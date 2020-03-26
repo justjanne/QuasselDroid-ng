@@ -24,6 +24,8 @@
   android:orientation="vertical"
   tools:showIn="@layout/chat_messages">
 
+  <include layout="@layout/widget_chatmessage_daychange" />
+
   <LinearLayout
     android:id="@+id/message_container"
     android:layout_width="match_parent"
@@ -35,6 +37,33 @@
     android:paddingRight="@dimen/message_horizontal"
     android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
+
+    <TextView
+      android:id="@+id/time_left"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:typeface="monospace"
+      tools:text="@sample/messages.json/data/time"
+      tools:visibility="gone" />
+
+    <FrameLayout
+      android:id="@+id/avatar_container"
+      android:layout_width="@dimen/avatar_size"
+      android:layout_height="@dimen/avatar_size"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:visibility="gone"
+      tools:visibility="visible">
+
+      <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/label_avatar"
+        tools:src="@tools:sample/avatars" />
+    </FrameLayout>
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -125,35 +154,6 @@
           tools:visibility="visible" />
       </LinearLayout>
     </LinearLayout>
-
-    <FrameLayout
-      android:id="@+id/avatar_container"
-      android:layout_width="@dimen/avatar_size"
-      android:layout_height="@dimen/avatar_size"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-      <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/label_avatar"
-        tools:src="@tools:sample/avatars" />
-    </FrameLayout>
-
-    <TextView
-      android:id="@+id/time_left"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="top"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:textColor="?attr/colorForegroundSecondary"
-      android:typeface="monospace"
-      tools:text="@sample/messages.json/data/time"
-      tools:visibility="gone" />
   </LinearLayout>
-
-  <include layout="@layout/widget_chatmessage_daychange" />
 
 </LinearLayout>

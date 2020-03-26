@@ -24,21 +24,6 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <TextView
-    android:id="@+id/error"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingStart="?listPreferredItemPaddingLeft"
-    android:paddingEnd="?listPreferredItemPaddingRight"
-    android:text="@string/label_error_certificate_no_certificate"
-    android:textColor="?colorTextSecondary"
-    android:textStyle="italic"
-    android:visibility="gone"
-    tools:visibility="visible" />
-
   <androidx.core.widget.NestedScrollView
     android:id="@+id/content"
     android:layout_width="match_parent"
@@ -245,4 +230,19 @@
         android:layout_height="16dp" />
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
+
+  <TextView
+    android:id="@+id/error"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingEnd="?listPreferredItemPaddingRight"
+    android:text="@string/label_error_certificate_no_certificate"
+    android:textColor="?colorTextSecondary"
+    android:textStyle="italic"
+    android:visibility="gone"
+    tools:visibility="visible" />
 </FrameLayout>

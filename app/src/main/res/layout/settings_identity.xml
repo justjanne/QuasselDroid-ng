@@ -192,6 +192,23 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
+      <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.CustomTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_identity_away_reason">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/away_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="Gone Fishing." />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/detach_away"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_detach_away" />
+
       <LinearLayout
         android:id="@+id/detach_away_group"
         android:layout_width="match_parent"
@@ -209,23 +226,6 @@
             tools:text="Gone Fishing." />
         </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/detach_away"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_identity_detach_away" />
-
-      <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CustomTextInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/settings_identity_away_reason">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/away_reason"
-          style="@style/Widget.CoreSettings.EditText"
-          tools:text="Gone Fishing." />
-      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -62,11 +62,15 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
-    <LinearLayout
-      android:id="@android:id/widget_frame"
-      android:layout_width="match_parent"
+    <TextView
+      android:id="@android:id/title"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:orientation="vertical" />
+      android:ellipsize="marquee"
+      android:singleLine="true"
+      android:textColor="?colorTextPrimary"
+      android:textSize="16sp"
+      tools:text="Font Size" />
 
     <TextView
       android:id="@android:id/summary"
@@ -77,14 +81,10 @@
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary" />
 
-    <TextView
-      android:id="@android:id/title"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:id="@android:id/widget_frame"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:ellipsize="marquee"
-      android:singleLine="true"
-      android:textColor="?colorTextPrimary"
-      android:textSize="16sp"
-      tools:text="Font Size" />
+      android:orientation="vertical" />
   </LinearLayout>
 </LinearLayout>

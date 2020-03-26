@@ -23,6 +23,8 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
+  <include layout="@layout/widget_chatmessage_daychange" />
+
   <LinearLayout
     android:id="@+id/message_container"
     android:layout_width="match_parent"
@@ -104,7 +106,5 @@
         tools:visibility="visible" />
     </LinearLayout>
   </LinearLayout>
-
-  <include layout="@layout/widget_chatmessage_daychange" />
 
 </LinearLayout>

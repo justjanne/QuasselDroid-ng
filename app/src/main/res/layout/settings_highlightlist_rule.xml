@@ -34,6 +34,16 @@
     android:gravity="center_vertical"
     android:minHeight="?listPreferredItemHeightSmall">
 
+    <androidx.appcompat.widget.AppCompatImageView
+      android:id="@+id/handle"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="center_vertical"
+      android:paddingStart="?listPreferredItemPaddingRight"
+      android:paddingEnd="32dp"
+      app:srcCompat="@drawable/ic_reorder"
+      app:tint="?colorTextSecondary" />
+
     <LinearLayout
       android:layout_width="0dip"
       android:layout_height="wrap_content"
@@ -41,6 +51,23 @@
       android:orientation="vertical"
       android:paddingTop="16dp"
       android:paddingBottom="16dp">
+
+      <TextView
+        android:id="@+id/match_all"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="marquee"
+        android:orientation="vertical"
+        android:singleLine="true"
+        android:text="@string/label_match_all"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="?colorTextPrimary"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
       <LinearLayout
         android:id="@+id/name_row"
@@ -123,34 +150,7 @@
           tools:text="#yepityha" />
       </LinearLayout>
 
-      <TextView
-        android:id="@+id/match_all"
-        style="@style/Widget.RtlConformTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:ellipsize="marquee"
-        android:orientation="vertical"
-        android:singleLine="true"
-        android:text="@string/label_match_all"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="?colorTextPrimary"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
     </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatImageView
-      android:id="@+id/handle"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_gravity="center_vertical"
-      android:paddingStart="?listPreferredItemPaddingRight"
-      android:paddingEnd="32dp"
-      app:srcCompat="@drawable/ic_reorder"
-      app:tint="?colorTextSecondary" />
 
     <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/toggle"

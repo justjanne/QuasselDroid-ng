@@ -27,12 +27,21 @@
   android:orientation="vertical"
   android:padding="32dp">
 
-  <androidx.appcompat.widget.SwitchCompat
-    android:id="@+id/require_ssl"
-    style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/hostWrapper"
+    style="@style/Widget.CustomTextInput"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/label_connection_ssl" />
+    android:hint="@string/label_connection_host"
+    app:errorEnabled="true"
+    tools:ignore="LabelFor">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/host"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="textUri" />
+  </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/portWrapper"
@@ -51,20 +60,11 @@
       android:text="@string/defaultConnectionPort" />
   </com.google.android.material.textfield.TextInputLayout>
 
-  <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/hostWrapper"
-    style="@style/Widget.CustomTextInput"
+  <androidx.appcompat.widget.SwitchCompat
+    android:id="@+id/require_ssl"
+    style="@style/Widget.CoreSettings.PrimaryItemSwitch"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/label_connection_host"
-    app:errorEnabled="true"
-    tools:ignore="LabelFor">
-
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/host"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:inputType="textUri" />
-  </com.google.android.material.textfield.TextInputLayout>
+    android:text="@string/label_connection_ssl" />
 
 </LinearLayout>

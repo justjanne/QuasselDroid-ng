@@ -24,12 +24,19 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
-    android:id="@+id/search_results"
-    style="@style/Widget.FastScroller"
+  <de.kuschku.ui.spinner.MaterialSpinnerLayout
+    style="@style/Widget.CustomSpinnerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:listitem="@layout/widget_channel_search" />
+    android:layout_height="wrap_content"
+    android:hint="@string/label_network">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/network"
+      style="@style/Widget.MaterialSpinner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_spinner_item_material" />
+  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
   <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
@@ -100,18 +107,11 @@
     app:icon="@drawable/ic_alert"
     app:mode="none" />
 
-  <de.kuschku.ui.spinner.MaterialSpinnerLayout
-    style="@style/Widget.CustomSpinnerLayout"
+  <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
+    android:id="@+id/search_results"
+    style="@style/Widget.FastScroller"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/label_network">
-
-    <androidx.appcompat.widget.AppCompatSpinner
-      android:id="@+id/network"
-      style="@style/Widget.MaterialSpinner"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:listitem="@layout/widget_spinner_item_material" />
-  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+    android:layout_height="match_parent"
+    tools:listitem="@layout/widget_channel_search" />
 
 </LinearLayout>

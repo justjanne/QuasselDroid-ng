@@ -27,6 +27,61 @@
     android:layout_height="match_parent"
     android:padding="2dp">
 
+    <androidx.appcompat.widget.AppCompatImageButton
+      android:id="@+id/action_format_bold"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_bold"
+      app:srcCompat="@drawable/ic_format_bold"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+      android:id="@+id/action_format_italic"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_italic"
+      app:srcCompat="@drawable/ic_format_italic"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+      android:id="@+id/action_format_underline"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_underline"
+      app:srcCompat="@drawable/ic_format_underline"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+      android:id="@+id/action_format_strikethrough"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_strikethrough"
+      app:srcCompat="@drawable/ic_format_strikethrough"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+      android:id="@+id/action_format_monospace"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_monospace"
+      app:srcCompat="@drawable/ic_format_monospace"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
     <FrameLayout
       android:layout_width="48dp"
       android:layout_height="48dp"
@@ -51,6 +106,10 @@
         android:background="?colorForeground" />
     </FrameLayout>
 
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
     <FrameLayout
       android:layout_width="48dp"
       android:layout_height="48dp"
@@ -74,65 +133,6 @@
         android:layout_margin="8dp"
         android:background="?colorBackground" />
     </FrameLayout>
-
-    <Space
-      android:layout_width="2dp"
-      android:layout_height="match_parent" />
-
-    <Space
-      android:layout_width="2dp"
-      android:layout_height="match_parent" />
-
-    <Space
-      android:layout_width="2dp"
-      android:layout_height="match_parent" />
-
-    <Space
-      android:layout_width="2dp"
-      android:layout_height="match_parent" />
-
-    <Space
-      android:layout_width="2dp"
-      android:layout_height="match_parent" />
-
-    <Space
-      android:layout_width="2dp"
-      android:layout_height="match_parent" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-      android:id="@+id/action_format_bold"
-      style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_bold"
-      app:srcCompat="@drawable/ic_format_bold"
-      app:tint="?colorControlNormal" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-      android:id="@+id/action_format_italic"
-      style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_italic"
-      app:srcCompat="@drawable/ic_format_italic"
-      app:tint="?colorControlNormal" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-      android:id="@+id/action_format_underline"
-      style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_underline"
-      app:srcCompat="@drawable/ic_format_underline"
-      app:tint="?colorControlNormal" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-      android:id="@+id/action_format_strikethrough"
-      style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_strikethrough"
-      app:srcCompat="@drawable/ic_format_strikethrough"
-      app:tint="?colorControlNormal" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-      android:id="@+id/action_format_monospace"
-      style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_monospace"
-      app:srcCompat="@drawable/ic_format_monospace"
-      app:tint="?colorControlNormal" />
 
     <Space
       android:layout_width="2dp"

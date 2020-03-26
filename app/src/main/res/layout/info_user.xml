@@ -23,6 +23,40 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#40000000"
+    app:elevation="0dip">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_scrollFlags="scroll">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="parallax">
+
+        <ImageView
+          android:id="@+id/avatar"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:adjustViewBounds="true"
+          android:contentDescription="@string/label_avatar"
+          android:scaleType="centerCrop"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:src="@tools:sample/avatars" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
+
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,36 +86,10 @@
           tools:text="Janne Mareike Koschinski https://kuschku.de/" />
       </LinearLayout>
 
-      <LinearLayout
-        android:id="@+id/away_container"
+      <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-          style="@style/Widget.Info.Section"
-          android:text="@string/label_user_away" />
-
-        <LinearLayout style="@style/Widget.Info.Item">
-
-          <TextView
-            android:id="@+id/away_message"
-            style="@style/Widget.Info.Item.Content"
-            android:textIsSelectable="true"
-            tools:text="~justJanne" />
-
-          <TextView
-            style="@style/Widget.Info.Item.Description"
-            android:text="@string/label_user_away_reason" />
-        </LinearLayout>
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="?colorDivider" />
-      </LinearLayout>
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
 
       <HorizontalScrollView
         android:layout_width="match_parent"
@@ -135,19 +143,45 @@
         </LinearLayout>
       </HorizontalScrollView>
 
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
+
+      <LinearLayout
+        android:id="@+id/away_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          style="@style/Widget.Info.Section"
+          android:text="@string/label_user_away" />
+
+        <LinearLayout style="@style/Widget.Info.Item">
+
+          <TextView
+            android:id="@+id/away_message"
+            style="@style/Widget.Info.Item.Content"
+            android:textIsSelectable="true"
+            tools:text="~justJanne" />
+
+          <TextView
+            style="@style/Widget.Info.Item.Description"
+            android:text="@string/label_user_away_reason" />
+        </LinearLayout>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="?colorDivider" />
+      </LinearLayout>
+
       <TextView
         style="@style/Widget.Info.Section"
         android:text="@string/label_user_identity" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
 
       <LinearLayout
         android:id="@+id/account_container"
@@ -227,38 +261,4 @@
         android:layout_height="wrap_content" />
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
-
-  <com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#40000000"
-    app:elevation="0dip">
-
-    <com.google.android.material.appbar.CollapsingToolbarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:layout_scrollFlags="scroll">
-
-      <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_collapseMode="parallax">
-
-        <ImageView
-          android:id="@+id/avatar"
-          android:layout_width="0dp"
-          android:layout_height="0dp"
-          android:adjustViewBounds="true"
-          android:contentDescription="@string/label_avatar"
-          android:scaleType="centerCrop"
-          app:layout_constraintDimensionRatio="1:1"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          tools:src="@tools:sample/avatars" />
-
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
-  </com.google.android.material.appbar.AppBarLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

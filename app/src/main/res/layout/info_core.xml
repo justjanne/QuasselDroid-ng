@@ -56,13 +56,14 @@
         android:text="@string/label_missing_features" />
     </LinearLayout>
 
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_uptime" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
 
     <TextView
       style="@style/Widget.Info.Section"
-      android:text="@string/label_core_security" />
+      android:text="@string/label_core_uptime" />
 
     <LinearLayout
       android:id="@+id/uptime_container"
@@ -81,10 +82,9 @@
       android:layout_height="1dp"
       android:background="?colorDivider" />
 
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_security" />
 
     <LinearLayout
       style="@style/Widget.Info.Item"

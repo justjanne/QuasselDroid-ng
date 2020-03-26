@@ -366,10 +366,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_network_customratelimits_interval_unit" />
-
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
@@ -381,6 +377,10 @@
             style="@style/Widget.CoreSettings.EditText"
             tools:text="2.20" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_network_customratelimits_interval_unit" />
       </FrameLayout>
     </LinearLayout>
   </LinearLayout>

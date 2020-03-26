@@ -27,6 +27,12 @@
   android:paddingBottom="@dimen/md_title_frame_margin_bottom"
   tools:ignore="PrivateResource">
 
+  <View
+    android:id="@+id/md_colorIndicator"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    tools:background="@color/md_material_blue_600" />
+
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -119,14 +125,14 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
-    <SeekBar
-      android:id="@+id/md_colorG"
+    <androidx.appcompat.widget.AppCompatSeekBar
+      android:id="@+id/md_colorR"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/md_colorR"
+      android:layout_below="@+id/md_colorA"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorGValue"
-      android:layout_toEndOf="@+id/md_colorGLabel"
+      android:layout_toStartOf="@+id/md_colorRValue"
+      android:layout_toEndOf="@+id/md_colorRLabel"
       android:focusable="true"
       android:max="255" />
 
@@ -160,13 +166,14 @@
       tools:ignore="HardcodedText" />
 
     <SeekBar
-      android:id="@+id/md_colorB"
+      android:id="@+id/md_colorG"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/md_colorG"
+      android:layout_below="@+id/md_colorR"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorBValue"
-      android:layout_toEndOf="@+id/md_colorBLabel"
+      android:layout_toStartOf="@+id/md_colorGValue"
+      android:layout_toEndOf="@+id/md_colorGLabel"
+      android:focusable="true"
       android:max="255" />
 
     <TextView
@@ -198,15 +205,14 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
-    <androidx.appcompat.widget.AppCompatSeekBar
-      android:id="@+id/md_colorR"
+    <SeekBar
+      android:id="@+id/md_colorB"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/md_colorA"
+      android:layout_below="@+id/md_colorG"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorRValue"
-      android:layout_toEndOf="@+id/md_colorRLabel"
-      android:focusable="true"
+      android:layout_toStartOf="@+id/md_colorBValue"
+      android:layout_toEndOf="@+id/md_colorBLabel"
       android:max="255" />
 
     <TextView
@@ -225,11 +231,5 @@
       tools:ignore="HardcodedText" />
 
   </RelativeLayout>
-
-  <View
-    android:id="@+id/md_colorIndicator"
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
-    tools:background="@color/md_material_blue_600" />
 
 </LinearLayout>

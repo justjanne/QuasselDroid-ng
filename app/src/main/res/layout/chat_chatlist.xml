@@ -53,14 +53,14 @@
       android:orientation="vertical"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+      <include layout="@layout/widget_search" />
+
       <de.kuschku.quasseldroid.util.ui.view.WarningBarView
         android:id="@+id/feature_context_bufferactivitysync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_alert"
         app:text="@string/label_feature_context_bufferactivitysync" />
-
-      <include layout="@layout/widget_search" />
     </LinearLayout>
 
   </com.google.android.material.appbar.AppBarLayout>

@@ -28,71 +28,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <Space
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp">
-
-      <FrameLayout
-        android:layout_width="56dp"
-        android:layout_height="68dp">
-
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_gravity="center_vertical"
-          app:srcCompat="@drawable/ic_server_network"
-          app:tint="?android:textColorSecondary"
-          tools:ignore="ContentDescription" />
-      </FrameLayout>
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.SwitchCompat
-          android:id="@+id/require_ssl"
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/label_connection_ssl" />
-
-        <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/portWrapper"
-          style="@style/Widget.CustomTextInput"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/label_connection_port"
-          tools:ignore="LabelFor">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/port"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="@string/defaultConnectionPort"
-            app:errorEnabled="true" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/hostWrapper"
-          style="@style/Widget.CustomTextInput"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/label_connection_host"
-          tools:ignore="LabelFor">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/host"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textUri"
-            app:errorEnabled="true" />
-        </com.google.android.material.textfield.TextInputLayout>
-      </LinearLayout>
-    </LinearLayout>
+      android:layout_height="16dp" />
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -134,9 +72,71 @@
       android:layout_width="match_parent"
       android:layout_height="16dp" />
 
-    <Space
+    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="16dp" />
+      android:layout_height="wrap_content"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp">
+
+      <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="68dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center_vertical"
+          app:srcCompat="@drawable/ic_server_network"
+          app:tint="?android:textColorSecondary"
+          tools:ignore="ContentDescription" />
+      </FrameLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/hostWrapper"
+          style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_connection_host"
+          tools:ignore="LabelFor">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            app:errorEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/portWrapper"
+          style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_connection_port"
+          tools:ignore="LabelFor">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="@string/defaultConnectionPort"
+            app:errorEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+          android:id="@+id/require_ssl"
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/label_connection_ssl" />
+      </LinearLayout>
+    </LinearLayout>
 
     <Space
       android:layout_width="match_parent"

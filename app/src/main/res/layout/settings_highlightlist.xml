@@ -29,6 +29,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <de.kuschku.quasseldroid.util.ui.view.WarningBarView
+      android:id="@+id/feature_context_coresidehighlights"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:icon="@drawable/ic_alert"
+      app:mode="none"
+      app:text="@string/label_feature_context_coresidehighlights" />
+
     <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
       <LinearLayout
@@ -147,13 +155,5 @@
         </LinearLayout>
       </LinearLayout>
     </LinearLayout>
-
-    <de.kuschku.quasseldroid.util.ui.view.WarningBarView
-      android:id="@+id/feature_context_coresidehighlights"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:icon="@drawable/ic_alert"
-      app:mode="none"
-      app:text="@string/label_feature_context_coresidehighlights" />
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

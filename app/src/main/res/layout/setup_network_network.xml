@@ -25,18 +25,39 @@
   android:orientation="vertical"
   android:padding="32dp">
 
+  <de.kuschku.ui.spinner.MaterialSpinnerLayout
+    style="@style/Widget.CustomSpinnerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/settings_network_title">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/network"
+      style="@style/Widget.MaterialSpinner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_spinner_item_material" />
+  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
   <LinearLayout
     android:id="@+id/network_group"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.SwitchCompat
-      android:id="@+id/ssl_enabled"
-      style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+    <de.kuschku.ui.spinner.MaterialSpinnerLayout
+      style="@style/Widget.CustomSpinnerLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/settings_networkserver_ssl_enabled" />
+      android:hint="@string/settings_identity_title">
+
+      <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/identity"
+        style="@style/Widget.MaterialSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/widget_spinner_item_material" />
+    </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/nameWrapper"
@@ -89,33 +110,12 @@
         tools:ignore="HardcodedText" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <de.kuschku.ui.spinner.MaterialSpinnerLayout
-      style="@style/Widget.CustomSpinnerLayout"
+    <androidx.appcompat.widget.SwitchCompat
+      android:id="@+id/ssl_enabled"
+      style="@style/Widget.CoreSettings.PrimaryItemSwitch"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="@string/settings_identity_title">
-
-      <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/identity"
-        style="@style/Widget.MaterialSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/widget_spinner_item_material" />
-    </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+      android:text="@string/settings_networkserver_ssl_enabled" />
   </LinearLayout>
-
-  <de.kuschku.ui.spinner.MaterialSpinnerLayout
-    style="@style/Widget.CustomSpinnerLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/settings_network_title">
-
-    <androidx.appcompat.widget.AppCompatSpinner
-      android:id="@+id/network"
-      style="@style/Widget.MaterialSpinner"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:listitem="@layout/widget_spinner_item_material" />
-  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
 </LinearLayout>
