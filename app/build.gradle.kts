@@ -38,7 +38,7 @@ android {
   }
 
   defaultConfig {
-    minSdkVersion(16)
+    minSdkVersion(20)
     targetSdkVersion(28)
 
     applicationId = "com.iskrembilen.quasseldroid"
@@ -69,7 +69,6 @@ android {
       isZipAlignEnabled = true
       isMinifyEnabled = true
       isShrinkResources = true
-      isUseProguard = false
 
       multiDexEnabled = false
 
@@ -99,38 +98,42 @@ android {
     isWarningsAsErrors = true
     setLintConfig(file("../lint.xml"))
   }
+
+  viewBinding {
+    isEnabled = true
+  }
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.50"))
+  implementation(kotlin("stdlib", "1.3.61"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.1.0-alpha10")
 
   implementation("androidx.appcompat", "appcompat", "1.1.0")
-  implementation("androidx.browser", "browser", "1.2.0-alpha07")
+  implementation("androidx.browser", "browser", "1.2.0")
   implementation("androidx.cardview", "cardview", "1.0.0")
-  implementation("androidx.recyclerview", "recyclerview", "1.1.0-beta04")
-  implementation("androidx.swiperefreshlayout", "swiperefreshlayout", "1.1.0-alpha02")
-  implementation("androidx.preference", "preference", "1.0.0")
+  implementation("androidx.recyclerview", "recyclerview", "1.1.0")
+  implementation("androidx.swiperefreshlayout", "swiperefreshlayout", "1.1.0-beta01")
+  implementation("androidx.preference", "preference", "1.1.0")
   // Only needed for ringtone preference
   implementation("androidx.legacy", "legacy-preference-v14", "1.0.0")
-  implementation("androidx.constraintlayout", "constraintlayout", "2.0.0-beta1")
+  implementation("androidx.constraintlayout", "constraintlayout", "2.0.0-beta4")
 
-  withVersion("2.2.0-rc01") {
+  withVersion("2.2.5") {
     implementation("androidx.room", "room-runtime", version)
     kapt("androidx.room", "room-compiler", version)
     implementation("androidx.room", "room-rxjava2", version)
     testImplementation("androidx.room", "room-testing", version)
   }
-  withVersion("2.1.0") {
+  withVersion("2.2.0") {
     implementation("androidx.lifecycle", "lifecycle-extensions", version)
     implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
   }
   testImplementation("androidx.arch.core", "core-testing", "2.1.0")
   implementation(project(":lifecycle-ktx"))
 
-  implementation("androidx.paging", "paging-runtime", "2.1.0")
+  implementation("androidx.paging", "paging-runtime", "2.1.2")
 
   implementation("androidx.multidex", "multidex", "2.0.1")
 

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -38,6 +38,7 @@ import de.kuschku.libquassel.util.helper.mapMapNullable
 import de.kuschku.libquassel.util.helper.mapSwitchMap
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.dao.findById
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.util.TextValidator

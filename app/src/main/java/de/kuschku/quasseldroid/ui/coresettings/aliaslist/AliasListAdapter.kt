@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,14 +21,10 @@ package de.kuschku.quasseldroid.ui.coresettings.aliaslist
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.SettingsAliaslistItemBinding
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import java.util.*
 import javax.inject.Inject
@@ -84,7 +80,7 @@ class AliasListAdapter @Inject constructor(
   override fun getItemCount() = data.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = AliasItemViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.settings_aliaslist_item, parent, false),
+    SettingsAliaslistItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     formatDeserializer,
     clickListener,
     dragListener
@@ -95,30 +91,20 @@ class AliasListAdapter @Inject constructor(
   }
 
   class AliasItemViewHolder(
-    itemView: View,
+    private val binding: SettingsAliaslistItemBinding,
     private val formatDeserializer: IrcFormatDeserializer,
     clickListener: ((IAliasManager.Alias) -> Unit)?,
     dragListener: ((AliasItemViewHolder) -> Unit)?
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.name)
-    lateinit var name: TextView
-
-    @BindView(R.id.expansion)
-    lateinit var expansion: TextView
-
-    @BindView(R.id.handle)
-    lateinit var handle: View
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     private var item: IAliasManager.Alias? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         item?.let {
           clickListener?.invoke(it)
         }
       }
-      handle.setOnTouchListener { _, event ->
+      binding.handle.setOnTouchListener { _, event ->
         if (event.action == MotionEvent.ACTION_DOWN) {
           dragListener?.invoke(this)
         }
@@ -128,8 +114,8 @@ class AliasListAdapter @Inject constructor(
 
     fun bind(item: IAliasManager.Alias) {
       this.item = item
-      name.text = item.name
-      expansion.text = formatDeserializer.formatString(item.expansion, true)
+      binding.name.text = item.name
+      binding.expansion.text = formatDeserializer.formatString(item.expansion, true)
     }
   }
 }

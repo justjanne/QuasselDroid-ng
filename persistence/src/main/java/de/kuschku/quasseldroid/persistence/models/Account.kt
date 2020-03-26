@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -19,13 +19,16 @@
 
 package de.kuschku.quasseldroid.persistence.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import de.kuschku.quasseldroid.persistence.util.AccountId
 
 @Entity(tableName = "Account")
 data class Account(
   @PrimaryKey(autoGenerate = true)
-  var id: Long,
+  @ColumnInfo(name = "id")
+  var rawId: Long,
   var host: String,
   var port: Int,
   var requireSsl: Boolean,
@@ -35,4 +38,36 @@ data class Account(
   var lastUsed: Long,
   var acceptedMissingFeatures: Boolean,
   var defaultFiltered: Int
-)
+) {
+  inline var id
+    get() = AccountId(rawId)
+    set(value) {
+      rawId = value.id
+    }
+
+  companion object {
+    inline fun of(
+      id: AccountId,
+      host: String,
+      port: Int,
+      requireSsl: Boolean,
+      user: String,
+      pass: String,
+      name: String,
+      lastUsed: Long,
+      acceptedMissingFeatures: Boolean,
+      defaultFiltered: Int
+    ) = Account(
+      id.id,
+      host,
+      port,
+      requireSsl,
+      user,
+      pass,
+      name,
+      lastUsed,
+      acceptedMissingFeatures,
+      defaultFiltered
+    )
+  }
+}

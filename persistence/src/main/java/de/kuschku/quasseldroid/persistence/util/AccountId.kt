@@ -17,25 +17,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.setup.accounts.edit
+package de.kuschku.quasseldroid.persistence.util
 
-import android.content.Context
-import android.content.Intent
-import de.kuschku.quasseldroid.persistence.util.AccountId
-import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
+import java.io.Serializable
 
-class AccountEditActivity : SettingsActivity(AccountEditFragment()) {
+typealias AccountId_Type = Long
+
+inline class AccountId(val id: AccountId_Type) : Comparable<AccountId>, Serializable {
+  override fun compareTo(other: AccountId) = id.compareTo(other.id)
+  inline fun isValidId() = id >= 0
+
+  override fun toString(): String {
+    return "AccountId($id)"
+  }
+
   companion object {
-    fun launch(
-      context: Context,
-      account: AccountId
-    ) = context.startActivity(intent(context, account))
-
-    fun intent(
-      context: Context,
-      account: AccountId
-    ) = Intent(context, AccountEditActivity::class.java).apply {
-      putExtra("account", account.id)
-    }
+    val MIN_VALUE = AccountId(AccountId_Type.MIN_VALUE)
+    val MAX_VALUE = AccountId(AccountId_Type.MAX_VALUE)
   }
 }

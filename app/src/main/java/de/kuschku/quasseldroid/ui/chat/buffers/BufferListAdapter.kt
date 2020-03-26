@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -24,17 +24,16 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetBufferAwayBinding
+import de.kuschku.quasseldroid.databinding.WidgetBufferBinding
+import de.kuschku.quasseldroid.databinding.WidgetNetworkBinding
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.lists.ListAdapter
@@ -94,34 +93,38 @@ class BufferListAdapter(
     val viewType = ViewType(viewType.toUInt())
     return when (viewType.bufferType?.enabledValues()?.firstOrNull()) {
       BufferInfo.Type.ChannelBuffer -> BufferViewHolder.ChannelBuffer(
-        LayoutInflater.from(parent.context).inflate(
-          R.layout.widget_buffer, parent, false
-        ),
+        WidgetBufferBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         clickListener = clickListener,
         longClickListener = longClickListener,
         dragListener = dragListener
       )
-      BufferInfo.Type.QueryBuffer   -> BufferViewHolder.QueryBuffer(
-        LayoutInflater.from(parent.context).inflate(
-          if (viewType.bufferStatus == BufferStatus.AWAY) R.layout.widget_buffer_away
-          else R.layout.widget_buffer, parent, false
-        ),
-        clickListener = clickListener,
-        longClickListener = longClickListener,
-        dragListener = dragListener
-      )
+      BufferInfo.Type.QueryBuffer   -> if (viewType.bufferStatus == BufferStatus.AWAY) {
+        BufferViewHolder.QueryAwayBuffer(
+          WidgetBufferAwayBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+          ),
+          clickListener = clickListener,
+          longClickListener = longClickListener,
+          dragListener = dragListener
+        )
+      } else {
+        BufferViewHolder.QueryBuffer(
+          WidgetBufferBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+          ),
+          clickListener = clickListener,
+          longClickListener = longClickListener,
+          dragListener = dragListener
+        )
+      }
       BufferInfo.Type.GroupBuffer   -> BufferViewHolder.GroupBuffer(
-        LayoutInflater.from(parent.context).inflate(
-          R.layout.widget_buffer, parent, false
-        ),
+        WidgetBufferBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         clickListener = clickListener,
         longClickListener = longClickListener,
         dragListener = dragListener
       )
       BufferInfo.Type.StatusBuffer  -> BufferViewHolder.StatusBuffer(
-        LayoutInflater.from(parent.context).inflate(
-          R.layout.widget_network, parent, false
-        ),
+        WidgetNetworkBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         clickListener = clickListener,
         longClickListener = longClickListener,
         expansionListener = ::expandListener
@@ -162,17 +165,11 @@ class BufferListAdapter(
     abstract fun bind(item: BufferListItem, messageSettings: MessageSettings)
 
     class StatusBuffer(
-      itemView: View,
+      private val binding: WidgetNetworkBinding,
       private val clickListener: ((BufferId) -> Unit)? = null,
       private val longClickListener: ((BufferId) -> Unit)? = null,
       private val expansionListener: ((NetworkId, Boolean) -> Unit)? = null
-    ) : BufferViewHolder(itemView) {
-      @BindView(R.id.status)
-      lateinit var status: ImageView
-
-      @BindView(R.id.name)
-      lateinit var name: TextView
-
+    ) : BufferViewHolder(binding.root) {
       var bufferId: BufferId? = null
       var networkId: NetworkId? = null
 
@@ -184,7 +181,6 @@ class BufferListAdapter(
       private var expanded: Boolean = false
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val buffer = bufferId
           if (buffer != null)
@@ -201,7 +197,7 @@ class BufferListAdapter(
           }
         }
 
-        status.setOnClickListener {
+        binding.status.setOnClickListener {
           val network = networkId
           if (network != null)
             expansionListener?.invoke(network, !expanded)
@@ -219,11 +215,11 @@ class BufferListAdapter(
       }
 
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
-        name.text = item.props.name
+        binding.name.text = item.props.name
         bufferId = item.props.info.bufferId
         networkId = item.props.info.networkId
 
-        name.setTextColor(
+        binding.name.setTextColor(
           when {
             item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
             item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
@@ -237,31 +233,19 @@ class BufferListAdapter(
         itemView.isSelected = item.state.selected
 
         if (item.state.networkExpanded) {
-          status.setImageResource(R.drawable.ic_chevron_up)
+          binding.status.setImageResource(R.drawable.ic_chevron_up)
         } else {
-          status.setImageResource(R.drawable.ic_chevron_down)
+          binding.status.setImageResource(R.drawable.ic_chevron_down)
         }
       }
     }
 
     class GroupBuffer(
-      itemView: View,
+      private val binding: WidgetBufferBinding,
       private val clickListener: ((BufferId) -> Unit)? = null,
       private val longClickListener: ((BufferId) -> Unit)? = null,
       private val dragListener: ((BufferViewHolder) -> Unit)? = null
-    ) : BufferViewHolder(itemView) {
-      @BindView(R.id.status)
-      lateinit var status: ImageView
-
-      @BindView(R.id.name)
-      lateinit var name: TextView
-
-      @BindView(R.id.description)
-      lateinit var description: TextView
-
-      @BindView(R.id.handle)
-      lateinit var handle: View
-
+    ) : BufferViewHolder(binding.root) {
       var bufferId: BufferId? = null
 
       private val online: Drawable?
@@ -273,7 +257,6 @@ class BufferListAdapter(
       private var highlight: Int = 0
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val buffer = bufferId
           if (buffer != null)
@@ -290,7 +273,7 @@ class BufferListAdapter(
           }
         }
 
-        handle.setOnTouchListener { _, event ->
+        binding.handle.setOnTouchListener { _, event ->
           if (event.action == MotionEvent.ACTION_DOWN) {
             dragListener?.invoke(this)
           }
@@ -318,10 +301,10 @@ class BufferListAdapter(
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
         bufferId = item.props.info.bufferId
 
-        name.text = item.props.name
-        description.text = item.props.description
+        binding.name.text = item.props.name
+        binding.description.text = item.props.description
 
-        name.setTextColor(
+        binding.name.setTextColor(
           when {
             item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
             item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
@@ -332,11 +315,11 @@ class BufferListAdapter(
 
         itemView.isSelected = item.state.selected
 
-        handle.visibleIf(item.state.showHandle)
+        binding.handle.visibleIf(item.state.showHandle)
 
-        description.visibleIf(item.props.description.isNotBlank())
+        binding.description.visibleIf(item.props.description.isNotBlank())
 
-        status.setImageDrawable(
+        binding.status.setImageDrawable(
           when (item.props.bufferStatus) {
             BufferStatus.ONLINE -> online
             else                -> offline
@@ -346,23 +329,11 @@ class BufferListAdapter(
     }
 
     class ChannelBuffer(
-      itemView: View,
+      private val binding: WidgetBufferBinding,
       private val clickListener: ((BufferId) -> Unit)? = null,
       private val longClickListener: ((BufferId) -> Unit)? = null,
       private val dragListener: ((BufferViewHolder) -> Unit)? = null
-    ) : BufferViewHolder(itemView) {
-      @BindView(R.id.status)
-      lateinit var status: ImageView
-
-      @BindView(R.id.name)
-      lateinit var name: TextView
-
-      @BindView(R.id.description)
-      lateinit var description: TextView
-
-      @BindView(R.id.handle)
-      lateinit var handle: View
-
+    ) : BufferViewHolder(binding.root) {
       var bufferId: BufferId? = null
 
       private var none: Int = 0
@@ -371,7 +342,6 @@ class BufferListAdapter(
       private var highlight: Int = 0
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val buffer = bufferId
           if (buffer != null)
@@ -388,7 +358,7 @@ class BufferListAdapter(
           }
         }
 
-        handle.setOnTouchListener { _, event ->
+        binding.handle.setOnTouchListener { _, event ->
           if (event.action == MotionEvent.ACTION_DOWN) {
             dragListener?.invoke(this)
           }
@@ -409,10 +379,10 @@ class BufferListAdapter(
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
         bufferId = item.props.info.bufferId
 
-        name.text = item.props.name
-        description.text = item.props.description
+        binding.name.text = item.props.name
+        binding.description.text = item.props.description
 
-        name.setTextColor(
+        binding.name.setTextColor(
           when {
             item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
             item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
@@ -423,32 +393,20 @@ class BufferListAdapter(
 
         itemView.isSelected = item.state.selected
 
-        handle.visibleIf(item.state.showHandle)
+        binding.handle.visibleIf(item.state.showHandle)
 
-        description.visibleIf(item.props.description.isNotBlank())
+        binding.description.visibleIf(item.props.description.isNotBlank())
 
-        status.setImageDrawable(item.props.fallbackDrawable)
+        binding.status.setImageDrawable(item.props.fallbackDrawable)
       }
     }
 
     class QueryBuffer(
-      itemView: View,
+      private val binding: WidgetBufferBinding,
       private val clickListener: ((BufferId) -> Unit)? = null,
       private val longClickListener: ((BufferId) -> Unit)? = null,
       private val dragListener: ((BufferViewHolder) -> Unit)? = null
-    ) : BufferViewHolder(itemView) {
-      @BindView(R.id.status)
-      lateinit var status: ImageView
-
-      @BindView(R.id.name)
-      lateinit var name: TextView
-
-      @BindView(R.id.description)
-      lateinit var description: TextView
-
-      @BindView(R.id.handle)
-      lateinit var handle: View
-
+    ) : BufferViewHolder(binding.root) {
       var bufferId: BufferId? = null
 
       private var none: Int = 0
@@ -457,7 +415,6 @@ class BufferListAdapter(
       private var highlight: Int = 0
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val buffer = bufferId
           if (buffer != null)
@@ -474,7 +431,7 @@ class BufferListAdapter(
           }
         }
 
-        handle.setOnTouchListener { _, event ->
+        binding.handle.setOnTouchListener { _, event ->
           if (event.action == MotionEvent.ACTION_DOWN) {
             dragListener?.invoke(this)
           }
@@ -495,10 +452,10 @@ class BufferListAdapter(
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
         bufferId = item.props.info.bufferId
 
-        name.text = item.props.info.bufferName
-        description.text = item.props.description
+        binding.name.text = item.props.info.bufferName
+        binding.description.text = item.props.description
 
-        name.setTextColor(
+        binding.name.setTextColor(
           when {
             item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
             item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
@@ -509,11 +466,86 @@ class BufferListAdapter(
 
         itemView.isSelected = item.state.selected
 
-        handle.visibleIf(item.state.showHandle)
+        binding.handle.visibleIf(item.state.showHandle)
 
-        description.visibleIf(item.props.description.isNotBlank())
+        binding.description.visibleIf(item.props.description.isNotBlank())
 
-        status.loadAvatars(item.props.avatarUrls,
+        binding.status.loadAvatars(item.props.avatarUrls,
+                                   item.props.fallbackDrawable,
+                                   crop = !messageSettings.squareAvatars)
+      }
+    }
+
+    class QueryAwayBuffer(
+      private val binding: WidgetBufferAwayBinding,
+      private val clickListener: ((BufferId) -> Unit)? = null,
+      private val longClickListener: ((BufferId) -> Unit)? = null,
+      private val dragListener: ((BufferViewHolder) -> Unit)? = null
+    ) : BufferViewHolder(binding.root) {
+      var bufferId: BufferId? = null
+
+      private var none: Int = 0
+      private var activity: Int = 0
+      private var message: Int = 0
+      private var highlight: Int = 0
+
+      init {
+        itemView.setOnClickListener {
+          val buffer = bufferId
+          if (buffer != null)
+            clickListener?.invoke(buffer)
+        }
+
+        itemView.setOnLongClickListener {
+          val buffer = bufferId
+          if (buffer != null) {
+            longClickListener?.invoke(buffer)
+            true
+          } else {
+            false
+          }
+        }
+
+        binding.handle.setOnTouchListener { _, event ->
+          if (event.action == MotionEvent.ACTION_DOWN) {
+            dragListener?.invoke(this)
+          }
+          false
+        }
+
+        itemView.context.theme.styledAttributes(
+          R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTintHighlight
+        ) {
+          none = getColor(0, 0)
+          activity = getColor(1, 0)
+          message = getColor(2, 0)
+          highlight = getColor(3, 0)
+        }
+      }
+
+      override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
+        bufferId = item.props.info.bufferId
+
+        binding.name.text = item.props.info.bufferName
+        binding.description.text = item.props.description
+
+        binding.name.setTextColor(
+          when {
+            item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            item.props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                             -> none
+          }
+        )
+
+        itemView.isSelected = item.state.selected
+
+        binding.handle.visibleIf(item.state.showHandle)
+
+        binding.description.visibleIf(item.props.description.isNotBlank())
+
+        binding.status.loadAvatars(item.props.avatarUrls,
                            item.props.fallbackDrawable,
                            crop = !messageSettings.squareAvatars)
       }

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,15 +20,11 @@
 package de.kuschku.quasseldroid.ui.chat.add
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.widget.ThemedSpinnerAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetSpinnerItemMaterialBinding
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
@@ -59,8 +55,7 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
       else
         parent.context
     )
-    val view = inflater.inflate(R.layout.widget_spinner_item_material, parent, false)
-    return NetworkViewHolder(view)
+    return NetworkViewHolder(WidgetSpinnerItemMaterialBinding.inflate(inflater, parent, false))
   }
 
   fun indexOf(id: NetworkId): Int? {
@@ -76,17 +71,11 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
   override fun getItemId(position: Int) = getItem(position)?.id?.id?.toLong() ?: 0L
   override fun hasStableIds() = true
   override fun getCount() = data.size
-  class NetworkViewHolder(itemView: View) :
-    RecyclerView.ViewHolder(itemView) {
-    @BindView(android.R.id.text1)
-    lateinit var text: TextView
-
-    init {
-      ButterKnife.bind(this, itemView)
-    }
-
+  class NetworkViewHolder(
+    private val binding: WidgetSpinnerItemMaterialBinding
+  ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(network: NetworkItem) {
-      text.text = network.name
+      binding.text1.text = network.name
     }
   }
 }

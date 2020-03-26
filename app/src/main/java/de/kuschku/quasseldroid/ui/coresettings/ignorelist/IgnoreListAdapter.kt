@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,15 +21,10 @@ package de.kuschku.quasseldroid.ui.coresettings.ignorelist
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.SettingsIgnorelistItemBinding
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import java.util.*
 
@@ -79,7 +74,7 @@ class IgnoreListAdapter(
   override fun getItemCount() = data.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = IgnoreItemViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.settings_ignorelist_item, parent, false),
+    SettingsIgnorelistItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     clickListener,
     ::toggle,
     dragListener
@@ -90,38 +85,25 @@ class IgnoreListAdapter(
   }
 
   class IgnoreItemViewHolder(
-    itemView: View,
+    private val binding: SettingsIgnorelistItemBinding,
     clickListener: (IgnoreListManager.IgnoreListItem) -> Unit,
     toggleListener: (IgnoreListManager.IgnoreListItem, Boolean) -> Unit,
     dragListener: (IgnoreItemViewHolder) -> Unit
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.ignore_rule)
-    lateinit var ignoreRule: TextView
-
-    @BindView(R.id.scope_rule)
-    lateinit var scopeRule: TextView
-
-    @BindView(R.id.toggle)
-    lateinit var toggle: SwitchCompat
-
-    @BindView(R.id.handle)
-    lateinit var handle: View
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     private var item: IgnoreListManager.IgnoreListItem? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         item?.let {
           clickListener(it)
         }
       }
-      toggle.setOnCheckedChangeListener { _, isChecked ->
+      binding.toggle.setOnCheckedChangeListener { _, isChecked ->
         item?.let {
           toggleListener.invoke(it, isChecked)
         }
       }
-      handle.setOnTouchListener { _, event ->
+      binding.handle.setOnTouchListener { _, event ->
         if (event.action == MotionEvent.ACTION_DOWN) {
           dragListener.invoke(this)
         }
@@ -131,10 +113,10 @@ class IgnoreListAdapter(
 
     fun bind(item: IgnoreListManager.IgnoreListItem) {
       this.item = item
-      ignoreRule.text = item.ignoreRule
-      scopeRule.text = item.scopeRule
-      scopeRule.visibleIf(item.scopeRule.isNotBlank() && item.scope != IgnoreListManager.ScopeType.GlobalScope)
-      toggle.isChecked = item.isActive
+      binding.ignoreRule.text = item.ignoreRule
+      binding.scopeRule.text = item.scopeRule
+      binding.scopeRule.visibleIf(item.scopeRule.isNotBlank() && item.scope != IgnoreListManager.ScopeType.GlobalScope)
+      binding.toggle.isChecked = item.isActive
     }
   }
 }

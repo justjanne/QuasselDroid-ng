@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import dagger.android.support.DaggerFragment
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.malheur.data.Report
@@ -78,15 +79,19 @@ class CrashFragment : DaggerFragment() {
 
     if (crashDir != null && context != null) {
       crashDir.mkdirs()
-      val list: List<Pair<Report, Uri>> = crashDir.listFiles()
+      val list: List<Pair<Report?, Uri>> = crashDir.listFiles()
         .orEmpty()
         .map {
-          Pair<Report, Uri>(
-            gson.fromJson(it.readText()),
+          Pair<Report?, Uri>(
+            try {
+              gson.fromJson<Report>(it.readText())
+            } catch (e: JsonSyntaxException) {
+              null
+            },
             FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it)
           )
         }
-        .sortedByDescending { it.first.environment?.crashTime }
+        .sortedByDescending { it.first?.environment?.crashTime }
 
       activity?.runOnUiThread {
         this.adapter?.submitList(list)

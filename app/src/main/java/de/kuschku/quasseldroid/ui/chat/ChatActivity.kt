@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -65,14 +65,13 @@ import de.kuschku.libquassel.util.helper.*
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
-import de.kuschku.quasseldroid.persistence.dao.clear
-import de.kuschku.quasseldroid.persistence.dao.get
-import de.kuschku.quasseldroid.persistence.dao.setFiltered
+import de.kuschku.quasseldroid.persistence.dao.*
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.models.Filtered
 import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
 import de.kuschku.quasseldroid.persistence.models.SslValidityWhitelistEntry
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
@@ -163,7 +162,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private var chatlineFragment: ChatlineFragment? = null
 
-  private var connectedAccount = -1L
+  private var connectedAccount = AccountId(-1L)
 
   private var restoredDrawerState = false
 
@@ -182,12 +181,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           chatViewModel.bufferId.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
           chatViewModel.bufferOpened.onNext(Unit)
           if (intent.hasExtra(KEY_ACCOUNT_ID)) {
-            val accountId = intent.getLongExtra(ChatActivity.KEY_ACCOUNT_ID, -1)
+            val accountId = AccountId(intent.getLongExtra(KEY_ACCOUNT_ID, -1L))
             if (accountId != this.accountId) {
               resetAccount()
               connectToAccount(accountId)
               startedSelection = false
-              connectedAccount = -1L
+              connectedAccount = AccountId(-1L)
               checkConnection()
               recreate()
             }
@@ -848,18 +847,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
     chatlineFragment?.panelSlideListener?.let(editorBottomSheet::setBottomSheetCallback)
 
-    chatlineFragment?.historyBottomSheet?.setBottomSheetCallback(
-      object : BottomSheetBehavior.BottomSheetCallback() {
-        override fun onSlide(bottomSheet: View, slideOffset: Float) {
-          val opacity = (1.0f - slideOffset) / 2.0f
-          chatlineFragment?.editorContainer?.alpha = opacity
-        }
-
-        override fun onStateChanged(bottomSheet: View, newState: Int) {
-          editorBottomSheet.allowDragging = newState == BottomSheetBehavior.STATE_HIDDEN
-        }
+    chatlineFragment?.historyBottomSheet?.bottomSheetCallback = object :
+      BottomSheetBehavior.BottomSheetCallback() {
+      override fun onSlide(bottomSheet: View, slideOffset: Float) {
+        val opacity = (1.0f - slideOffset) / 2.0f
+        chatlineFragment?.editorContainer?.alpha = opacity
       }
-    )
+
+      override fun onStateChanged(bottomSheet: View, newState: Int) {
+        editorBottomSheet.allowDragging = newState == BottomSheetBehavior.STATE_HIDDEN
+      }
+    }
 
     combineLatest(modelHelper.allBuffers,
                   modelHelper.chat.chatToJoin).map { (buffers, chatToJoinOptional) ->
@@ -933,7 +931,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onSaveInstanceState(outState)
     chatViewModel.onSaveInstanceState(outState)
 
-    outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
+    outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount.id)
     outState.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
     outState.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
   }
@@ -944,7 +942,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       chatViewModel.onRestoreInstanceState(savedInstanceState)
     }
 
-    connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
+    connectedAccount = AccountId(savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L)
 
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true &&
         resources.getBoolean(R.bool.buffer_drawer_exists)) {
@@ -1108,7 +1106,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     if (requestCode == REQUEST_SELECT_ACCOUNT) {
       startedSelection = false
-      connectedAccount = -1L
+      connectedAccount = AccountId(-1L)
 
       if (resultCode == Activity.RESULT_CANCELED) {
         finish()
@@ -1118,7 +1116,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private fun resetAccount() {
     startedSelection = true
-    connectedAccount = -1L
+    connectedAccount = AccountId(-1L)
     restoredDrawerState = false
     ChatActivity.launch(this, bufferId = BufferId.MAX_VALUE)
     chatViewModel.resetAccount()

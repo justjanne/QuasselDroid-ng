@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -34,6 +34,7 @@ import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.editCommit
@@ -70,12 +71,12 @@ abstract class ServiceBoundActivity :
     }
   }
 
-  fun connectToAccount(accountId: Long) {
+  fun connectToAccount(accountId: AccountId) {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
       putBoolean(Keys.Status.reconnect, false)
     }
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
-      putLong(Keys.Status.selectedAccount, accountId)
+      putLong(Keys.Status.selectedAccount, accountId.id)
       putBoolean(Keys.Status.reconnect, true)
     }
   }
@@ -86,7 +87,7 @@ abstract class ServiceBoundActivity :
   @Inject
   lateinit var quasselViewModel: QuasselViewModel
 
-  protected var accountId: Long = -1
+  protected var accountId: AccountId = AccountId(-1L)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -143,14 +144,13 @@ abstract class ServiceBoundActivity :
     checkConnection()
 
   protected fun checkConnection() {
-    accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-                  ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+    accountId = AccountId(getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+                            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1)
 
     val reconnect = sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       getBoolean(Keys.Status.reconnect, false)
     }
-    val accountIdValid = accountId != -1L
-    if (!reconnect || !accountIdValid) {
+    if (!reconnect || !accountId.isValidId()) {
       onSelectAccount()
     } else {
       if (!connection.start())

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,15 +20,11 @@
 package de.kuschku.quasseldroid.util.missingfeatures
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetMissingFeatureBinding
 
 class MissingFeaturesAdapter :
   ListAdapter<MissingFeature, MissingFeaturesAdapter.MissingFeatureViewHolder>(
@@ -41,26 +37,18 @@ class MissingFeaturesAdapter :
     }
   ) {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MissingFeatureViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.widget_missing_feature, parent, false)
+    WidgetMissingFeatureBinding.inflate(LayoutInflater.from(parent.context), parent, false)
   )
 
   override fun onBindViewHolder(holder: MissingFeatureViewHolder, position: Int) =
     holder.bind(getItem(position))
 
-  class MissingFeatureViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.name)
-    lateinit var name: TextView
-
-    @BindView(R.id.description)
-    lateinit var description: TextView
-
-    init {
-      ButterKnife.bind(this, itemView)
-    }
-
+  class MissingFeatureViewHolder(
+    private val binding: WidgetMissingFeatureBinding
+  ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: MissingFeature) {
-      name.text = item.feature.name
-      description.setText(item.description)
+      binding.name.text = item.feature.name
+      binding.description.setText(item.description)
     }
   }
 }

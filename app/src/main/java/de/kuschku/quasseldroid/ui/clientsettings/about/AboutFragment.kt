@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -210,7 +210,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Kotlin Standard Library",
-        version = "1.3.50",
+        version = "1.3.61",
         license = apache2,
         url = "https://kotlinlang.org/"
       ),

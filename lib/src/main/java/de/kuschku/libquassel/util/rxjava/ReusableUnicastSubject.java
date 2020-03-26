@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -206,7 +206,7 @@ public final class ReusableUnicastSubject<T> extends Subject<T> {
     this.delayError = delayError;
     this.actual = new AtomicReference<>();
     this.once = new AtomicBoolean();
-    this.wip = new ReusableUnicastSubject.UnicastQueueDisposable();
+    this.wip = new ReusableUnicastSubject<T>.UnicastQueueDisposable();
   }
 
   /**
@@ -236,7 +236,7 @@ public final class ReusableUnicastSubject<T> extends Subject<T> {
     this.delayError = delayError;
     this.actual = new AtomicReference<Observer<? super T>>();
     this.once = new AtomicBoolean();
-    this.wip = new ReusableUnicastSubject.UnicastQueueDisposable();
+    this.wip = new ReusableUnicastSubject<T>.UnicastQueueDisposable();
   }
 
   /**

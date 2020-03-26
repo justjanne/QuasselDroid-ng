@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -45,6 +45,8 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.util.helper.*
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.dao.listenDefaultFiltered
+import de.kuschku.quasseldroid.persistence.dao.listenRx
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.models.Filtered

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,18 +20,14 @@
 package de.kuschku.quasseldroid.ui.clientsettings.about
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetContributorBinding
 
 class ContributorAdapter(private val contributors: List<Contributor>) :
   RecyclerView.Adapter<ContributorAdapter.ContributorViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ContributorViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.widget_contributor, parent, false)
+    WidgetContributorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
   )
 
   override fun getItemCount() = contributors.size
@@ -40,24 +36,13 @@ class ContributorAdapter(private val contributors: List<Contributor>) :
     holder.bind(contributors[position])
   }
 
-  class ContributorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.name)
-    lateinit var name: TextView
-
-    @BindView(R.id.nickname)
-    lateinit var nickName: TextView
-
-    @BindView(R.id.description)
-    lateinit var description: TextView
-
-    init {
-      ButterKnife.bind(this, itemView)
-    }
-
+  class ContributorViewHolder(
+    private val binding: WidgetContributorBinding
+  ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Contributor) {
-      this.name.text = item.name
-      this.nickName.text = item.nickName
-      this.description.text = item.description
+      binding.name.text = item.name
+      binding.nickname.text = item.nickName
+      binding.description.text = item.description
     }
   }
 }

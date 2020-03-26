@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -23,6 +23,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.BufferId_Type
+import de.kuschku.quasseldroid.persistence.util.AccountId
 
 @Entity(tableName = "filtered", primaryKeys = ["accountId", "bufferId"])
 data class Filtered(
@@ -36,11 +37,11 @@ data class Filtered(
 
   companion object {
     inline fun of(
-      accountId: Long,
+      accountId: AccountId,
       bufferId: BufferId,
       filtered: Int
     ) = Filtered(
-      accountId,
+      accountId.id,
       bufferId.id,
       filtered
     )

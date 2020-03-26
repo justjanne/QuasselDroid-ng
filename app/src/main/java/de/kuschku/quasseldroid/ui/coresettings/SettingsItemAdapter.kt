@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,15 +20,11 @@
 package de.kuschku.quasseldroid.ui.coresettings
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.SettingsItemBinding
 
 class SettingsItemAdapter<T>(private val clickListener: (T) -> Unit) :
   ListAdapter<SettingsItem<T>, SettingsItemAdapter.SettingsItemViewHolder<T>>(
@@ -41,7 +37,7 @@ class SettingsItemAdapter<T>(private val clickListener: (T) -> Unit) :
     }
   ) {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SettingsItemViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.settings_item, parent, false),
+    SettingsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     clickListener
   )
 
@@ -49,15 +45,13 @@ class SettingsItemAdapter<T>(private val clickListener: (T) -> Unit) :
     holder.bind(getItem(position))
   }
 
-  class SettingsItemViewHolder<T>(itemView: View, clickListener: (T) -> Unit) :
-    RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.title)
-    lateinit var title: TextView
-
+  class SettingsItemViewHolder<T>(
+    private val binding: SettingsItemBinding,
+    clickListener: (T) -> Unit
+  ) : RecyclerView.ViewHolder(binding.root) {
     var id: T? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         id?.let(clickListener::invoke)
       }
@@ -65,7 +59,7 @@ class SettingsItemAdapter<T>(private val clickListener: (T) -> Unit) :
 
     fun bind(item: SettingsItem<T>) {
       this.id = item.id
-      this.title.text = item.name
+      binding.title.text = item.name
     }
   }
 }

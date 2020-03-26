@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,15 +21,10 @@ package de.kuschku.quasseldroid.ui.coresettings.highlightlist
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.SettingsHighlightlistRuleBinding
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import java.util.*
 
@@ -79,8 +74,7 @@ class HighlightRuleAdapter(
   override fun getItemCount() = data.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HighlightRuleViewHolder(
-    LayoutInflater.from(parent.context)
-      .inflate(R.layout.settings_highlightlist_rule, parent, false),
+    SettingsHighlightlistRuleBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     clickListener,
     ::toggle,
     dragListener
@@ -91,53 +85,25 @@ class HighlightRuleAdapter(
   }
 
   class HighlightRuleViewHolder(
-    itemView: View,
+    private val binding: SettingsHighlightlistRuleBinding,
     clickListener: (HighlightRuleManager.HighlightRule) -> Unit,
     toggleListener: (HighlightRuleManager.HighlightRule, Boolean) -> Unit,
     dragListener: (HighlightRuleViewHolder) -> Unit
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.name)
-    lateinit var name: TextView
-
-    @BindView(R.id.name_row)
-    lateinit var nameRow: View
-
-    @BindView(R.id.sender)
-    lateinit var sender: TextView
-
-    @BindView(R.id.sender_row)
-    lateinit var senderRow: View
-
-    @BindView(R.id.channel)
-    lateinit var channel: TextView
-
-    @BindView(R.id.channel_row)
-    lateinit var channelRow: View
-
-    @BindView(R.id.match_all)
-    lateinit var matchAll: View
-
-    @BindView(R.id.toggle)
-    lateinit var toggle: SwitchCompat
-
-    @BindView(R.id.handle)
-    lateinit var handle: View
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     private var item: HighlightRuleManager.HighlightRule? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         item?.let {
           clickListener(it)
         }
       }
-      toggle.setOnCheckedChangeListener { _, isChecked ->
+      binding.toggle.setOnCheckedChangeListener { _, isChecked ->
         item?.let {
           toggleListener.invoke(it, isChecked)
         }
       }
-      handle.setOnTouchListener { _, event ->
+      binding.handle.setOnTouchListener { _, event ->
         if (event.action == MotionEvent.ACTION_DOWN) {
           dragListener.invoke(this)
         }
@@ -147,15 +113,15 @@ class HighlightRuleAdapter(
 
     fun bind(item: HighlightRuleManager.HighlightRule) {
       this.item = item
-      name.text = item.name
-      nameRow.visibleIf(item.name.isNotBlank())
-      sender.text = item.sender
-      senderRow.visibleIf(item.sender.isNotBlank())
-      channel.text = item.channel
-      channelRow.visibleIf(item.channel.isNotBlank())
-      matchAll.visibleIf(item.name.isBlank() && item.sender.isBlank() && item.channel.isBlank())
+      binding.name.text = item.name
+      binding.nameRow.visibleIf(item.name.isNotBlank())
+      binding.sender.text = item.sender
+      binding.senderRow.visibleIf(item.sender.isNotBlank())
+      binding.channel.text = item.channel
+      binding.channelRow.visibleIf(item.channel.isNotBlank())
+      binding.matchAll.visibleIf(item.name.isBlank() && item.sender.isBlank() && item.channel.isBlank())
 
-      toggle.isChecked = item.isEnabled
+      binding.toggle.isChecked = item.isEnabled
     }
   }
 }

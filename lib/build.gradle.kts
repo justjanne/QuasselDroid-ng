@@ -23,7 +23,7 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.50"))
+  implementation(kotlin("stdlib", "1.3.61"))
 
   implementation("androidx.annotation", "annotation", "1.1.0")
 

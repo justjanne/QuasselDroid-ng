@@ -26,7 +26,7 @@ android {
   compileSdkVersion(28)
 
   defaultConfig {
-    minSdkVersion(16)
+    minSdkVersion(20)
     targetSdkVersion(28)
 
     consumerProguardFiles("proguard-rules.pro")
@@ -44,10 +44,10 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.50"))
+  implementation(kotlin("stdlib", "1.3.61"))
 
   implementation("androidx.appcompat", "appcompat", "1.1.0")
-  withVersion("2.1.0") {
+  withVersion("2.2.0") {
     implementation("androidx.lifecycle", "lifecycle-extensions", version)
     implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
   }

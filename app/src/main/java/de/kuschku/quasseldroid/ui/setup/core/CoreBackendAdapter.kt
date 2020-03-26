@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,16 +20,11 @@
 package de.kuschku.quasseldroid.ui.setup.core
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupBackend
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetCoreBackendBinding
 
 class CoreBackendAdapter : RecyclerView.Adapter<CoreBackendAdapter.BackendViewHolder>() {
   private val selectionListeners = mutableSetOf<(CoreSetupBackend) -> Unit>()
@@ -105,29 +100,21 @@ class CoreBackendAdapter : RecyclerView.Adapter<CoreBackendAdapter.BackendViewHo
     holder.bind(item.second, item.first)
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BackendViewHolder {
-    val inflater = LayoutInflater.from(parent.context)
-    val view = inflater.inflate(R.layout.widget_core_backend, parent, false)
-    return BackendViewHolder(view, clickListener)
-  }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BackendViewHolder(
+    WidgetCoreBackendBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+    clickListener
+  )
 
   override fun getItemCount() = list.size
 
-  class BackendViewHolder(itemView: View, clickListener: (CoreSetupBackend) -> Unit) :
-    RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.backend_name)
-    lateinit var backendName: TextView
-
-    @BindView(R.id.backend_description)
-    lateinit var backendDescription: TextView
-
-    @BindView(R.id.backend_select)
-    lateinit var backendSelect: AppCompatRadioButton
-
+  class BackendViewHolder(
+    private val binding: WidgetCoreBackendBinding,
+    clickListener: (CoreSetupBackend) -> Unit
+  ) :
+    RecyclerView.ViewHolder(binding.root) {
     private var item: CoreSetupBackend? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         item?.let(clickListener)
       }
@@ -135,16 +122,9 @@ class CoreBackendAdapter : RecyclerView.Adapter<CoreBackendAdapter.BackendViewHo
 
     fun bind(backend: CoreSetupBackend, selected: Boolean) {
       item = backend
-      backendName.text = backend.displayName
-      backendDescription.text = backend.description
-      backendSelect.isChecked = selected
-    }
-
-    fun clear() {
-      item = null
-      backendName.text = ""
-      backendDescription.text = ""
-      backendSelect.isChecked = false
+      binding.backendName.text = backend.displayName
+      binding.backendDescription.text = backend.description
+      binding.backendSelect.isChecked = selected
     }
   }
 }

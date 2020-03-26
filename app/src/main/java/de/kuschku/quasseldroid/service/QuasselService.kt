@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -48,12 +48,10 @@ import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.persistence.dao.buffers
-import de.kuschku.quasseldroid.persistence.dao.clear
-import de.kuschku.quasseldroid.persistence.dao.markHidden
-import de.kuschku.quasseldroid.persistence.dao.markReadNormal
+import de.kuschku.quasseldroid.persistence.dao.*
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.persistence.util.QuasselBacklogStorage
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
@@ -99,7 +97,7 @@ class QuasselService : DaggerLifecycleService(),
 
     val (accountId, reconnect) = this.sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       Pair(
-        getLong(Keys.Status.selectedAccount, -1),
+        AccountId(getLong(Keys.Status.selectedAccount, -1)),
         getBoolean(Keys.Status.reconnect, false)
       )
     }
@@ -108,7 +106,7 @@ class QuasselService : DaggerLifecycleService(),
       this.reconnect = reconnect
 
       handlerService.backend {
-        val account = if (accountId != -1L && reconnect) {
+        val account = if (accountId.isValidId() && reconnect) {
           accountDatabase.accounts().findById(accountId)
         } else {
           null
@@ -129,7 +127,7 @@ class QuasselService : DaggerLifecycleService(),
           )
         }
       }
-    } else if (accountId == -1L || !reconnect) {
+    } else if (!accountId.isValidId() || !reconnect) {
       handlerService.backend {
         backendImplementation.disconnect(true)
         stopSelf()
@@ -137,12 +135,12 @@ class QuasselService : DaggerLifecycleService(),
     }
   }
 
-  private var accountId: Long = -1
+  private var accountId: AccountId = AccountId(-1)
     set(value) {
       field = value
       liveAccountId.onNext(value)
     }
-  private var liveAccountId = BehaviorSubject.createDefault(-1L)
+  private var liveAccountId = BehaviorSubject.createDefault(AccountId(-1L))
   private var reconnect: Boolean = false
 
   @Inject
@@ -169,13 +167,15 @@ class QuasselService : DaggerLifecycleService(),
     }
   }
 
-  override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     val result = super.onStartCommand(intent, flags, startId)
     handleIntent(intent)
     return result
   }
 
-  private fun handleIntent(intent: Intent) {
+  private fun handleIntent(intent: Intent?) {
+    if (intent == null) return
+
     if (intent.getBooleanExtra("disconnect", false)) {
       sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
         editApply {
@@ -493,7 +493,7 @@ class QuasselService : DaggerLifecycleService(),
     super.onDestroy()
   }
 
-  override fun onBind(intent: Intent): QuasselBinder {
+  override fun onBind(intent: Intent?): QuasselBinder {
     super.onBind(intent)
     return QuasselBinder(asyncBackend)
   }

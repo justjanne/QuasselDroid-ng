@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,17 +20,12 @@
 package de.kuschku.quasseldroid.ui.info.user
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetBufferBinding
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.lists.ListAdapter
@@ -51,9 +46,7 @@ class ChannelAdapter : ListAdapter<BufferProps, ChannelAdapter.ChannelViewHolder
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ChannelViewHolder(
-    LayoutInflater.from(parent.context).inflate(
-      R.layout.widget_buffer, parent, false
-    ),
+    WidgetBufferBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     clickListener = clickListener
   )
 
@@ -61,22 +54,12 @@ class ChannelAdapter : ListAdapter<BufferProps, ChannelAdapter.ChannelViewHolder
     holder.bind(getItem(position))
 
   class ChannelViewHolder(
-    itemView: View,
+    private val binding: WidgetBufferBinding,
     private val clickListener: ((NetworkId, String) -> Unit)? = null
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.status)
-    lateinit var status: ImageView
-
-    @BindView(R.id.name)
-    lateinit var name: TextView
-
-    @BindView(R.id.description)
-    lateinit var description: TextView
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     var info: BufferInfo? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         info?.let {
           ChatActivity.launch(
@@ -91,12 +74,12 @@ class ChannelAdapter : ListAdapter<BufferProps, ChannelAdapter.ChannelViewHolder
     fun bind(props: BufferProps) {
       info = props.info
 
-      name.text = props.info.bufferName
-      description.text = props.description
+      binding.name.text = props.info.bufferName
+      binding.description.text = props.description
 
-      description.visibleIf(props.description.isNotBlank())
+      binding.description.visibleIf(props.description.isNotBlank())
 
-      status.setImageDrawable(props.fallbackDrawable)
+      binding.status.setImageDrawable(props.fallbackDrawable)
     }
   }
 }

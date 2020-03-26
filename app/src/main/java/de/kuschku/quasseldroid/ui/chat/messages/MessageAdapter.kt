@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -29,8 +29,6 @@ import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -46,7 +44,7 @@ import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(
-  private val messageRenderer: MessageRenderer
+  private val messageRenderer: QuasselMessageRenderer
 ) : PagedListAdapter<DisplayMessage, MessageAdapter.QuasselMessageViewHolder>(
   object : DiffUtil.ItemCallback<DisplayMessage>() {
     override fun areItemsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
@@ -185,45 +183,16 @@ class MessageAdapter @Inject constructor(
     expansionListener: ((MessageData) -> Unit)? = null,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.daychange_container)
-    @JvmField
-    var daychangeContainer: View? = null
-
-    @BindView(R.id.daychange)
-    @JvmField
-    var daychange: TextView? = null
-
-    @BindView(R.id.message_container)
-    @JvmField
-    var messageContainer: View? = null
-
-    @BindView(R.id.time_left)
-    @JvmField
-    var timeLeft: TextView? = null
-
-    @BindView(R.id.time_right)
-    @JvmField
-    var timeRight: TextView? = null
-
-    @BindView(R.id.avatar)
-    @JvmField
-    var avatar: ImageView? = null
-
-    @BindView(R.id.name)
-    @JvmField
-    var name: TextView? = null
-
-    @BindView(R.id.realname)
-    @JvmField
-    var realname: TextView? = null
-
-    @BindView(R.id.content)
-    @JvmField
-    var content: TextView? = null
-
-    @BindView(R.id.combined)
-    @JvmField
-    var combined: TextView? = null
+    val daychangeContainer: View? = itemView.findViewById(R.id.daychange_container)
+    val daychange: TextView? = itemView.findViewById(R.id.daychange)
+    val messageContainer: View? = itemView.findViewById(R.id.message_container)
+    val timeLeft: TextView? = itemView.findViewById(R.id.time_left)
+    val timeRight: TextView? = itemView.findViewById(R.id.time_right)
+    val avatar: ImageView? = itemView.findViewById(R.id.avatar)
+    val name: TextView? = itemView.findViewById(R.id.name)
+    val realname: TextView? = itemView.findViewById(R.id.realname)
+    val content: TextView? = itemView.findViewById(R.id.content)
+    val combined: TextView? = itemView.findViewById(R.id.combined)
 
     private var message: FormattedMessage? = null
     private var original: MessageData? = null
@@ -254,7 +223,6 @@ class MessageAdapter @Inject constructor(
     }
 
     init {
-      ButterKnife.bind(this, itemView)
       content?.movementMethod = movementMethod
       combined?.movementMethod = movementMethod
 

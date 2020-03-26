@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -54,7 +54,7 @@ open class RingtonePreference : DialogPreference,
     this(context, null)
 
   constructor(context: Context, attrs: AttributeSet?) :
-    this(context, attrs, R.attr.ringtonePreferenceStyle)
+    this(context, attrs, android.R.attr.ringtonePreferenceStyle)
 
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     this(context, attrs, defStyleAttr, 0)

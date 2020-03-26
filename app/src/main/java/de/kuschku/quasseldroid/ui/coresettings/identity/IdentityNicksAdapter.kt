@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,13 +21,9 @@ package de.kuschku.quasseldroid.ui.coresettings.identity
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.SettingsIdentityNickBinding
 import java.util.*
 
 class IdentityNicksAdapter(
@@ -70,8 +66,7 @@ class IdentityNicksAdapter(
   override fun getItemCount() = data.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = IdentityNickViewHolder(
-    LayoutInflater.from(parent.context)
-      .inflate(R.layout.settings_identity_nick, parent, false),
+    SettingsIdentityNickBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     clickListener,
     dragListener
   )
@@ -81,27 +76,19 @@ class IdentityNicksAdapter(
   }
 
   class IdentityNickViewHolder(
-    itemView: View,
+    private val binding: SettingsIdentityNickBinding,
     private val clickListener: (Int, String) -> Unit,
     dragListener: (IdentityNickViewHolder) -> Unit
-  ) :
-    RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.nick)
-    lateinit var nick: TextView
-
-    @BindView(R.id.handle)
-    lateinit var handle: View
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     private var item: String? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         item?.let {
           clickListener(adapterPosition, it)
         }
       }
-      handle.setOnTouchListener { _, event ->
+      binding.handle.setOnTouchListener { _, event ->
         if (event.action == MotionEvent.ACTION_DOWN) {
           dragListener.invoke(this)
         }
@@ -111,7 +98,7 @@ class IdentityNicksAdapter(
 
     fun bind(item: String) {
       this.item = item
-      nick.text = item
+      binding.nick.text = item
     }
   }
 }

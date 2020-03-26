@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -35,8 +35,10 @@ import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.dao.findById
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.models.Account
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.editCommit
@@ -79,7 +81,7 @@ class AccountEditFragment : SettingsFragment(), Changeable, Savable, Deletable {
   lateinit var database: AccountDatabase
 
   private var account: Account? = null
-  private var accountId: Long = -1L
+  private var accountId: AccountId = AccountId(-1L)
 
   private lateinit var handlerThread: HandlerThread
   private lateinit var handler: Handler
@@ -104,8 +106,8 @@ class AccountEditFragment : SettingsFragment(), Changeable, Savable, Deletable {
     setHasOptionsMenu(true)
 
     handler.post {
-      accountId = arguments?.getLong("account", -1) ?: -1
-      if (accountId == -1L) {
+      accountId = AccountId(arguments?.getLong("account", -1L) ?: -1L)
+      if (!accountId.isValidId()) {
         activity?.setResult(Activity.RESULT_CANCELED)
         activity?.finish()
       }
@@ -187,8 +189,8 @@ class AccountEditFragment : SettingsFragment(), Changeable, Savable, Deletable {
     handler.post {
       account?.let {
         val preferences = activity?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-        if (preferences?.getLong(Keys.Status.selectedAccount, -1) == it.id) {
-          preferences.editCommit {
+        if (AccountId(preferences?.getLong(Keys.Status.selectedAccount, -1) ?: -1) == it.id) {
+          preferences?.editCommit {
             remove(Keys.Status.selectedAccount)
           }
         }

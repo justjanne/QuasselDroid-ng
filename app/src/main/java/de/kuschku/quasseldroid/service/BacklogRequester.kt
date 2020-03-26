@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -27,10 +27,12 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.helper.value
+import de.kuschku.quasseldroid.persistence.dao.findById
 import de.kuschku.quasseldroid.persistence.dao.findFirstByBufferId
 import de.kuschku.quasseldroid.persistence.dao.get
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.persistence.util.QuasselBacklogStorage
 import io.reactivex.Observable
 
@@ -39,7 +41,7 @@ class BacklogRequester(
   private val database: QuasselDatabase,
   private val accountDatabase: AccountDatabase
 ) {
-  fun loadMore(accountId: Long, buffer: BufferId, amount: Int, pageSize: Int,
+  fun loadMore(accountId: AccountId, buffer: BufferId, amount: Int, pageSize: Int,
                lastMessageId: MsgId? = null,
                untilAllVisible: Boolean = false,
                finishCallback: () -> Unit) {
@@ -49,10 +51,11 @@ class BacklogRequester(
     var missing = amount
     session.value?.orNull()?.let { session: ISession ->
       session.backlogManager.let {
-        val filtered = database.filtered().get(accountId,
-                                               buffer,
-                                               accountDatabase.accounts().findById(accountId)?.defaultFiltered
-                                               ?: 0)
+        val filtered = database.filtered().get(
+          accountId,
+          buffer,
+          accountDatabase.accounts().findById(accountId)?.defaultFiltered ?: 0
+        )
         it.requestBacklog(
           bufferId = buffer,
           last = lastMessageId

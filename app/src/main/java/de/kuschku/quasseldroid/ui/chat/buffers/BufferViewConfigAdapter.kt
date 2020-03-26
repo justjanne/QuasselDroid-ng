@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,16 +20,12 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.ThemedSpinnerAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetSpinnerItemToolbarBinding
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
 class BufferViewConfigAdapter :
@@ -63,9 +59,8 @@ class BufferViewConfigAdapter :
       if (dropDown) ContextThemeWrapper(parent.context, dropDownViewTheme)
       else parent.context
     )
-    val view = inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false)
     return BufferViewConfigViewHolder(
-      view
+      WidgetSpinnerItemToolbarBinding.inflate(inflater, parent, false)
     )
   }
 
@@ -80,16 +75,11 @@ class BufferViewConfigAdapter :
 
   override fun getCount() = data.size
 
-  class BufferViewConfigViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    @BindView(android.R.id.text1)
-    lateinit var text: TextView
-
-    init {
-      ButterKnife.bind(this, itemView)
-    }
-
+  class BufferViewConfigViewHolder(
+    private val binding: WidgetSpinnerItemToolbarBinding
+  ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(bufferViewConfig: BufferViewConfig?) {
-      text.text = bufferViewConfig?.bufferViewName() ?: ""
+      binding.text1.text = bufferViewConfig?.bufferViewName() ?: ""
     }
   }
 }

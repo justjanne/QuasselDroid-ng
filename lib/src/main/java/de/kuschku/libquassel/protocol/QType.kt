@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -25,8 +25,7 @@ enum class QType(val typeName: String, val serializer: Serializer<*>,
                  val type: Type = Type.UserType) {
   BufferId("BufferId", BufferIdSerializer),
   BufferInfo("BufferInfo", BufferInfoSerializer),
-  DccConfig_IpDetectionMode("DccConfig::IpDetectionMode",
-                            DccConfig_IpDetectionModeSerializer),
+  DccConfig_IpDetectionMode("DccConfig::IpDetectionMode", DccConfig_IpDetectionModeSerializer),
   DccConfig_PortSelectionMode("DccConfig::PortSelectionMode",
                               DccConfig_PortSelectionModeSerializer),
   IrcUser("IrcUser", VariantMapSerializer),

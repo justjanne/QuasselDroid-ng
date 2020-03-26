@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,14 +21,10 @@ package de.kuschku.quasseldroid.ui.chat.input
 
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetHistoryMessageBinding
 import de.kuschku.quasseldroid.util.lists.ListAdapter
 
 class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.MessageViewHolder>(
@@ -52,7 +48,7 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
     MessageViewHolder(
-      LayoutInflater.from(parent.context).inflate(R.layout.widget_history_message, parent, false),
+      WidgetHistoryMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener
     )
 
@@ -64,16 +60,12 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
     holder.bind(getItem(position))
 
   class MessageViewHolder(
-    itemView: View,
+    private val binding: WidgetHistoryMessageBinding,
     private val clickListener: ((CharSequence) -> Unit)? = null
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.content)
-    lateinit var content: TextView
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     var value: CharSequence? = null
 
     init {
-      ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         val value = value
         if (value != null)
@@ -83,7 +75,7 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
 
     fun bind(data: CharSequence) {
       value = data
-      content.text = data
+      binding.content.text = data
     }
   }
 }

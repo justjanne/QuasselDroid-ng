@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -22,16 +22,13 @@ package de.kuschku.quasseldroid.ui.chat.nicks
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.util.helper.nullIf
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetNickAwayBinding
+import de.kuschku.quasseldroid.databinding.WidgetNickBinding
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.loadAvatars
@@ -56,20 +53,15 @@ class NickListAdapter(
     (it.initial.nullIf(String?::isNullOrBlank) ?: "123")
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NickViewHolder {
-    val holder = NickViewHolder(
-      LayoutInflater.from(parent.context).inflate(
-        when (viewType) {
-          VIEWTYPE_AWAY -> R.layout.widget_nick_away
-          else          -> R.layout.widget_nick
-        }, parent, false
-      ),
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+    VIEWTYPE_AWAY -> NickViewHolder.Away(
+      WidgetNickAwayBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener
     )
-
-    holder.avatar.visibleIf(messageSettings.showAvatars)
-
-    return holder
+    else          -> NickViewHolder.Active(
+      WidgetNickBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+      clickListener = clickListener
+    )
   }
 
   operator fun get(position: Int): IrcUserItem? = super.getItem(position)
@@ -83,39 +75,61 @@ class NickListAdapter(
     VIEWTYPE_ACTIVE
   }
 
-  class NickViewHolder(
-    itemView: View,
-    private val clickListener: ((NetworkId, String) -> Unit)? = null
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.avatar)
-    lateinit var avatar: ImageView
+  sealed class NickViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract fun bind(data: IrcUserItem, messageSettings: MessageSettings)
 
-    @BindView(R.id.nick)
-    lateinit var nick: TextView
+    class Active(
+      private val binding: WidgetNickBinding,
+      private val clickListener: ((NetworkId, String) -> Unit)? = null
+    ) : NickViewHolder(binding.root) {
+      var user: IrcUserItem? = null
 
-    @BindView(R.id.realname)
-    lateinit var realname: TextView
+      init {
+        itemView.setOnClickListener {
+          val nick = user
+          if (nick != null)
+            clickListener?.invoke(nick.networkId, nick.nick)
+        }
+      }
 
-    var user: IrcUserItem? = null
+      override fun bind(data: IrcUserItem, messageSettings: MessageSettings) {
+        user = data
 
-    init {
-      ButterKnife.bind(this, itemView)
-      itemView.setOnClickListener {
-        val nick = user
-        if (nick != null)
-          clickListener?.invoke(nick.networkId, nick.nick)
+        binding.nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
+        binding.realname.text = data.realname
+
+        binding.avatar.visibleIf(messageSettings.showAvatars)
+        binding.avatar.loadAvatars(data.avatarUrls,
+                                   data.fallbackDrawable,
+                                   crop = !messageSettings.squareAvatars)
       }
     }
 
-    fun bind(data: IrcUserItem, messageSettings: MessageSettings) {
-      user = data
+    class Away(
+      private val binding: WidgetNickAwayBinding,
+      private val clickListener: ((NetworkId, String) -> Unit)? = null
+    ) : NickViewHolder(binding.root) {
+      var user: IrcUserItem? = null
 
-      nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
-      realname.text = data.realname
+      init {
+        itemView.setOnClickListener {
+          val nick = user
+          if (nick != null)
+            clickListener?.invoke(nick.networkId, nick.nick)
+        }
+      }
 
-      avatar.loadAvatars(data.avatarUrls,
-                         data.fallbackDrawable,
-                         crop = !messageSettings.squareAvatars)
+      override fun bind(data: IrcUserItem, messageSettings: MessageSettings) {
+        user = data
+
+        binding.nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
+        binding.realname.text = data.realname
+
+        binding.avatar.visibleIf(messageSettings.showAvatars)
+        binding.avatar.loadAvatars(data.avatarUrls,
+                                   data.fallbackDrawable,
+                                   crop = !messageSettings.squareAvatars)
+      }
     }
   }
 

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -66,13 +66,13 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     setPreferencesFromResource(R.xml.preferences, rootKey)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      findPreference(getString(R.string.preference_notification_sound_key)).isVisible = false
-      findPreference(getString(R.string.preference_notification_vibration_key)).isVisible = false
-      findPreference(getString(R.string.preference_notification_light_key)).isVisible = false
+      findPreference<Preference>(getString(R.string.preference_notification_sound_key))?.isVisible = false
+      findPreference<Preference>(getString(R.string.preference_notification_vibration_key))?.isVisible = false
+      findPreference<Preference>(getString(R.string.preference_notification_light_key))?.isVisible = false
     } else {
-      findPreference(getString(R.string.preference_notification_configure_key)).isVisible = false
+      findPreference<Preference>(getString(R.string.preference_notification_configure_key))?.isVisible = false
     }
-    findPreference(getString(R.string.preference_clear_cache_key)).setOnPreferenceClickListener {
+    findPreference<Preference>(getString(R.string.preference_clear_cache_key))?.setOnPreferenceClickListener {
       activity?.let {
         handler.post {
           QuasselDatabase.Creator.init(it).message().clearMessages()
@@ -93,8 +93,8 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
     super.onStop()
   }
 
-  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-    updateSummary(findPreference(key))
+  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
+    updateSummary(findPreference<ListPreference>(key))
     val appearanceSettings = Settings.appearance(context!!)
     if (this.appearanceSettings.theme != appearanceSettings.theme ||
         this.appearanceSettings.language != appearanceSettings.language) {
@@ -102,8 +102,8 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
     }
   }
 
-  private fun updateSummary(preference: Preference) {
-    if (preference is ListPreference) {
+  private fun updateSummary(preference: ListPreference?) {
+    if (preference != null) {
       preference.summary = preference.entry
     }
   }
@@ -111,7 +111,7 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
   private fun initSummary(preference: Preference) {
     if (preference is PreferenceGroup) {
       (0 until preference.preferenceCount).asSequence().map(preference::getPreference).forEach(::initSummary)
-    } else {
+    } else if (preference is ListPreference) {
       updateSummary(preference)
     }
   }

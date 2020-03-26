@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -126,7 +126,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       if (it != null) {
         val selectOriginal = networkId.selectedItemId == Spinner.INVALID_ROW_ID
         networkAdapter.submitList(listOf(null) + it)
@@ -143,7 +143,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()
-        .toLiveData().observe(this, Observer {
+        .toLiveData().observe(viewLifecycleOwner, Observer {
           it?.let {
             update(Defaults.bufferViewConfig(requireContext(), it.proxy),
                    minimumActivityAdapter,
@@ -155,7 +155,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
         .filter(Optional<BufferViewConfig>::isPresent)
         .map(Optional<BufferViewConfig>::get)
         .firstElement()
-        .toLiveData().observe(this, Observer {
+        .toLiveData().observe(viewLifecycleOwner, Observer {
           it?.let {
             update(it, minimumActivityAdapter, networkAdapter)
           }
@@ -169,11 +169,11 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
       }
 
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (id == -1L) {
+        if (NetworkId(id.toInt()).isValidId()) {
+          showStatusBuffer.isEnabled = true
+        } else {
           showStatusBuffer.isChecked = true
           showStatusBuffer.isEnabled = false
-        } else {
-          showStatusBuffer.isEnabled = true
         }
       }
     }

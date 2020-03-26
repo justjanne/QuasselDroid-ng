@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -28,6 +28,7 @@ import androidx.room.Query
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.BufferId_Type
 import de.kuschku.quasseldroid.persistence.models.Filtered
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import io.reactivex.Flowable
 
 @Dao
@@ -44,36 +45,45 @@ interface FilteredDao {
   @Query("SELECT IFNULL(t.filtered, :defaultValue) FROM (SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT NULL ORDER BY filtered DESC LIMIT 1) t")
   fun _get(accountId: Long, bufferId: BufferId_Type, defaultValue: Int): Int
 
+  @Query("SELECT * FROM filtered WHERE accountId = :accountId")
+  fun _listen(accountId: Long): LiveData<List<Filtered>>
+
+  @Query("SELECT * FROM filtered WHERE accountId = :accountId")
+  fun _listenRx(accountId: Long): Flowable<List<Filtered>>
+
   @Query("SELECT IFNULL(t.filtered, :defaultValue) FROM (SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT NULL ORDER BY filtered DESC LIMIT 1) t")
   fun _listen(accountId: Long, bufferId: BufferId_Type, defaultValue: Int): LiveData<Int>
-
-  @Query("SELECT * FROM filtered WHERE accountId = :accountId")
-  fun listen(accountId: Long): LiveData<List<Filtered>>
-
-  @Query("SELECT * FROM filtered WHERE accountId = :accountId")
-  fun listenRx(accountId: Long): Flowable<List<Filtered>>
 
   @Query("DELETE FROM filtered")
   fun clear()
 
   @Query("DELETE FROM filtered WHERE accountId = :accountId")
-  fun clear(accountId: Long)
+  fun _clear(accountId: Long)
 
   @Query("DELETE FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId")
   fun _clear(accountId: Long, bufferId: BufferId_Type)
 }
 
-inline fun FilteredDao.buffers(accountId: Long) =
-  _buffers(accountId).map(::BufferId)
+inline fun FilteredDao.buffers(accountId: AccountId) =
+  _buffers(accountId.id).map(::BufferId)
 
-inline fun FilteredDao.setFiltered(accountId: Long, bufferId: BufferId, filtered: Int) =
-  _setFiltered(accountId, bufferId.id, filtered)
+inline fun FilteredDao.setFiltered(accountId: AccountId, bufferId: BufferId, filtered: Int) =
+  _setFiltered(accountId.id, bufferId.id, filtered)
 
-inline fun FilteredDao.get(accountId: Long, bufferId: BufferId, defaultValue: Int) =
-  _get(accountId, bufferId.id, defaultValue)
+inline fun FilteredDao.get(accountId: AccountId, bufferId: BufferId, defaultValue: Int) =
+  _get(accountId.id, bufferId.id, defaultValue)
 
-inline fun FilteredDao.listen(accountId: Long, bufferId: BufferId, defaultValue: Int) =
-  _listen(accountId, bufferId.id, defaultValue)
+inline fun FilteredDao.listen(accountId: AccountId) =
+  _listen(accountId.id)
 
-inline fun FilteredDao.clear(accountId: Long, bufferId: BufferId) =
-  _clear(accountId, bufferId.id)
+inline fun FilteredDao.listenRx(accountId: AccountId) =
+  _listenRx(accountId.id)
+
+inline fun FilteredDao.listen(accountId: AccountId, bufferId: BufferId, defaultValue: Int) =
+  _listen(accountId.id, bufferId.id, defaultValue)
+
+inline fun FilteredDao.clear(accountId: AccountId) =
+  _clear(accountId.id)
+
+inline fun FilteredDao.clear(accountId: AccountId, bufferId: BufferId) =
+  _clear(accountId.id, bufferId.id)

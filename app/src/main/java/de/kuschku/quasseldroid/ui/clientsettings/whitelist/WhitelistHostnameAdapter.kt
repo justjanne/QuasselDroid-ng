@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,14 +20,9 @@
 package de.kuschku.quasseldroid.ui.clientsettings.whitelist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.PreferencesWhitelistHostnameItemBinding
 import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
 import de.kuschku.quasseldroid.util.helper.setTooltip
 
@@ -77,9 +72,9 @@ class WhitelistHostnameAdapter :
   override fun getItemCount() = data.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = WhitelistItemViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.preferences_whitelist_hostname_item,
-                                                parent,
-                                                false),
+    PreferencesWhitelistHostnameItemBinding.inflate(
+      LayoutInflater.from(parent.context), parent, false
+    ),
     ::remove
   )
 
@@ -88,34 +83,24 @@ class WhitelistHostnameAdapter :
   }
 
   class WhitelistItemViewHolder(
-    itemView: View,
+    private val binding: PreferencesWhitelistHostnameItemBinding,
     clickListener: ((SslHostnameWhitelistEntry) -> Unit)?
-  ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.hostname)
-    lateinit var hostname: TextView
-
-    @BindView(R.id.fingerprint)
-    lateinit var fingerprint: TextView
-
-    @BindView(R.id.action_delete)
-    lateinit var delete: AppCompatImageButton
-
+  ) : RecyclerView.ViewHolder(binding.root) {
     private var item: SslHostnameWhitelistEntry? = null
 
     init {
-      ButterKnife.bind(this, itemView)
-      delete.setOnClickListener {
+      binding.actionDelete.setOnClickListener {
         item?.let {
           clickListener?.invoke(it)
         }
       }
-      delete.setTooltip()
+      binding.actionDelete.setTooltip()
     }
 
     fun bind(item: SslHostnameWhitelistEntry) {
       this.item = item
-      hostname.text = item.hostname
-      fingerprint.text = item.fingerprint
+      binding.hostname.text = item.hostname
+      binding.fingerprint.text = item.fingerprint
     }
   }
 }

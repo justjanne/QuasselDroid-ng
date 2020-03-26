@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,17 +20,13 @@
 package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.ThemedSpinnerAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.WidgetSpinnerItemMaterialBinding
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
@@ -57,13 +53,13 @@ class NetworkAdapter(@StringRes private val fallbackName: Int) :
       else
         parent.context
     )
-    val view = inflater.inflate(R.layout.widget_spinner_item_material, parent, false)
-    return NetworkViewHolder(fallbackName, view)
+    return NetworkViewHolder(fallbackName,
+                             WidgetSpinnerItemMaterialBinding.inflate(inflater, parent, false))
   }
 
   fun indexOf(id: NetworkId): Int? {
     for ((key, item) in data.withIndex()) {
-      if (item?.networkId ?: -1 == id) {
+      if (item?.networkId ?: 0 == id) {
         return key
       }
     }
@@ -71,20 +67,15 @@ class NetworkAdapter(@StringRes private val fallbackName: Int) :
   }
 
   override fun getItem(position: Int): INetwork.NetworkInfo? = data[position]
-  override fun getItemId(position: Int) = getItem(position)?.networkId?.id?.toLong() ?: -1
+  override fun getItemId(position: Int) = getItem(position)?.networkId?.id?.toLong() ?: 0
   override fun hasStableIds() = true
   override fun getCount() = data.size
-  class NetworkViewHolder(@StringRes private val fallbackName: Int, itemView: View) :
-    RecyclerView.ViewHolder(itemView) {
-    @BindView(android.R.id.text1)
-    lateinit var text: TextView
-
-    init {
-      ButterKnife.bind(this, itemView)
-    }
-
+  class NetworkViewHolder(
+    @StringRes private val fallbackName: Int,
+    private val binding: WidgetSpinnerItemMaterialBinding
+  ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(network: INetwork.NetworkInfo?) {
-      text.text = network?.networkName ?: itemView.context.getString(fallbackName)
+      binding.text1.text = network?.networkName ?: itemView.context.getString(fallbackName)
     }
   }
 }

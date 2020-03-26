@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -26,9 +26,11 @@ import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Quasseldroid
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.dao.create
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.LegacyAccountDatabase
 import de.kuschku.quasseldroid.persistence.models.Account
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.SettingsMigration
 import de.kuschku.quasseldroid.settings.SettingsMigrationManager
@@ -53,8 +55,8 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidB
 
           val accountDatabase = AccountDatabase.Creator.init(app)
           accountDatabase.accounts().create(*accounts.map {
-            Account(
-              id = it.id,
+            Account.of(
+              id = AccountId(it.id),
               host = it.host,
               port = it.port,
               user = it.user,

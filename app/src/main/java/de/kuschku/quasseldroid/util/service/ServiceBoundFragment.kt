@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -26,6 +26,7 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.Keys
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
@@ -50,11 +51,11 @@ abstract class ServiceBoundFragment : DaggerFragment() {
     }
   }
 
-  protected var accountId: Long = -1
+  protected var accountId = AccountId(-1L)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    accountId = context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-                  ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+    accountId = AccountId(context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+                            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1)
 
     connection.context = context
     lifecycle.addObserver(connection)
@@ -63,8 +64,8 @@ abstract class ServiceBoundFragment : DaggerFragment() {
 
   override fun onStart() {
     super.onStart()
-    accountId = context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-                  ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+    accountId = AccountId(context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+                            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1)
   }
 
   override fun onDestroy() {

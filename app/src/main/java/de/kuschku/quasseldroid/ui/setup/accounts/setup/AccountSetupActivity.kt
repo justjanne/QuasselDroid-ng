@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -23,8 +23,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import de.kuschku.quasseldroid.persistence.dao.create
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.models.Account
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.ui.setup.SetupActivity
 import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import org.threeten.bp.Instant
@@ -37,8 +39,8 @@ class AccountSetupActivity : SetupActivity() {
   lateinit var database: AccountDatabase
 
   override fun onDone(data: Bundle) {
-    val account = Account(
-      id = 0,
+    val account = Account.of(
+      id = AccountId(-1L),
       host = data.getString("host", ""),
       port = data.getInt("port"),
       requireSsl = data.getBoolean("require_ssl"),

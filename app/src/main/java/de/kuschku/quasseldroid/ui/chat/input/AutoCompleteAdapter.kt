@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -22,16 +22,11 @@ package de.kuschku.quasseldroid.ui.chat.input
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.*
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
 import de.kuschku.quasseldroid.util.helper.loadAvatars
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
@@ -56,33 +51,23 @@ class AutoCompleteAdapter @Inject constructor(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
     VIEWTYPE_CHANNEL                         -> AutoCompleteViewHolder.ChannelViewHolder(
-      LayoutInflater.from(parent.context)
-        .inflate(R.layout.widget_buffer, parent, false),
+      WidgetBufferBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener
     )
-    VIEWTYPE_NICK_ACTIVE, VIEWTYPE_NICK_AWAY -> {
-      val holder = AutoCompleteViewHolder.NickViewHolder(
-        LayoutInflater.from(parent.context).inflate(
-          when (viewType) {
-            VIEWTYPE_AWAY -> R.layout.widget_nick_away
-            else          -> R.layout.widget_nick
-          }, parent, false
-        ),
-        clickListener = clickListener
-      )
-
-      holder.avatar.visibleIf(messageSettings.showAvatars)
-
-      holder
-    }
+    VIEWTYPE_NICK_ACTIVE, VIEWTYPE_NICK_AWAY -> AutoCompleteViewHolder.NickViewHolder(
+      WidgetNickBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+      clickListener = clickListener
+    )
+    VIEWTYPE_NICK_AWAY                       -> AutoCompleteViewHolder.NickAwayViewHolder(
+      WidgetNickAwayBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+      clickListener = clickListener
+    )
     VIEWTYPE_ALIAS                           -> AutoCompleteViewHolder.AliasViewHolder(
-      LayoutInflater.from(parent.context)
-        .inflate(R.layout.widget_alias, parent, false),
+      WidgetAliasBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener
     )
     VIEWTYPE_EMOJI                           -> AutoCompleteViewHolder.EmojiViewHolder(
-      LayoutInflater.from(parent.context)
-        .inflate(R.layout.widget_emoji, parent, false),
+      WidgetEmojiBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener
     )
     else                                     -> throw IllegalArgumentException(
@@ -118,22 +103,12 @@ class AutoCompleteAdapter @Inject constructor(
     }
 
     class NickViewHolder(
-      itemView: View,
+      private val binding: WidgetNickBinding,
       private val clickListener: ((String, String) -> Unit)? = null
-    ) : AutoCompleteViewHolder(itemView) {
-      @BindView(R.id.avatar)
-      lateinit var avatar: ImageView
-
-      @BindView(R.id.nick)
-      lateinit var nick: TextView
-
-      @BindView(R.id.realname)
-      lateinit var realname: TextView
-
+    ) : AutoCompleteViewHolder(binding.root) {
       var value: AutoCompleteItem? = null
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
@@ -144,32 +119,50 @@ class AutoCompleteAdapter @Inject constructor(
       fun bindImpl(data: AutoCompleteItem.UserItem, messageSettings: MessageSettings) {
         value = data
 
-        nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
-        realname.text = data.realname
+        binding.nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
+        binding.realname.text = data.realname
 
-        avatar.loadAvatars(data.avatarUrls,
+        binding.avatar.visibleIf(messageSettings.showAvatars)
+        binding.avatar.loadAvatars(data.avatarUrls,
+                                   data.fallbackDrawable,
+                                   crop = !messageSettings.squareAvatars)
+      }
+    }
+
+    class NickAwayViewHolder(
+      private val binding: WidgetNickAwayBinding,
+      private val clickListener: ((String, String) -> Unit)? = null
+    ) : AutoCompleteViewHolder(binding.root) {
+      var value: AutoCompleteItem? = null
+
+      init {
+        itemView.setOnClickListener {
+          val value = value
+          if (value != null)
+            clickListener?.invoke(value.name, value.suffix)
+        }
+      }
+
+      fun bindImpl(data: AutoCompleteItem.UserItem, messageSettings: MessageSettings) {
+        value = data
+
+        binding.nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
+        binding.realname.text = data.realname
+
+        binding.avatar.visibleIf(messageSettings.showAvatars)
+        binding.avatar.loadAvatars(data.avatarUrls,
                            data.fallbackDrawable,
                            crop = !messageSettings.squareAvatars)
       }
     }
 
     class ChannelViewHolder(
-      itemView: View,
+      private val binding: WidgetBufferBinding,
       private val clickListener: ((String, String) -> Unit)? = null
-    ) : AutoCompleteViewHolder(itemView) {
-      @BindView(R.id.status)
-      lateinit var status: ImageView
-
-      @BindView(R.id.name)
-      lateinit var name: TextView
-
-      @BindView(R.id.description)
-      lateinit var description: TextView
-
+    ) : AutoCompleteViewHolder(binding.root) {
       var value: AutoCompleteItem? = null
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
@@ -180,29 +173,22 @@ class AutoCompleteAdapter @Inject constructor(
       fun bindImpl(data: AutoCompleteItem.ChannelItem, messageSettings: MessageSettings) {
         value = data
 
-        name.text = data.info.bufferName
-        description.text = data.description
+        binding.name.text = data.info.bufferName
+        binding.description.text = data.description
 
-        description.visibleIf(data.description.isNotBlank())
+        binding.description.visibleIf(data.description.isNotBlank())
 
-        status.setImageDrawable(data.icon)
+        binding.status.setImageDrawable(data.icon)
       }
     }
 
     class AliasViewHolder(
-      itemView: View,
+      private val binding: WidgetAliasBinding,
       private val clickListener: ((String, String) -> Unit)? = null
-    ) : AutoCompleteViewHolder(itemView) {
-      @BindView(R.id.alias)
-      lateinit var alias: TextView
-
-      @BindView(R.id.expansion)
-      lateinit var expansion: TextView
-
+    ) : AutoCompleteViewHolder(binding.root) {
       var value: AutoCompleteItem? = null
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
@@ -213,25 +199,18 @@ class AutoCompleteAdapter @Inject constructor(
       fun bindImpl(data: AutoCompleteItem.AliasItem, messageSettings: MessageSettings) {
         value = data
 
-        alias.text = data.alias
-        expansion.text = data.expansion
+        binding.alias.text = data.alias
+        binding.expansion.text = data.expansion
       }
     }
 
     class EmojiViewHolder(
-      itemView: View,
+      private val binding: WidgetEmojiBinding,
       private val clickListener: ((String, String) -> Unit)? = null
-    ) : AutoCompleteViewHolder(itemView) {
-      @BindView(R.id.emoji)
-      lateinit var emoji: TextView
-
-      @BindView(R.id.shortCode)
-      lateinit var shortCode: TextView
-
+    ) : AutoCompleteViewHolder(binding.root) {
       var value: AutoCompleteItem? = null
 
       init {
-        ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
@@ -242,8 +221,8 @@ class AutoCompleteAdapter @Inject constructor(
       fun bindImpl(data: AutoCompleteItem.EmojiItem, messageSettings: MessageSettings) {
         value = data
 
-        emoji.text = data.replacement
-        shortCode.text = data.shortCodes.joinToString(", ")
+        binding.emoji.text = data.replacement
+        binding.shortCode.text = data.shortCodes.joinToString(", ")
       }
     }
   }

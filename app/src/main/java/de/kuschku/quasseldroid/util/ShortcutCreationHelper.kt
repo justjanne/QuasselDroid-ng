@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -27,7 +27,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
@@ -36,6 +36,7 @@ import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
@@ -46,9 +47,11 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.
 object ShortcutCreationHelper {
   fun create(context: Context,
              messageSettings: MessageSettings,
-             accountId: Long,
+             accountId: AccountId,
              info: BufferInfo,
              ircUser: IrcUser? = null) {
+    val bitmapSize = context.resources.getInteger(R.integer.shortcut_image_size)
+
     val callback: (IconCompat) -> Unit = { icon ->
       ShortcutManagerCompat.requestPinShortcut(
         context,
@@ -59,7 +62,7 @@ object ShortcutCreationHelper {
             ChatActivity.intent(
               context,
               bufferId = info.bufferId,
-              accountId = accountId
+              accountId = accountId.id
             ).setAction(Intent.ACTION_VIEW)
           )
           .build(),
@@ -68,7 +71,7 @@ object ShortcutCreationHelper {
     }
 
     val resultAvailable: (Drawable) -> Unit = { resource ->
-      val bitmap = Bitmap.createBitmap(432, 432, Bitmap.Config.ARGB_8888)
+      val bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888)
       val canvas = Canvas(bitmap)
       resource.setBounds(0, 0, canvas.width, canvas.height)
       resource.draw(canvas)
@@ -103,7 +106,7 @@ object ShortcutCreationHelper {
         .buildRect(initial, senderColor)
 
       val urls = ircUser?.let {
-        AvatarHelper.avatar(messageSettings, it, 432)
+        AvatarHelper.avatar(messageSettings, it, bitmapSize)
       }
 
       if (urls == null || urls.isEmpty()) {
@@ -112,7 +115,7 @@ object ShortcutCreationHelper {
         GlideApp.with(context)
           .loadWithFallbacks(urls)
           ?.placeholder(fallback)
-          ?.into(object : SimpleTarget<Drawable>(432, 432) {
+          ?.into(object : CustomTarget<Drawable>(bitmapSize, bitmapSize) {
             override fun onResourceReady(resource: Drawable,
                                          transition: Transition<in Drawable>?) {
               resultAvailable(resource)
@@ -120,6 +123,10 @@ object ShortcutCreationHelper {
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
               resultAvailable(errorDrawable!!)
+            }
+
+            override fun onLoadCleared(placeholder: Drawable?) {
+              // do nothing, as we’ve already processed the drawable
             }
           })
       }

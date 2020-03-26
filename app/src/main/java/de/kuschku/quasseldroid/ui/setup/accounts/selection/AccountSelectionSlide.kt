@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -31,13 +31,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.models.Account
+import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_FIRST
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_NEW
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
+import de.kuschku.quasseldroid.util.helper.map
+import de.kuschku.quasseldroid.util.helper.zip
 import javax.inject.Inject
 
 class AccountSelectionSlide : SlideFragment() {
@@ -47,23 +51,26 @@ class AccountSelectionSlide : SlideFragment() {
   @Inject
   lateinit var accountViewModel: AccountViewModel
 
-  override fun isValid() = adapter?.selectedItemId ?: -1L != -1L
+  override fun isValid() = accountViewModel.selectedItem.value?.isValidId() == true
 
   override val title = R.string.slide_account_select_title
   override val description = R.string.slide_account_select_description
 
   override fun setData(data: Bundle) {
-    if (data.containsKey("selectedAccount"))
-      adapter?.selectAccount(data.getLong("selectedAccount"))
+    if (data.containsKey("selectedAccount")) {
+      accountViewModel.selectedItem.postValue(AccountId(data.getLong("selectedAccount")))
+    }
   }
 
   override fun getData(data: Bundle) {
-    data.putLong("selectedAccount", adapter?.selectedItemId ?: -1L)
+    data.putLong("selectedAccount", accountViewModel.selectedItem.value?.id ?: -1L)
   }
 
-  private var adapter: AccountAdapter? = null
+  private val adapter = AccountAdapter()
+
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
+    BufferId
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
     ButterKnife.bind(this, view)
     val firstObserver = object : Observer<List<Account>?> {
@@ -79,10 +86,6 @@ class AccountSelectionSlide : SlideFragment() {
     accountViewModel.accounts.observe(this, firstObserver)
     accountList.layoutManager = LinearLayoutManager(context)
     accountList.itemAnimator = DefaultItemAnimator()
-    val adapter = AccountAdapter(
-      this, accountViewModel.accounts, accountViewModel.selectedItem
-    )
-    this.adapter = adapter
     accountList.adapter = adapter
 
     adapter.addAddListener {
@@ -91,9 +94,15 @@ class AccountSelectionSlide : SlideFragment() {
     adapter.addEditListener { id ->
       startActivityForResult(AccountEditActivity.intent(requireContext(), id), REQUEST_CREATE_NEW)
     }
-    adapter.addSelectionListener {
+    adapter.addClickListener {
       updateValidity()
     }
+
+    accountViewModel.accounts.zip(accountViewModel.selectedItem).map { (accounts, selected) ->
+      accounts.map { Pair(it, it.id == selected) }
+    }.observe(this, Observer {
+      adapter.submitList((it ?: emptyList()) + Pair(null, false))
+    })
 
     return view
   }
