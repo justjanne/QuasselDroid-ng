@@ -37,8 +37,13 @@ test:
   script:
     - "./gradlew check -x connectedCheck"
   artifacts:
+    paths:
+      - "*/build/test-results/**/TEST-*.xml"
+      - "*/build/reports/*.xml"
     reports:
-      junit: "*/build/test-results/*/TEST-*.xml"
+      junit:
+        - "*/build/test-results/**/TEST-*.xml"
+        - "*/build/reports/*.xml"
 
 deploy-local:
   stage: "deploy"
