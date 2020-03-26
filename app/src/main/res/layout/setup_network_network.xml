@@ -39,6 +39,22 @@
       android:text="@string/settings_networkserver_ssl_enabled" />
 
     <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/nameWrapper"
+      style="@style/Widget.CustomTextInput"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/settings_network_network_name"
+      tools:ignore="LabelFor">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textUri|textNoSuggestions"
+        app:errorEnabled="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/hostWrapper"
       style="@style/Widget.CustomTextInput"
       android:layout_width="match_parent"
@@ -71,22 +87,6 @@
         android:text="6667"
         app:errorEnabled="true"
         tools:ignore="HardcodedText" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/nameWrapper"
-      style="@style/Widget.CustomTextInput"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="@string/settings_network_network_name"
-      tools:ignore="LabelFor">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textUri|textNoSuggestions"
-        app:errorEnabled="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <de.kuschku.ui.spinner.MaterialSpinnerLayout

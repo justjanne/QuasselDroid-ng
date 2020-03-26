@@ -37,6 +37,52 @@
       android:orientation="vertical"
       tools:ignore="UnusedAttribute">
 
+      <LinearLayout style="@style/Widget.Info.Header">
+
+        <TextView
+          android:id="@+id/nick"
+          style="@style/Widget.Info.Header.Name"
+          android:textIsSelectable="true"
+          tools:text="justJanne" />
+
+        <TextView
+          android:id="@+id/real_name"
+          style="@style/Widget.Info.Header.Description"
+          android:textIsSelectable="true"
+          tools:text="Janne Mareike Koschinski https://kuschku.de/" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/away_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          style="@style/Widget.Info.Section"
+          android:text="@string/label_user_away" />
+
+        <LinearLayout style="@style/Widget.Info.Item">
+
+          <TextView
+            android:id="@+id/away_message"
+            style="@style/Widget.Info.Item.Content"
+            android:textIsSelectable="true"
+            tools:text="~justJanne" />
+
+          <TextView
+            style="@style/Widget.Info.Item.Description"
+            android:text="@string/label_user_away_reason" />
+        </LinearLayout>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="?colorDivider" />
+      </LinearLayout>
+
       <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -89,51 +135,19 @@
         </LinearLayout>
       </HorizontalScrollView>
 
-      <LinearLayout style="@style/Widget.Info.Header">
+      <TextView
+        style="@style/Widget.Info.Section"
+        android:text="@string/label_user_identity" />
 
-        <TextView
-          android:id="@+id/nick"
-          style="@style/Widget.Info.Header.Name"
-          android:textIsSelectable="true"
-          tools:text="justJanne" />
-
-        <TextView
-          android:id="@+id/real_name"
-          style="@style/Widget.Info.Header.Description"
-          android:textIsSelectable="true"
-          tools:text="Janne Mareike Koschinski https://kuschku.de/" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/away_container"
+      <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
 
-        <LinearLayout style="@style/Widget.Info.Item">
-
-          <TextView
-            android:id="@+id/away_message"
-            style="@style/Widget.Info.Item.Content"
-            android:textIsSelectable="true"
-            tools:text="~justJanne" />
-
-          <TextView
-            style="@style/Widget.Info.Item.Description"
-            android:text="@string/label_user_away_reason" />
-        </LinearLayout>
-
-        <TextView
-          style="@style/Widget.Info.Section"
-          android:text="@string/label_user_away" />
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="?colorDivider" />
-      </LinearLayout>
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
 
       <LinearLayout
         android:id="@+id/account_container"
@@ -205,21 +219,7 @@
 
       <TextView
         style="@style/Widget.Info.Section"
-        android:text="@string/label_user_identity" />
-
-      <TextView
-        style="@style/Widget.Info.Section"
         android:text="@string/label_user_common_channels" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/common_channels"

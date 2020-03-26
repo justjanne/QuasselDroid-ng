@@ -48,11 +48,6 @@
         android:layout_height="48dp"
         android:orientation="horizontal">
 
-        <Space
-          android:layout_width="0dip"
-          android:layout_height="match_parent"
-          android:layout_weight="1" />
-
         <TextView
           style="@style/Widget.RtlConformTextView"
           android:layout_width="wrap_content"
@@ -63,6 +58,11 @@
           android:text="@string/label_input_history"
           android:textAppearance="@style/TextAppearance.AppCompat.Body2"
           android:textColor="?attr/colorForegroundSecondary" />
+
+        <Space
+          android:layout_width="0dip"
+          android:layout_height="match_parent"
+          android:layout_weight="1" />
 
         <androidx.appcompat.widget.AppCompatImageButton
           android:id="@+id/close"

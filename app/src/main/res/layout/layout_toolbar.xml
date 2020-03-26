@@ -36,11 +36,12 @@
       app:contentInsetStartWithNavigation="0dp"
       app:popupTheme="?attr/actionBarPopupTheme">
 
-      <androidx.fragment.app.FragmentContainerView
+      <fragment
         android:id="@+id/fragment_toolbar"
         android:name="de.kuschku.quasseldroid.ui.chat.ToolbarFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        tools:ignore="FragmentTagUsage"
         tools:layout="@layout/chat_toolbar" />
 
     </androidx.appcompat.widget.Toolbar>

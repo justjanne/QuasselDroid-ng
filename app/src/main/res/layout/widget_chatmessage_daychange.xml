@@ -44,13 +44,6 @@
       android:layout_weight="1"
       android:background="?colorDivider" />
 
-    <View
-      android:layout_width="0dip"
-      android:layout_height="1dp"
-      android:layout_gravity="center_vertical"
-      android:layout_weight="1"
-      android:background="?colorDivider" />
-
     <de.kuschku.quasseldroid.util.ui.view.RipplePassthroughTextView
       android:id="@+id/daychange"
       style="@style/Widget.RtlConformTextView"
@@ -65,5 +58,12 @@
       android:textColor="?attr/colorForeground"
       android:textStyle="bold"
       tools:text="27.03.2018" />
+
+    <View
+      android:layout_width="0dip"
+      android:layout_height="1dp"
+      android:layout_gravity="center_vertical"
+      android:layout_weight="1"
+      android:background="?colorDivider" />
   </LinearLayout>
 </LinearLayout>

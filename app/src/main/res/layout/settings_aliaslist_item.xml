@@ -26,6 +26,16 @@
   android:orientation="horizontal"
   tools:showIn="@layout/settings_aliaslist">
 
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/handle"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingEnd="32dp"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
+
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -58,14 +68,4 @@
       tools:text="/quote away" />
 
   </LinearLayout>
-
-  <androidx.appcompat.widget.AppCompatImageView
-    android:id="@+id/handle"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:paddingStart="?listPreferredItemPaddingLeft"
-    android:paddingEnd="32dp"
-    app:srcCompat="@drawable/ic_reorder"
-    app:tint="?colorTextSecondary" />
 </LinearLayout>

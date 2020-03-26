@@ -31,6 +31,15 @@
   android:paddingBottom="4dp"
   android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/status"
+    android:layout_width="@dimen/avatar_size_buffer"
+    android:layout_height="@dimen/avatar_size_buffer"
+    android:layout_gravity="center_vertical"
+    android:layout_marginEnd="16dp"
+    android:contentDescription="@string/label_avatar"
+    tools:src="@tools:sample/avatars" />
+
   <LinearLayout
     android:layout_width="0dip"
     android:layout_height="wrap_content"
@@ -63,15 +72,6 @@
       tools:text="@sample/messages.json/data/sender"
       tools:visibility="visible" />
   </LinearLayout>
-
-  <androidx.appcompat.widget.AppCompatImageView
-    android:id="@+id/status"
-    android:layout_width="@dimen/avatar_size_buffer"
-    android:layout_height="@dimen/avatar_size_buffer"
-    android:layout_gravity="center_vertical"
-    android:layout_marginEnd="16dp"
-    android:contentDescription="@string/label_avatar"
-    tools:src="@tools:sample/avatars" />
 
   <androidx.appcompat.widget.AppCompatImageView
     android:id="@+id/handle"

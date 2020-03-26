@@ -51,23 +51,6 @@
         app:srcCompat="@drawable/ic_tab"
         app:tint="?attr/colorTextSecondary" />
 
-      <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/send"
-        style="?attr/buttonStyleSmall"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="top"
-        android:autoMirrored="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/label_send"
-        android:padding="12dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_send"
-        app:tint="?attr/colorAccent"
-        tools:ignore="UnusedAttribute" />
-
       <de.kuschku.quasseldroid.util.ui.FixedNestingScrollView
         android:id="@+id/chatline_scroller"
         android:layout_width="0dip"
@@ -92,6 +75,23 @@
           android:textColor="?attr/colorForeground"
           android:textSize="16sp" />
       </de.kuschku.quasseldroid.util.ui.FixedNestingScrollView>
+
+      <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/send"
+        style="?attr/buttonStyleSmall"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:autoMirrored="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/label_send"
+        android:padding="12dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_send"
+        app:tint="?attr/colorAccent"
+        tools:ignore="UnusedAttribute" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

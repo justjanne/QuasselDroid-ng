@@ -38,13 +38,6 @@
     android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
-    <Space
-      android:id="@+id/avatar_placeholder"
-      android:layout_width="@dimen/avatar_size"
-      android:layout_height="match_parent"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:visibility="gone" />
-
     <TextView
       android:id="@+id/time_left"
       android:layout_width="wrap_content"
@@ -54,6 +47,22 @@
       android:textColor="?attr/colorForegroundSecondary"
       android:typeface="monospace"
       tools:text="@sample/messages.json/data/time" />
+
+    <Space
+      android:id="@+id/avatar_placeholder"
+      android:layout_width="@dimen/avatar_size"
+      android:layout_height="match_parent"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:visibility="gone" />
+
+    <de.kuschku.quasseldroid.util.ui.view.RipplePassthroughTextView
+      android:id="@+id/combined"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="?attr/colorForegroundNotice"
+      tools:text="@sample/messages.json/data/message" />
 
     <TextView
       android:id="@+id/time_right"
@@ -68,15 +77,6 @@
       tools:text="@sample/messages.json/data/time"
       tools:textSize="11.9sp"
       tools:visibility="visible" />
-
-    <de.kuschku.quasseldroid.util.ui.view.RipplePassthroughTextView
-      android:id="@+id/combined"
-      style="@style/Widget.RtlConformTextView"
-      android:layout_width="0dip"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:textColor="?attr/colorForegroundNotice"
-      tools:text="@sample/messages.json/data/message" />
   </LinearLayout>
 
   <include layout="@layout/widget_chatmessage_daychange" />

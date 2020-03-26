@@ -45,6 +45,15 @@
       android:textStyle="italic"
       android:visibility="gone" />
 
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/certificate_whitelist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="2dp"
+      android:paddingRight="2dp"
+      tools:itemCount="2"
+      tools:listitem="@layout/preferences_whitelist_certificate_item" />
+
     <TextView
       style="@style/Widget.Subhead"
       android:text="@string/label_whitelist_hostnames" />
@@ -61,15 +70,6 @@
       android:textColor="?colorTextSecondary"
       android:textStyle="italic"
       android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/certificate_whitelist"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="2dp"
-      android:paddingRight="2dp"
-      tools:itemCount="2"
-      tools:listitem="@layout/preferences_whitelist_certificate_item" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/hostname_whitelist"

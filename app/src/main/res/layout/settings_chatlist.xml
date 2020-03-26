@@ -31,18 +31,30 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_ui" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_eye" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_ui" />
     </LinearLayout>
 
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
+
+      <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.CustomTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_chatlist_buffer_view_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/buffer_view_name"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="All Chats" />
+      </com.google.android.material.textfield.TextInputLayout>
 
       <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/show_search"
@@ -61,18 +73,6 @@
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:checked="true"
         android:text="@string/settings_chatlist_add_new_buffers_automatically" />
-
-      <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CustomTextInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/settings_chatlist_buffer_view_name">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/buffer_view_name"
-          style="@style/Widget.CoreSettings.EditText"
-          tools:text="All Chats" />
-      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -80,24 +80,18 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_network" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_server_network" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_network" />
     </LinearLayout>
 
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/show_status_buffer"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:checked="true"
-        android:text="@string/settings_chatlist_show_status_buffer" />
 
       <de.kuschku.ui.spinner.MaterialSpinnerLayout
         style="@style/Widget.CustomSpinnerLayout"
@@ -112,6 +106,12 @@
           android:layout_height="wrap_content"
           tools:listitem="@layout/widget_spinner_item_material" />
       </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/show_status_buffer"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
+        android:text="@string/settings_chatlist_show_status_buffer" />
     </LinearLayout>
 
     <LinearLayout
@@ -119,13 +119,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_types" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_tag_text" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_types" />
     </LinearLayout>
 
     <LinearLayout
@@ -150,28 +150,18 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_activity" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_clock" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_activity" />
     </LinearLayout>
 
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/hide_inactive_buffers"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_hide_inactive_buffers" />
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/hide_inactive_networks"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_hide_inactive_networks" />
 
       <de.kuschku.ui.spinner.MaterialSpinnerLayout
         style="@style/Widget.CustomSpinnerLayout"
@@ -186,6 +176,16 @@
           android:layout_height="wrap_content"
           tools:listitem="@layout/widget_spinner_item_material" />
       </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/hide_inactive_buffers"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_hide_inactive_buffers" />
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/hide_inactive_networks"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_hide_inactive_networks" />
     </LinearLayout>
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -36,22 +36,6 @@
     android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
-    <FrameLayout
-      android:id="@+id/avatar_container"
-      android:layout_width="@dimen/avatar_size"
-      android:layout_height="@dimen/avatar_size"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-      <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/label_avatar"
-        tools:src="@tools:sample/avatars" />
-    </FrameLayout>
-
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -61,10 +45,6 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <Space
-          android:layout_width="4dp"
-          android:layout_height="0dip" />
 
         <TextView
           android:id="@+id/name"
@@ -78,6 +58,10 @@
           android:visibility="gone"
           tools:text="@sample/messages.json/data/sender"
           tools:visibility="visible" />
+
+        <Space
+          android:layout_width="4dp"
+          android:layout_height="0dip" />
 
         <TextView
           android:id="@+id/realname"
@@ -141,6 +125,22 @@
           tools:visibility="visible" />
       </LinearLayout>
     </LinearLayout>
+
+    <FrameLayout
+      android:id="@+id/avatar_container"
+      android:layout_width="@dimen/avatar_size"
+      android:layout_height="@dimen/avatar_size"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:visibility="gone"
+      tools:visibility="visible">
+
+      <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/label_avatar"
+        tools:src="@tools:sample/avatars" />
+    </FrameLayout>
 
     <TextView
       android:id="@+id/time_left"

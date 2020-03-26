@@ -35,18 +35,6 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CustomTextInput"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/label_nick">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
-            style="@style/Widget.CoreSettings.EditText"
-            tools:text="justJanne" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <de.kuschku.ui.spinner.MaterialSpinnerLayout
           style="@style/Widget.CustomSpinnerLayout"
           android:layout_width="match_parent"
@@ -60,6 +48,18 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/widget_spinner_item_material" />
         </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_nick">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            style="@style/Widget.CoreSettings.EditText"
+            tools:text="justJanne" />
+        </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
 
       <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView

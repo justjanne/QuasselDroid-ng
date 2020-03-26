@@ -28,6 +28,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/preferences_about_header" />
+
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -101,8 +103,6 @@
         tools:listitem="@layout/widget_library" />
 
     </LinearLayout>
-
-    <include layout="@layout/preferences_about_header" />
 
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

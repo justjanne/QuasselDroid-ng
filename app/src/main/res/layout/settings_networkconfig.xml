@@ -50,10 +50,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_ping_interval_unit" />
-
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
@@ -66,15 +62,15 @@
             android:inputType="number"
             tools:text="30" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_ping_interval_unit" />
       </FrameLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_max_ping_count_unit" />
 
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
@@ -88,6 +84,10 @@
             android:inputType="number"
             tools:text="10" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_max_ping_count_unit" />
       </FrameLayout>
     </LinearLayout>
 
@@ -115,10 +115,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_auto_who_interval_unit" />
-
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
@@ -131,15 +127,15 @@
             android:inputType="number"
             tools:text="90" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_interval_unit" />
       </FrameLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_auto_who_nick_limit_unit" />
 
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
@@ -153,15 +149,15 @@
             android:inputType="number"
             tools:text="100" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_nick_limit_unit" />
       </FrameLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_auto_who_delay_unit" />
 
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
@@ -175,6 +171,10 @@
             android:inputType="number"
             tools:text="5" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_delay_unit" />
       </FrameLayout>
     </LinearLayout>
 

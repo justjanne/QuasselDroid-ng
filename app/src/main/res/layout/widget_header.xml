@@ -26,14 +26,14 @@
 
   <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
+    <androidx.appcompat.widget.AppCompatImageView
+      style="@style/Widget.CoreSettings.PrimaryItemIcon"
+      app:srcCompat="@drawable/ic_clock" />
+
     <TextView
       android:id="@+id/title"
       style="@style/Widget.CoreSettings.PrimaryItemSwitch"
       tools:text="@string/label_temporarily_archived" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-      style="@style/Widget.CoreSettings.PrimaryItemIcon"
-      app:srcCompat="@drawable/ic_clock" />
   </LinearLayout>
 
   <TextView

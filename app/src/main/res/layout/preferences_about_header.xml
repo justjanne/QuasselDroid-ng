@@ -36,6 +36,13 @@
     android:focusable="true"
     android:orientation="horizontal">
 
+    <androidx.appcompat.widget.AppCompatImageView
+      android:layout_width="?actionBarSize"
+      android:layout_height="?actionBarSize"
+      android:layout_gravity="center"
+      android:layout_marginEnd="?listPreferredItemPaddingRight"
+      app:srcCompat="@mipmap/ic_launcher_legacy" />
+
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -55,13 +62,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         tools:text="v0.3.0-310-ge2d1d05" />
     </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatImageView
-      android:layout_width="?actionBarSize"
-      android:layout_height="?actionBarSize"
-      android:layout_gravity="center"
-      android:layout_marginEnd="?listPreferredItemPaddingRight"
-      app:srcCompat="@mipmap/ic_launcher_legacy" />
   </LinearLayout>
 
   <TextView

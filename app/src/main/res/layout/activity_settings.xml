@@ -29,11 +29,6 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <FrameLayout
-      android:id="@+id/fragment_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -47,6 +42,11 @@
         app:popupTheme="?attr/actionBarPopupTheme" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+      android:id="@+id/fragment_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
   </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

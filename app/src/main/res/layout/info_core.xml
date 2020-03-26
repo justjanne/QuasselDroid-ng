@@ -30,6 +30,10 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_version" />
+
     <LinearLayout style="@style/Widget.Info.Item">
 
       <TextView
@@ -52,6 +56,14 @@
         android:text="@string/label_missing_features" />
     </LinearLayout>
 
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_uptime" />
+
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_security" />
+
     <LinearLayout
       android:id="@+id/uptime_container"
       style="@style/Widget.Info.Item"
@@ -63,6 +75,16 @@
         style="@style/Widget.Info.Item.Content"
         tools:text="30 minutes" />
     </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
 
     <LinearLayout
       style="@style/Widget.Info.Item"
@@ -109,17 +131,10 @@
         android:text="@string/label_info" />
     </LinearLayout>
 
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_version" />
-
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_uptime" />
-
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_security" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
 
     <TextView
       android:id="@+id/clients_title"
@@ -127,21 +142,6 @@
       android:text="@string/label_core_clients"
       android:visibility="gone"
       tools:visibility="visible" />
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/clients"

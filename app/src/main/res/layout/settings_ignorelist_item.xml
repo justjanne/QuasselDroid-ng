@@ -28,6 +28,16 @@
   android:minHeight="?listPreferredItemHeightSmall"
   tools:showIn="@layout/settings_ignorelist">
 
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/handle"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:paddingStart="?listPreferredItemPaddingRight"
+    android:paddingEnd="32dp"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
+
   <LinearLayout
     android:layout_width="0dip"
     android:layout_height="wrap_content"
@@ -61,16 +71,6 @@
       tools:text="#quasseldroid" />
 
   </LinearLayout>
-
-  <androidx.appcompat.widget.AppCompatImageView
-    android:id="@+id/handle"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:paddingStart="?listPreferredItemPaddingRight"
-    android:paddingEnd="32dp"
-    app:srcCompat="@drawable/ic_reorder"
-    app:tint="?colorTextSecondary" />
 
   <androidx.appcompat.widget.SwitchCompat
     android:id="@+id/toggle"

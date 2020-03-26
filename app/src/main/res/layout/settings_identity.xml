@@ -31,13 +31,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_identity_names" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_account_card" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_names" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,6 +98,13 @@
       android:orientation="vertical"
       android:visibility="visible">
 
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/nicks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:itemCount="4"
+        tools:listitem="@layout/settings_identity_nick" />
+
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,13 +117,6 @@
           android:layout_height="wrap_content"
           android:text="@string/label_new_nick" />
       </LinearLayout>
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/nicks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:itemCount="4"
-        tools:listitem="@layout/settings_identity_nick" />
     </LinearLayout>
 
     <LinearLayout
@@ -124,13 +124,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_identity_messages" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_message_bulleted" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_messages" />
     </LinearLayout>
 
     <LinearLayout
@@ -179,13 +179,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_identity_away" />
-
       <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_clock" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_away" />
     </LinearLayout>
 
     <LinearLayout

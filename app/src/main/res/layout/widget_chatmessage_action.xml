@@ -37,6 +37,17 @@
     android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
+    <TextView
+      android:id="@+id/time_left"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:typeface="monospace"
+      tools:text="@sample/messages.json/data/time"
+      tools:visibility="gone" />
+
     <FrameLayout
       android:id="@+id/avatar_container"
       android:layout_width="@dimen/avatar_size"
@@ -92,17 +103,6 @@
         tools:textSize="11.9sp"
         tools:visibility="visible" />
     </LinearLayout>
-
-    <TextView
-      android:id="@+id/time_left"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="top"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:textColor="?attr/colorForegroundSecondary"
-      android:typeface="monospace"
-      tools:text="@sample/messages.json/data/time"
-      tools:visibility="gone" />
   </LinearLayout>
 
   <include layout="@layout/widget_chatmessage_daychange" />

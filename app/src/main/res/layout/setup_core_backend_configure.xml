@@ -23,15 +23,15 @@
   android:orientation="vertical"
   android:padding="32dp">
 
-  <LinearLayout
-    android:id="@+id/frame"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" />
-
   <TextView
     android:id="@+id/no_options_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="@string/setup_core_backend_no_options" />
+
+  <LinearLayout
+    android:id="@+id/frame"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" />
 </LinearLayout>

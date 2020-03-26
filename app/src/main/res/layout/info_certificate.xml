@@ -52,13 +52,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/certificate_subject" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_account" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_subject" />
       </LinearLayout>
 
       <LinearLayout
@@ -119,13 +119,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/certificate_issuer" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_domain" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_issuer" />
       </LinearLayout>
 
       <LinearLayout
@@ -172,13 +172,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/certificate_validity" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_clock" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_validity" />
       </LinearLayout>
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
@@ -207,13 +207,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/certificate_fingerprints" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_fingerprint" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_fingerprints" />
       </LinearLayout>
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">

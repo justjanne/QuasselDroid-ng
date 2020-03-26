@@ -37,6 +37,32 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
+        <com.google.android.material.textfield.TextInputLayout
+          style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_channel_name">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            style="@style/Widget.CoreSettings.EditText"
+            tools:text="#trees" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <de.kuschku.ui.spinner.MaterialSpinnerLayout
+          style="@style/Widget.CustomSpinnerLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_network">
+
+          <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/network"
+            style="@style/Widget.MaterialSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/widget_spinner_item_material" />
+        </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -101,32 +127,6 @@
               tools:text="NickServ" />
           </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CustomTextInput"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/label_channel_name">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
-            style="@style/Widget.CoreSettings.EditText"
-            tools:text="#trees" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <de.kuschku.ui.spinner.MaterialSpinnerLayout
-          style="@style/Widget.CustomSpinnerLayout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/label_network">
-
-          <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/network"
-            style="@style/Widget.MaterialSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/widget_spinner_item_material" />
-        </de.kuschku.ui.spinner.MaterialSpinnerLayout>
       </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

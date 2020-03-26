@@ -55,21 +55,23 @@
       </com.google.android.material.appbar.AppBarLayout>
     </LinearLayout>
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
       android:id="@+id/fragment_chat_list"
       android:name="de.kuschku.quasseldroid.ui.chat.buffers.BufferViewConfigFragment"
       android:layout_width="320dp"
       android:layout_height="match_parent"
+      tools:ignore="FragmentTagUsage"
       tools:layout="@layout/chat_chatlist" />
 
     <include android:id="@+id/layout_main" layout="@layout/layout_main" />
   </LinearLayout>
 
-  <androidx.fragment.app.FragmentContainerView
+  <fragment
     android:id="@+id/fragment_nick_list"
     android:name="de.kuschku.quasseldroid.ui.chat.nicks.NickListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="end"
+    tools:ignore="FragmentTagUsage"
     tools:layout="@layout/chat_nicklist" />
 </androidx.drawerlayout.widget.DrawerLayout>

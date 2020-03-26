@@ -34,6 +34,16 @@
     android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
     android:gravity="center">
 
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="2dp"
+      android:digits="0123456789abcdefABCDEF"
+      android:text="#"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/md_title_textsize"
+      tools:ignore="HardcodedText,TextViewEdits" />
+
     <EditText
       android:id="@+id/md_hexInput"
       android:layout_width="wrap_content"
@@ -47,16 +57,6 @@
       android:textSize="@dimen/md_title_textsize"
       tools:ignore="HardcodedText" />
 
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="2dp"
-      android:digits="0123456789abcdefABCDEF"
-      android:text="#"
-      android:textColor="?colorTextPrimary"
-      android:textSize="@dimen/md_title_textsize"
-      tools:ignore="HardcodedText,TextViewEdits" />
-
   </LinearLayout>
 
   <RelativeLayout
@@ -67,39 +67,6 @@
     android:paddingRight="@dimen/md_dialog_frame_margin">
 
     <!-- Alpha -->
-
-    <SeekBar
-      android:id="@+id/md_colorA"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorAValue"
-      android:layout_toEndOf="@+id/md_colorALabel"
-      android:focusable="true"
-      android:max="255" />
-
-    <SeekBar
-      android:id="@+id/md_colorG"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/md_colorR"
-      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorGValue"
-      android:layout_toEndOf="@+id/md_colorGLabel"
-      android:focusable="true"
-      android:max="255" />
-
-    <SeekBar
-      android:id="@+id/md_colorB"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/md_colorG"
-      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorBValue"
-      android:layout_toEndOf="@+id/md_colorBLabel"
-      android:max="255" />
-
-    <!-- Red -->
 
     <TextView
       android:id="@+id/md_colorALabel"
@@ -112,6 +79,16 @@
       android:textColor="?colorTextPrimary"
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
+
+    <SeekBar
+      android:id="@+id/md_colorA"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
+      android:layout_toStartOf="@+id/md_colorAValue"
+      android:layout_toEndOf="@+id/md_colorALabel"
+      android:focusable="true"
+      android:max="255" />
 
     <TextView
       android:id="@+id/md_colorAValue"
@@ -128,6 +105,8 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
+    <!-- Red -->
+
     <TextView
       android:id="@+id/md_colorRLabel"
       android:layout_width="wrap_content"
@@ -140,7 +119,16 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
-    <!-- Green -->
+    <SeekBar
+      android:id="@+id/md_colorG"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/md_colorR"
+      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
+      android:layout_toStartOf="@+id/md_colorGValue"
+      android:layout_toEndOf="@+id/md_colorGLabel"
+      android:focusable="true"
+      android:max="255" />
 
     <TextView
       android:id="@+id/md_colorRValue"
@@ -157,6 +145,8 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
+    <!-- Green -->
+
     <TextView
       android:id="@+id/md_colorGLabel"
       android:layout_width="wrap_content"
@@ -168,6 +158,16 @@
       android:textColor="?colorTextPrimary"
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
+
+    <SeekBar
+      android:id="@+id/md_colorB"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/md_colorG"
+      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
+      android:layout_toStartOf="@+id/md_colorBValue"
+      android:layout_toEndOf="@+id/md_colorBLabel"
+      android:max="255" />
 
     <TextView
       android:id="@+id/md_colorGValue"
@@ -198,6 +198,17 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
+    <androidx.appcompat.widget.AppCompatSeekBar
+      android:id="@+id/md_colorR"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/md_colorA"
+      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
+      android:layout_toStartOf="@+id/md_colorRValue"
+      android:layout_toEndOf="@+id/md_colorRLabel"
+      android:focusable="true"
+      android:max="255" />
+
     <TextView
       android:id="@+id/md_colorBValue"
       android:layout_width="wrap_content"
@@ -212,17 +223,6 @@
       android:textColor="?colorTextPrimary"
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
-
-    <androidx.appcompat.widget.AppCompatSeekBar
-      android:id="@+id/md_colorR"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/md_colorA"
-      android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toStartOf="@+id/md_colorRValue"
-      android:layout_toEndOf="@+id/md_colorRLabel"
-      android:focusable="true"
-      android:max="255" />
 
   </RelativeLayout>
 

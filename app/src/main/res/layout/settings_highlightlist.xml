@@ -36,23 +36,18 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/settings_highlightlist_highlight_nick" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_server_network" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_highlight_nick" />
       </LinearLayout>
 
       <LinearLayout
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
-
-        <androidx.appcompat.widget.SwitchCompat
-          android:id="@+id/is_case_sensitive"
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/settings_highlightlist_nicks_case_sensitive" />
 
         <de.kuschku.ui.spinner.MaterialSpinnerLayout
           style="@style/Widget.CustomSpinnerLayout"
@@ -67,6 +62,11 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/widget_spinner_item_material" />
         </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+          android:id="@+id/is_case_sensitive"
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_nicks_case_sensitive" />
       </LinearLayout>
 
       <LinearLayout
@@ -74,18 +74,25 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/settings_highlightlist_rules" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_server_network" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_rules" />
       </LinearLayout>
 
       <LinearLayout
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/highlight_rules"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:itemCount="2"
+          tools:listitem="@layout/settings_highlightlist_rule" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -99,13 +106,6 @@
             android:layout_height="wrap_content"
             android:text="@string/label_new_highlight_rule" />
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/highlight_rules"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:itemCount="2"
-          tools:listitem="@layout/settings_highlightlist_rule" />
       </LinearLayout>
 
       <LinearLayout
@@ -113,18 +113,25 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp">
 
-        <TextView
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/settings_highlightlist_ignore_rules" />
-
         <androidx.appcompat.widget.AppCompatImageView
           style="@style/Widget.CoreSettings.PrimaryItemIcon"
           app:srcCompat="@drawable/ic_server_network" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_ignore_rules" />
       </LinearLayout>
 
       <LinearLayout
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/highlight_ignore_rules"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:itemCount="2"
+          tools:listitem="@layout/settings_highlightlist_rule" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -138,13 +145,6 @@
             android:layout_height="wrap_content"
             android:text="@string/label_new_highlight_ignore_rule" />
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/highlight_ignore_rules"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:itemCount="2"
-          tools:listitem="@layout/settings_highlightlist_rule" />
       </LinearLayout>
     </LinearLayout>
 

@@ -58,11 +58,12 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
           android:id="@+id/fragment_messages"
           android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          tools:ignore="FragmentTagUsage"
           tools:layout="@layout/chat_messages" />
 
         <de.kuschku.quasseldroid.util.ui.view.WarningBarView

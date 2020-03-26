@@ -48,6 +48,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          app:srcCompat="@drawable/ic_message_bulleted"
+          app:tint="?colorTextSecondary" />
+
         <TextView
           android:id="@+id/name"
           style="@style/Widget.RtlConformTextView"
@@ -62,13 +69,6 @@
           android:textSize="16sp"
           tools:text="(janne): " />
 
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="8dp"
-          app:srcCompat="@drawable/ic_message_bulleted"
-          app:tint="?colorTextSecondary" />
-
       </LinearLayout>
 
       <LinearLayout
@@ -76,6 +76,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          app:srcCompat="@drawable/ic_account"
+          app:tint="?colorTextSecondary" />
 
         <TextView
           android:id="@+id/sender"
@@ -88,13 +95,6 @@
           android:textAppearance="?textAppearanceListItemSecondary"
           android:textColor="?colorTextSecondary"
           tools:text="TARS" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="8dp"
-          app:srcCompat="@drawable/ic_account"
-          app:tint="?colorTextSecondary" />
       </LinearLayout>
 
       <LinearLayout
@@ -102,6 +102,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          app:srcCompat="@drawable/ic_channel"
+          app:tint="?colorTextSecondary" />
 
         <TextView
           android:id="@+id/channel"
@@ -114,13 +121,6 @@
           android:textAppearance="?textAppearanceListItemSecondary"
           android:textColor="?colorTextSecondary"
           tools:text="#yepityha" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="8dp"
-          app:srcCompat="@drawable/ic_channel"
-          app:tint="?colorTextSecondary" />
       </LinearLayout>
 
       <TextView
