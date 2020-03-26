@@ -40,7 +40,7 @@ class AccountSetupActivity : SetupActivity() {
 
   override fun onDone(data: Bundle) {
     val account = Account.of(
-      id = AccountId(-1L),
+      id = AccountId(0),
       host = data.getString("host", ""),
       port = data.getInt("port"),
       requireSsl = data.getBoolean("require_ssl"),

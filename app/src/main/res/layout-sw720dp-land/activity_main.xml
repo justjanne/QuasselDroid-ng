@@ -62,7 +62,7 @@
       android:layout_height="match_parent"
       tools:layout="@layout/chat_chatlist" />
 
-    <include layout="@layout/layout_main" />
+    <include android:id="@+id/layout_main" layout="@layout/layout_main" />
   </LinearLayout>
 
   <androidx.fragment.app.FragmentContainerView

@@ -49,5 +49,5 @@
       tools:layout="@layout/chat_chatlist" />
   </de.kuschku.quasseldroid.util.ui.view.NavigationDrawerLayout>
 
-  <include layout="@layout/layout_main" />
+  <include android:id="@+id/layout_main" layout="@layout/layout_main" />
 </androidx.drawerlayout.widget.DrawerLayout>

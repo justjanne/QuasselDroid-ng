@@ -32,7 +32,10 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
@@ -41,6 +44,7 @@ import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActiv
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_NEW
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
 import de.kuschku.quasseldroid.util.helper.map
+import de.kuschku.quasseldroid.util.helper.observeSticky
 import de.kuschku.quasseldroid.util.helper.zip
 import javax.inject.Inject
 
@@ -95,8 +99,11 @@ class AccountSelectionSlide : SlideFragment() {
       startActivityForResult(AccountEditActivity.intent(requireContext(), id), REQUEST_CREATE_NEW)
     }
     adapter.addClickListener {
-      updateValidity()
+      accountViewModel.selectedItem.postValue(it)
     }
+    accountViewModel.selectedItem.observeSticky(viewLifecycleOwner, Observer {
+      updateValidity()
+    })
 
     accountViewModel.accounts.zip(accountViewModel.selectedItem).map { (accounts, selected) ->
       accounts.map { Pair(it, it.id == selected) }

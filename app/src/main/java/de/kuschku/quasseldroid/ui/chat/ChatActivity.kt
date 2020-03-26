@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.chat
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -34,15 +35,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.connection.ConnectionState
@@ -64,6 +61,7 @@ import de.kuschku.libquassel.util.flag.or
 import de.kuschku.libquassel.util.helper.*
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.databinding.ActivityMainBinding
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
 import de.kuschku.quasseldroid.persistence.dao.*
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
@@ -111,21 +109,9 @@ import java.security.cert.CertificateExpiredException
 import java.security.cert.CertificateNotYetValidException
 import javax.inject.Inject
 
+@SuppressLint("ResourceType")
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-  @BindView(R.id.drawer_layout)
-  lateinit var drawerLayout: DrawerLayout
-
-  @BindView(R.id.toolbar)
-  lateinit var toolbar: Toolbar
-
-  @BindView(R.id.progress_bar)
-  lateinit var progressBar: MaterialContentLoadingProgressBar
-
-  @BindView(R.id.connection_status)
-  lateinit var connectionStatusDisplay: WarningBarView
-
-  @BindView(R.id.autocomplete_list)
-  lateinit var autoCompleteList: RecyclerView
+  lateinit var binding: ActivityMainBinding
 
   @Inject
   lateinit var modelHelper: ChatViewModelHelper
@@ -174,7 +160,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
           if (text != null) {
             chatlineFragment?.replaceText(text)
-            drawerLayout.closeDrawers()
+            binding.drawerLayout.closeDrawers()
           }
         }
         intent.hasExtra(KEY_BUFFER_ID) -> {
@@ -197,7 +183,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT),
             intent.getStringExtra(KEY_AUTOCOMPLETE_SUFFIX)
           )
-          drawerLayout.closeDrawers()
+          binding.drawerLayout.closeDrawers()
         }
         intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL)   -> {
           val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
@@ -303,17 +289,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    ButterKnife.bind(this)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
-    chatlineFragment = supportFragmentManager.findFragmentById(R.id.fragment_chatline) as? ChatlineFragment
+    chatlineFragment = supportFragmentManager.findFragmentByTag("fragment_chatline") as? ChatlineFragment
 
-    setSupportActionBar(toolbar)
+    setSupportActionBar(binding.layoutMain.layoutToolbar.toolbar)
 
     chatViewModel.bufferOpened.toLiveData().observe(this, Observer {
       actionMode?.finish()
-      if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-        drawerLayout.closeDrawer(GravityCompat.START, true)
+      if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        binding.drawerLayout.closeDrawer(GravityCompat.START, true)
       }
     })
 
@@ -322,14 +308,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       supportActionBar?.setDisplayHomeAsUpEnabled(true)
       drawerToggle = ActionBarDrawerToggle(
         this,
-        drawerLayout,
+        binding.drawerLayout,
         R.string.label_open,
         R.string.label_close
       )
       drawerToggle.syncState()
     }
 
-    drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+    binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
       override fun onDrawerStateChanged(newState: Int) = Unit
       override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
         actionMode?.finish()
@@ -408,12 +394,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
-      val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
+      val autoCompleteBottomSheet = BottomSheetBehavior.from(binding.layoutMain.autocompleteList)
       chatlineFragment?.let {
         autoCompleteAdapter.setOnClickListener(it.chatline::autoComplete)
-        autoCompleteList.layoutManager = LinearLayoutManager(it.activity)
-        autoCompleteList.itemAnimator = DefaultItemAnimator()
-        autoCompleteList.adapter = autoCompleteAdapter
+        binding.layoutMain.autocompleteList.layoutManager = LinearLayoutManager(it.activity)
+        binding.layoutMain.autocompleteList.itemAnimator = DefaultItemAnimator()
+        binding.layoutMain.autocompleteList.adapter = autoCompleteAdapter
         it.autoCompleteHelper.addDataListener {
           autoCompleteBottomSheet.state =
             if (it.isEmpty()) BottomSheetBehavior.STATE_HIDDEN
@@ -750,7 +736,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
               chatViewModel.bufferId.safeValue == BufferId.MAX_VALUE &&
               !restoredDrawerState) {
-            drawerLayout.openDrawer(GravityCompat.START)
+            binding.drawerLayout.openDrawer(GravityCompat.START)
           }
           connectedAccount = accountId
           modelHelper.connectedSession.value?.orNull()?.let { session ->
@@ -782,7 +768,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       })
 
-    connectionStatusDisplay.setOnClickListener {
+    binding.layoutMain.connectionStatus.setOnClickListener {
       modelHelper.sessionManager.value?.orNull()?.apply {
         log(INFO, "ChatActivity", "Reconnect triggered: User action")
         backend.safeValue.orNull()?.autoConnect(ignoreErrors = true, ignoreSetting = true)
@@ -795,39 +781,39 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       when (state) {
         ConnectionState.DISCONNECTED,
         ConnectionState.CLOSED     -> {
-          progressBar.visibility = View.INVISIBLE
+          binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
 
-          connectionStatusDisplay.setMode(WarningBarView.MODE_ICON)
-          connectionStatusDisplay.setText(getString(R.string.label_status_disconnected))
+          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
+          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_disconnected))
         }
         ConnectionState.CONNECTING -> {
-          progressBar.visibility = View.VISIBLE
-          progressBar.isIndeterminate = true
+          binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
+          binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
 
-          connectionStatusDisplay.setMode(WarningBarView.MODE_PROGRESS)
-          connectionStatusDisplay.setText(getString(R.string.label_status_connecting))
+          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
+          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_connecting))
         }
         ConnectionState.HANDSHAKE  -> {
-          progressBar.visibility = View.VISIBLE
-          progressBar.isIndeterminate = true
+          binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
+          binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
 
-          connectionStatusDisplay.setMode(WarningBarView.MODE_PROGRESS)
-          connectionStatusDisplay.setText(getString(R.string.label_status_handshake))
+          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
+          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_handshake))
         }
         ConnectionState.INIT       -> {
-          progressBar.visibility = View.VISIBLE
+          binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
           // Show indeterminate when no progress has been made yet
-          progressBar.isIndeterminate = progress == 0 || max == 0
-          progressBar.progress = progress
-          progressBar.max = max
+          binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = progress == 0 || max == 0
+          binding.layoutMain.layoutToolbar.progressBar.progress = progress
+          binding.layoutMain.layoutToolbar.progressBar.max = max
 
-          connectionStatusDisplay.setMode(WarningBarView.MODE_PROGRESS)
-          connectionStatusDisplay.setText(getString(R.string.label_status_init))
+          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
+          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_init))
         }
         ConnectionState.CONNECTED  -> {
-          progressBar.visibility = View.INVISIBLE
+          binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
 
-          connectionStatusDisplay.setMode(WarningBarView.MODE_NONE)
+          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_NONE)
         }
       }
     })
@@ -836,15 +822,15 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     modelHelper.bufferDataThrottled.toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
       } else {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
       }
 
       invalidateOptionsMenu()
     })
 
-    editorBottomSheet = DragInterceptBottomSheetBehavior.from(chatlineFragment?.view)
+    editorBottomSheet = DragInterceptBottomSheetBehavior.from(binding.root.findViewById(R.id.fragment_chatline))
     editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
     chatlineFragment?.panelSlideListener?.let(editorBottomSheet::setBottomSheetCallback)
 
@@ -892,7 +878,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   override fun onActionModeStarted(mode: ActionMode?) {
     when (mode?.tag) {
       "BUFFER",
-      "MESSAGES" -> mode.menu?.retint(toolbar.context)
+      "MESSAGES" -> mode.menu?.retint(binding.layoutMain.layoutToolbar.toolbar.context)
     }
     actionMode = mode
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -933,8 +919,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     chatViewModel.onSaveInstanceState(outState)
 
     outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount.id)
-    outState.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
-    outState.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
+    outState.putBoolean(KEY_OPEN_DRAWER_START, binding.drawerLayout.isDrawerOpen(GravityCompat.START))
+    outState.putBoolean(KEY_OPEN_DRAWER_END, binding.drawerLayout.isDrawerOpen(GravityCompat.END))
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -947,10 +933,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true &&
         resources.getBoolean(R.bool.buffer_drawer_exists)) {
-      drawerLayout.openDrawer(GravityCompat.START)
+      binding.drawerLayout.openDrawer(GravityCompat.START)
     }
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) == true) {
-      drawerLayout.openDrawer(GravityCompat.END)
+      binding.drawerLayout.openDrawer(GravityCompat.END)
     }
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) != null ||
         savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) != null) {
@@ -960,7 +946,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     val nickCountDrawableSize = resources.getDimensionPixelSize(R.dimen.size_nick_count)
-    val nickCountDrawableColor = toolbar.context.theme.styledAttributes(R.attr.colorControlNormal) {
+    val nickCountDrawableColor = binding.layoutMain.layoutToolbar.toolbar.context.theme.styledAttributes(R.attr.colorControlNormal) {
       getColor(0, 0)
     }
 
@@ -970,7 +956,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     menu?.findItem(R.id.action_filter_messages)?.isVisible =
       (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false)
-    menu?.retint(toolbar.context)
+    menu?.retint(binding.layoutMain.layoutToolbar.toolbar.context)
     menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(
       bufferData?.userCount ?: 0,
       nickCountDrawableSize,
@@ -983,10 +969,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       drawerToggle.onOptionsItemSelected(item)
     }
     R.id.action_nicklist        -> {
-      if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
-        drawerLayout.closeDrawer(GravityCompat.END)
+      if (binding.drawerLayout.isDrawerVisible(GravityCompat.END)) {
+        binding.drawerLayout.closeDrawer(GravityCompat.END)
       } else {
-        drawerLayout.openDrawer(GravityCompat.END)
+        binding.drawerLayout.openDrawer(GravityCompat.END)
       }
       true
     }

@@ -77,10 +77,10 @@
       app:layout_behavior="@string/bottom_sheet_behavior"
       tools:listitem="@layout/widget_nick" />
 
-    <include layout="@layout/layout_toolbar" />
+    <include android:id="@+id/layout_toolbar" layout="@layout/layout_toolbar" />
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-  <androidx.fragment.app.FragmentContainerView
+  <fragment
     android:id="@+id/fragment_chatline"
     android:name="de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment"
     android:layout_width="match_parent"
@@ -88,6 +88,7 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="?actionBarSize"
     app:layout_behavior="@string/drag_intercept_bottom_sheet_behavior"
-    tools:layout="@layout/chat_chatline" />
+    tools:layout="@layout/chat_chatline"
+    tools:ignore="FragmentTagUsage" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
