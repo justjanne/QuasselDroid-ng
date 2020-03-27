@@ -31,6 +31,8 @@ build:
   artifacts:
     paths:
       - "*.apk"
+  except:
+    - "tags"
 
 test:
   stage: "test"
@@ -44,6 +46,8 @@ test:
       junit:
         - "*/build/test-results/**/TEST-*.xml"
         - "*/build/reports/*.xml"
+  except:
+    - "tags"
 
 deploy-local:
   stage: "deploy"
@@ -54,6 +58,8 @@ deploy-local:
       - "master"
     variables:
       - "$S3_CONFIG"
+  except:
+    - "tags"
   dependencies:
     - "build"
   script:
@@ -71,6 +77,8 @@ deploy-beta:
       - "master"
     variables:
       - "$FASTLANE_CONFIG"
+  except:
+    - "tags"
   dependencies:
     - "build"
   script:
