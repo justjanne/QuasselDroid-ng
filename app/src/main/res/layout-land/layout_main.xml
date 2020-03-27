@@ -17,79 +17,88 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:gravity="bottom">
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_anchor="@id/fragment_chatline"
-    app:layout_anchorGravity="top">
-
-    <Space
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/shadow_height" />
-
-    <de.kuschku.quasseldroid.util.ui.view.ShadowView
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/shadow_height"
-      android:gravity="bottom" />
-  </LinearLayout>
+  android:gravity="bottom"
+  android:orientation="vertical">
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="?actionBarSize"
-    android:orientation="vertical">
+    android:gravity="bottom">
 
-    <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-      <fragment
-        android:id="@+id/fragment_messages"
-        android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="FragmentTagUsage"
-        tools:layout="@layout/chat_messages" />
-
-      <de.kuschku.quasseldroid.util.ui.view.WarningBarView
-        android:id="@+id/connection_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/ic_disconnected"
-        app:mode="none" />
-    </FrameLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/autocomplete_list"
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="?colorBackgroundCard"
-      app:behavior_hideable="true"
-      app:behavior_peekHeight="92dp"
-      app:layout_behavior="@string/bottom_sheet_behavior"
-      tools:listitem="@layout/widget_nick" />
+      android:orientation="vertical"
+      app:layout_anchor="@id/fragment_chatline"
+      app:layout_anchorGravity="top">
 
-    <include android:id="@+id/layout_toolbar" layout="@layout/layout_toolbar" />
+      <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/shadow_height" />
+
+      <de.kuschku.quasseldroid.util.ui.view.ShadowView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/shadow_height"
+        android:gravity="bottom" />
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="?actionBarSize"
+      android:orientation="vertical">
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <de.kuschku.quasseldroid.util.ui.view.WarningBarView
+          android:id="@+id/connection_status"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:icon="@drawable/ic_disconnected"
+          app:mode="none" />
+
+        <fragment
+          android:id="@+id/fragment_messages"
+          android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          tools:ignore="FragmentTagUsage"
+          tools:layout="@layout/chat_messages" />
+      </FrameLayout>
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/autocomplete_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorBackgroundCard"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="92dp"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        tools:listitem="@layout/widget_nick" />
+
+      <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/layout_toolbar" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <fragment
+      android:id="@+id/fragment_chatline"
+      android:name="de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:behavior_hideable="false"
+      app:behavior_peekHeight="?actionBarSize"
+      app:layout_behavior="@string/drag_intercept_bottom_sheet_behavior"
+      tools:ignore="FragmentTagUsage"
+      tools:layout="@layout/chat_chatline" />
+
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-  <fragment
-    android:id="@+id/fragment_chatline"
-    android:name="de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:behavior_hideable="false"
-    app:behavior_peekHeight="?actionBarSize"
-    app:layout_behavior="@string/drag_intercept_bottom_sheet_behavior"
-    tools:layout="@layout/chat_chatline"
-    tools:ignore="FragmentTagUsage" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>
