@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -32,12 +32,10 @@ open class Quasseldroid : DaggerApplication() {
 
   override fun onCreate() {
     super.onCreate()
-    if (delegate.shouldInit()) {
-      delegate.onInit()
-      delegate.onPreInit()
-      applicationInjector().inject(this)
-      delegate.onPostInit()
-    }
+    delegate.onPreInit()
+    delegate.onInit()
+    applicationInjector().inject(this)
+    delegate.onPostInit()
   }
 
   override fun attachBaseContext(base: Context) {
