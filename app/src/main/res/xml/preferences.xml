@@ -21,14 +21,13 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:robobunny="http://robobunny.com">
 
-  <PreferenceCategory android:title="@string/preference_appearance_title">
-    <DropDownPreference
-      android:defaultValue="NEWLINE"
-      android:entries="@array/preference_input_enter_entries"
-      android:entryValues="@array/preference_input_enter_entryvalues"
-      android:key="@string/preference_input_enter_key"
-      android:title="@string/preference_input_enter_title" />
+  <PreferenceScreen android:layout="@layout/widget_advertisement_support_patreon">
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:data="https://www.patreon.com/justjanne" />
+  </PreferenceScreen>
 
+  <PreferenceCategory android:title="@string/preference_appearance_title">
     <ListPreference
       android:defaultValue="MATERIAL_LIGHT"
       android:entries="@array/preference_theme_entries"
@@ -36,12 +35,18 @@
       android:key="@string/preference_theme_key"
       android:title="@string/preference_theme_title" />
 
-    <ListPreference
-      android:defaultValue=""
-      android:entries="@array/preference_language_entries"
-      android:entryValues="@array/preference_language_entryvalues"
-      android:key="@string/preference_language_key"
-      android:title="@string/preference_language_title" />
+    <DropDownPreference
+      android:defaultValue="NEWLINE"
+      android:entries="@array/preference_input_enter_entries"
+      android:entryValues="@array/preference_input_enter_entryvalues"
+      android:key="@string/preference_input_enter_key"
+      android:title="@string/preference_input_enter_title" />
+
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_show_lag_key"
+      android:summary="@string/preference_show_lag_summary"
+      android:title="@string/preference_show_lag_title" />
 
     <SwitchPreference
       android:defaultValue="false"
@@ -49,11 +54,12 @@
       android:summary="@string/preference_keep_screen_on_summary"
       android:title="@string/preference_keep_screen_on_title" />
 
-    <SwitchPreference
-      android:defaultValue="false"
-      android:key="@string/preference_show_lag_key"
-      android:summary="@string/preference_show_lag_summary"
-      android:title="@string/preference_show_lag_title" />
+    <ListPreference
+      android:defaultValue=""
+      android:entries="@array/preference_language_entries"
+      android:entryValues="@array/preference_language_entryvalues"
+      android:key="@string/preference_language_key"
+      android:title="@string/preference_language_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
@@ -75,6 +81,7 @@
       android:summary="@string/preference_redirection_errors_summary"
       android:title="@string/preference_redirection_errors_title" />
   </PreferenceCategory>
+
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
 
   <PreferenceCategory android:title="@string/preference_notifications_title">
@@ -97,16 +104,6 @@
       android:key="@string/preference_notification_other_key"
       android:title="@string/preference_notification_other_title" />
 
-    <PreferenceScreen
-      android:key="@string/preference_notification_configure_key"
-      android:title="@string/preference_notification_configure_title">
-      <intent android:action="android.settings.APP_NOTIFICATION_SETTINGS">
-        <extra
-          android:name="android.provider.extra.APP_PACKAGE"
-          android:value="@string/package_name" />
-      </intent>
-    </PreferenceScreen>
-
     <SwitchPreference
       android:defaultValue="false"
       android:key="@string/preference_notification_mark_read_on_swipe_key"
@@ -124,6 +121,14 @@
       android:summary="@string/preference_notification_show_all_activities_in_toolbar_summary"
       android:title="@string/preference_notification_show_all_activities_in_toolbar_title" />
 
+    <de.kuschku.quasseldroid.util.ui.settings.RingtonePreference
+      android:defaultValue="content://settings/system/notification_sound"
+      android:key="@string/preference_notification_sound_key"
+      android:title="@string/preference_notification_sound_title"
+      app:ringtoneType="notification"
+      app:showDefault="true"
+      app:showSilent="true" />
+
     <SwitchPreference
       android:defaultValue="true"
       android:key="@string/preference_notification_vibration_key"
@@ -134,37 +139,32 @@
       android:key="@string/preference_notification_light_key"
       android:title="@string/preference_notification_light_title" />
 
-    <de.kuschku.quasseldroid.util.ui.settings.RingtonePreference
-      android:defaultValue="content://settings/system/notification_sound"
-      android:key="@string/preference_notification_sound_key"
-      android:title="@string/preference_notification_sound_title"
-      app:ringtoneType="notification"
-      app:showDefault="true"
-      app:showSilent="true" />
+    <PreferenceScreen
+      android:key="@string/preference_notification_configure_key"
+      android:title="@string/preference_notification_configure_title">
+      <intent android:action="android.settings.APP_NOTIFICATION_SETTINGS">
+        <extra
+          android:name="android.provider.extra.APP_PACKAGE"
+          android:value="@string/package_name" />
+      </intent>
+    </PreferenceScreen>
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
 
   <PreferenceCategory android:title="@string/preference_messages_title">
 
-    <DropDownPreference
-      android:defaultValue="ALL_BUT_MINE"
-      android:entries="@array/preference_colorize_nicknames_entries"
-      android:entryValues="@array/preference_colorize_nicknames_entryvalues"
-      android:key="@string/preference_colorize_nicknames_key"
-      android:title="@string/preference_colorize_nicknames_title" />
-
-    <DropDownPreference
-      android:defaultValue="HIGHEST"
-      android:entries="@array/preference_show_prefix_entries"
-      android:entryValues="@array/preference_show_prefix_entryvalues"
-      android:key="@string/preference_show_prefix_key"
-      android:title="@string/preference_show_prefix_title" />
-
     <SwitchPreference
       android:defaultValue="false"
       android:key="@string/preference_monospace_key"
       android:title="@string/preference_monospace_title" />
+
+    <de.kuschku.quasseldroid.util.ui.settings.SeekBarPreference
+      android:defaultValue="14"
+      android:key="@string/preference_textsize_key"
+      android:max="24"
+      android:title="@string/preference_textsize_title"
+      robobunny:min="6" />
 
     <SwitchPreference
       android:defaultValue="false"
@@ -182,6 +182,20 @@
       android:summaryOff="@string/preference_colorize_mirc_summaryoff"
       android:summaryOn="@string/preference_colorize_mirc_summaryon"
       android:title="@string/preference_colorize_mirc_title" />
+
+    <DropDownPreference
+      android:defaultValue="ALL_BUT_MINE"
+      android:entries="@array/preference_colorize_nicknames_entries"
+      android:entryValues="@array/preference_colorize_nicknames_entryvalues"
+      android:key="@string/preference_colorize_nicknames_key"
+      android:title="@string/preference_colorize_nicknames_title" />
+
+    <DropDownPreference
+      android:defaultValue="HIGHEST"
+      android:entries="@array/preference_show_prefix_entries"
+      android:entryValues="@array/preference_show_prefix_entryvalues"
+      android:key="@string/preference_show_prefix_key"
+      android:title="@string/preference_show_prefix_title" />
 
     <SwitchPreference
       android:defaultValue="true"
@@ -234,7 +248,6 @@
       android:key="@string/preference_time_at_end_key"
       android:summary="@string/preference_time_at_end_summary"
       android:title="@string/preference_time_at_end_title" />
-
     <SwitchPreference
       android:defaultValue="false"
       android:dependency="@string/preference_nicks_on_new_line_key"
@@ -251,12 +264,6 @@
       android:key="@string/preference_replace_emoji_key"
       android:summary="@string/preference_replace_emoji_summary"
       android:title="@string/preference_replace_emoji_title" />
-    <de.kuschku.quasseldroid.util.ui.settings.SeekBarPreference
-      android:defaultValue="14"
-      android:key="@string/preference_textsize_key"
-      android:max="24"
-      android:title="@string/preference_textsize_title"
-      robobunny:min="6" />
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
@@ -348,10 +355,4 @@
       android:summary="@string/preference_ignore_network_changes_summary"
       android:title="@string/preference_ignore_network_changes_title" />
   </PreferenceCategory>
-
-  <PreferenceScreen android:layout="@layout/widget_advertisement_support_patreon">
-    <intent
-      android:action="android.intent.action.VIEW"
-      android:data="https://www.patreon.com/justjanne" />
-  </PreferenceScreen>
 </PreferenceScreen>
