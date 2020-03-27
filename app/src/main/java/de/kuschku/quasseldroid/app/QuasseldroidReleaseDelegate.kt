@@ -22,7 +22,6 @@ package de.kuschku.quasseldroid.app
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.StrictMode
-import com.squareup.leakcanary.LeakCanary
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Quasseldroid
@@ -38,10 +37,7 @@ import de.kuschku.quasseldroid.settings.SettingsMigrationManager
 import de.kuschku.quasseldroid.util.helper.letIf
 
 class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidBaseDelegate(app) {
-  override fun shouldInit() = !LeakCanary.isInAnalyzerProcess(app)
-
   override fun onPreInit() {
-    LeakCanary.install(app)
     CrashHandler.init<BuildConfig>(application = app)
   }
 

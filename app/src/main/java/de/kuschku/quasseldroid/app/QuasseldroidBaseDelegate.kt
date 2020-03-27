@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -29,8 +29,6 @@ import de.kuschku.quasseldroid.util.compatibility.AndroidLoggingHandler
 import de.kuschku.quasseldroid.util.compatibility.AndroidStreamChannelFactory
 
 open class QuasseldroidBaseDelegate(private val app: Quasseldroid) : AppDelegate {
-  override fun shouldInit() = true
-
   override fun onPreInit() = Unit
 
   override fun onInit() {
