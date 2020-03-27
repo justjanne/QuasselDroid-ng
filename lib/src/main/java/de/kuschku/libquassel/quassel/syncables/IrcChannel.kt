@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -289,7 +289,7 @@ class IrcChannel(
       _userModes.remove(ircuser)
       ircuser.partChannel(this)
       if (network().isMe(ircuser) || _userModes.isEmpty()) {
-        for (user in _userModes.keys) {
+        for (user in _userModes.keys.toList()) {
           user.partChannel(this)
         }
         _userModes.clear()
