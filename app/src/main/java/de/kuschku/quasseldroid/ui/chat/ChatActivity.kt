@@ -93,7 +93,6 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.drawable.DrawerToggleActivityDrawable
 import de.kuschku.quasseldroid.util.ui.drawable.NickCountDrawable
-import de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
@@ -152,9 +151,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private var restoredDrawerState = false
 
-  override fun onNewIntent(intent: Intent?) {
-    super.onNewIntent(intent)
-    if (intent != null) {
+  fun processIntent(intent: Intent) {
       when {
         intent.type == "text/plain"    -> {
           val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
@@ -284,7 +281,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
         }
       }
-    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -292,7 +288,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    chatlineFragment = supportFragmentManager.findFragmentByTag("fragment_chatline") as? ChatlineFragment
+    chatlineFragment = supportFragmentManager.findFragmentById(R.id.fragment_chatline) as? ChatlineFragment
 
     setSupportActionBar(binding.layoutMain.layoutToolbar.toolbar)
 
@@ -867,8 +863,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         launch(this, bufferId = info.bufferId)
       }
     }
+  }
 
-    onNewIntent(intent)
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    setIntent(intent)
   }
 
   private var bufferData: BufferData? = null
@@ -912,6 +911,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       recreate()
     }
     super.onStart()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    intent?.let(this@ChatActivity::processIntent)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
