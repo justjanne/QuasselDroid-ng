@@ -25,6 +25,10 @@
   android:fitsSystemWindows="true"
   android:orientation="vertical">
 
+  <include
+    android:id="@+id/layout_toolbar"
+    layout="@layout/layout_toolbar" />
+
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -97,7 +101,5 @@
       tools:ignore="FragmentTagUsage" />
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-  <include android:id="@+id/layout_toolbar" layout="@layout/layout_toolbar" />
 
 </LinearLayout>
