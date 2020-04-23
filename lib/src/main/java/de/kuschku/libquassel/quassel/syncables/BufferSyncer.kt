@@ -304,7 +304,7 @@ class BufferSyncer constructor(
     networkId: NetworkId? = null,
     type: Buffer_Types? = null,
     groupId: Int? = null
-  ) = _bufferInfos.values.filter {
+  ) = _bufferInfos.values.toList().asSequence().filter {
     bufferId == null || it.bufferId == bufferId
   }.filter {
     networkId == null || it.networkId == networkId
@@ -315,7 +315,7 @@ class BufferSyncer constructor(
   }.filter {
     val caseMapper = IrcCaseMappers[session.networks[it.networkId]?.support("CASEMAPPING")]
     bufferName == null || caseMapper.equalsIgnoreCaseNullable(it.bufferName, bufferName)
-  }
+  }.toList()
 
   fun liveAll(
     bufferName: String? = null,
@@ -324,7 +324,7 @@ class BufferSyncer constructor(
     type: Buffer_Types? = null,
     groupId: Int? = null
   ) = liveBufferInfos().map {
-    it.values.filter {
+    it.values.toList().asSequence().filter {
       bufferId == null || it.bufferId == bufferId
     }.filter {
       networkId == null || it.networkId == networkId
@@ -335,7 +335,7 @@ class BufferSyncer constructor(
     }.filter {
       val caseMapper = IrcCaseMappers[session.networks[it.networkId]?.support("CASEMAPPING")]
       bufferName == null || caseMapper.equalsIgnoreCaseNullable(it.bufferName, bufferName)
-    }
+    }.toList()
   }
 
   fun find(
