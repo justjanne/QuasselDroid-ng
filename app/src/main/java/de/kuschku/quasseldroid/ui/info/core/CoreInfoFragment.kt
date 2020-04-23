@@ -101,6 +101,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
   private val movementMethod = BetterLinkMovementMethod.newInstance()
 
   private val cipherSuiteRegex = Regex("TLS_(.*)_WITH_(.*)")
+  private val cipherSuiteRegex13 = Regex("TLS_()(.*)")
 
   init {
     movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
@@ -188,19 +189,30 @@ class CoreInfoFragment : ServiceBoundFragment() {
         secureDetails.visibility = View.GONE
       }
 
+      val protocol = it.orNull()?.protocol
+      val cipherSuiteRegex =
+        if (it.orNull()?.protocol == "TLSv1.3") cipherSuiteRegex13
+        else cipherSuiteRegex
+
       val (keyExchangeMechanism, cipherSuite) = it.orNull()?.cipherSuite?.let { cipherSuite ->
         cipherSuiteRegex.matchEntire(cipherSuite)?.destructured
       }?.let { (keyExchangeMechanism, cipherSuite) ->
         Pair(keyExchangeMechanism, cipherSuite)
       } ?: Pair(null, null)
 
-      val protocol = it.orNull()?.protocol
+
       if (cipherSuite != null && keyExchangeMechanism != null && protocol != null) {
+        // TLSv1.3 has no key exchange mechanism in the ciphersuite
+        if (keyExchangeMechanism.isEmpty()) {
+          secureConnectionCiphersuite.text = context?.getString(R.string.label_core_connection_ciphersuite_13,
+                                                                cipherSuite)
+        } else {
+          secureConnectionCiphersuite.text = context?.getString(R.string.label_core_connection_ciphersuite,
+                                                                cipherSuite,
+                                                                keyExchangeMechanism)
+        }
         secureConnectionProtocol.text = context?.getString(R.string.label_core_connection_protocol,
                                                            protocol)
-        secureConnectionCiphersuite.text = context?.getString(R.string.label_core_connection_ciphersuite,
-                                                              cipherSuite,
-                                                              keyExchangeMechanism)
         secureConnectionProtocol.visibility = View.VISIBLE
         secureConnectionCiphersuite.visibility = View.VISIBLE
       } else {

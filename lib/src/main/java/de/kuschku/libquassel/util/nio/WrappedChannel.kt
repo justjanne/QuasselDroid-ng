@@ -22,6 +22,8 @@ package de.kuschku.libquassel.util.nio
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel
 import de.kuschku.libquassel.util.compatibility.StreamChannelFactory
 import java.io.*
 import java.net.Socket
@@ -32,6 +34,7 @@ import java.nio.channels.InterruptibleChannel
 import java.nio.channels.ReadableByteChannel
 import java.nio.channels.WritableByteChannel
 import java.security.GeneralSecurityException
+import java.security.NoSuchAlgorithmException
 import java.security.cert.X509Certificate
 import java.util.zip.InflaterInputStream
 import javax.net.ssl.SSLContext
@@ -60,6 +63,8 @@ class WrappedChannel private constructor(
   }
 
   companion object {
+    const val DEFAULT_TLS_VERSION = "TLSv1.2"
+
     fun ofSocket(s: Socket, closeListeners: List<Closeable> = emptyList()): WrappedChannel {
       return WrappedChannel(
         s,
@@ -67,6 +72,12 @@ class WrappedChannel private constructor(
         s.getOutputStream(),
         closeListeners = closeListeners + s.getInputStream() + s.getOutputStream()
       )
+    }
+
+    fun selectBestTlsVersion(availableVersions: Array<String>): String? {
+      return availableVersions.filter {
+        it.startsWith("TLSv") && it >= "TLSv1.2"
+      }.sorted().lastOrNull()
     }
   }
 
@@ -82,7 +93,16 @@ class WrappedChannel private constructor(
   @Throws(GeneralSecurityException::class, IOException::class)
   fun withSSL(certificateManager: X509TrustManager, hostnameVerifier: HostnameVerifier,
               address: SocketAddress): WrappedChannel {
-    val context = SSLContext.getInstance("TLSv1.2")
+    val tlsVersion = try {
+      selectBestTlsVersion(SSLContext.getDefault().defaultSSLParameters.protocols)
+    } catch (e: NoSuchAlgorithmException) {
+      null
+    }
+    log(LogLevel.DEBUG,
+        "WrappedChannel",
+        "TLS Version chosen is: $tlsVersion, with fallback $DEFAULT_TLS_VERSION")
+
+    val context = SSLContext.getInstance(tlsVersion ?: DEFAULT_TLS_VERSION)
     val managers = arrayOf(certificateManager)
     context.init(null, managers, null)
     val factory = context.socketFactory

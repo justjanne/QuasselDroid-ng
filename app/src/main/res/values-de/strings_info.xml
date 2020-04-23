@@ -36,6 +36,7 @@
   <string name="label_core_connection_verified_by">Verbindung verifiziert von %1$s</string>
   <string name="label_core_connection_protocol">Die Verbindung verwendet %1$s</string>
   <string name="label_core_connection_ciphersuite">Die Verbindung ist mit %1$s verschlüsselt und authentifiziert und verwendet %2$s als Mechanismus für den Schlüsselaustausch</string>
+  <string name="label_core_connection_ciphersuite_13">Die Verbindung ist mit %1$s verschlüsselt und authentifiziert</string>
   <string name="label_core_connection_verified_by_unknown">Unbekannt</string>
   <string name="label_core_connection_insecure">Unsichere Verbindung</string>
 
