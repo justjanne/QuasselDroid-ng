@@ -44,6 +44,6 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.61"))
+  implementation(kotlin("stdlib", "1.3.72"))
   implementation("androidx.appcompat", "appcompat", "1.1.0")
 }
