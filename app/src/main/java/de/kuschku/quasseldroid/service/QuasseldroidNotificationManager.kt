@@ -169,6 +169,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setLights(context.getColorCompat(R.color.colorPrimary), 200, 200)
+      .setGroup("notification-${buffer.networkName}")
       .apply {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
           var defaults = 0
@@ -267,6 +268,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setPriority(NotificationCompat.PRIORITY_MIN)
+      .setGroup("system-background")
     return Handle(BACKGROUND_NOTIFICATION_ID, notification)
   }
 
