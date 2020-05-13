@@ -29,7 +29,6 @@ import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.session.ProtocolHandler
-import de.kuschku.libquassel.ssl.BrowserCompatibleHostnameVerifier
 import de.kuschku.libquassel.ssl.TrustManagers
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
@@ -50,6 +49,8 @@ import java.lang.Thread.UncaughtExceptionHandler
 import java.net.Socket
 import java.net.SocketException
 import java.nio.ByteBuffer
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
@@ -60,7 +61,7 @@ class CoreConnection(
   private val features: Features = Features(clientData.clientFeatures, QuasselFeatures.empty()),
   private val handlerService: HandlerService = JavaHandlerService(),
   private val trustManager: X509TrustManager = TrustManagers.default(),
-  private val hostnameVerifier: HostnameVerifier = BrowserCompatibleHostnameVerifier()
+  private val hostnameVerifier: HostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier()
 ) : Thread(), Closeable {
   companion object {
     private const val TAG = "CoreConnection"

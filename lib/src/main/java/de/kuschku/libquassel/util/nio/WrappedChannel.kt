@@ -19,8 +19,9 @@
 
 package de.kuschku.libquassel.util.nio
 
-import de.kuschku.libquassel.connection.HostnameVerifier
+import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel
@@ -35,12 +36,8 @@ import java.nio.channels.ReadableByteChannel
 import java.nio.channels.WritableByteChannel
 import java.security.GeneralSecurityException
 import java.security.NoSuchAlgorithmException
-import java.security.cert.X509Certificate
 import java.util.zip.InflaterInputStream
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
+import javax.net.ssl.*
 
 class WrappedChannel private constructor(
   private val socket: Socket,
@@ -91,8 +88,10 @@ class WrappedChannel private constructor(
   }
 
   @Throws(GeneralSecurityException::class, IOException::class)
-  fun withSSL(certificateManager: X509TrustManager, hostnameVerifier: HostnameVerifier,
-              address: SocketAddress): WrappedChannel {
+  fun withSSL(certificateManager: X509TrustManager,
+              hostnameVerifier: HostnameVerifier,
+              address: SocketAddress
+  ): WrappedChannel {
     val tlsVersion = try {
       selectBestTlsVersion(SSLContext.getDefault().defaultSSLParameters.protocols)
     } catch (e: NoSuchAlgorithmException) {
@@ -111,10 +110,13 @@ class WrappedChannel private constructor(
     val socket = factory.createSocket(socket, address.host, address.port, true) as SSLSocket
     socket.useClientMode = true
     socket.addHandshakeCompletedListener {
-      hostnameVerifier.checkValid(
-        address,
-        socket.session.peerCertificates.map { it as X509Certificate }.toTypedArray()
-      )
+      if (socket.session.peerCertificateChain.isEmpty()) {
+        throw QuasselSecurityException.NoCertificate(address)
+      }
+      if (!hostnameVerifier.verify(address.host, socket.session)) {
+        throw QuasselSecurityException.WrongHostname(X509Helper.convert(socket.session.peerCertificateChain),
+                                                     address)
+      }
     }
     socket.startHandshake()
     return ofSocket(socket)

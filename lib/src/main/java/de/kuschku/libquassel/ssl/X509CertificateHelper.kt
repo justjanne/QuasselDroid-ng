@@ -17,12 +17,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.connection
+package de.kuschku.libquassel.ssl
 
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLException
+import javax.security.cert.X509Certificate
 
-interface HostnameVerifier {
-  @Throws(SSLException::class)
-  fun checkValid(address: SocketAddress, chain: Array<out X509Certificate>)
-}
+fun X509Certificate.toJavaCertificate() = X509Helper.convert(this)
+fun Array<X509Certificate>.toJavaCertificate() = X509Helper.convert(this)

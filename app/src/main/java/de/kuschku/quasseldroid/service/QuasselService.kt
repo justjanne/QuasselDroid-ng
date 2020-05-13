@@ -28,7 +28,6 @@ import androidx.core.app.RemoteInput
 import androidx.lifecycle.Observer
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import de.kuschku.libquassel.connection.ConnectionState
-import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
@@ -68,6 +67,7 @@ import de.kuschku.quasseldroid.util.ui.LocaleHelper
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.inject.Inject
+import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.X509TrustManager
 
 class QuasselService : DaggerLifecycleService(),

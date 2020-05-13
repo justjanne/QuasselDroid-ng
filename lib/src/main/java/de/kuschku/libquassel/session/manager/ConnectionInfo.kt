@@ -19,9 +19,9 @@
 
 package de.kuschku.libquassel.session.manager
 
-import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.ClientData
+import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.X509TrustManager
 
 data class ConnectionInfo(

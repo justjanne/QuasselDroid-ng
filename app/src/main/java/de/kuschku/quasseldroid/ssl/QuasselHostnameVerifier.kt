@@ -19,25 +19,16 @@
 
 package de.kuschku.quasseldroid.ssl
 
-import de.kuschku.libquassel.connection.HostnameVerifier
-import de.kuschku.libquassel.connection.QuasselSecurityException
-import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.libquassel.ssl.BrowserCompatibleHostnameVerifier
 import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLException
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSession
 
 class QuasselHostnameVerifier(
   private val hostnameManager: QuasselHostnameManager,
-  private val hostnameVerifier: HostnameVerifier = BrowserCompatibleHostnameVerifier()
+  private val hostnameVerifier: HostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier()
 ) : HostnameVerifier {
-  override fun checkValid(address: SocketAddress, chain: Array<out X509Certificate>) {
-    try {
-      if (!hostnameManager.isValid(address, chain)) {
-        hostnameVerifier.checkValid(address, chain)
-      }
-    } catch (e: SSLException) {
-      throw QuasselSecurityException.Hostname(chain, address, e)
-    }
+  override fun verify(hostname: String?, session: SSLSession?): Boolean {
+    return hostnameManager.verify(hostname, session) || hostnameVerifier.verify(hostname, session)
   }
 }

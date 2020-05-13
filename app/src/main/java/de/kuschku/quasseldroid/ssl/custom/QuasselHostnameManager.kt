@@ -19,17 +19,19 @@
 
 package de.kuschku.quasseldroid.ssl.custom
 
-import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.libquassel.ssl.toJavaCertificate
 import de.kuschku.quasseldroid.persistence.dao.SslHostnameWhitelistDao
 import de.kuschku.quasseldroid.util.helper.sha1Fingerprint
-import java.security.cert.X509Certificate
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLSession
 
 class QuasselHostnameManager(
   private val hostnameWhitelist: SslHostnameWhitelistDao
-) {
-  fun isValid(address: SocketAddress, chain: Array<out X509Certificate>): Boolean {
-    val leafCertificate = chain.firstOrNull() ?: return false
-    val whitelistEntry = hostnameWhitelist.find(leafCertificate.sha1Fingerprint, address.host)
+) : HostnameVerifier {
+  override fun verify(hostname: String?, session: SSLSession?): Boolean {
+    val chain = session?.peerCertificateChain?.toJavaCertificate()
+    val leafCertificate = chain?.firstOrNull() ?: return false
+    val whitelistEntry = hostnameWhitelist.find(leafCertificate.sha1Fingerprint, hostname ?: "")
     return whitelistEntry != null
   }
 }
