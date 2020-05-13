@@ -23,9 +23,8 @@ import java.io.ByteArrayInputStream
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 
-// FIXME: re-read RFC and check it's actually secure
 object X509Helper {
-  val certificateFactory = CertificateFactory.getInstance("X.509")
+  private val certificateFactory = CertificateFactory.getInstance("X.509")
 
   fun hostnames(certificate: X509Certificate): Sequence<String> =
     (sequenceOf(certificate.subjectX500Principal.commonName) + subjectAlternativeNames(certificate))
@@ -47,6 +46,9 @@ object X509Helper {
 
   fun convert(certificate: javax.security.cert.X509Certificate) =
     certificateFactory.generateCertificate(ByteArrayInputStream(certificate.encoded)) as? X509Certificate
+
+  fun convert(chain: Array<out javax.security.cert.X509Certificate>): Array<X509Certificate>? =
+    chain.map { convert(it) ?: return null }.toTypedArray()
 
 
   val COMMON_NAME = Regex("""(?:^|,\s?)(?:CN=("(?:[^"]|"")+"|[^,]+))""")

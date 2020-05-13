@@ -31,11 +31,14 @@ sealed class QuasselSecurityException(
     cause: Exception
   ) : QuasselSecurityException(certificateChain, cause)
 
-  class Hostname(
+  class WrongHostname(
     certificateChain: Array<out X509Certificate>?,
-    val address: SocketAddress,
-    cause: Exception
-  ) : QuasselSecurityException(certificateChain, cause)
+    val address: SocketAddress
+  ) : QuasselSecurityException(certificateChain, null)
+
+  class NoCertificate(
+    val address: SocketAddress
+  ) : QuasselSecurityException(emptyArray(), null)
 
   object NoSsl : QuasselSecurityException(emptyArray(), null)
 }

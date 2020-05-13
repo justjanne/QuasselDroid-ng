@@ -526,7 +526,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .show()
               } else {
                 val leafCertificate = it.certificateChain?.firstOrNull()
-                if (leafCertificate == null) {
+                if (leafCertificate == null || it is QuasselSecurityException.NoCertificate) {
                   // No certificate exists in the chain
                   MaterialDialog.Builder(this)
                     .title(R.string.label_error_certificate)
@@ -584,7 +584,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                         .show()
                     }
                     // Certificate is in any other way invalid
-                    it is QuasselSecurityException.Certificate -> {
+                    it is QuasselSecurityException.Certificate   -> {
                       MaterialDialog.Builder(this)
                         .title(R.string.label_error_certificate)
                         .content(
@@ -630,7 +630,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                         .show()
                     }
                     // Certificate not valid for this hostname
-                    it is QuasselSecurityException.Hostname    -> {
+                    it is QuasselSecurityException.WrongHostname -> {
                       MaterialDialog.Builder(this)
                         .title(R.string.label_error_certificate)
                         .content(

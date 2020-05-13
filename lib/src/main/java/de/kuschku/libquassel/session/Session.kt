@@ -26,7 +26,6 @@ import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
-import de.kuschku.libquassel.ssl.BrowserCompatibleHostnameVerifier
 import de.kuschku.libquassel.ssl.TrustManagers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -37,6 +36,8 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.X509TrustManager
 
 class Session(
@@ -44,7 +45,7 @@ class Session(
   private var userData: Pair<String, String>,
   requireSsl: Boolean = false,
   trustManager: X509TrustManager = TrustManagers.default(),
-  hostnameVerifier: HostnameVerifier = BrowserCompatibleHostnameVerifier(),
+  hostnameVerifier: HostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier(),
   clientData: ClientData = ClientData.DEFAULT,
   private val handlerService: HandlerService = JavaHandlerService(),
   heartBeatFactory: () -> HeartBeatRunner = ::JavaHeartBeatRunner,
