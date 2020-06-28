@@ -43,6 +43,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -237,9 +238,11 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private val boundaryCallback = object : PagedList.BoundaryCallback<DisplayMessage>() {
     override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) {
-      val id = itemAtFront.tag.id
-      log(DEBUG, "MessageListFragment", "onItemAtFrontLoaded: $id")
-      loadMore(reverse = true, lastMessageId = id)
+      if (modelHelper.coreFeatures.value?.second?.hasFeature(ExtendedFeature.LoadBacklogForwards) == true) {
+        val id = itemAtFront.tag.id
+        log(DEBUG, "MessageListFragment", "onItemAtFrontLoaded: $id")
+        loadMore(reverse = true, lastMessageId = id)
+      }
     }
     override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) {
       val id = itemAtEnd.tag.id
@@ -342,8 +345,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
         val canScrollUp = recyclerView.canScrollVertically(-1)
         val isScrollingUp = dy < 0
+        val canJumpTo = modelHelper.coreFeatures.value?.second?.hasFeature(ExtendedFeature.LoadBacklogForwards) == true
 
-        scrollUp.toggle(canScrollUp && isScrollingUp)
+        scrollUp.toggle(canJumpTo && canScrollUp && isScrollingUp)
       }
 
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -504,7 +508,9 @@ class MessageListFragment : ServiceBoundFragment() {
       jumpTo(false)
     }
     scrollUp.setOnClickListener {
-      jumpTo(true)
+      if (modelHelper.coreFeatures.value?.second?.hasFeature(ExtendedFeature.LoadBacklogForwards) == true) {
+        jumpTo(true)
+      }
     }
 
     val avatarSize = TypedValue.applyDimension(
@@ -653,7 +659,7 @@ class MessageListFragment : ServiceBoundFragment() {
         if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
           runInBackground {
-            if (reverse) {
+            if (reverse && modelHelper.coreFeatures.value?.second?.hasFeature(ExtendedFeature.LoadBacklogForwards) == true) {
               backlogRequester.loadMoreAfter(
                 accountId = accountId,
                 buffer = bufferId,

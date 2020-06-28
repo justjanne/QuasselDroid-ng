@@ -58,7 +58,9 @@ enum class ExtendedFeature {
   /** 64-bit IDs for messages */
   LongMessageId,
   /** CoreInfo dynamically updated using signals */
-  SyncedCoreInfo;
+  SyncedCoreInfo,
+  /** Allow loading backlog in reverse */
+  LoadBacklogForwards;
 
   companion object {
     private val map = values().associateBy(ExtendedFeature::name)
