@@ -29,6 +29,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.persistence.dao.findById
 import de.kuschku.quasseldroid.persistence.dao.findFirstByBufferId
+import de.kuschku.quasseldroid.persistence.dao.findLastByBufferId
 import de.kuschku.quasseldroid.persistence.dao.get
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
@@ -41,13 +42,13 @@ class BacklogRequester(
   private val database: QuasselDatabase,
   private val accountDatabase: AccountDatabase
 ) {
-  fun loadMore(accountId: AccountId, buffer: BufferId, amount: Int, pageSize: Int,
-               lastMessageId: MsgId? = null,
-               untilAllVisible: Boolean = false,
-               finishCallback: () -> Unit) {
+  fun loadMoreBefore(accountId: AccountId, buffer: BufferId, amount: Int, pageSize: Int,
+                     lastMessageId: MsgId? = null,
+                     untilAllVisible: Boolean = false,
+                     finishCallback: () -> Unit) {
     log(DEBUG,
         "BacklogRequester",
-        "requested(bufferId: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
+        "requestedBefore(bufferId: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
     var missing = amount
     session.value?.orNull()?.let { session: ISession ->
       session.backlogManager.let {
@@ -56,14 +57,26 @@ class BacklogRequester(
           buffer,
           accountDatabase.accounts().findById(accountId)?.defaultFiltered ?: 0
         )
+        val msgId = lastMessageId
+                    ?: database.message().findFirstByBufferId(buffer)?.messageId
+                    ?: MsgId(-1)
+        log(DEBUG,
+            "BacklogRequester",
+            "requestBefore(bufferId: $buffer, first: -1, last: $msgId, limit: $amount)")
         it.requestBacklog(
           bufferId = buffer,
-          last = lastMessageId
-                 ?: database.message().findFirstByBufferId(buffer)?.messageId
-                 ?: MsgId(-1),
+          last = msgId,
           limit = amount
         ) {
-          if (it.isNotEmpty()) {
+          val min = it.asSequence().map(Message::messageId).min()
+          val max = it.asSequence().map(Message::messageId).max()
+          log(DEBUG,
+              "BacklogRequester",
+              "receivedBefore(bufferId: $buffer, [$min-$max])")
+          if (min == max) {
+            // Do not change stored messages if we only got back one message
+            false
+          } else if (it.isNotEmpty()) {
             missing -= it.count {
               (it.type.value and filtered.toUInt().inv()) != 0u &&
               !QuasselBacklogStorage.isIgnored(session, it)
@@ -72,13 +85,76 @@ class BacklogRequester(
             val hasLoadedAny = missing < amount
             if (untilAllVisible && !hasLoadedAll || !untilAllVisible && !hasLoadedAny) {
               val messageId = it.map(Message::messageId).min()
-              loadMore(accountId,
+              loadMoreBefore(accountId,
                        buffer,
                        missing,
                        pageSize,
                        messageId,
                        untilAllVisible,
                        finishCallback)
+              true
+            } else {
+              finishCallback()
+              true
+            }
+          } else {
+            finishCallback()
+            true
+          }
+        }
+      }
+    }
+  }
+  fun loadMoreAfter(accountId: AccountId, buffer: BufferId, amount: Int, pageSize: Int,
+                     lastMessageId: MsgId? = null,
+                     untilAllVisible: Boolean = false,
+                     finishCallback: () -> Unit) {
+    log(DEBUG,
+        "BacklogRequester",
+        "loadMoreAfter(bufferId: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
+    var missing = amount
+    session.value?.orNull()?.let { session: ISession ->
+      session.backlogManager.let {
+        val filtered = database.filtered().get(
+          accountId,
+          buffer,
+          accountDatabase.accounts().findById(accountId)?.defaultFiltered ?: 0
+        )
+        val msgId = lastMessageId
+                    ?: database.message().findLastByBufferId(buffer)?.messageId
+                    ?: MsgId(0)
+        log(DEBUG,
+            "BacklogRequester",
+            "requestAfter(bufferId: $buffer, first: $msgId, last: -1, limit: $amount)")
+        it.requestBacklogForward(
+          bufferId = buffer,
+          first = msgId,
+          limit = amount
+        ) {
+          val min = it.asSequence().map(Message::messageId).min()
+          val max = it.asSequence().map(Message::messageId).max()
+          log(DEBUG,
+              "BacklogRequester",
+              "receivedAfter(bufferId: $buffer, [$min-$max])")
+          if (min == max) {
+            // Do not change stored messages if we only got back one message
+            false
+          } else if (it.isNotEmpty()) {
+            missing -= it.count {
+              (it.type.value and filtered.toUInt().inv()) != 0u &&
+              !QuasselBacklogStorage.isIgnored(session, it)
+            }
+            val hasLoadedAll = missing == 0
+            val hasLoadedAny = missing < amount
+            if (untilAllVisible && !hasLoadedAll || !untilAllVisible && !hasLoadedAny) {
+              val messageId = it.map(Message::messageId).max()
+              loadMoreAfter(accountId,
+                             buffer,
+                             missing,
+                             pageSize,
+                             messageId,
+                             untilAllVisible,
+                             finishCallback)
               true
             } else {
               finishCallback()

@@ -48,6 +48,8 @@ open class ChatViewModel : QuasselViewModel() {
   val stateReset = BehaviorSubject.create<Unit>()
   val bufferOpened = PublishSubject.create<Unit>()
 
+  val loadKey = BehaviorSubject.create<MsgId>()
+
   fun onSaveInstanceState(outState: Bundle) {
     /*
     outState.putSerializable(

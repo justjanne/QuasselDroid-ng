@@ -45,6 +45,8 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.*
 import de.kuschku.libquassel.util.irc.HostmaskHelper
@@ -76,6 +78,9 @@ import kotlin.math.roundToInt
 class MessageListFragment : ServiceBoundFragment() {
   @BindView(R.id.messages)
   lateinit var messageList: RecyclerView
+
+  @BindView(R.id.scrollUp)
+  lateinit var scrollUp: FloatingActionButton
 
   @BindView(R.id.scrollDown)
   lateinit var scrollDown: FloatingActionButton
@@ -119,7 +124,8 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private var lastBuffer: BufferId? = null
   private var previousMessageId: MsgId? = null
-  private var previousLoadKey: Int? = null
+  private var previousLoadKey: MsgId_Type? = null
+  private var reverse: Boolean = false
 
   private var actionMode: ActionMode? = null
 
@@ -230,9 +236,15 @@ class MessageListFragment : ServiceBoundFragment() {
   }
 
   private val boundaryCallback = object : PagedList.BoundaryCallback<DisplayMessage>() {
-    override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = Unit
+    override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) {
+      val id = itemAtFront.tag.id
+      log(DEBUG, "MessageListFragment", "onItemAtFrontLoaded: $id")
+      loadMore(reverse = true, lastMessageId = id)
+    }
     override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) {
-      loadMore()
+      val id = itemAtEnd.tag.id
+      log(DEBUG, "MessageListFragment", "onItemAtEndLoaded: $id")
+      loadMore(reverse = false, lastMessageId = id)
     }
   }
 
@@ -327,6 +339,11 @@ class MessageListFragment : ServiceBoundFragment() {
         val isScrollingDown = dy > 0
 
         scrollDown.toggle(canScrollDown && isScrollingDown)
+
+        val canScrollUp = recyclerView.canScrollVertically(-1)
+        val isScrollingUp = dy < 0
+
+        scrollUp.toggle(canScrollUp && isScrollingUp)
       }
 
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -396,7 +413,7 @@ class MessageListFragment : ServiceBoundFragment() {
                 .setEnablePlaceholders(true)
                 .build()
             ).setBoundaryCallback(boundaryCallback)
-              .setInitialLoadKey(previousLoadKey)
+              .setInitialLoadKey(previousLoadKey?.toInt())
               .build()
           }
         }
@@ -461,7 +478,7 @@ class MessageListFragment : ServiceBoundFragment() {
     var hasLoaded = false
     fun checkScroll() {
       if (hasLoaded) {
-        if (linearLayoutManager.findFirstVisibleItemPosition() < 2 && !isScrolling) {
+        if (!reverse && linearLayoutManager.findFirstVisibleItemPosition() < 2 && !isScrolling) {
           messageList.scrollToPosition(0)
         }
       } else {
@@ -483,7 +500,12 @@ class MessageListFragment : ServiceBoundFragment() {
         (fab as View).visibility = View.VISIBLE
       }
     })
-    scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
+    scrollDown.setOnClickListener {
+      jumpTo(false)
+    }
+    scrollUp.setOnClickListener {
+      jumpTo(true)
+    }
 
     val avatarSize = TypedValue.applyDimension(
       TypedValue.COMPLEX_UNIT_SP,
@@ -512,12 +534,12 @@ class MessageListFragment : ServiceBoundFragment() {
     savedInstanceState?.run {
       (messageList.layoutManager as RecyclerView.LayoutManager).onRestoreInstanceState(getParcelable(
         KEY_STATE_LIST))
-      previousLoadKey = getInt(KEY_STATE_PAGING).nullIf { it == -1 }
+      previousLoadKey = getLong(KEY_STATE_PAGING).nullIf { it == -1L }
       lastBuffer = BufferId(getInt(KEY_STATE_BUFFER)).nullIf { !it.isValidId() }
     }
 
     data.observe(viewLifecycleOwner, Observer { list ->
-      previousLoadKey = list?.lastKey as? Int
+      previousLoadKey = (list?.lastKey as? Int)?.toLong()
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId
       runInBackground {
@@ -534,6 +556,7 @@ class MessageListFragment : ServiceBoundFragment() {
           type = Buffer_Type.of(Buffer_Type.StatusBuffer)
         )?.bufferId ?: BufferId(0)
         if (buffer != lastBuffer) {
+          reverse = false
           adapter.clearCache()
           modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             onBufferChange(lastBuffer,
@@ -552,10 +575,26 @@ class MessageListFragment : ServiceBoundFragment() {
     return view
   }
 
+  private fun jumpTo(start: Boolean) {
+    reverse = start
+    runInBackground {
+      modelHelper.chat.bufferId { bufferId ->
+        //if (database.message().find(msg.id) == null) {
+        database.message().clearMessages(bufferId.id)
+        //}
+        if (start) {
+          loadMore(initial = true, reverse = true, lastMessageId = MsgId(0L))
+        } else {
+          loadMore(initial = true, reverse = false, lastMessageId = MsgId(-1L))
+        }
+      }
+    }
+  }
+
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelable(KEY_STATE_LIST, messageList.layoutManager?.onSaveInstanceState())
-    outState.putInt(KEY_STATE_PAGING, previousLoadKey ?: -1)
+    outState.putLong(KEY_STATE_PAGING, previousLoadKey ?: -1L)
     outState.putInt(KEY_STATE_BUFFER, lastBuffer?.id ?: -1)
   }
 
@@ -607,25 +646,42 @@ class MessageListFragment : ServiceBoundFragment() {
     super.onPause()
   }
 
-  private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null) {
+  private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null, reverse: Boolean = this.reverse) {
     // This can be called *after* we’re already detached from the activity
     activity?.runOnUiThread {
       modelHelper.chat.bufferId { bufferId ->
         if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
           runInBackground {
-            backlogRequester.loadMore(
-              accountId = accountId,
-              buffer = bufferId,
-              amount = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize,
-              pageSize = backlogSettings.pageSize,
-              lastMessageId = lastMessageId
-                              ?: database.message().findFirstByBufferId(bufferId)?.messageId
-                              ?: MsgId(-1),
-              untilAllVisible = initial
-            ) {
-              activity?.runOnUiThread {
-                swipeRefreshLayout.isRefreshing = false
+            if (reverse) {
+              backlogRequester.loadMoreAfter(
+                accountId = accountId,
+                buffer = bufferId,
+                amount = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize,
+                pageSize = backlogSettings.pageSize,
+                lastMessageId = lastMessageId
+                                ?: database.message().findLastByBufferId(bufferId)?.messageId
+                                ?: MsgId(0),
+                untilAllVisible = initial
+              ) {
+                activity?.runOnUiThread {
+                  swipeRefreshLayout.isRefreshing = false
+                }
+              }
+            } else {
+              backlogRequester.loadMoreBefore(
+                accountId = accountId,
+                buffer = bufferId,
+                amount = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize,
+                pageSize = backlogSettings.pageSize,
+                lastMessageId = lastMessageId
+                                ?: database.message().findFirstByBufferId(bufferId)?.messageId
+                                ?: MsgId(-1),
+                untilAllVisible = initial
+              ) {
+                activity?.runOnUiThread {
+                  swipeRefreshLayout.isRefreshing = false
+                }
               }
             }
           }

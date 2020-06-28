@@ -47,6 +47,17 @@ interface IBacklogManager : ISyncableObject {
   }
 
   @Slot
+  fun requestBacklogForward(bufferId: BufferId, first: MsgId = MsgId(-1),
+                             last: MsgId = MsgId(-1), limit: Int = -1,
+                             type: Int = -1, flags: Int = -1) {
+    REQUEST(
+      "requestBacklogForward", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
+      ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(type, Type.Int),
+      ARG(flags, Type.Int)
+    )
+  }
+
+  @Slot
   fun requestBacklogAll(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1), limit: Int = -1,
                         additional: Int = 0) {
     REQUEST(
@@ -72,6 +83,10 @@ interface IBacklogManager : ISyncableObject {
   @Slot
   fun receiveBacklogFiltered(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
                              additional: Int, type: Int, flags: Int, messages: QVariantList)
+
+  @Slot
+  fun receiveBacklogForward(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
+                             type: Int, flags: Int, messages: QVariantList)
 
   @Slot
   fun receiveBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int,

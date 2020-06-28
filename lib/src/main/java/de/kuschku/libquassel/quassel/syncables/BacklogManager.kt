@@ -32,6 +32,7 @@ class BacklogManager(
 ) : SyncableObject(session.proxy, "BacklogManager"), IBacklogManager {
   private val loading = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
   private val loadingFiltered = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
+  private val loadingForward = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
 
   override fun deinit() {
     super.deinit()
@@ -58,6 +59,15 @@ class BacklogManager(
     if (loadingFiltered.contains(bufferId)) return
     loadingFiltered[bufferId] = callback
     requestBacklogFiltered(bufferId, first, last, limit, additional, type, flags)
+  }
+
+  fun requestBacklogForward(bufferId: BufferId, first: MsgId = MsgId(-1),
+                             last: MsgId = MsgId(-1), limit: Int = -1,
+                             type: Int = 0, flags: Int = 0,
+                             callback: (List<Message>) -> Boolean) {
+    if (loadingForward.contains(bufferId)) return
+    loadingForward[bufferId] = callback
+    requestBacklogForward(bufferId, first, last, limit, type, flags)
   }
 
   fun requestBacklogAll(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1), limit: Int = -1,
@@ -98,6 +108,16 @@ class BacklogManager(
                                       messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     if (loadingFiltered.remove(bufferId)?.invoke(list) != false) {
+      log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
+      backlogStorage?.storeMessages(session, list)
+    }
+  }
+
+  override fun receiveBacklogForward(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
+                                      type: Int, flags: Int,
+                                      messages: QVariantList) {
+    val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
+    if (loadingForward.remove(bufferId)?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
       backlogStorage?.storeMessages(session, list)
     }
