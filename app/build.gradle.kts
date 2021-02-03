@@ -1,45 +1,32 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   id("com.android.application")
   id("kotlin-android")
+  id("kotlin-kapt")
   id("de.kuschku.justcode")
 }
 
 android {
   defaultConfig {
-    setMinSdkVersion(21)
-    setTargetSdkVersion(30)
-
     applicationId = "com.iskrembilen.quasseldroid"
 
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    setMinSdkVersion(21)
+    setTargetSdkVersion(30)
   }
 
-  buildTypes {
-    release {
-      setMinifyEnabled(false)
-      setProguardFiles(
-        listOf(
-          getDefaultProguardFile("proguard-android-optimize.txt"),
-          "proguard-rules.pro"
-        )
-      )
-    }
-  }
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-  }
-  kotlinOptions {
-    jvmTarget = "1.8"
-    useIR = true
-  }
   buildFeatures {
     compose = true
   }
+
   composeOptions {
     val androidxComposeVersion: String by project.extra
     kotlinCompilerExtensionVersion = androidxComposeVersion
   }
+}
+
+kapt {
+  correctErrorTypes = true
 }
 
 dependencies {
@@ -59,6 +46,17 @@ dependencies {
 
   val androidxLifecycleVersion: String by project.extra
   implementation("androidx.lifecycle", "lifecycle-runtime-ktx", androidxLifecycleVersion)
+
+  val androidxMultidexVersion: String by project.extra
+  implementation("androidx.multidex", "multidex", androidxMultidexVersion)
+
+  val daggerHiltVersion: String by project.extra
+  implementation("com.google.dagger", "hilt-android", daggerHiltVersion)
+  annotationProcessor("com.google.dagger", "hilt-android-compiler", daggerHiltVersion)
+  testImplementation("com.google.dagger", "hilt-android-testing", daggerHiltVersion)
+  testAnnotationProcessor("com.google.dagger", "hilt-android-compiler", daggerHiltVersion)
+  androidTestImplementation("com.google.dagger", "hilt-android-testing", daggerHiltVersion)
+  androidTestAnnotationProcessor("com.google.dagger", "hilt-android-compiler", daggerHiltVersion)
 
   implementation("org.threeten", "threetenbp", "1.4.0")
 

@@ -44,7 +44,38 @@ class JustCodePlugin : Plugin<Project> {
             gitCommitDate()
           )
 
+          setProperty("archivesBaseName", "${rootProject.name}-$versionName")
+
           signingConfig = signingConfigs.findByName("default")
+
+          testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+          // Disable test runner analytics
+          testInstrumentationRunnerArguments(mapOf(
+            "disableAnalytics" to "true"
+          ))
+        }
+
+        buildTypes {
+          getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            multiDexEnabled = true
+
+            proguardFiles(
+              getDefaultProguardFile("proguard-android.txt"),
+              "proguard-rules.pro"
+            )
+          }
+
+          getByName("debug") {
+            applicationIdSuffix = ".debug"
+            multiDexEnabled = true
+          }
+        }
+
+        compileOptions {
+          sourceCompatibility = JavaVersion.VERSION_1_8
+          targetCompatibility = JavaVersion.VERSION_1_8
         }
       }
     }

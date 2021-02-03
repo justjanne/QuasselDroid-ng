@@ -19,26 +19,34 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import de.kuschku.quasseldroid.ui.theme.QuasseldroidTheme
 import de.kuschku.quasseldroid.ui.theme.shapes
 import de.kuschku.quasseldroid.ui.theme.typography
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import kotlin.random.Random
 
-val time = flow<ZonedDateTime> {
-  emit(ZonedDateTime.now())
-  delay(1000)
-}
+val time = MutableStateFlow(ZonedDateTime.now())
+
+inline class Password1(private val s: String)
 
 class MainActivity : AppCompatActivity() {
-  var timer: Job? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    lifecycleScope.launchWhenResumed {
+      while (true) {
+        time.value = ZonedDateTime.now()
+        delay(1000)
+      }
+    }
     setContent {
       JetChat()
     }
@@ -79,7 +87,7 @@ fun parseString(text: String): AnnotatedString {
     if (monospace) builder.addStyle(
       SpanStyle(
         fontFamily = FontFamily.Monospace,
-        background = Color.Gray,
+        background = Color(0xFFDEDEDE),
       ),
       before,
       after
@@ -114,7 +122,7 @@ fun ChatBubble(
   content: @Composable () -> Unit
 ) {
   Surface(
-    color = Color.LightGray,
+    color = Color(0xFFF5F5F5),
     shape = shapes.medium,
     modifier = Modifier
       .padding(2.dp)

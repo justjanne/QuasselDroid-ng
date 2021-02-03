@@ -13,6 +13,7 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <application
+    android:name="de.kuschku.quasseldroid.QuasseldroidApplication"
     android:allowBackup="true"
     android:fullBackupContent="@xml/backup_descriptor"
     android:icon="@mipmap/ic_launcher"
