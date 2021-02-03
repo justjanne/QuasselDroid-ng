@@ -60,6 +60,8 @@ dependencies {
   val androidxLifecycleVersion: String by project.extra
   implementation("androidx.lifecycle", "lifecycle-runtime-ktx", androidxLifecycleVersion)
 
+  implementation("org.threeten", "threetenbp", "1.4.0")
+
   implementation("io.coil-kt", "coil", "1.1.1")
   implementation("dev.chrisbanes.accompanist", "accompanist-coil", "0.5.0")
 
