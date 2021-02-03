@@ -1,13 +1,8 @@
-import de.kuschku.justcode.properties
-import de.kuschku.justcode.signingData
-
 plugins {
   id("com.android.application")
   id("kotlin-android")
   id("de.kuschku.justcode")
 }
-
-val composeVersion: String by extra
 
 android {
   defaultConfig {
@@ -42,20 +37,33 @@ android {
     compose = true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion = composeVersion
+    val androidxComposeVersion: String by project.extra
+    kotlinCompilerExtensionVersion = androidxComposeVersion
   }
 }
 
 dependencies {
-  implementation("androidx.core:core-ktx:1.3.2")
-  implementation("androidx.appcompat:appcompat:1.2.0")
-  implementation("com.google.android.material:material:1.2.1")
-  implementation("androidx.compose.ui:ui:$composeVersion")
-  implementation("androidx.compose.material:material:$composeVersion")
-  implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-rc01")
+  val androidxCoreVersion: String by project.extra
+  implementation("androidx.core", "core-ktx", androidxCoreVersion)
 
-  testImplementation("junit:junit:4.13.1")
-  androidTestImplementation("androidx.test.ext:junit:1.1.2")
-  androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+  val androidxAppcompatVersion: String by project.extra
+  implementation("androidx.appcompat", "appcompat", androidxAppcompatVersion)
+
+  val mdcVersion: String by project.extra
+  implementation("com.google.android.material", "material", mdcVersion)
+
+  val androidxComposeVersion: String by project.extra
+  implementation("androidx.compose.ui", "ui", androidxComposeVersion)
+  implementation("androidx.compose.material", "material", androidxComposeVersion)
+  implementation("androidx.compose.ui", "ui-tooling", androidxComposeVersion)
+
+  val androidxLifecycleVersion: String by project.extra
+  implementation("androidx.lifecycle", "lifecycle-runtime-ktx", androidxLifecycleVersion)
+
+  implementation("io.coil-kt", "coil", "1.1.1")
+  implementation("dev.chrisbanes.accompanist", "accompanist-coil", "0.5.0")
+
+  testImplementation("junit", "junit", "4.13.1")
+  androidTestImplementation("androidx.test.ext", "junit", "1.1.2")
+  androidTestImplementation("androidx.test.espresso", "espresso-core", "3.3.0")
 }

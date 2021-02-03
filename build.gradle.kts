@@ -20,18 +20,25 @@
 buildscript {
   repositories {
     google()
+    mavenCentral()
     jcenter()
   }
   dependencies {
     classpath("com.android.tools.build:gradle:7.0.0-alpha05")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21-2")
   }
 }
 
 allprojects {
-  extra["composeVersion"] = "1.0.0-alpha08"
+  extra["androidxAppcompatVersion"] = "1.2.0"
+  extra["androidxCoreVersion"] = "1.2.0"
+  extra["androidxComposeVersion"] = "1.0.0-alpha11"
+  extra["androidxLifecycleVersion"] = "2.3.0-rc01"
+  extra["mdcVersion"] = "1.2.1"
+
   repositories {
     google()
+    mavenCentral()
     jcenter()
   }
 }
