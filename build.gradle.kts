@@ -1,10 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2018 Janne Mareike Koschinski
- * Copyright (c) 2018 The Quassel Project
+ * Copyright (c) 2019 Janne Mareike Koschinski
+ * Copyright (c) 2019 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -12,11 +10,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 buildscript {
@@ -25,25 +23,15 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("com.android.tools.build:gradle:3.6.1")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
+    classpath("com.android.tools.build:gradle:7.0.0-alpha05")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21")
   }
 }
 
 allprojects {
+  extra["composeVersion"] = "1.0.0-alpha08"
   repositories {
     google()
     jcenter()
-    maven(url = "https://jitpack.io")
-  }
-
-  tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-      freeCompilerArgs += listOf(
-        "-XXLanguage:+InlineClasses",
-        "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"
-      )
-      jvmTarget = "1.6"
-    }
   }
 }

@@ -17,22 +17,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-plugins {
-  `kotlin-dsl`
-}
+rootProject.buildFileName = "build.gradle.kts"
 
-kotlinDslPluginOptions {
-  experimentalWarning.set(false)
-}
-
-repositories {
-  google()
-  jcenter()
-}
-
-dependencies {
-  implementation("com.android.tools.build:gradle:7.0.0-alpha05")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21")
-  implementation(gradleApi())
-  implementation(localGroovy())
-}
+include(
+  ":app"//,
+  //":invokerannotations",
+  //":invokergenerator",
+  //":lib",
+  //":lifecycle-ktx",
+  //":malheur",
+  //":persistence",
+  //":viewmodel",
+  //":ui_spinner"
+)

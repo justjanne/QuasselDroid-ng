@@ -20,9 +20,6 @@
 <lint>
   <issue id="NewerVersionAvailable" severity="error" />
 
-  <!-- Because of course paging and room have incompatible versions -->
-  <issue id="GradleCompatible" severity="ignore" />
-
   <!-- Because these are entirely broken -->
   <issue id="ResourceType" severity="ignore" />
   <issue id="UnusedResources" severity="ignore" />
