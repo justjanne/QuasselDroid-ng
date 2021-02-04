@@ -17,6 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -51,7 +53,7 @@ allprojects {
     kotlinOptions {
       freeCompilerArgs = listOf(
         "-Xinline-classes",
-        "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"
+        "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
       )
       jvmTarget = "1.8"
       useIR = true
