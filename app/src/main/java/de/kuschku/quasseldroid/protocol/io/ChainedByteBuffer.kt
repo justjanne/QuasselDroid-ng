@@ -17,14 +17,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.protocol
+package de.kuschku.quasseldroid.protocol.io
 
-import de.kuschku.quasseldroid.util.CoroutineChannel
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.yield
 import java.nio.ByteBuffer
-import java.nio.channels.AsynchronousByteChannel
-import java.nio.channels.WritableByteChannel
 import java.util.*
 
 class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: Boolean = false) {
@@ -51,6 +46,11 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
       bufferList.add(allocate(bufferSize))
     }
     this.size += size
+  }
+
+  fun nextBuffer(length: Int = 1): ByteBuffer {
+    ensureSpace(length)
+    return bufferList.last()
   }
 
   fun put(value: Byte) {
@@ -96,11 +96,18 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
   }
 
   fun put(value: ByteBuffer) {
-    while (value.remaining() > 8) {
-      putLong(value.long)
-    }
-    while (value.hasRemaining()) {
-      put(value.get())
+    ensureSpace(value.remaining())
+
+    while (value.remaining() > 0) {
+      val buffer = bufferList.last()
+      if (buffer.remaining() >= value.remaining()) {
+        buffer.put(value)
+      } else {
+        val oldLimit = value.limit()
+        value.limit(value.position() + buffer.remaining())
+        buffer.put(value)
+        value.limit(oldLimit)
+      }
     }
   }
 

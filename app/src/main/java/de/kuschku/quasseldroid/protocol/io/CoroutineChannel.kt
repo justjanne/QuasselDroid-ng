@@ -17,23 +17,47 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util
+package de.kuschku.quasseldroid.protocol.io
 
-import de.kuschku.quasseldroid.protocol.ChainedByteBuffer
+import de.kuschku.quasseldroid.util.TlsInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runInterruptible
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
+import javax.net.ssl.SSLContext
 
 class CoroutineChannel {
   private lateinit var channel: StreamChannel
   private val writeContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
   private val readContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+  private val _tlsInfo = MutableStateFlow<TlsInfo?>(null)
+  val tlsInfo: StateFlow<TlsInfo?> get() = _tlsInfo
 
-  suspend fun connect(address: InetSocketAddress) = runInterruptible(writeContext) {
-    this.channel = StreamChannel(Socket(address.address, address.port))
+  suspend fun connect(
+    address: InetSocketAddress,
+    timeout: Int = 0,
+    keepAlive: Boolean = false,
+  ) = runInterruptible(Dispatchers.IO) {
+    val socket = Socket()
+    socket.keepAlive = keepAlive
+    socket.connect(address, timeout)
+    this.channel = StreamChannel(socket)
+  }
+
+  fun enableCompression() {
+    channel = channel.withCompression()
+  }
+
+  suspend fun enableTLS(context: SSLContext) {
+    channel = runInterruptible(writeContext) {
+      channel.withTLS(context)
+    }
+    _tlsInfo.emit(channel.tlsInfo())
   }
 
   suspend fun read(buffer: ByteBuffer): Int = runInterruptible(readContext) {

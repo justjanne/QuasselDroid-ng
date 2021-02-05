@@ -17,8 +17,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util
+package de.kuschku.quasseldroid.protocol.io
 
+import de.kuschku.quasseldroid.util.TlsInfo
 import java.io.Flushable
 import java.io.InputStream
 import java.io.OutputStream
@@ -26,8 +27,9 @@ import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.channels.ByteChannel
 import java.nio.channels.InterruptibleChannel
-import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterInputStream
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocket
 
 class StreamChannel constructor(
   private val socket: Socket,
@@ -37,12 +39,31 @@ class StreamChannel constructor(
   private val input = ReadableWrappedChannel(inputStream)
   private val output = WritableWrappedChannel(outputStream)
 
+  fun tlsInfo(): TlsInfo? {
+    val sslSocket = socket as? SSLSocket ?: return null
+    return TlsInfo.ofSession(sslSocket.session)
+  }
+
   fun withCompression(): StreamChannel {
     return StreamChannel(
       socket,
       InflaterInputStream(inputStream),
-      DeflaterOutputStream(outputStream),
+      FixedDeflaterOutputStream(outputStream),
     )
+  }
+
+  fun withTLS(
+    context: SSLContext,
+  ): StreamChannel {
+    val sslSocket = context.socketFactory.createSocket(
+      this.socket,
+      this.socket.inetAddress.hostAddress,
+      this.socket.port,
+      true
+    ) as SSLSocket
+    sslSocket.useClientMode = true
+    sslSocket.startHandshake()
+    return StreamChannel(sslSocket)
   }
 
   override fun close() {

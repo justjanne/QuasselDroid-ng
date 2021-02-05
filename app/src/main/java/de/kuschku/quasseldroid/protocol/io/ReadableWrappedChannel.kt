@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util
+package de.kuschku.quasseldroid.protocol.io
 
 import android.util.Log
 import java.io.InputStream

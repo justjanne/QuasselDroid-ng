@@ -17,16 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.protocol
+package de.kuschku.quasseldroid.protocol.serializers
 
-import java.nio.ByteBuffer
+import de.kuschku.quasseldroid.protocol.variant.QtType
+import de.kuschku.quasseldroid.protocol.variant.QuasselType
 
-object ByteSerializer : Serializer<Byte> {
-  override fun serialize(buffer: ChainedByteBuffer, data: Byte) {
-    buffer.put(data)
-  }
-
-  override fun deserialize(buffer: ByteBuffer): Byte {
-    return buffer.get()
-  }
+interface QuasselSerializer<T> : QtSerializer<T> {
+  override val qtType: QtType get() = quasselType.qtType
+  val quasselType: QuasselType
 }

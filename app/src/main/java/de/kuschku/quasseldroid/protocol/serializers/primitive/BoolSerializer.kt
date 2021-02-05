@@ -17,16 +17,25 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.protocol
+package de.kuschku.quasseldroid.protocol.serializers.primitive
 
+import de.kuschku.quasseldroid.protocol.io.ChainedByteBuffer
+import de.kuschku.quasseldroid.protocol.serializers.QtSerializer
+import de.kuschku.quasseldroid.protocol.variant.QtType
 import java.nio.ByteBuffer
 
-object UByteSerializer : Serializer<UByte> {
-  override fun serialize(buffer: ChainedByteBuffer, data: UByte) {
-    buffer.put(data.toByte())
+object BoolSerializer : QtSerializer<Boolean> {
+  override val qtType: QtType = QtType.Bool
+  override val javaType: Class<Boolean> = Boolean::class.java
+
+  override fun serialize(buffer: ChainedByteBuffer, data: Boolean) {
+    buffer.put(
+      if (data) 0x01.toByte()
+      else 0x00.toByte()
+    )
   }
 
-  override fun deserialize(buffer: ByteBuffer): UByte {
-    return buffer.get().toUByte()
+  override fun deserialize(buffer: ByteBuffer): Boolean {
+    return buffer.get() != 0x00.toByte()
   }
 }

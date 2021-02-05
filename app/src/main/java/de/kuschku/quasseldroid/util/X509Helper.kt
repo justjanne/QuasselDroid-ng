@@ -17,16 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.protocol
+package de.kuschku.quasseldroid.util
 
-import java.nio.ByteBuffer
+import java.io.ByteArrayInputStream
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate as javaCertificate
+import javax.security.cert.X509Certificate as javaxCertificate
 
-object ULongSerializer : Serializer<ULong> {
-  override fun serialize(buffer: ChainedByteBuffer, data: ULong) {
-    buffer.putLong(data.toLong())
-  }
+private val certificateFactory = CertificateFactory.getInstance("X.509")
 
-  override fun deserialize(buffer: ByteBuffer): ULong {
-    return buffer.getLong().toULong()
-  }
-}
+fun javaxCertificate.toJavaCertificate(): javaCertificate =
+  certificateFactory.generateCertificate(ByteArrayInputStream(this.encoded))
+    as javaCertificate
+
+fun javaCertificate.toJavaXCertificate(): javaxCertificate =
+  javaxCertificate.getInstance(this.encoded)
