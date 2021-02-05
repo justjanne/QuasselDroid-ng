@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2021 Janne Mareike Koschinski
+ * Copyright (c) 2021 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -17,8 +17,21 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-buildscript {
-    dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21'
-    }
+package de.kuschku.libquassel.protocol.serializers.primitive
+
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.variant.QtType
+import java.nio.ByteBuffer
+
+object UByteSerializer : QtSerializer<UByte> {
+  override val qtType: QtType = QtType.UChar
+  override val javaType: Class<UByte> = UByte::class.java
+
+  override fun serialize(buffer: ChainedByteBuffer, data: UByte) {
+    buffer.put(data.toByte())
+  }
+
+  override fun deserialize(buffer: ByteBuffer): UByte {
+    return buffer.get().toUByte()
+  }
 }

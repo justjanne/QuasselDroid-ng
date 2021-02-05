@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2021 Janne Mareike Koschinski
+ * Copyright (c) 2021 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -17,8 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-buildscript {
-    dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21'
-    }
-}
+package de.kuschku.libquassel.protocol.io
+
+import kotlin.concurrent.getOrSet
+
+private val ascii = ThreadLocal<StringEncoder>()
+private val utf8 = ThreadLocal<StringEncoder>()
+private val utf16 = ThreadLocal<StringEncoder>()
+
+fun stringEncoderAscii() = ascii.getOrSet { StringEncoder(Charsets.ISO_8859_1) }
+fun stringEncoderUtf8() = utf8.getOrSet { StringEncoder(Charsets.UTF_8) }
+fun stringEncoderUtf16() = utf16.getOrSet { StringEncoder(Charsets.UTF_16BE) }

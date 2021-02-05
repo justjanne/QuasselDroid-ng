@@ -17,19 +17,24 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.io
+package de.kuschku.libquassel.protocol.serializers.primitive
 
-import java.io.OutputStream
-import java.util.zip.DeflaterOutputStream
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.variant.QtType
+import java.nio.ByteBuffer
 
-class FixedDeflaterOutputStream(
-  stream: OutputStream
-) : DeflaterOutputStream(stream, true) {
-  override fun close() {
-    try {
-      super.close()
-    } finally {
-      def.end()
-    }
+object BoolSerializer : QtSerializer<Boolean> {
+  override val qtType: QtType = QtType.Bool
+  override val javaType: Class<Boolean> = Boolean::class.java
+
+  override fun serialize(buffer: ChainedByteBuffer, data: Boolean) {
+    buffer.put(
+      if (data) 0x01.toByte()
+      else 0x00.toByte()
+    )
+  }
+
+  override fun deserialize(buffer: ByteBuffer): Boolean {
+    return buffer.get() != 0x00.toByte()
   }
 }

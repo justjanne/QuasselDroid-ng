@@ -21,5 +21,7 @@ rootProject.name = "Quasseldroid"
 rootProject.buildFileName = "build.gradle.kts"
 
 include(
-  ":app"
+  ":app",
+  ":bitflags",
+  ":protocol"
 )

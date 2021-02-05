@@ -1,10 +1,10 @@
 package de.kuschku.quasseldroid
 
-import de.kuschku.quasseldroid.protocol.io.ChainedByteBuffer
-import de.kuschku.quasseldroid.protocol.serializers.primitive.IntSerializer
-import de.kuschku.quasseldroid.protocol.serializers.primitive.ProtocolInfoSerializer
-import de.kuschku.quasseldroid.protocol.serializers.primitive.UIntSerializer
-import de.kuschku.quasseldroid.protocol.io.CoroutineChannel
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.serializers.primitive.IntSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.ProtocolInfoSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.UIntSerializer
+import de.kuschku.libquassel.protocol.io.CoroutineChannel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -45,7 +45,7 @@ class ExampleUnitTest {
 
     runBlocking {
       val sizeBuffer = ByteBuffer.allocateDirect(4)
-      val sendBuffer = ChainedByteBuffer(direct = true)
+      val sendBuffer = de.kuschku.libquassel.protocol.io.ChainedByteBuffer(direct = true)
       val channel = CoroutineChannel()
       channel.connect(InetSocketAddress("kuschku.de", 4242))
       val readBuffer = ByteBuffer.allocateDirect(4)

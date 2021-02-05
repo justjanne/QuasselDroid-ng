@@ -17,19 +17,21 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.io
+package de.kuschku.libquassel.protocol.serializers.handshake
 
-import java.io.OutputStream
-import java.util.zip.DeflaterOutputStream
+import de.kuschku.libquassel.protocol.messages.handshake.ClientInitReject
+import de.kuschku.libquassel.protocol.variant.QVariantMap
+import de.kuschku.libquassel.protocol.variant.QtType
+import de.kuschku.libquassel.protocol.variant.into
+import de.kuschku.libquassel.protocol.variant.qVariant
 
-class FixedDeflaterOutputStream(
-  stream: OutputStream
-) : DeflaterOutputStream(stream, true) {
-  override fun close() {
-    try {
-      super.close()
-    } finally {
-      def.end()
-    }
-  }
+object ClientInitRejectSerializer : HandshakeSerializer<ClientInitReject> {
+  override fun serialize(data: ClientInitReject) = mapOf(
+    "MsgType" to qVariant("ClientInitReject", QtType.QString),
+    "Error" to qVariant(data.errorString, QtType.QString)
+  )
+
+  override fun deserialize(data: QVariantMap) = ClientInitReject(
+    errorString = data["Error"].into()
+  )
 }
