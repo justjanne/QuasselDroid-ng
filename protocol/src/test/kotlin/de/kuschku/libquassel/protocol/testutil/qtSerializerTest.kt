@@ -18,31 +18,27 @@
  */
 package de.kuschku.libquassel.protocol.testutil
 import de.kuschku.libquassel.protocol.features.FeatureSet
-import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.io.print
-import de.kuschku.libquassel.protocol.serializers.primitive.QVariantSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
-import de.kuschku.libquassel.protocol.variant.QVariant
+import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
 import org.hamcrest.Matcher
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Assertions.assertEquals
-
-fun <T> testQtSerializerVariant(
+import java.nio.ByteBuffer
+fun <T> qtSerializerTest(
   serializer: QtSerializer<T>,
-  data: T,
-  featureSet: FeatureSet = FeatureSet.all(),
-  matcher: Matcher<in T>? = null
+  value: T,
+  encoded: ByteBuffer? = null,
+  matcher: ((T) -> Matcher<T>)? = null,
+  featureSets: List<FeatureSet> = listOf(FeatureSet.none(), FeatureSet.all()),
+  deserializeFeatureSet: FeatureSet = FeatureSet.all(),
 ) {
-  val buffer = ChainedByteBuffer()
-  QVariantSerializer.serialize(buffer, QVariant.of(data, serializer), featureSet)
-  val result = buffer.toBuffer()
-  result.print()
-  val after = QVariantSerializer.deserialize(result, featureSet)
-  assertEquals(0, result.remaining())
-  if (matcher != null) {
-    @Suppress("UNCHECKED_CAST")
-    assertThat(after.value() as T, matcher)
-  } else {
-    assertEquals(data, after.value())
+  for (featureSet in featureSets) {
+    testQtSerializerDirect(serializer, value, featureSet, matcher?.invoke(value))
+    testQtSerializerVariant(serializer, value, featureSet, matcher?.invoke(value))
+  }
+  if (encoded != null) {
+    if (matcher != null) {
+      testDeserialize(serializer, matcher(value), encoded.rewind(), deserializeFeatureSet)
+    } else {
+      testDeserialize(serializer, value, encoded.rewind(), deserializeFeatureSet)
+    }
   }
 }

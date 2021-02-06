@@ -16,31 +16,27 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
-import de.kuschku.libquassel.protocol.testutil.testDeserialize
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
-import org.junit.Test
+import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import org.junit.jupiter.api.Test
 
 class ByteBufferSerializerTest {
   @Test
-  fun testBaseCase() {
-    val value = byteBufferOf(0)
-    testQtSerializerDirect(ByteBufferSerializer, value, ByteBufferMatcher(value))
-    // @formatter:off
-    testDeserialize(ByteBufferSerializer, ByteBufferMatcher(value), byteBufferOf(0, 0, 0, 1, 0))
-    // @formatter:on
-  }
+  fun testBaseCase() = qtSerializerTest(
+    ByteBufferSerializer,
+    byteBufferOf(0),
+    byteBufferOf(0, 0, 0, 1, 0),
+    ::ByteBufferMatcher
+  )
 
   @Test
-  fun testNormal() {
-    val value = byteBufferOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    testQtSerializerDirect(ByteBufferSerializer, value, ByteBufferMatcher(value))
-    // @formatter:off
-    testDeserialize(ByteBufferSerializer, ByteBufferMatcher(value), byteBufferOf(0, 0, 0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9))
-    // @formatter:on
-  }
+  fun testNormal() = qtSerializerTest(
+    ByteBufferSerializer,
+    byteBufferOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
+    byteBufferOf(0, 0, 0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+    ::ByteBufferMatcher
+  )
 }

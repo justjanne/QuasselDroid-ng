@@ -38,42 +38,10 @@ sealed class QVariant<T> constructor(
   open val serializer: QtSerializer<T>,
 ) {
   class Typed<T> internal constructor(data: T, serializer: QtSerializer<T>) :
-    QVariant<T>(data, serializer) {
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (other !is Typed<*>) return false
-
-      if (data != other.data) return false
-      if (serializer.qtType != other.serializer.qtType) return false
-
-      return true
-    }
-
-    override fun hashCode(): Int {
-      var result = data?.hashCode() ?: 0
-      result = 31 * result + serializer.qtType.hashCode()
-      return result
-    }
-  }
+    QVariant<T>(data, serializer)
 
   class Custom<T> internal constructor(data: T, override val serializer: QuasselSerializer<T>) :
-    QVariant<T>(data, serializer) {
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (other !is Custom<*>) return false
-
-      if (data != other.data) return false
-      if (serializer.quasselType != other.serializer.quasselType) return false
-
-      return true
-    }
-
-    override fun hashCode(): Int {
-      var result = data?.hashCode() ?: 0
-      result = 31 * result + serializer.quasselType.hashCode()
-      return result
-    }
-  }
+    QVariant<T>(data, serializer)
 
   fun value(): T = data
 

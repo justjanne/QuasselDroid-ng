@@ -16,19 +16,39 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.testutil.matchers
-
 import de.kuschku.libquassel.protocol.io.contentToString
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 import java.nio.ByteBuffer
 
-class ByteBufferMatcher(private val expected: ByteBuffer) : BaseMatcher<ByteBuffer>() {
-  override fun describeTo(description: Description?) {
-    description?.appendText(expected.contentToString())
+class ByteBufferMatcher(buffer: ByteBuffer?) : BaseMatcher<ByteBuffer>() {
+  private val expected = buffer?.let { original ->
+    val copy = ByteBuffer.allocateDirect(original.limit())
+    original.rewind()
+    copy.put(original)
+    copy.rewind()
+    original.rewind()
+    copy
   }
 
-  override fun matches(item: Any?) =
-    (item as? ByteBuffer)?.clear()?.contentToString() == expected.clear().contentToString()
+  override fun describeTo(description: Description?) {
+    description?.appendText(expected?.contentToString())
+  }
+
+  override fun describeMismatch(item: Any?, description: Description?) {
+    description?.appendText("was ")
+    description?.appendText((item as? ByteBuffer)?.rewind()?.contentToString())
+  }
+
+  override fun matches(item: Any?): Boolean {
+    return if (item is ByteBuffer && expected is ByteBuffer) {
+      val expected = expected.rewind().contentToString()
+      val actual = item.rewind().contentToString()
+
+      expected == actual
+    } else {
+      false
+    }
+  }
 }

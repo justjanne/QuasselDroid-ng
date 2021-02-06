@@ -16,55 +16,39 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
-import de.kuschku.libquassel.protocol.testutil.testDeserialize
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
-import org.junit.Test
+import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import org.junit.jupiter.api.Test
 import kotlin.experimental.inv
 
 class ShortSerializerTest {
   @Test
-  fun testZero() {
-    val value = 0.toShort()
-    testQtSerializerDirect(ShortSerializer, value)
-    testQtSerializerVariant(ShortSerializer, value)
-    // @formatter:off
-    testDeserialize(ShortSerializer, value, byteBufferOf(0, 0))
-    // @formatter:on
-  }
+  fun testZero() = qtSerializerTest(
+    ShortSerializer,
+    0.toShort(),
+    byteBufferOf(0, 0)
+  )
 
   @Test
-  fun testMinimal() {
-    val value = Short.MIN_VALUE
-    testQtSerializerDirect(ShortSerializer, value)
-    testQtSerializerVariant(ShortSerializer, value)
-    // @formatter:off
-    testDeserialize(ShortSerializer, value, byteBufferOf(-128, 0))
-    // @formatter:on
-  }
+  fun testMinimal() = qtSerializerTest(
+    ShortSerializer,
+    Short.MIN_VALUE,
+    byteBufferOf(-128, 0)
+  )
 
   @Test
-  fun testMaximal() {
-    val value = Short.MAX_VALUE
-    testQtSerializerDirect(ShortSerializer, value)
-    testQtSerializerVariant(ShortSerializer, value)
-    // @formatter:off
-    testDeserialize(ShortSerializer, value, byteBufferOf(127, -1))
-    // @formatter:on
-  }
+  fun testMaximal() = qtSerializerTest(
+    ShortSerializer,
+    Short.MAX_VALUE,
+    byteBufferOf(127, -1)
+  )
 
   @Test
-  fun testAllOnes() {
-    val value = 0.toShort().inv()
-
-    testQtSerializerDirect(ShortSerializer, value)
-    testQtSerializerVariant(ShortSerializer, value)
-    // @formatter:off
-    testDeserialize(ShortSerializer, value, byteBufferOf(-1, -1))
-    // @formatter:on
-  }
+  fun testAllOnes() = qtSerializerTest(
+    ShortSerializer,
+    0.toShort().inv(),
+    byteBufferOf(-1, -1)
+  )
 }

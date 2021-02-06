@@ -16,16 +16,23 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.kuschku.libquassel.protocol.testutil.matchers
-import org.hamcrest.BaseMatcher
-import org.hamcrest.Description
-class BomMatcherString(private val expected: String?) : BaseMatcher<String?>() {
-  private val malformed = charArrayOf(
-    '￾', '﻿'
-  )
-  override fun describeTo(description: Description?) {
-    description?.appendText(expected)
+
+package de.kuschku.libquassel.protocol.serializers.primitive
+
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.variant.QtType
+import java.nio.ByteBuffer
+
+object FloatSerializer : QtSerializer<Float> {
+  override val qtType: QtType = QtType.Float
+  override val javaType: Class<Float> = Float::class.java
+
+  override fun serialize(buffer: ChainedByteBuffer, data: Float, featureSet: FeatureSet) {
+    buffer.putFloat(data)
   }
-  override fun matches(item: Any?) =
-    (item as? String)?.endsWith(expected?.trimStart(*malformed) ?: "") == true
+
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): Float {
+    return buffer.getFloat()
+  }
 }

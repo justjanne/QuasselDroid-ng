@@ -105,8 +105,7 @@ enum class QtType(val id: kotlin.Int) {
   QVariant(138),//, VariantSerializer),
 
   User(256),
-  UserType(127),
-  LastType(-1);
+  UserType(127);
 
   val serializableName =
     if (name.startsWith("Q")) name

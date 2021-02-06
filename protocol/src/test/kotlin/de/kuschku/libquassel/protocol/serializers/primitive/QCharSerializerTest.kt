@@ -16,90 +16,70 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.matchers.BomMatcherChar
-import de.kuschku.libquassel.protocol.testutil.testDeserialize
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
-import org.junit.Test
+import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import org.junit.jupiter.api.Test
 
 class QCharSerializerTest {
   @Test
-  fun testNull() {
-    val value = '\u0000'
-    testQtSerializerDirect(QCharSerializer, value)
-    testQtSerializerVariant(QCharSerializer, value)
-    // @formatter:off
-    testDeserialize(QCharSerializer, value, byteBufferOf(0, 0))
-    // @formatter:on
-  }
+  fun testNull() = qtSerializerTest(
+    QCharSerializer,
+    '\u0000',
+    byteBufferOf(0, 0),
+    ::BomMatcherChar,
+  )
 
   @Test
-  fun testAllOnes() {
-    val value = '\uFFFF'
-    testQtSerializerDirect(QCharSerializer, value)
-    testQtSerializerVariant(QCharSerializer, value)
-    // @formatter:off
-    testDeserialize(QCharSerializer, value, byteBufferOf(-1, -1))
-    // @formatter:on
-  }
+  fun testAllOnes() = qtSerializerTest(
+    QCharSerializer,
+    '\uFFFF',
+    byteBufferOf(-1, -1),
+    ::BomMatcherChar,
+  )
 
   @Test
-  fun testBOM1() {
-    val value = '\uFFFE'
-    testQtSerializerDirect(QCharSerializer, value)
-    testQtSerializerVariant(QCharSerializer, value)
-    // @formatter:off
-    testDeserialize(QCharSerializer, BomMatcherChar(value), byteBufferOf(-2, -1))
-    // @formatter:on
-  }
+  fun testBOM1() = qtSerializerTest(
+    QCharSerializer,
+    '\uFFFE',
+    byteBufferOf(-2, -1),
+    ::BomMatcherChar,
+  )
 
   @Test
-  fun testBOM2() {
-    val value = '\uFEFF'
-    testQtSerializerDirect(QCharSerializer, value)
-    testQtSerializerVariant(QCharSerializer, value)
-    // @formatter:off
-    testDeserialize(QCharSerializer, BomMatcherChar(value), byteBufferOf(-1, -2))
-    // @formatter:on
-  }
+  fun testBOM2() = qtSerializerTest(
+    QCharSerializer,
+    '\uFEFF',
+    byteBufferOf(-1, -2),
+    ::BomMatcherChar,
+  )
 
   @Test
   fun testAlphabet() {
-    for (index in 0..25) {
-      val value = 'a' + index
-      testQtSerializerDirect(QCharSerializer, value)
-      testQtSerializerVariant(QCharSerializer, value)
-      // @formatter:off
-      testDeserialize(QCharSerializer, value, byteBufferOf(0, (97 + index).toByte()))
-      // @formatter:on
-    }
-    for (index in 0..25) {
-      val value = 'A' + index
-      testQtSerializerDirect(QCharSerializer, value)
-      testQtSerializerVariant(QCharSerializer, value)
-      // @formatter:off
-      testDeserialize(QCharSerializer, value, byteBufferOf(0, (65 + index).toByte()))
-      // @formatter:on
-    }
-    for (index in 0..9) {
-      val value = '0' + index
-      testQtSerializerDirect(QCharSerializer, value)
-      testQtSerializerVariant(QCharSerializer, value)
-      // @formatter:off
-      testDeserialize(QCharSerializer, value, byteBufferOf(0, (48 + index).toByte()))
-      // @formatter:on
-    }
+    for (value in 'a'..'z') qtSerializerTest(
+      QCharSerializer,
+      value,
+      byteBufferOf(0, value.toByte())
+    )
+    for (value in 'A'..'Z') qtSerializerTest(
+      QCharSerializer,
+      value,
+      byteBufferOf(0, value.toByte())
+    )
+    for (value in '0'..'9') qtSerializerTest(
+      QCharSerializer,
+      value,
+      byteBufferOf(0, value.toByte())
+    )
   }
 
   @Test
   fun testAlphabetExtended() {
-    for (value in listOf('ä', 'ö', 'ü', 'ß', 'æ', 'ø', 'µ')) {
-      testQtSerializerDirect(QCharSerializer, value)
-      testQtSerializerVariant(QCharSerializer, value)
-    }
+    for (value in listOf('ä', 'ö', 'ü', 'ß', 'æ', 'ø', 'µ')) qtSerializerTest(
+      QCharSerializer,
+      value
+    )
   }
 }

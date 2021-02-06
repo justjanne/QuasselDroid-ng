@@ -17,10 +17,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.bitflags
+package de.kuschku.libquassel.protocol.serializers.primitive
 
-import java.util.*
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.variant.QtType
+import java.nio.ByteBuffer
 
-inline fun <reified T : Enum<T>> List<T>.toEnumSet(): EnumSet<T> =
-  if (this.isEmpty()) EnumSet.noneOf(T::class.java)
-  else EnumSet.of(this.first(), *this.subList(1, this.size).toTypedArray())
+object DoubleSerializer : QtSerializer<Double> {
+  override val qtType: QtType = QtType.Double
+  override val javaType: Class<Double> = Double::class.java
+
+  override fun serialize(buffer: ChainedByteBuffer, data: Double, featureSet: FeatureSet) {
+    buffer.putDouble(data)
+  }
+
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): Double {
+    return buffer.getDouble()
+  }
+}

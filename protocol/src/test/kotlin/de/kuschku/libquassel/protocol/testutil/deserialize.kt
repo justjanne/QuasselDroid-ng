@@ -16,46 +16,59 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.testutil
-
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import org.hamcrest.Matcher
-import org.hamcrest.MatcherAssert
-import org.junit.Assert
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.nio.ByteBuffer
-
-fun <T> deserialize(serializer: QtSerializer<T>, buffer: ByteBuffer): T {
-  val connectionFeatureSet = FeatureSet.build()
-  val result = serializer.deserialize(
-    buffer,
-    connectionFeatureSet
-  )
-  Assert.assertEquals(0, buffer.remaining())
+fun <T> deserialize(
+  serializer: QtSerializer<T>,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+): T {
+  val result = serializer.deserialize(buffer, featureSet)
+  assertEquals(0, buffer.remaining())
   return result
 }
-
-fun <T> testDeserialize(serializer: QtSerializer<T>, matcher: Matcher<in T>, buffer: ByteBuffer) {
-  val after = deserialize(serializer, buffer)
-  MatcherAssert.assertThat(after, matcher)
+fun <T> testDeserialize(
+  serializer: QtSerializer<T>,
+  matcher: Matcher<in T>,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+) {
+  val after = deserialize(serializer, buffer, featureSet)
+  assertThat(after, matcher)
 }
-
-fun <T> testDeserialize(serializer: QtSerializer<T>, data: T, buffer: ByteBuffer) {
-  val after = deserialize(serializer, buffer)
-  Assert.assertEquals(data, after)
+fun <T> testDeserialize(
+  serializer: QtSerializer<T>,
+  data: T,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+) {
+  val after = deserialize(serializer, buffer, featureSet)
+  assertEquals(data, after)
 }
-
-fun <T> testDeserialize(serializer: HandshakeSerializer<T>, matcher: Matcher<in T>, buffer: ByteBuffer) {
-  val map = deserialize(HandshakeMapSerializer, buffer)
+fun <T> testDeserialize(
+  serializer: HandshakeSerializer<T>,
+  matcher: Matcher<in T>,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+) {
+  val map = deserialize(HandshakeMapSerializer, buffer, featureSet)
   val after = serializer.deserialize(map)
-  MatcherAssert.assertThat(after, matcher)
+  assertThat(after, matcher)
 }
-
-fun <T> testDeserialize(serializer: HandshakeSerializer<T>, data: T, buffer: ByteBuffer) {
-  val map = deserialize(HandshakeMapSerializer, buffer)
+fun <T> testDeserialize(
+  serializer: HandshakeSerializer<T>,
+  data: T,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+) {
+  val map = deserialize(HandshakeMapSerializer, buffer, featureSet)
   val after = serializer.deserialize(map)
-  Assert.assertEquals(data, after)
+  assertEquals(data, after)
 }

@@ -22,32 +22,46 @@ import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import org.junit.jupiter.api.Test
 
-class IntSerializerTest {
+class DoubleSerializerTest {
   @Test
   fun testZero() = qtSerializerTest(
-    IntSerializer,
-    0,
-    byteBufferOf(0, 0, 0, 0)
+    DoubleSerializer,
+    0.0,
+    byteBufferOf(0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u)
   )
 
   @Test
   fun testMinimal() = qtSerializerTest(
-    IntSerializer,
-    Int.MIN_VALUE,
-    byteBufferOf(-128, 0, 0, 0)
+    DoubleSerializer,
+    Double.MIN_VALUE,
+    byteBufferOf(0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x01u)
   )
 
   @Test
   fun testMaximal() = qtSerializerTest(
-    IntSerializer,
-    Int.MAX_VALUE,
-    byteBufferOf(127, -1, -1, -1)
+    DoubleSerializer,
+    Double.MAX_VALUE,
+    byteBufferOf(0x7Fu, 0xEFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu)
   )
 
   @Test
-  fun testAllOnes() = qtSerializerTest(
-    IntSerializer,
-    0.inv(),
-    byteBufferOf(-1, -1, -1, -1)
+  fun testInfinityPositive() = qtSerializerTest(
+    DoubleSerializer,
+    Double.POSITIVE_INFINITY,
+    byteBufferOf(0x7Fu, 0xF0u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u)
+  )
+
+  @Test
+  fun testInfinityNegative() = qtSerializerTest(
+    DoubleSerializer,
+    Double.NEGATIVE_INFINITY,
+    byteBufferOf(0xFFu, 0xF0u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u)
+  )
+
+  @Test
+  fun testNotANumber() = qtSerializerTest(
+    DoubleSerializer,
+    Double.NaN,
+    byteBufferOf(0x7Fu, 0xF8u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u)
   )
 }

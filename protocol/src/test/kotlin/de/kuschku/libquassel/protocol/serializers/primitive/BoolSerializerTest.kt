@@ -16,31 +16,24 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
-import de.kuschku.libquassel.protocol.testutil.testDeserialize
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
-import org.junit.Test
+import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import org.junit.jupiter.api.Test
 
 class BoolSerializerTest {
   @Test
-  fun testTrue() {
-    testQtSerializerDirect(BoolSerializer, true)
-    testQtSerializerVariant(BoolSerializer, true)
-    // @formatter:off
-    testDeserialize(BoolSerializer, true, byteBufferOf(1))
-    // @formatter:on
-  }
+  fun testTrue() = qtSerializerTest(
+    BoolSerializer,
+    true,
+    byteBufferOf(1)
+  )
 
   @Test
-  fun testFalse() {
-    testQtSerializerDirect(BoolSerializer, false)
-    testQtSerializerVariant(BoolSerializer, false)
-    // @formatter:off
-    testDeserialize(BoolSerializer, false, byteBufferOf(0))
-    // @formatter:on
-  }
+  fun testFalse() = qtSerializerTest(
+    BoolSerializer,
+    false,
+    byteBufferOf(0)
+  )
 }

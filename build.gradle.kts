@@ -41,6 +41,9 @@ allprojects {
   extra["androidxLifecycleVersion"] = "2.3.0-rc01"
   extra["androidxMultidexVersion"] = "2.0.1"
   extra["daggerHiltVersion"] = "2.31.2-alpha"
+  extra["hamcrestVersion"] = "2.1"
+  extra["junit4Version"] = "4.13.1"
+  extra["junit5Version"] = "5.3.1"
   extra["mdcVersion"] = "1.2.1"
 
   repositories {
@@ -56,7 +59,6 @@ allprojects {
         "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
       )
       jvmTarget = "1.8"
-      useIR = true
     }
   }
 }

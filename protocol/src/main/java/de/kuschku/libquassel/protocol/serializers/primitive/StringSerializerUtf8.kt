@@ -19,4 +19,4 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-object StringSerializerUtf8 : StringSerializer(Charsets.UTF_8)
+object StringSerializerUtf8 : StringSerializer(Charsets.UTF_8, false)

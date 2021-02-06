@@ -16,10 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.testutil
-
 import java.nio.ByteBuffer
-
 inline fun byteBufferOf(vararg elements: Byte) = ByteBuffer.wrap(byteArrayOf(*elements))
 inline fun byteBufferOf(vararg elements: UByte) = ByteBuffer.wrap(ubyteArrayOf(*elements).toByteArray())

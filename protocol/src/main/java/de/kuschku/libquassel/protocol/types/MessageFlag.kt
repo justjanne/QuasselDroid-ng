@@ -21,6 +21,7 @@ package de.kuschku.libquassel.protocol.types
 
 import de.kuschku.bitflags.Flag
 import de.kuschku.bitflags.Flags
+import de.kuschku.bitflags.toEnumSet
 
 enum class MessageFlag(
   override val value: UInt,
@@ -34,7 +35,7 @@ enum class MessageFlag(
   companion object : Flags<UInt, MessageFlag> {
     private val values = values().associateBy(MessageFlag::value)
     override fun get(value: UInt) = values[value]
-    override fun all() = values.values
+    override val all: MessageFlags = values.values.toEnumSet()
   }
 }
 

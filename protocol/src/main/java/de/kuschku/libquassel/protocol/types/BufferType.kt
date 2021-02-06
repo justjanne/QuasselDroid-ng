@@ -21,6 +21,7 @@ package de.kuschku.libquassel.protocol.types
 
 import de.kuschku.bitflags.Flag
 import de.kuschku.bitflags.Flags
+import de.kuschku.bitflags.toEnumSet
 
 enum class BufferType(
   override val value: UShort,
@@ -34,7 +35,7 @@ enum class BufferType(
   companion object : Flags<UShort, BufferType> {
     private val values = values().associateBy(BufferType::value)
     override fun get(value: UShort) = values[value]
-    override fun all() = values.values
+    override val all: BufferTypes = values.values.toEnumSet()
   }
 }
 

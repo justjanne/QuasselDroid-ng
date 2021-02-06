@@ -1,5 +1,24 @@
 plugins {
   kotlin("jvm")
+  jacoco
+}
+
+tasks.withType<Test> {
+  useJUnitPlatform()
+}
+
+jacoco {
+  toolVersion = "0.8.6"
+}
+
+tasks.getByName<JacocoReport>("jacocoTestReport") {
+  reports {
+    sourceDirectories.from(fileTree("src/main/kotlin"))
+    xml.destination = File("$buildDir/reports/jacoco/report.xml")
+    html.isEnabled = true
+    xml.isEnabled = true
+    csv.isEnabled = false
+  }
 }
 
 dependencies {
@@ -7,5 +26,9 @@ dependencies {
   implementation("org.threeten", "threetenbp", "1.4.0")
   api(project(":bitflags"))
 
-  testImplementation("junit", "junit", "4.13.1")
+  val junit5Version: String by project.extra
+  testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)
+  testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)
+  val hamcrestVersion: String by project.extra
+  testImplementation("org.hamcrest", "hamcrest-library", hamcrestVersion)
 }

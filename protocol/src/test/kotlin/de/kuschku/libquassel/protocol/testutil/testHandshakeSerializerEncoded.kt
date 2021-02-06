@@ -16,34 +16,31 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.testutil
-
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.io.print
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
-import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import org.hamcrest.Matcher
-import org.hamcrest.MatcherAssert
-import org.junit.Assert
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 
-fun <T> testHandshakeSerializerEncoded(serializer: HandshakeSerializer<T>, data: T, matcher: Matcher<T>? = null) {
-  val connectionFeatureSet = FeatureSet.build()
+fun <T> testHandshakeSerializerEncoded(
+  serializer: HandshakeSerializer<T>,
+  data: T,
+  featureSet: FeatureSet = FeatureSet.all(),
+  matcher: Matcher<T>? = null
+) {
   val buffer = ChainedByteBuffer()
-
-  HandshakeMapSerializer.serialize(buffer, serializer.serialize(data), connectionFeatureSet)
+  HandshakeMapSerializer.serialize(buffer, serializer.serialize(data), featureSet)
   val result = buffer.toBuffer()
   result.print()
-  val after = serializer.deserialize(HandshakeMapSerializer.deserialize(result, connectionFeatureSet))
-
-  Assert.assertEquals(0, result.remaining())
-
+  val after = serializer.deserialize(HandshakeMapSerializer.deserialize(result, featureSet))
+  assertEquals(0, result.remaining())
   if (matcher != null) {
-    MatcherAssert.assertThat(data, matcher)
+    assertThat(after, matcher)
   } else {
-    Assert.assertEquals(data, after)
+    assertEquals(data, after)
   }
 }
-

@@ -19,4 +19,4 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-object StringSerializerUtf16 : StringSerializer(Charsets.UTF_16BE)
+object StringSerializerUtf16 : StringSerializer(Charsets.UTF_16BE, false)

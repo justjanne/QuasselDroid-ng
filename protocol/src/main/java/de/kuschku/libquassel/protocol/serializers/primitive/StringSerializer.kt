@@ -30,7 +30,7 @@ import kotlin.concurrent.getOrSet
 
 abstract class StringSerializer(
   private val charset: Charset,
-  private val nullLimited: Boolean = false,
+  private val nullLimited: Boolean,
 ) : QtSerializer<String?> {
   override val qtType = QtType.QString
   override val javaType: Class<out String> = String::class.java
@@ -38,10 +38,8 @@ abstract class StringSerializer(
   private val encoderLocal = ThreadLocal<StringEncoder>()
   private fun encoder() = encoderLocal.getOrSet { StringEncoder(charset) }
 
-  @Suppress("NOTHING_TO_INLINE")
-  private inline fun addNullBytes(before: Int) = if (nullLimited) before + 1 else before
-  @Suppress("NOTHING_TO_INLINE")
-  private inline fun removeNullBytes(before: Int) = if (nullLimited) before - 1 else before
+  private fun addNullBytes(before: Int) = if (nullLimited) before + 1 else before
+  private fun removeNullBytes(before: Int) = if (nullLimited) before - 1 else before
 
   override fun serialize(buffer: ChainedByteBuffer, data: String?, featureSet: FeatureSet) {
     if (data == null) {

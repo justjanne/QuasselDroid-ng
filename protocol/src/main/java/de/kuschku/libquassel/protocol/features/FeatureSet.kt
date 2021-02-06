@@ -45,7 +45,7 @@ class FeatureSet internal constructor(
     fun build(vararg features: QuasselFeature) = FeatureSet(features.toSet())
     fun build(features: Set<QuasselFeature>) = FeatureSet(features)
     fun all() = build(*QuasselFeature.values())
-    fun empty() = build()
+    fun none() = build()
 
     private fun parseFeatures(features: LegacyFeatures) =
       features.map(LegacyFeature::feature).toSet()

@@ -30,12 +30,12 @@ object TimeSerializer : QtSerializer<LocalTime> {
   override val javaType: Class<out LocalTime> = LocalTime::class.java
 
   override fun serialize(buffer: ChainedByteBuffer, data: LocalTime, featureSet: FeatureSet) {
-    val millisecondOfDay = (data.toNanoOfDay() / 1000).toInt()
+    val millisecondOfDay = (data.toNanoOfDay() / 1_000_000).toInt()
     IntSerializer.serialize(buffer, millisecondOfDay, featureSet)
   }
 
   override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): LocalTime {
     val millisecondOfDay = IntSerializer.deserialize(buffer, featureSet).toLong()
-    return LocalTime.ofNanoOfDay(millisecondOfDay * 1000)
+    return LocalTime.ofNanoOfDay(millisecondOfDay * 1_000_000)
   }
 }

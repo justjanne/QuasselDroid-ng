@@ -22,32 +22,46 @@ import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import org.junit.jupiter.api.Test
 
-class IntSerializerTest {
+class FloatSerializerTest {
   @Test
   fun testZero() = qtSerializerTest(
-    IntSerializer,
-    0,
-    byteBufferOf(0, 0, 0, 0)
+    FloatSerializer,
+    0f,
+    byteBufferOf(0x00u, 0x00u, 0x00u, 0x00u)
   )
 
   @Test
   fun testMinimal() = qtSerializerTest(
-    IntSerializer,
-    Int.MIN_VALUE,
-    byteBufferOf(-128, 0, 0, 0)
+    FloatSerializer,
+    Float.MIN_VALUE,
+    byteBufferOf(0x00u, 0x00u, 0x00u, 0x01u)
   )
 
   @Test
   fun testMaximal() = qtSerializerTest(
-    IntSerializer,
-    Int.MAX_VALUE,
-    byteBufferOf(127, -1, -1, -1)
+    FloatSerializer,
+    Float.MAX_VALUE,
+    byteBufferOf(0x7Fu, 0x7Fu, 0xFFu, 0xFFu)
   )
 
   @Test
-  fun testAllOnes() = qtSerializerTest(
-    IntSerializer,
-    0.inv(),
-    byteBufferOf(-1, -1, -1, -1)
+  fun testInfinityPositive() = qtSerializerTest(
+    FloatSerializer,
+    Float.POSITIVE_INFINITY,
+    byteBufferOf(0x7Fu, 0x80u, 0x00u, 0x00u)
+  )
+
+  @Test
+  fun testInfinityNegative() = qtSerializerTest(
+    FloatSerializer,
+    Float.NEGATIVE_INFINITY,
+    byteBufferOf(0xFFu, 0x80u, 0x00u, 0x00u)
+  )
+
+  @Test
+  fun testNotANumber() = qtSerializerTest(
+    FloatSerializer,
+    Float.NaN,
+    byteBufferOf(0x7Fu, 0xC0u, 0x00u, 0x00u)
   )
 }

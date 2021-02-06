@@ -21,33 +21,34 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import org.junit.jupiter.api.Test
+import kotlin.experimental.inv
 
-class IntSerializerTest {
+class UByteSerializerTest {
   @Test
   fun testZero() = qtSerializerTest(
-    IntSerializer,
-    0,
-    byteBufferOf(0, 0, 0, 0)
+    UByteSerializer,
+    0.toUByte(),
+    byteBufferOf(0)
   )
 
   @Test
   fun testMinimal() = qtSerializerTest(
-    IntSerializer,
-    Int.MIN_VALUE,
-    byteBufferOf(-128, 0, 0, 0)
+    UByteSerializer,
+    UByte.MIN_VALUE,
+    byteBufferOf(0)
   )
 
   @Test
   fun testMaximal() = qtSerializerTest(
-    IntSerializer,
-    Int.MAX_VALUE,
-    byteBufferOf(127, -1, -1, -1)
+    UByteSerializer,
+    UByte.MAX_VALUE,
+    byteBufferOf(255u)
   )
 
   @Test
   fun testAllOnes() = qtSerializerTest(
-    IntSerializer,
-    0.inv(),
-    byteBufferOf(-1, -1, -1, -1)
+    UByteSerializer,
+    0.toUByte().inv(),
+    byteBufferOf(255u)
   )
 }

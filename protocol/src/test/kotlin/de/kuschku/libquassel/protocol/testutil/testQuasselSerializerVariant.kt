@@ -17,21 +17,32 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil
-
-import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.print
+import de.kuschku.libquassel.protocol.serializers.primitive.QVariantSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
+import de.kuschku.libquassel.protocol.variant.QVariant
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 
-fun <T> testHandshakeSerializerDirect(
-  serializer: HandshakeSerializer<T>,
+fun <T> testQuasselSerializerVariant(
+  serializer: QuasselSerializer<T>,
   data: T,
-  matcher: Matcher<T>? = null
+  featureSet: FeatureSet = FeatureSet.all(),
+  matcher: Matcher<in T>? = null
 ) {
-  val after = serializer.deserialize(serializer.serialize(data))
+  val buffer = ChainedByteBuffer()
+  QVariantSerializer.serialize(buffer, QVariant.of(data, serializer), featureSet)
+  val result = buffer.toBuffer()
+  result.print()
+  val after = QVariantSerializer.deserialize(result, featureSet)
+  assertEquals(0, result.remaining())
   if (matcher != null) {
-    assertThat(after, matcher)
+    @Suppress("UNCHECKED_CAST")
+    assertThat(after.value() as T, matcher)
   } else {
-    assertEquals(data, after)
+    assertEquals(data, after.value())
   }
 }

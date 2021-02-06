@@ -29,13 +29,20 @@ object Serializers {
   private val qtSerializers = setOf<QtSerializer<*>>(
     VoidSerializer,
     BoolSerializer,
+
+    ByteSerializer,
+    UByteSerializer,
+    ShortSerializer,
+    UShortSerializer,
     IntSerializer,
     UIntSerializer,
+    LongSerializer,
+    ULongSerializer,
+
+    FloatSerializer,
+    DoubleSerializer,
 
     QCharSerializer,
-    QVariantMapSerializer,
-    QVariantListSerializer,
-
     StringSerializerUtf16,
     QStringListSerializer,
     ByteBufferSerializer,
@@ -44,16 +51,12 @@ object Serializers {
     TimeSerializer,
     DateTimeSerializer,
 
-    LongSerializer,
-    ShortSerializer,
-    ByteSerializer,
-    ULongSerializer,
-
-    UShortSerializer,
-    UByteSerializer,
-
     QVariantSerializer,
+    QVariantListSerializer,
+    QVariantMapSerializer,
+  ).associateBy(QtSerializer<*>::qtType)
 
+  private val quasselSerializers = listOf<QuasselSerializer<*>>(
     BufferIdSerializer,
     BufferInfoSerializer,
     //DccConfigIpDetectionModeSerializer,
@@ -69,9 +72,6 @@ object Serializers {
     //NetworkServerSerializer,
     //QHostAddressSerializer,
     PeerPtrSerializer,
-  ).associateBy(QtSerializer<*>::qtType)
-
-  private val quasselSerializers = listOf<QuasselSerializer<*>>(
   ).associateBy(QuasselSerializer<*>::quasselType)
 
   operator fun get(type: QtType) = qtSerializers[type]

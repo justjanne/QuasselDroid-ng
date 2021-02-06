@@ -18,20 +18,28 @@
  */
 package de.kuschku.libquassel.protocol.testutil
 
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
 import org.hamcrest.Matcher
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Assertions.assertEquals
+import java.nio.ByteBuffer
 
-fun <T> testHandshakeSerializerDirect(
+fun <T> handshakeSerializerTest(
   serializer: HandshakeSerializer<T>,
-  data: T,
-  matcher: Matcher<T>? = null
+  value: T,
+  encoded: ByteBuffer? = null,
+  matcher: ((T) -> Matcher<T>)? = null,
+  featureSets: List<FeatureSet> = listOf(FeatureSet.none(), FeatureSet.all()),
+  deserializeFeatureSet: FeatureSet = FeatureSet.all(),
 ) {
-  val after = serializer.deserialize(serializer.serialize(data))
-  if (matcher != null) {
-    assertThat(after, matcher)
-  } else {
-    assertEquals(data, after)
+  for (featureSet in featureSets) {
+    testHandshakeSerializerDirect(serializer, value)
+    testHandshakeSerializerEncoded(serializer, value, featureSet)
+  }
+  if (encoded != null) {
+    if (matcher != null) {
+      testDeserialize(serializer, matcher(value), encoded.rewind(), deserializeFeatureSet)
+    } else {
+      testDeserialize(serializer, value, encoded.rewind(), deserializeFeatureSet)
+    }
   }
 }

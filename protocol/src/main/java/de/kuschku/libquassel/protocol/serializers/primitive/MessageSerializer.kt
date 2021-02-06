@@ -65,7 +65,7 @@ object MessageSerializer : QuasselSerializer<Message> {
         Instant.ofEpochSecond(IntSerializer.deserialize(buffer, featureSet).toLong()),
       type = MessageType.of(UIntSerializer.deserialize(buffer, featureSet)),
       flag = MessageFlag.of(
-        UByteSerializer.deserialize(buffer, featureSet).toUInt() and 0xffu
+        UByteSerializer.deserialize(buffer, featureSet).toUInt()
       ),
       bufferInfo = BufferInfoSerializer.deserialize(buffer, featureSet),
       sender = StringSerializerUtf8.deserialize(buffer, featureSet) ?: "",

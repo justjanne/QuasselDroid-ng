@@ -32,7 +32,7 @@ object DateTimeSerializer : QtSerializer<Temporal> {
   override val javaType: Class<out Temporal> = Temporal::class.java
 
   override fun serialize(buffer: ChainedByteBuffer, data: Temporal, featureSet: FeatureSet) {
-    fun serialize(data: LocalDateTime, timeSpec: TimeSpec, offset: ZoneOffset? = null) {
+    fun serialize(data: LocalDateTime, timeSpec: TimeSpec, offset: ZoneOffset?) {
       DateSerializer.serialize(buffer, data.toLocalDate(), featureSet)
       TimeSerializer.serialize(buffer, data.toLocalTime(), featureSet)
       ByteSerializer.serialize(buffer, timeSpec.value, featureSet)
@@ -43,13 +43,13 @@ object DateTimeSerializer : QtSerializer<Temporal> {
 
     when (data) {
       is LocalDateTime ->
-        serialize(data, TimeSpec.LocalUnknown)
+        serialize(data, TimeSpec.LocalUnknown, null)
       is OffsetDateTime ->
         serialize(data.toLocalDateTime(), TimeSpec.OffsetFromUTC, data.offset)
       is ZonedDateTime ->
         serialize(data.toLocalDateTime(), TimeSpec.OffsetFromUTC, data.offset)
       is Instant ->
-        serialize(data.atOffset(ZoneOffset.UTC).toLocalDateTime(), TimeSpec.OffsetFromUTC)
+        serialize(data.atOffset(ZoneOffset.UTC).toLocalDateTime(), TimeSpec.UTC, null)
       else ->
         throw IllegalArgumentException("Unsupported Format: ${data::class.java.canonicalName}")
     }
@@ -66,12 +66,10 @@ object DateTimeSerializer : QtSerializer<Temporal> {
       TimeSpec.LocalUnknown,
       TimeSpec.LocalDST ->
         localDateTime
-          .atZone(ZoneId.systemDefault())
       TimeSpec.OffsetFromUTC ->
         localDateTime
           .atOffset(ZoneOffset.ofTotalSeconds(
             IntSerializer.deserialize(buffer, featureSet)))
-          .toInstant()
       TimeSpec.UTC ->
         localDateTime
           .atOffset(ZoneOffset.UTC)

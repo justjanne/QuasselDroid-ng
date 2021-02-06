@@ -21,24 +21,12 @@ package de.kuschku.bitflags
 
 import java.util.*
 
-interface Flags<T, U> where U: Flag<T>, U: Enum<U> {
-  operator fun get(value: T): U?
-  fun all(): Collection<U>
-}
-
-inline fun <reified T> Flags<*, T>.of(
-  vararg values: T
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-inline fun <reified T> Flags<*, T>.of(
-  values: Collection<T>
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-
-inline fun <reified T: Enum<T>> Array<out T>.toEnumSet() =
+inline fun <reified T : Enum<T>> Array<out T>.toEnumSet() =
   EnumSet.noneOf(T::class.java).apply {
     addAll(this@toEnumSet)
   }
 
-inline fun <reified T: Enum<T>> Collection<T>.toEnumSet() =
+inline fun <reified T : Enum<T>> Collection<T>.toEnumSet() =
   EnumSet.noneOf(T::class.java).apply {
     addAll(this@toEnumSet)
   }

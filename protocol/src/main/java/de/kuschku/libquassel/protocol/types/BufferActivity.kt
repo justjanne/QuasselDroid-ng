@@ -21,6 +21,8 @@ package de.kuschku.libquassel.protocol.types
 
 import de.kuschku.bitflags.Flag
 import de.kuschku.bitflags.Flags
+import de.kuschku.bitflags.toEnumSet
+import de.kuschku.libquassel.protocol.features.LegacyFeature
 
 enum class BufferActivity(
   override val value: UInt,
@@ -33,7 +35,7 @@ enum class BufferActivity(
   companion object : Flags<UInt, BufferActivity> {
     private val values = values().associateBy(BufferActivity::value)
     override fun get(value: UInt) = values[value]
-    override fun all() = values.values
+    override val all: BufferActivities = values.values.toEnumSet()
   }
 }
 

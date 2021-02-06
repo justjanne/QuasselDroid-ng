@@ -21,7 +21,7 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.serializers.*
+import de.kuschku.libquassel.protocol.serializers.NoSerializerForTypeException
 import de.kuschku.libquassel.protocol.variant.QVariant
 import de.kuschku.libquassel.protocol.variant.QVariant_
 import de.kuschku.libquassel.protocol.variant.QtType

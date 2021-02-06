@@ -16,16 +16,10 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.kuschku.libquassel.protocol.testutil.matchers
-import org.hamcrest.BaseMatcher
-import org.hamcrest.Description
-class BomMatcherString(private val expected: String?) : BaseMatcher<String?>() {
-  private val malformed = charArrayOf(
-    '￾', '﻿'
-  )
-  override fun describeTo(description: Description?) {
-    description?.appendText(expected)
-  }
-  override fun matches(item: Any?) =
-    (item as? String)?.endsWith(expected?.trimStart(*malformed) ?: "") == true
-}
+
+package de.kuschku.bitflags
+
+import java.util.*
+
+inline fun <reified T> Flags<*, T>.none(): EnumSet<T>
+  where T : Flag<*>, T : Enum<T> = EnumSet.noneOf(T::class.java)

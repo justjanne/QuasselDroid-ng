@@ -16,54 +16,38 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not,see <http://www.gnu.org/licenses/>.
  */
-
 package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
-import de.kuschku.libquassel.protocol.testutil.testDeserialize
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
-import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
-import org.junit.Test
+import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import org.junit.jupiter.api.Test
 
 class LongSerializerTest {
   @Test
-  fun testZero() {
-    val value = 0.toLong()
-    testQtSerializerDirect(LongSerializer, value)
-    testQtSerializerVariant(LongSerializer, value)
-    // @formatter:off
-    testDeserialize(LongSerializer, value, byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0))
-    // @formatter:on
-  }
+  fun testZero() = qtSerializerTest(
+    LongSerializer,
+    0L,
+    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0)
+  )
 
   @Test
-  fun testMinimal() {
-    val value = Long.MIN_VALUE
-    testQtSerializerDirect(LongSerializer, value)
-    testQtSerializerVariant(LongSerializer, value)
-    // @formatter:off
-    testDeserialize(LongSerializer, value, byteBufferOf(-128, 0, 0, 0, 0, 0, 0, 0))
-    // @formatter:on
-  }
+  fun testMinimal() = qtSerializerTest(
+    LongSerializer,
+    Long.MIN_VALUE,
+    byteBufferOf(-128, 0, 0, 0, 0, 0, 0, 0)
+  )
 
   @Test
-  fun testMaximal() {
-    val value = Long.MAX_VALUE
-    testQtSerializerDirect(LongSerializer, value)
-    testQtSerializerVariant(LongSerializer, value)
-    // @formatter:off
-    testDeserialize(LongSerializer, value, byteBufferOf(127, -1, -1, -1, -1, -1, -1, -1))
-    // @formatter:on
-  }
+  fun testMaximal() = qtSerializerTest(
+    LongSerializer,
+    Long.MAX_VALUE,
+    byteBufferOf(127, -1, -1, -1, -1, -1, -1, -1)
+  )
 
   @Test
-  fun testAllOnes() {
-    val value = 0.toLong().inv()
-
-    testQtSerializerDirect(LongSerializer, value)
-    testQtSerializerVariant(LongSerializer, value)
-    // @formatter:off
-    testDeserialize(LongSerializer, value, byteBufferOf(-1, -1, -1, -1, -1, -1, -1, -1))
-    // @formatter:on
-  }
+  fun testAllOnes() = qtSerializerTest(
+    LongSerializer,
+    0L.inv(),
+    byteBufferOf(-1, -1, -1, -1, -1, -1, -1, -1)
+  )
 }

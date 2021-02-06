@@ -22,32 +22,32 @@ import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import org.junit.jupiter.api.Test
 
-class IntSerializerTest {
+class ULongSerializerTest {
   @Test
   fun testZero() = qtSerializerTest(
-    IntSerializer,
-    0,
-    byteBufferOf(0, 0, 0, 0)
+    ULongSerializer,
+    0.toULong(),
+    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   @Test
   fun testMinimal() = qtSerializerTest(
-    IntSerializer,
-    Int.MIN_VALUE,
-    byteBufferOf(-128, 0, 0, 0)
+    ULongSerializer,
+    ULong.MIN_VALUE,
+    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   @Test
   fun testMaximal() = qtSerializerTest(
-    IntSerializer,
-    Int.MAX_VALUE,
-    byteBufferOf(127, -1, -1, -1)
+    ULongSerializer,
+    ULong.MAX_VALUE,
+    byteBufferOf(255u, 255u, 255u, 255u, 255u, 255u, 255u, 255u)
   )
 
   @Test
   fun testAllOnes() = qtSerializerTest(
-    IntSerializer,
-    0.inv(),
-    byteBufferOf(-1, -1, -1, -1)
+    ULongSerializer,
+    0.toULong().inv(),
+    byteBufferOf(255u, 255u, 255u, 255u, 255u, 255u, 255u, 255u)
   )
 }

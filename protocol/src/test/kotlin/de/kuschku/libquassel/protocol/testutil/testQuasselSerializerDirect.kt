@@ -17,18 +17,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil
-
-import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.print
+import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 
-fun <T> testHandshakeSerializerDirect(
-  serializer: HandshakeSerializer<T>,
+fun <T> testQuasselSerializerDirect(
+  serializer: QuasselSerializer<T>,
   data: T,
+  featureSet: FeatureSet = FeatureSet.all(),
   matcher: Matcher<T>? = null
 ) {
-  val after = serializer.deserialize(serializer.serialize(data))
+  val buffer = ChainedByteBuffer()
+  serializer.serialize(buffer, data, featureSet)
+  val result = buffer.toBuffer()
+  println("direct")
+  result.print()
+  val after = serializer.deserialize(result, featureSet)
+  assertEquals(0, result.remaining())
   if (matcher != null) {
     assertThat(after, matcher)
   } else {

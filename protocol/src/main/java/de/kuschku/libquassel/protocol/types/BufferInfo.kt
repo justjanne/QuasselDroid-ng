@@ -19,12 +19,12 @@
 
 package de.kuschku.libquassel.protocol.types
 
-import de.kuschku.bitflags.of
+import de.kuschku.bitflags.none
 
 data class BufferInfo(
   val bufferId: BufferId = BufferId(-1),
   val networkId: NetworkId = NetworkId(-1),
-  val type: BufferTypes = BufferType.of(),
+  val type: BufferTypes = BufferType.none(),
   val groupId: Int = -1,
   val bufferName: String? = null,
 )

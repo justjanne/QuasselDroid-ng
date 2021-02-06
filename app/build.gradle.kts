@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
   id("com.android.application")
   id("kotlin-android")
@@ -22,6 +20,10 @@ android {
   composeOptions {
     val androidxComposeVersion: String by project.extra
     kotlinCompilerExtensionVersion = androidxComposeVersion
+  }
+
+  kotlinOptions {
+    useIR = true
   }
 }
 
@@ -65,7 +67,8 @@ dependencies {
   implementation("io.coil-kt", "coil", "1.1.1")
   implementation("dev.chrisbanes.accompanist", "accompanist-coil", "0.5.0")
 
-  testImplementation("junit", "junit", "4.13.1")
+  val junit4Version: String by project.extra
+  testImplementation("junit", "junit", junit4Version)
   androidTestImplementation("androidx.test.ext", "junit", "1.1.2")
   androidTestImplementation("androidx.test.espresso", "espresso-core", "3.3.0")
 }

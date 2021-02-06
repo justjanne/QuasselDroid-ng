@@ -37,7 +37,8 @@ enum class QuasselType(
   NetworkInfo("NetworkInfo"),
   NetworkServer("Network::Server"),
   QHostAddress("QHostAddress"),
-  PeerPtr("PeerPtr");
+  PeerPtr("PeerPtr"),
+  Unknown("");
 
   companion object {
     private val values = values().associateBy(QuasselType::typeName)

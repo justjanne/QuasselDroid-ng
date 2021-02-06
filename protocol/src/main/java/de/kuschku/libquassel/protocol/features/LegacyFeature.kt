@@ -21,6 +21,8 @@ package de.kuschku.libquassel.protocol.features
 
 import de.kuschku.bitflags.Flag
 import de.kuschku.bitflags.Flags
+import de.kuschku.bitflags.toEnumSet
+import java.util.*
 
 /**
  * A list of features that are optional in core and/or client, but need runtime checking
@@ -68,7 +70,7 @@ enum class LegacyFeature(
 
     private val values = values().associateBy(LegacyFeature::value)
     override fun get(value: UInt) = values[value]
-    override fun all() = values.values
+    override val all: LegacyFeatures = values.values.toEnumSet()
   }
 }
 

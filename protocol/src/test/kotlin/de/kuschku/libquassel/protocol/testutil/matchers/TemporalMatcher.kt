@@ -17,15 +17,36 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil.matchers
+
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
-class BomMatcherString(private val expected: String?) : BaseMatcher<String?>() {
-  private val malformed = charArrayOf(
-    '￾', '﻿'
-  )
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.temporal.Temporal
+
+class TemporalMatcher(
+  private val expected: Temporal
+) : BaseMatcher<Temporal>() {
   override fun describeTo(description: Description?) {
-    description?.appendText(expected)
+    description?.appendText(expected.toString())
   }
-  override fun matches(item: Any?) =
-    (item as? String)?.endsWith(expected?.trimStart(*malformed) ?: "") == true
+
+  override fun matches(item: Any?): Boolean {
+    return when {
+      expected is ZonedDateTime && item is ZonedDateTime ->
+        expected == item
+      expected is ZonedDateTime && item is OffsetDateTime ->
+        expected.toOffsetDateTime() == item
+      expected is OffsetDateTime && item is OffsetDateTime ->
+        expected == item
+      expected is LocalDateTime && item is LocalDateTime ->
+        expected == item
+      expected is Instant && item is Instant ->
+        expected == item
+      else ->
+        false
+    }
+  }
 }
