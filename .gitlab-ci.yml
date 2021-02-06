@@ -46,7 +46,7 @@ test:
 deploy-local:
   stage: "deploy"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
-  cache: {}
+  cache: { }
   only:
     refs:
       - "master"
@@ -65,7 +65,7 @@ deploy-local:
 deploy-beta:
   stage: "deploy"
   image: "k8r.eu/justjanne/docker-fastlane:latest"
-  cache: {}
+  cache: { }
   only:
     refs:
       - "master"

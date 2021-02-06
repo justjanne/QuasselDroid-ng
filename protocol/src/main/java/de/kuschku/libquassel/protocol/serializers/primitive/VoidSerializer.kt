@@ -29,5 +29,5 @@ object VoidSerializer : QtSerializer<Unit> {
   override val javaType: Class<out Unit> = Unit::class.java
 
   override fun serialize(buffer: ChainedByteBuffer, data: Unit, featureSet: FeatureSet) = Unit
-  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet)  = Unit
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet) = Unit
 }

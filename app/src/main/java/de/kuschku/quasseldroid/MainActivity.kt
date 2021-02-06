@@ -19,17 +19,13 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
 import de.kuschku.quasseldroid.ui.theme.QuasseldroidTheme
 import de.kuschku.quasseldroid.ui.theme.shapes
 import de.kuschku.quasseldroid.ui.theme.typography
 import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import kotlin.random.Random

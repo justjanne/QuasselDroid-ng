@@ -22,13 +22,12 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.variant.QStringList
-import de.kuschku.libquassel.protocol.variant.QVariantList
-import de.kuschku.libquassel.protocol.variant.QVariant_
 import de.kuschku.libquassel.protocol.variant.QtType
 import java.nio.ByteBuffer
 
 object QStringListSerializer : QtSerializer<QStringList> {
   override val qtType = QtType.QStringList
+
   @Suppress("UNCHECKED_CAST")
   override val javaType: Class<QStringList> = List::class.java as Class<QStringList>
 

@@ -18,9 +18,12 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.testutil.*
+import de.kuschku.libquassel.protocol.testutil.byteBufferOf
+import de.kuschku.libquassel.protocol.testutil.deserialize
 import de.kuschku.libquassel.protocol.testutil.matchers.BomMatcherString
 import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
+import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
+import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

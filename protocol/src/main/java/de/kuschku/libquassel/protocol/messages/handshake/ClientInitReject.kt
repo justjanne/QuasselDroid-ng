@@ -22,3 +22,4 @@ package de.kuschku.libquassel.protocol.messages.handshake
 data class ClientInitReject(
   val errorString: String?
 )
+

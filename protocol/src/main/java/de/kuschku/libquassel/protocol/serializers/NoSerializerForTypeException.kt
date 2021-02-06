@@ -22,21 +22,36 @@ package de.kuschku.libquassel.protocol.serializers
 import de.kuschku.libquassel.protocol.variant.QtType
 import de.kuschku.libquassel.protocol.variant.QuasselType
 
-class NoSerializerForTypeException(
-  private val javaType: Class<*>?,
-  private val qtType: Int,
-  private val quasselType: String?,
-) : Exception() {
-  constructor(quasselType: QuasselType, javaType: Class<*>? = null) :
-    this(javaType, quasselType.qtType.id, quasselType.typeName)
-
-  constructor(qtType: QtType, javaType: Class<*>? = null) :
-    this(javaType, qtType.id, null)
-
-  constructor(qtType: Int, quasselType: String?) :
-    this(null, qtType, quasselType)
-
-  override fun toString(): String {
-    return "NoSerializerForTypeException(javaType=$javaType, qtType=${QtType.of(qtType) ?: qtType}, quasselType=${QuasselType.of(quasselType) ?: quasselType})"
+sealed class NoSerializerForTypeException : Exception() {
+  data class Qt(
+    private val type: Int,
+    private val javaType: Class<*>? = null
+  ) : NoSerializerForTypeException() {
+    constructor(
+      type: QtType,
+      javaType: Class<*>? = null
+    ) : this(type.id, javaType)
   }
+
+  data class Quassel(
+    private val type: Int,
+    private val typename: String?,
+    private val javaType: Class<*>? = null
+  ) : NoSerializerForTypeException() {
+    constructor(
+      type: QtType,
+      typename: String?,
+      javaType: Class<*>? = null
+    ) : this(type.id, typename, javaType)
+
+    constructor(
+      type: QuasselType,
+      javaType: Class<*>? = null
+    ) : this(type.qtType, type.typeName, javaType)
+  }
+
+  data class Handshake(
+    private val type: String,
+    private val javaType: Class<*>? = null
+  ) : NoSerializerForTypeException()
 }

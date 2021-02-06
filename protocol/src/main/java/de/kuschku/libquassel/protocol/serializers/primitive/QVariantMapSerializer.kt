@@ -28,6 +28,7 @@ import java.nio.ByteBuffer
 
 object QVariantMapSerializer : QtSerializer<QVariantMap> {
   override val qtType = QtType.QVariantMap
+
   @Suppress("UNCHECKED_CAST")
   override val javaType: Class<out QVariantMap> = Map::class.java as Class<QVariantMap>
 

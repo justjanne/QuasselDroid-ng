@@ -19,11 +19,5 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.features.FeatureSet
-import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.io.stringEncoderAscii
-import de.kuschku.libquassel.protocol.variant.QtType
-import java.nio.ByteBuffer
-
 object StringSerializerAscii : StringSerializer(Charsets.ISO_8859_1, true)
 

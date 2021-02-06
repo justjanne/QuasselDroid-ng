@@ -17,19 +17,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.serializers.handshake
+package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.serializers.primitive.QVariantListSerializer
-import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
-import de.kuschku.libquassel.protocol.serializers.primitive.StringSerializerAscii
-import de.kuschku.libquassel.protocol.serializers.primitive.StringSerializerUtf8
 import de.kuschku.libquassel.protocol.variant.*
 import java.nio.ByteBuffer
 
 object HandshakeMapSerializer : QtSerializer<QVariantMap> {
   override val qtType = QtType.QVariantMap
+
   @Suppress("UNCHECKED_CAST")
   override val javaType: Class<out QVariantMap> = Map::class.java as Class<QVariantMap>
 
@@ -46,7 +43,7 @@ object HandshakeMapSerializer : QtSerializer<QVariantMap> {
     val list = QVariantListSerializer.deserialize(buffer, featureSet)
     return (list.indices step 2).map {
       val encodedKey = list[it].into<ByteBuffer>(ByteBuffer.allocateDirect(0))
-      val value = list[it+1]
+      val value = list[it + 1]
 
       Pair(StringSerializerUtf8.deserializeRaw(encodedKey), value)
     }.toMap()

@@ -22,6 +22,9 @@ package de.kuschku.libquassel.protocol.serializers.handshake
 import de.kuschku.libquassel.protocol.variant.QVariantMap
 
 interface HandshakeSerializer<T> {
+  val type: String
+  val javaType: Class<out T>
+
   fun serialize(data: T): QVariantMap
   fun deserialize(data: QVariantMap): T
 }

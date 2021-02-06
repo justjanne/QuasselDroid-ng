@@ -22,11 +22,10 @@ package de.kuschku.libquassel.protocol.types
 import de.kuschku.bitflags.Flag
 import de.kuschku.bitflags.Flags
 import de.kuschku.bitflags.toEnumSet
-import de.kuschku.libquassel.protocol.features.LegacyFeature
 
 enum class BufferActivity(
   override val value: UInt,
-): Flag<UInt> {
+) : Flag<UInt> {
   NoActivity(0x00u),
   OtherActivity(0x01u),
   NewMessage(0x02u),

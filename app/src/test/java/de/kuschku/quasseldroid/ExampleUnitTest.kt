@@ -1,16 +1,13 @@
 package de.kuschku.quasseldroid
 
-import de.kuschku.bitflags.of
 import de.kuschku.libquassel.protocol.connection.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.features.FeatureSet
-import de.kuschku.libquassel.protocol.features.LegacyFeature
-import de.kuschku.libquassel.protocol.features.QuasselFeature
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitAckSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitRejectSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitSerializer
-import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeMapSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.IntSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.UIntSerializer
 import de.kuschku.libquassel.protocol.variant.into

@@ -17,15 +17,19 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil.matchers
+
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
+
 class BomMatcherString(private val expected: String?) : BaseMatcher<String?>() {
   private val malformed = charArrayOf(
     '￾', '﻿'
   )
+
   override fun describeTo(description: Description?) {
     description?.appendText(expected)
   }
+
   override fun matches(item: Any?) =
     (item as? String)?.endsWith(expected?.trimStart(*malformed) ?: "") == true
 }

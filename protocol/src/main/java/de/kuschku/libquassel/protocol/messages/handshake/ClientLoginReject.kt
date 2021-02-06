@@ -17,26 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.types
+package de.kuschku.libquassel.protocol.messages.handshake
 
-import de.kuschku.bitflags.Flag
-import de.kuschku.bitflags.Flags
-import de.kuschku.bitflags.toEnumSet
-
-enum class BufferType(
-  override val value: UShort,
-) : Flag<UShort> {
-  Invalid(0x00u),
-  Status(0x01u),
-  Channel(0x02u),
-  Query(0x04u),
-  Group(0x08u);
-
-  companion object : Flags<UShort, BufferType> {
-    private val values = values().associateBy(BufferType::value)
-    override fun get(value: UShort) = values[value]
-    override val all: BufferTypes = values.values.toEnumSet()
-  }
-}
-
-typealias BufferTypes = Set<BufferType>
+data class ClientLoginReject(
+  val errorString: String?
+)

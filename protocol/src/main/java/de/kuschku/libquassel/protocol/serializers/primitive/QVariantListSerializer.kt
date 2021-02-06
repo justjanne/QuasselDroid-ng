@@ -28,6 +28,7 @@ import java.nio.ByteBuffer
 
 object QVariantListSerializer : QtSerializer<QVariantList> {
   override val qtType = QtType.QVariantList
+
   @Suppress("UNCHECKED_CAST")
   override val javaType: Class<QVariantList> = List::class.java as Class<QVariantList>
 

@@ -22,6 +22,8 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.serializers.NoSerializerForTypeException
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.variant.QVariant
 import de.kuschku.libquassel.protocol.variant.QVariant_
 import de.kuschku.libquassel.protocol.variant.QtType
@@ -44,14 +46,14 @@ object QVariantSerializer : QtSerializer<QVariant_> {
   override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): QVariant_ {
     val rawType = IntSerializer.deserialize(buffer, featureSet)
     val qtType = QtType.of(rawType)
-      ?: throw NoSerializerForTypeException(rawType, null)
+      ?: throw NoSerializerForTypeException.Qt(rawType, null)
     // isNull, but we ignore it as it has no meaning
     BoolSerializer.deserialize(buffer, featureSet)
 
     return if (qtType == QtType.UserType) {
       val name = StringSerializerAscii.deserialize(buffer, featureSet)
       val quasselType = QuasselType.of(name)
-        ?: throw NoSerializerForTypeException(qtType.id, name)
+        ?: throw NoSerializerForTypeException.Quassel(qtType.id, name)
       deserialize(quasselType, buffer, featureSet)
     } else {
       deserialize(qtType, buffer, featureSet)
@@ -60,16 +62,16 @@ object QVariantSerializer : QtSerializer<QVariant_> {
 
   @Suppress("UNCHECKED_CAST")
   private fun deserialize(type: QtType, buffer: ByteBuffer, featureSet: FeatureSet): QVariant_ {
-    val serializer = Serializers[type]
-      ?: throw NoSerializerForTypeException(type)
+    val serializer = QtSerializers.find(type)
+      ?: throw NoSerializerForTypeException.Qt(type)
     val value = serializer.deserialize(buffer, featureSet)
     return QVariant.of(value, serializer as QtSerializer<Any?>)
   }
 
   @Suppress("UNCHECKED_CAST")
   private fun deserialize(type: QuasselType, buffer: ByteBuffer, featureSet: FeatureSet): QVariant_ {
-    val serializer = Serializers[type]
-      ?: throw NoSerializerForTypeException(type)
+    val serializer = QuasselSerializers.find(type)
+      ?: throw NoSerializerForTypeException.Quassel(type)
     val value = serializer.deserialize(buffer, featureSet)
     return QVariant.of(value, serializer as QuasselSerializer<Any?>)
   }

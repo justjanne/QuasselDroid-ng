@@ -31,7 +31,7 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
   private var currentBuffer = 0
 
   private fun allocate(size: Int) = when (direct) {
-    true  -> ByteBuffer.allocateDirect(size)
+    true -> ByteBuffer.allocateDirect(size)
     false -> ByteBuffer.allocate(size)
   }
 
@@ -48,7 +48,7 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
     this.size += size
   }
 
-  fun <T> withBuffer(length: Int = 0, f: (ByteBuffer) -> T) : T{
+  fun <T> withBuffer(length: Int = 0, f: (ByteBuffer) -> T): T {
     ensureSpace(length)
     val buffer = bufferList.last()
     val positionBefore = buffer.position()

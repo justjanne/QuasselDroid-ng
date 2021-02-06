@@ -26,8 +26,10 @@ import de.kuschku.libquassel.protocol.variant.into
 import de.kuschku.libquassel.protocol.variant.qVariant
 
 object ClientInitRejectSerializer : HandshakeSerializer<ClientInitReject> {
+  override val type: String = "ClientInitReject"
+  override val javaType: Class<out ClientInitReject> = ClientInitReject::class.java
+
   override fun serialize(data: ClientInitReject) = mapOf(
-    "MsgType" to qVariant("ClientInitReject", QtType.QString),
     "Error" to qVariant(data.errorString, QtType.QString)
   )
 

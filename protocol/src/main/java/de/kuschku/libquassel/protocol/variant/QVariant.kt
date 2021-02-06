@@ -22,9 +22,10 @@ package de.kuschku.libquassel.protocol.variant
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.io.contentToString
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
-import de.kuschku.libquassel.protocol.serializers.primitive.serializerFor
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -59,6 +60,11 @@ sealed class QVariant<T> constructor(
       "QVariant(${serializer::class.java.simpleName}, $data)"
   }
 
+  @Suppress("UNCHECKED_CAST")
+  inline fun <reified T> withType(): QVariant<T>? =
+    if (serializer.javaType == T::class.java && this.value() is T) this as QVariant<T>
+    else null
+
   companion object {
     fun <T> of(data: T, serializer: QtSerializer<T>) = Typed(data, serializer)
     fun <T> of(data: T, serializer: QuasselSerializer<T>) = Custom(data, serializer)
@@ -66,15 +72,10 @@ sealed class QVariant<T> constructor(
 }
 
 inline fun <reified T> qVariant(data: T, type: QtType): QVariant<T> =
-  QVariant.of(data, serializerFor(type))
+  QVariant.of(data, QtSerializers[type])
 
 inline fun <reified T> qVariant(data: T, type: QuasselType): QVariant<T> =
-  QVariant.of(data, serializerFor(type))
-
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T> QVariant_.withType(): QVariant<T>? =
-  if (this.serializer.javaType == T::class.java && this.value() is T) this as QVariant<T>
-  else null
+  QVariant.of(data, QuasselSerializers[type])
 
 inline fun <reified T> QVariant_?.into(): T? =
   this?.withType<T>()?.value()

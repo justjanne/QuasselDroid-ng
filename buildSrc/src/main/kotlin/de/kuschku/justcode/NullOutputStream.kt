@@ -21,7 +21,6 @@ package de.kuschku.justcode
 
 import java.io.IOException
 import java.io.OutputStream
-import java.util.*
 
 class NullOutputStream : OutputStream() {
   @Volatile

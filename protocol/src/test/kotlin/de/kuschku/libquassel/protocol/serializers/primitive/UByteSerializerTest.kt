@@ -21,7 +21,6 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import org.junit.jupiter.api.Test
-import kotlin.experimental.inv
 
 class UByteSerializerTest {
   @Test

@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil.matchers
+
 import de.kuschku.libquassel.protocol.io.contentToString
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description

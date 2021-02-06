@@ -17,11 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil
+
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.io.print
-import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals

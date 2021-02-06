@@ -19,16 +19,18 @@
 
 package de.kuschku.libquassel.protocol.serializers.handshake
 
-import de.kuschku.bitflags.toBits
 import de.kuschku.bitflags.of
-import de.kuschku.libquassel.protocol.features.QuasselFeatureName
+import de.kuschku.bitflags.toBits
 import de.kuschku.libquassel.protocol.features.LegacyFeature
+import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInitAck
 import de.kuschku.libquassel.protocol.variant.*
 
 object ClientInitAckSerializer : HandshakeSerializer<ClientInitAck> {
+  override val type: String = "ClientInitAck"
+  override val javaType: Class<out ClientInitAck> = ClientInitAck::class.java
+
   override fun serialize(data: ClientInitAck) = mapOf(
-    "MsgType" to qVariant("ClientInitAck", QtType.QString),
     "CoreFeatures" to qVariant(data.coreFeatures.toBits(), QtType.UInt),
     "StorageBackends" to qVariant(data.backendInfo, QtType.QVariantList),
     "Authenticator" to qVariant(data.authenticatorInfo, QtType.QVariantList),

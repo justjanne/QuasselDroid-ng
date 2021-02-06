@@ -17,11 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil
+
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
-import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
 import org.hamcrest.Matcher
 import java.nio.ByteBuffer
+
 fun <T> qtSerializerTest(
   serializer: QtSerializer<T>,
   value: T,

@@ -21,11 +21,8 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 import de.kuschku.libquassel.protocol.serializers.NoSerializerForTypeException
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.deserialize
-import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
-import de.kuschku.libquassel.protocol.variant.QtType
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.experimental.inv
 
 class QVariantSerializerTest {
   @Test

@@ -21,7 +21,6 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.variant.QtType
 import de.kuschku.libquassel.protocol.variant.QuasselType
 import java.nio.ByteBuffer
 

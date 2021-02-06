@@ -17,14 +17,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.kuschku.libquassel.protocol.testutil
+
 import de.kuschku.libquassel.protocol.features.FeatureSet
-import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.nio.ByteBuffer
+
 fun <T> deserialize(
   serializer: QtSerializer<T>,
   buffer: ByteBuffer,
@@ -34,6 +36,7 @@ fun <T> deserialize(
   assertEquals(0, buffer.remaining())
   return result
 }
+
 fun <T> testDeserialize(
   serializer: QtSerializer<T>,
   matcher: Matcher<in T>,
@@ -43,6 +46,7 @@ fun <T> testDeserialize(
   val after = deserialize(serializer, buffer, featureSet)
   assertThat(after, matcher)
 }
+
 fun <T> testDeserialize(
   serializer: QtSerializer<T>,
   data: T,
@@ -52,6 +56,7 @@ fun <T> testDeserialize(
   val after = deserialize(serializer, buffer, featureSet)
   assertEquals(data, after)
 }
+
 fun <T> testDeserialize(
   serializer: HandshakeSerializer<T>,
   matcher: Matcher<in T>,
@@ -62,6 +67,7 @@ fun <T> testDeserialize(
   val after = serializer.deserialize(map)
   assertThat(after, matcher)
 }
+
 fun <T> testDeserialize(
   serializer: HandshakeSerializer<T>,
   data: T,
