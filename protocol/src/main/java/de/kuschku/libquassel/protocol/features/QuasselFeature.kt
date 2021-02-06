@@ -19,11 +19,11 @@
 
 package de.kuschku.libquassel.protocol.features
 
-inline class ExtendedFeatureName(
+inline class QuasselFeatureName(
   val name: String,
 )
 
-enum class ExtendedFeature {
+enum class QuasselFeature {
   SynchronizedMarkerLine,
   SaslAuthentication,
   SaslExternal,
@@ -64,5 +64,11 @@ enum class ExtendedFeature {
   /** CoreInfo dynamically updated using signals */
   SyncedCoreInfo;
 
-  fun feature(): ExtendedFeatureName = ExtendedFeatureName(name)
+  val feature = QuasselFeatureName(name)
+
+  companion object {
+    private val values = values().associateBy(QuasselFeature::feature)
+    @JvmStatic
+    fun valueOf(name: QuasselFeatureName): QuasselFeature? = values[name]
+  }
 }

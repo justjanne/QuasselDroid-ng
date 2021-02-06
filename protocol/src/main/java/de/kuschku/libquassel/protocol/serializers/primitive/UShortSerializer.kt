@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.variant.QtType
 import java.nio.ByteBuffer
@@ -27,11 +28,11 @@ object UShortSerializer : QtSerializer<UShort> {
   override val qtType: QtType = QtType.UShort
   override val javaType: Class<UShort> = UShort::class.java
 
-  override fun serialize(buffer: ChainedByteBuffer, data: UShort) {
+  override fun serialize(buffer: ChainedByteBuffer, data: UShort, featureSet: FeatureSet) {
     buffer.putShort(data.toShort())
   }
 
-  override fun deserialize(buffer: ByteBuffer): UShort {
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): UShort {
     return buffer.getShort().toUShort()
   }
 }

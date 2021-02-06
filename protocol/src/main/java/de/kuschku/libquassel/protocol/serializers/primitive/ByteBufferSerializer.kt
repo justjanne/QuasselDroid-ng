@@ -19,26 +19,31 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.connection.ProtocolInfo
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.copyData
+import de.kuschku.libquassel.protocol.io.print
 import de.kuschku.libquassel.protocol.variant.QtType
 import java.nio.ByteBuffer
 
-object ProtocolInfoSerializer : QtSerializer<ProtocolInfo> {
-  override val qtType: QtType = QtType.UserType
-  override val javaType: Class<ProtocolInfo> = ProtocolInfo::class.java
+object ByteBufferSerializer : QtSerializer<ByteBuffer?> {
+  override val qtType: QtType = QtType.QByteArray
+  override val javaType: Class<out ByteBuffer?> = ByteBuffer::class.java
 
-  override fun serialize(buffer: ChainedByteBuffer, data: ProtocolInfo) {
-      UByteSerializer.serialize(buffer, data.flags)
-      UShortSerializer.serialize(buffer, data.data)
-      UByteSerializer.serialize(buffer, data.version)
+  override fun serialize(buffer: ChainedByteBuffer, data: ByteBuffer?, featureSet: FeatureSet) {
+    IntSerializer.serialize(buffer, data?.remaining() ?: 0, featureSet)
+    if (data != null) {
+      buffer.put(data)
+    }
   }
 
-  override fun deserialize(buffer: ByteBuffer): ProtocolInfo {
-    return ProtocolInfo(
-            UByteSerializer.deserialize(buffer),
-            UShortSerializer.deserialize(buffer),
-            UByteSerializer.deserialize(buffer)
-    )
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): ByteBuffer? {
+    val length = IntSerializer.deserialize(buffer, featureSet)
+    if (length < 0) {
+      return null
+    }
+    val result = copyData(buffer, length)
+    result.limit(length)
+    return result
   }
 }

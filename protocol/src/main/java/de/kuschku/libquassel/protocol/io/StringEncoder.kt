@@ -30,59 +30,75 @@ class StringEncoder(charset: Charset) {
   private val charBuffer = CharBuffer.allocate(1024)
 
   private fun charBuffer(length: Int): CharBuffer =
-    if (length < 1024) charBuffer
+    if (length < 1024) charBuffer.clear()
     else CharBuffer.allocate(length)
 
-  private fun encodingLength(length: Int, nullLimited: Boolean) =
-    if (nullLimited) length + 1
-    else length
-
-  private fun decodingLength(length: Int, nullLimited: Boolean) =
-    if (nullLimited) length - 1
-    else length
-
-  fun encode(data: String?, target: ChainedByteBuffer, nullLimited: Boolean = false) {
+  fun encode(data: String?, target: ChainedByteBuffer) {
     if (data == null) return
 
-    val charBuffer = charBuffer(encodingLength(data.length, nullLimited))
+    val charBuffer = charBuffer(data.length)
     charBuffer.put(data)
-    if (nullLimited) charBuffer.put(0.toChar())
     charBuffer.flip()
     encoder.reset()
     var result: CoderResult
     do {
-      result = encoder.encode(charBuffer, target.nextBuffer(data.length), true)
+      result = target.withBuffer(charBuffer.remaining()) {
+        encoder.encode(charBuffer, it, true)
+      }
     } while (result == CoderResult.OVERFLOW)
   }
 
-  fun encode(data: String?, nullLimited: Boolean = false): ByteBuffer {
-    if (data == null) return ByteBuffer.allocate(0)
+  fun encode(data: String?): ByteBuffer {
+    if (data == null) {
+      return ByteBuffer.allocateDirect(0)
+    }
 
-    val charBuffer = charBuffer(encodingLength(data.length, nullLimited))
+    val charBuffer = charBuffer(data.length)
     charBuffer.put(data)
-    if (nullLimited) charBuffer.put(0.toChar())
     charBuffer.flip()
     encoder.reset()
     return encoder.encode(charBuffer)
   }
 
-  fun decode(source: ByteBuffer, length: Int, nullLimited: Boolean = false): String {
-    val charBuffer = charBuffer(decodingLength(length, nullLimited))
+  fun encodeChar(data: Char?, target: ChainedByteBuffer) {
+    if (data == null) {
+      target.putShort(0)
+    } else {
+      target.putChar(data)
+    }
+  }
+
+  fun decode(source: ByteBuffer, length: Int): String {
+    val charBuffer = charBuffer(length)
     val oldlimit = source.limit()
-    source.limit(decodingLength(source.position() + length, nullLimited))
+    source.limit(source.position() + length)
     decoder.reset()
-    decoder.decode(source, charBuffer, true)
+    decoder.decode(source, charBuffer, true).also {
+      if (it.isError) {
+        source.position(source.position() + it.length())
+      }
+    }
     source.limit(oldlimit)
     charBuffer.flip()
     return charBuffer.toString()
   }
 
-  fun decode(source: ByteBuffer, nullLimited: Boolean = false): String {
-    val charBuffer = charBuffer(decodingLength(source.remaining(), nullLimited))
-    source.limit(decodingLength(source.capacity(), nullLimited))
+  fun decode(source: ByteBuffer): String {
+    println("Called to decode ${source.contentToString()}")
+    val charBuffer = charBuffer(source.remaining())
     decoder.reset()
-    decoder.decode(source, charBuffer, true)
+    decoder.decode(source, charBuffer, true).also {
+      if (it.isError) {
+        println("Encountered error: $it")
+        source.position(source.position() + it.length())
+      }
+    }
     charBuffer.flip()
+    println("Result: $charBuffer")
     return charBuffer.toString()
+  }
+
+  fun decodeChar(source: ByteBuffer): Char {
+    return source.getChar()
   }
 }

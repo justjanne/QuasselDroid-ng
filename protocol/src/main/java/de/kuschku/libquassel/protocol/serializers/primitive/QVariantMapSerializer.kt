@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.variant.QVariantMap
 import de.kuschku.libquassel.protocol.variant.QVariant_
@@ -30,19 +31,21 @@ object QVariantMapSerializer : QtSerializer<QVariantMap> {
   @Suppress("UNCHECKED_CAST")
   override val javaType: Class<out QVariantMap> = Map::class.java as Class<QVariantMap>
 
-  override fun serialize(buffer: ChainedByteBuffer, data: QVariantMap) {
-    IntSerializer.serialize(buffer, data.size)
+  override fun serialize(buffer: ChainedByteBuffer, data: QVariantMap, featureSet: FeatureSet) {
+    IntSerializer.serialize(buffer, data.size, featureSet)
     data.entries.forEach { (key, value) ->
-      StringSerializerUtf16.serialize(buffer, key)
-      QVariantSerializer.serialize(buffer, value)
+      StringSerializerUtf16.serialize(buffer, key, featureSet)
+      QVariantSerializer.serialize(buffer, value, featureSet)
     }
   }
 
-  override fun deserialize(buffer: ByteBuffer): QVariantMap {
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): QVariantMap {
     val result = mutableMapOf<String, QVariant_>()
-    val length = IntSerializer.deserialize(buffer)
+    val length = IntSerializer.deserialize(buffer, featureSet)
     for (i in 0 until length) {
-      result[StringSerializerUtf16.deserialize(buffer) ?: ""] = QVariantSerializer.deserialize(buffer)
+      val key = StringSerializerUtf16.deserialize(buffer, featureSet) ?: ""
+      val value = QVariantSerializer.deserialize(buffer, featureSet)
+      result[key] = value
     }
     return result
   }

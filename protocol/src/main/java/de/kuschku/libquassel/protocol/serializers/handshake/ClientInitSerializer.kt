@@ -21,7 +21,7 @@ package de.kuschku.libquassel.protocol.serializers.handshake
 
 import de.kuschku.bitflags.toBits
 import de.kuschku.bitflags.toFlag
-import de.kuschku.libquassel.protocol.features.ExtendedFeatureName
+import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 import de.kuschku.libquassel.protocol.features.LegacyFeature
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
 import de.kuschku.libquassel.protocol.variant.QVariantMap
@@ -36,7 +36,7 @@ object ClientInitSerializer : HandshakeSerializer<ClientInit> {
     "ClientDate" to qVariant(data.buildDate, QtType.QString),
     "Features" to qVariant(data.clientFeatures.toBits(), QtType.UInt),
     "FeatureList" to qVariant(
-      data.featureList.map(ExtendedFeatureName::name),
+      data.featureList.map(QuasselFeatureName::name),
       QtType.QStringList
     ),
   )
@@ -46,7 +46,7 @@ object ClientInitSerializer : HandshakeSerializer<ClientInit> {
       clientVersion = data["ClientVersion"].into(),
       buildDate = data["ClientDate"].into(),
       clientFeatures = LegacyFeature.toFlag(data["Features"].into<UInt>()),
-      featureList = data["FeatureList"].into(emptyList()),
+      featureList = data["FeatureList"].into(emptyList<String>()).map(::QuasselFeatureName),
     )
   }
 }

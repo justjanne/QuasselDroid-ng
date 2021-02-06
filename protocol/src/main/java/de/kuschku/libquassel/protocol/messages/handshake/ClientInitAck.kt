@@ -19,14 +19,14 @@
 
 package de.kuschku.libquassel.protocol.messages.handshake
 
-import de.kuschku.libquassel.protocol.features.ExtendedFeatureName
 import de.kuschku.libquassel.protocol.features.LegacyFeatures
+import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 import de.kuschku.libquassel.protocol.variant.QVariantList
 
 data class ClientInitAck(
-        val coreFeatures: LegacyFeatures,
-        val coreConfigured: Boolean?,
-        val backendInfo: QVariantList,
-        val authenticatorInfo: QVariantList,
-        val featureList: List<ExtendedFeatureName>
+  val coreFeatures: LegacyFeatures,
+  val coreConfigured: Boolean?,
+  val backendInfo: QVariantList,
+  val authenticatorInfo: QVariantList,
+  val featureList: List<QuasselFeatureName>
 )

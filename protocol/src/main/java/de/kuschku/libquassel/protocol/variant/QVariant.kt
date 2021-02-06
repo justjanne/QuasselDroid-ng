@@ -19,15 +19,19 @@
 
 package de.kuschku.libquassel.protocol.variant
 
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.contentToString
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.serializerFor
+import java.nio.ByteBuffer
+import java.util.*
 
 typealias QVariant_ = QVariant<*>
 typealias QVariantList = List<QVariant_>
 typealias QVariantMap = Map<String, QVariant_>
-typealias QStringList = List<String>
+typealias QStringList = List<String?>
 
 sealed class QVariant<T> constructor(
   internal val data: T,
@@ -35,7 +39,6 @@ sealed class QVariant<T> constructor(
 ) {
   class Typed<T> internal constructor(data: T, serializer: QtSerializer<T>) :
     QVariant<T>(data, serializer) {
-    override fun toString() = "QVariant.Typed(${serializer.qtType.serializableName}, $data)"
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
       if (other !is Typed<*>) return false
@@ -55,7 +58,6 @@ sealed class QVariant<T> constructor(
 
   class Custom<T> internal constructor(data: T, override val serializer: QuasselSerializer<T>) :
     QVariant<T>(data, serializer) {
-    override fun toString() = "QVariant.Custom(${serializer.quasselType}, $data)"
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
       if (other !is Custom<*>) return false
@@ -75,8 +77,18 @@ sealed class QVariant<T> constructor(
 
   fun value(): T = data
 
-  fun serialize(buffer: ChainedByteBuffer) {
-    serializer.serialize(buffer, data)
+
+  fun serialize(buffer: ChainedByteBuffer, featureSet: FeatureSet) {
+    serializer.serialize(buffer, data, featureSet)
+  }
+
+  override fun toString() = when (data) {
+    is ByteBuffer ->
+      "QVariant(${serializer::class.java.simpleName}, ${data.contentToString()})"
+    is Array<*> ->
+      "QVariant(${serializer::class.java.simpleName}, ${Arrays.toString(data)})"
+    else ->
+      "QVariant(${serializer::class.java.simpleName}, $data)"
   }
 
   companion object {

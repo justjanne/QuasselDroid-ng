@@ -23,3 +23,6 @@ interface Flags<T, U : Flag<T>> {
   operator fun get(value: T): U?
   fun all(): Collection<U>
 }
+
+inline fun <reified T> flags(vararg values: T) where T : Flag<*>, T : Enum<T> = setOf(*values)
+inline fun <reified T> flags(values: Collection<T>) where T : Flag<*>, T : Enum<T> = values.toSet()

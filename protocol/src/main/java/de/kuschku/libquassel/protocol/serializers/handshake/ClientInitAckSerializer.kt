@@ -21,7 +21,7 @@ package de.kuschku.libquassel.protocol.serializers.handshake
 
 import de.kuschku.bitflags.toBits
 import de.kuschku.bitflags.toFlag
-import de.kuschku.libquassel.protocol.features.ExtendedFeatureName
+import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 import de.kuschku.libquassel.protocol.features.LegacyFeature
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInitAck
 import de.kuschku.libquassel.protocol.variant.*
@@ -42,6 +42,7 @@ object ClientInitAckSerializer : HandshakeSerializer<ClientInitAck> {
     authenticatorInfo = data["Authenticators"].into(emptyList()),
     coreConfigured = data["Configured"].into(),
     featureList = data["FeatureList"].into<QStringList>(emptyList())
-      .map(::ExtendedFeatureName),
+      .filterNotNull()
+      .map(::QuasselFeatureName),
   )
 }

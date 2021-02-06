@@ -19,31 +19,11 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.io.stringEncoderAscii
 import de.kuschku.libquassel.protocol.variant.QtType
 import java.nio.ByteBuffer
 
-object StringSerializerAscii : QtSerializer<String?> {
-  override val qtType = QtType.QString
-  override val javaType: Class<out String> = String::class.java
+object StringSerializerAscii : StringSerializer(Charsets.ISO_8859_1, true)
 
-  override fun serialize(buffer: ChainedByteBuffer, data: String?) {
-    if (data == null) {
-        IntSerializer.serialize(buffer, -1)
-    } else {
-      val stringBuffer = stringEncoderAscii().encode(data, true)
-        IntSerializer.serialize(buffer, stringBuffer.remaining())
-      buffer.put(stringBuffer)
-    }
-  }
-
-  override fun deserialize(buffer: ByteBuffer): String? {
-    val length = IntSerializer.deserialize(buffer) - 1
-    return if (length < 0) {
-      null
-    } else {
-      stringEncoderAscii().decode(buffer, length, true)
-    }
-  }
-}

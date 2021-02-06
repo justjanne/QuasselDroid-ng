@@ -31,35 +31,41 @@ import de.kuschku.bitflags.Flags
  *
  * This list should be cleaned up after every protocol break, as we can assume them to be present then.
  */
-enum class LegacyFeature(override val value: UInt): Flag<UInt> {
-  SynchronizedMarkerLine(0x0001u),
-  SaslAuthentication(0x0002u),
-  SaslExternal(0x0004u),
-  HideInactiveNetworks(0x0008u),
-  PasswordChange(0x0010u),
+enum class LegacyFeature(
+  override val value: UInt,
+  val feature: QuasselFeature,
+): Flag<UInt> {
+  SynchronizedMarkerLine(0x0001u, QuasselFeature.SynchronizedMarkerLine),
+  SaslAuthentication(0x0002u, QuasselFeature.SaslAuthentication),
+  SaslExternal(0x0004u, QuasselFeature.SaslExternal),
+  HideInactiveNetworks(0x0008u, QuasselFeature.HideInactiveNetworks),
+  PasswordChange(0x0010u, QuasselFeature.PasswordChange),
   /** IRCv3 capability negotiation, account tracking */
-  CapNegotiation(0x0020u),
+  CapNegotiation(0x0020u, QuasselFeature.CapNegotiation),
   /** IRC server SSL validation */
-  VerifyServerSSL(0x0040u),
+  VerifyServerSSL(0x0040u, QuasselFeature.VerifyServerSSL),
   /** IRC server custom message rate limits */
-  CustomRateLimits(0x0080u),
-  DccFileTransfer(0x0100u),
+  CustomRateLimits(0x0080u, QuasselFeature.CustomRateLimits),
+  DccFileTransfer(0x0100u, QuasselFeature.DccFileTransfer),
   /** Timestamp formatting in away (e.g. %%hh:mm%%) */
-  AwayFormatTimestamp(0x0200u),
+  AwayFormatTimestamp(0x0200u, QuasselFeature.AwayFormatTimestamp),
   /** Whether or not the core supports auth backends. */
-  Authenticators(0x0400u),
+  Authenticators(0x0400u, QuasselFeature.Authenticators),
   /** Sync buffer activity status */
-  BufferActivitySync(0x0800u),
+  BufferActivitySync(0x0800u, QuasselFeature.BufferActivitySync),
   /** Core-Side highlight configuration and matching */
-  CoreSideHighlights(0x1000u),
+  CoreSideHighlights(0x1000u, QuasselFeature.CoreSideHighlights),
   /** Show prefixes for senders in backlog */
-  SenderPrefixes(0x2000u),
+  SenderPrefixes(0x2000u, QuasselFeature.SenderPrefixes),
   /** Supports RPC call disconnectFromCore to remotely disconnect a client */
-  RemoteDisconnect(0x4000u),
+  RemoteDisconnect(0x4000u, QuasselFeature.RemoteDisconnect),
   /** Transmit features as list of strings */
-  ExtendedFeatures(0x8000u);
+  ExtendedFeatures(0x8000u, QuasselFeature.ExtendedFeatures);
 
   companion object : Flags<UInt, LegacyFeature> {
+    private val features = values().associateBy(LegacyFeature::feature)
+    fun get(feature: QuasselFeature) = features[feature]
+
     private val values = values().associateBy(LegacyFeature::value)
     override fun get(value: UInt) = values[value]
     override fun all() = values.values

@@ -17,8 +17,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.io
+package de.kuschku.quasseldroid.protocol.io
 
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.print
 import de.kuschku.quasseldroid.util.TlsInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -65,12 +67,17 @@ class CoroutineChannel {
   }
 
   suspend fun write(buffer: ByteBuffer): Int = runInterruptible(writeContext) {
+    buffer.print()
     this.channel.write(buffer)
   }
 
-  suspend fun write(chainedBuffer: de.kuschku.libquassel.protocol.io.ChainedByteBuffer) {
+  suspend fun write(chainedBuffer: ChainedByteBuffer) {
     for (buffer in chainedBuffer.buffers()) {
       write(buffer)
     }
+  }
+
+  suspend fun flush() = runInterruptible(writeContext) {
+    this.channel.flush()
   }
 }

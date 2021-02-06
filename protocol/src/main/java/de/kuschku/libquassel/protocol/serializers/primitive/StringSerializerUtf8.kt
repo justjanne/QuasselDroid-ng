@@ -19,32 +19,4 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.io.stringEncoderUtf8
-import de.kuschku.libquassel.protocol.variant.QtType
-import java.nio.ByteBuffer
-
-object StringSerializerUtf8 : QtSerializer<String?> {
-  override val qtType = QtType.QString
-  override val javaType: Class<out String> = String::class.java
-
-  override fun serialize(buffer: ChainedByteBuffer, data: String?) {
-    if (data == null) {
-      IntSerializer.serialize(buffer, -1)
-    } else {
-      val stringBuffer = stringEncoderUtf8().encode(data)
-      IntSerializer.serialize(buffer, stringBuffer.remaining())
-      buffer.put(stringBuffer)
-    }
-  }
-
-  override fun deserialize(buffer: ByteBuffer): String? {
-    val length = IntSerializer.deserialize(buffer)
-    return if (length < 0) {
-      null
-    } else {
-      stringEncoderUtf8().decode(buffer, length)
-    }
-  }
-}
-
+object StringSerializerUtf8 : StringSerializer(Charsets.UTF_8)

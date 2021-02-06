@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.io
+package de.kuschku.quasseldroid.protocol.io
 
 import android.util.Log
 import java.io.InputStream
@@ -43,7 +43,7 @@ class ReadableWrappedChannel(
       // Only read as long as we have content to read, and until we’ve blocked at most once
       while (remainingData > 0 && !(hasRead && backingStream.available() == 0)) {
         // Data to be read, always the minimum of available data and the page size
-        val toReadOnce = Math.min(remainingData, PAGE_SIZE)
+        val toReadOnce = remainingData.coerceAtMost(PAGE_SIZE)
         var readData = 0
 
         try {

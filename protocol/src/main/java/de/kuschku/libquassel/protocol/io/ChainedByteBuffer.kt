@@ -48,9 +48,14 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
     this.size += size
   }
 
-  fun nextBuffer(length: Int = 1): ByteBuffer {
+  fun <T> withBuffer(length: Int = 0, f: (ByteBuffer) -> T) : T{
     ensureSpace(length)
-    return bufferList.last()
+    val buffer = bufferList.last()
+    val positionBefore = buffer.position()
+    val result = f(buffer)
+    val positionAfter = buffer.position()
+    size += (positionAfter - positionBefore)
+    return result
   }
 
   fun put(value: Byte) {
@@ -99,15 +104,7 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
     ensureSpace(value.remaining())
 
     while (value.remaining() > 0) {
-      val buffer = bufferList.last()
-      if (buffer.remaining() >= value.remaining()) {
-        buffer.put(value)
-      } else {
-        val oldLimit = value.limit()
-        value.limit(value.position() + buffer.remaining())
-        buffer.put(value)
-        value.limit(oldLimit)
-      }
+      copyData(value, bufferList.last())
     }
   }
 
@@ -124,12 +121,16 @@ class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: 
   fun buffers() = sequence {
     for (buffer in bufferList) {
       buffer.flip()
+      val position = buffer.position()
+      val limit = buffer.limit()
       yield(buffer)
+      buffer.position(position)
+      buffer.limit(limit)
     }
   }
 
   fun toBuffer(): ByteBuffer {
-    val byteBuffer = allocate(size)
+    val byteBuffer = allocate(bufferSize * bufferList.size)
     for (buffer in bufferList) {
       buffer.flip()
       byteBuffer.put(buffer)

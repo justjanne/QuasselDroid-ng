@@ -36,8 +36,12 @@ object Serializers {
     UIntSerializer,
     LongSerializer,
     ULongSerializer,
+    ByteBufferSerializer,
     StringSerializerUtf16,
+    QCharSerializer,
+    QStringListSerializer,
     QVariantSerializer,
+    QVariantListSerializer,
     QVariantMapSerializer,
   ).associateBy(QtSerializer<*>::qtType)
 

@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.variant.QtType
 import java.nio.ByteBuffer
@@ -27,14 +28,14 @@ object BoolSerializer : QtSerializer<Boolean> {
   override val qtType: QtType = QtType.Bool
   override val javaType: Class<Boolean> = Boolean::class.java
 
-  override fun serialize(buffer: ChainedByteBuffer, data: Boolean) {
+  override fun serialize(buffer: ChainedByteBuffer, data: Boolean, featureSet: FeatureSet) {
     buffer.put(
       if (data) 0x01.toByte()
       else 0x00.toByte()
     )
   }
 
-  override fun deserialize(buffer: ByteBuffer): Boolean {
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): Boolean {
     return buffer.get() != 0x00.toByte()
   }
 }

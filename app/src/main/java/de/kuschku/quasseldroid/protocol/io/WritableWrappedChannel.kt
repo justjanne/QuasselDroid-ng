@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.io
+package de.kuschku.quasseldroid.protocol.io
 
 import java.io.OutputStream
 import java.nio.ByteBuffer
@@ -37,7 +37,7 @@ class WritableWrappedChannel(
     synchronized(lock) {
       while (remainingData > 0) {
         // Data to be written, always the minimum of available data and the page size
-        val writtenData = Math.min(remainingData, PAGE_SIZE)
+        val writtenData = remainingData.coerceAtMost(PAGE_SIZE)
 
         // Set new bufferId info
         buffer.clear()

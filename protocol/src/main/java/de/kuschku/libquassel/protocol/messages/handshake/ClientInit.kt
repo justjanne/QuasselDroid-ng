@@ -20,11 +20,11 @@
 package de.kuschku.libquassel.protocol.messages.handshake
 
 import de.kuschku.libquassel.protocol.features.LegacyFeatures
-import de.kuschku.libquassel.protocol.features.ExtendedFeatureName
+import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 
 data class ClientInit(
   val clientVersion: String?,
   val buildDate: String?,
   val clientFeatures: LegacyFeatures,
-  val featureList: List<ExtendedFeatureName>
+  val featureList: List<QuasselFeatureName>
 )

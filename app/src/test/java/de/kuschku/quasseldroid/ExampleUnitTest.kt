@@ -1,10 +1,19 @@
 package de.kuschku.quasseldroid
 
+import de.kuschku.bitflags.flags
+import de.kuschku.libquassel.protocol.connection.ProtocolInfoSerializer
+import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.print
+import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
+import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitAckSerializer
+import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitRejectSerializer
+import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitSerializer
+import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.IntSerializer
-import de.kuschku.libquassel.protocol.serializers.primitive.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.UIntSerializer
-import de.kuschku.libquassel.protocol.io.CoroutineChannel
+import de.kuschku.libquassel.protocol.variant.into
+import de.kuschku.quasseldroid.protocol.io.CoroutineChannel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -14,16 +23,7 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class ExampleUnitTest {
-  @Test
-  fun addition_isCorrect() {
-    assertEquals(4, 2 + 2)
-  }
 
   @Test
   fun testNetworking() {
@@ -44,22 +44,81 @@ class ExampleUnitTest {
     }), null)
 
     runBlocking {
+      val connectionFeatureSet = FeatureSet.build()
       val sizeBuffer = ByteBuffer.allocateDirect(4)
-      val sendBuffer = de.kuschku.libquassel.protocol.io.ChainedByteBuffer(direct = true)
+      val sendBuffer = ChainedByteBuffer(direct = true)
       val channel = CoroutineChannel()
       channel.connect(InetSocketAddress("kuschku.de", 4242))
-      val readBuffer = ByteBuffer.allocateDirect(4)
-      UIntSerializer.serialize(sendBuffer, 0x42b3_3f00u or 0x03u)
-      IntSerializer.serialize(sendBuffer, 2)
-      UIntSerializer.serialize(sendBuffer, 0x8000_0000u)
-      channel.write(sendBuffer)
-      channel.read(readBuffer)
-      readBuffer.flip()
-      println(ProtocolInfoSerializer.deserialize(readBuffer))
-      println(channel.tlsInfo.value)
-      channel.enableTLS(context)
-      println(channel.tlsInfo.value)
-      channel.enableCompression()
+
+      suspend fun readAmount(amount: Int? = null): Int {
+        if (amount != null) return amount
+
+        sizeBuffer.clear()
+        channel.read(sizeBuffer)
+        sizeBuffer.flip()
+        val size = IntSerializer.deserialize(sizeBuffer, connectionFeatureSet)
+        sizeBuffer.clear()
+        return size
+      }
+
+      suspend fun write(sizePrefix: Boolean = true, f: suspend (ChainedByteBuffer) -> Unit) {
+        f(sendBuffer)
+        if (sizePrefix) {
+          sizeBuffer.clear()
+          sizeBuffer.putInt(sendBuffer.size)
+          sizeBuffer.flip()
+          channel.write(sizeBuffer)
+          sizeBuffer.clear()
+        }
+        channel.write(sendBuffer)
+        channel.flush()
+        sendBuffer.clear()
+      }
+
+      suspend fun <T> read(amount: Int? = null, f: suspend (ByteBuffer) -> T): T {
+        val amount1 = readAmount(amount)
+        val messageBuffer = ByteBuffer.allocateDirect(minOf(amount1, 65 * 1024 * 1024))
+        channel.read(messageBuffer)
+        messageBuffer.flip()
+        return f(messageBuffer)
+      }
+
+      println("Writing protocol")
+      write(sizePrefix = false) {
+        UIntSerializer.serialize(it, 0x42b3_3f00u or 0x03u, connectionFeatureSet)
+        IntSerializer.serialize(it, 2, connectionFeatureSet)
+        UIntSerializer.serialize(it, 0x8000_0000u, connectionFeatureSet)
+      }
+
+      println("Reading protocol")
+      read(4) {
+        println(ProtocolInfoSerializer.deserialize(it, connectionFeatureSet))
+        println(channel.tlsInfo.value)
+        channel.enableTLS(context)
+        println(channel.tlsInfo.value)
+        channel.enableCompression()
+      }
+      println("Writing clientInit")
+      write {
+        HandshakeMapSerializer.serialize(
+          it,
+          ClientInitSerializer.serialize(ClientInit(
+            clientVersion = "Quasseldroid test",
+            buildDate = "Never",
+            clientFeatures = flags(),
+            featureList = emptyList()
+          )),
+          connectionFeatureSet
+        )
+      }
+      read {
+        val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
+        println(data)
+        when (data["MsgType"].into<String>()) {
+          "ClientInitAck" -> println(ClientInitAckSerializer.deserialize(data))
+          "ClientInitReject" -> println(ClientInitRejectSerializer.deserialize(data))
+        }
+      }
     }
   }
 }
