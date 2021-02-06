@@ -3,7 +3,6 @@ image: "k8r.eu/justjanne/android-sdk:30-30.0.3"
 cache:
   key: "$CI_PROJECT_NAME"
   paths:
-    - ".gradle/wrapper"
     - ".gradle/caches"
 
 before_script:
