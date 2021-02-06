@@ -17,28 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.bitflags
+package de.kuschku.libquassel.protocol.types
 
-import java.util.*
+import de.kuschku.bitflags.of
 
-interface Flags<T, U> where U: Flag<T>, U: Enum<U> {
-  operator fun get(value: T): U?
-  fun all(): Collection<U>
-}
-
-inline fun <reified T> Flags<*, T>.of(
-  vararg values: T
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-inline fun <reified T> Flags<*, T>.of(
-  values: Collection<T>
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-
-inline fun <reified T: Enum<T>> Array<out T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
-
-inline fun <reified T: Enum<T>> Collection<T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
+data class BufferInfo(
+  val bufferId: BufferId = BufferId(-1),
+  val networkId: NetworkId = NetworkId(-1),
+  val type: BufferTypes = BufferType.of(),
+  val groupId: Int = -1,
+  val bufferName: String? = null,
+)

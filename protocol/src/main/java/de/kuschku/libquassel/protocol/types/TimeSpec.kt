@@ -17,28 +17,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.bitflags
+package de.kuschku.libquassel.protocol.types
 
-import java.util.*
+enum class TimeSpec(val value: Byte) {
+  LocalUnknown(-1),
+  LocalStandard(0),
+  LocalDST(1),
+  UTC(2),
+  OffsetFromUTC(3);
 
-interface Flags<T, U> where U: Flag<T>, U: Enum<U> {
-  operator fun get(value: T): U?
-  fun all(): Collection<U>
+  companion object {
+    private val map = values().associateBy(TimeSpec::value)
+    fun of(type: Byte) = map[type]
+  }
 }
-
-inline fun <reified T> Flags<*, T>.of(
-  vararg values: T
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-inline fun <reified T> Flags<*, T>.of(
-  values: Collection<T>
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-
-inline fun <reified T: Enum<T>> Array<out T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
-
-inline fun <reified T: Enum<T>> Collection<T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }

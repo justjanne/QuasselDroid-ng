@@ -17,28 +17,25 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.bitflags
+package de.kuschku.libquassel.protocol.types
 
-import java.util.*
+import de.kuschku.bitflags.Flag
+import de.kuschku.bitflags.Flags
 
-interface Flags<T, U> where U: Flag<T>, U: Enum<U> {
-  operator fun get(value: T): U?
-  fun all(): Collection<U>
+enum class MessageFlag(
+  override val value: UInt,
+) : Flag<UInt> {
+  Self(0x01u),
+  Highlight(0x02u),
+  Redirected(0x04u),
+  ServerMsg(0x08u),
+  Backlog(0x80u);
+
+  companion object : Flags<UInt, MessageFlag> {
+    private val values = values().associateBy(MessageFlag::value)
+    override fun get(value: UInt) = values[value]
+    override fun all() = values.values
+  }
 }
 
-inline fun <reified T> Flags<*, T>.of(
-  vararg values: T
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-inline fun <reified T> Flags<*, T>.of(
-  values: Collection<T>
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-
-inline fun <reified T: Enum<T>> Array<out T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
-
-inline fun <reified T: Enum<T>> Collection<T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
+typealias MessageFlags = Set<MessageFlag>

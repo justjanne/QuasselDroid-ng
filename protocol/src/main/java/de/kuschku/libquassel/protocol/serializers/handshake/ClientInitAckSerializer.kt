@@ -20,7 +20,7 @@
 package de.kuschku.libquassel.protocol.serializers.handshake
 
 import de.kuschku.bitflags.toBits
-import de.kuschku.bitflags.toFlag
+import de.kuschku.bitflags.of
 import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 import de.kuschku.libquassel.protocol.features.LegacyFeature
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInitAck
@@ -37,7 +37,7 @@ object ClientInitAckSerializer : HandshakeSerializer<ClientInitAck> {
   )
 
   override fun deserialize(data: QVariantMap) = ClientInitAck(
-    coreFeatures = LegacyFeature.toFlag(data["CoreFeatures"].into<UInt>()),
+    coreFeatures = LegacyFeature.of(data["CoreFeatures"].into<UInt>()),
     backendInfo = data["StorageBackends"].into(emptyList()),
     authenticatorInfo = data["Authenticators"].into(emptyList()),
     coreConfigured = data["Configured"].into(),

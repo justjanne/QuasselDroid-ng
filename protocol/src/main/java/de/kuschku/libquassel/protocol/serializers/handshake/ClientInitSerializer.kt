@@ -20,7 +20,7 @@
 package de.kuschku.libquassel.protocol.serializers.handshake
 
 import de.kuschku.bitflags.toBits
-import de.kuschku.bitflags.toFlag
+import de.kuschku.bitflags.of
 import de.kuschku.libquassel.protocol.features.QuasselFeatureName
 import de.kuschku.libquassel.protocol.features.LegacyFeature
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
@@ -45,7 +45,7 @@ object ClientInitSerializer : HandshakeSerializer<ClientInit> {
     return ClientInit(
       clientVersion = data["ClientVersion"].into(),
       buildDate = data["ClientDate"].into(),
-      clientFeatures = LegacyFeature.toFlag(data["Features"].into<UInt>()),
+      clientFeatures = LegacyFeature.of(data["Features"].into<UInt>()),
       featureList = data["FeatureList"].into(emptyList<String>()).map(::QuasselFeatureName),
     )
   }

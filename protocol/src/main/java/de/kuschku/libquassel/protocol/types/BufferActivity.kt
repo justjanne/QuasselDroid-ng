@@ -17,28 +17,24 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.bitflags
+package de.kuschku.libquassel.protocol.types
 
-import java.util.*
+import de.kuschku.bitflags.Flag
+import de.kuschku.bitflags.Flags
 
-interface Flags<T, U> where U: Flag<T>, U: Enum<U> {
-  operator fun get(value: T): U?
-  fun all(): Collection<U>
+enum class BufferActivity(
+  override val value: UInt,
+): Flag<UInt> {
+  NoActivity(0x00u),
+  OtherActivity(0x01u),
+  NewMessage(0x02u),
+  Highlight(0x04u);
+
+  companion object : Flags<UInt, BufferActivity> {
+    private val values = values().associateBy(BufferActivity::value)
+    override fun get(value: UInt) = values[value]
+    override fun all() = values.values
+  }
 }
 
-inline fun <reified T> Flags<*, T>.of(
-  vararg values: T
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-inline fun <reified T> Flags<*, T>.of(
-  values: Collection<T>
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-
-inline fun <reified T: Enum<T>> Array<out T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
-
-inline fun <reified T: Enum<T>> Collection<T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
+typealias BufferActivities = Set<BufferActivity>

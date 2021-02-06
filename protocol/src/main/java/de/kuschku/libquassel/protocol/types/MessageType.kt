@@ -19,24 +19,37 @@
 
 package de.kuschku.libquassel.protocol.types
 
-import java.io.Serializable
+import de.kuschku.bitflags.Flag
+import de.kuschku.bitflags.Flags
 
-typealias SignedIdType = Int
-typealias SignedId64Type = Long
+enum class MessageType(
+  override val value: UInt,
+) : Flag<UInt> {
+  Plain(0x00001u),
+  Notice(0x00002u),
+  Action(0x00004u),
+  Nick(0x00008u),
+  Mode(0x00010u),
+  Join(0x00020u),
+  Part(0x00040u),
+  Quit(0x00080u),
+  Kick(0x00100u),
+  Kill(0x00200u),
+  Server(0x00400u),
+  Info(0x00800u),
+  Error(0x01000u),
+  DayChange(0x02000u),
+  Topic(0x04000u),
+  NetsplitJoin(0x08000u),
+  NetsplitQuit(0x10000u),
+  Invite(0x20000u),
+  Markerline(0x40000u);
 
-interface SignedId<T> : Serializable, Comparable<SignedId<T>>
-  where T : Number, T : Comparable<T> {
-  val id: T
-
-  override fun compareTo(other: SignedId<T>): Int {
-    return id.compareTo(other.id)
+  companion object : Flags<UInt, MessageType> {
+    private val values = values().associateBy(MessageType::value)
+    override fun get(value: UInt) = values[value]
+    override fun all() = values.values
   }
 }
 
-@Suppress("NOTHING_TO_INLINE")
-@JvmName("isValidId")
-inline fun SignedId<SignedIdType>.isValid() = id > 0
-
-@Suppress("NOTHING_TO_INLINE")
-@JvmName("isValidId64")
-inline fun SignedId<SignedId64Type>.isValid() = id > 0
+typealias MessageTypes = Set<MessageType>

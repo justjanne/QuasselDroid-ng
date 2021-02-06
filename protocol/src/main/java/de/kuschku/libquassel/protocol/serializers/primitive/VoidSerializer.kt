@@ -17,28 +17,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.bitflags
+package de.kuschku.libquassel.protocol.serializers.primitive
 
-import java.util.*
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.variant.QtType
+import java.nio.ByteBuffer
 
-interface Flags<T, U> where U: Flag<T>, U: Enum<U> {
-  operator fun get(value: T): U?
-  fun all(): Collection<U>
+object VoidSerializer : QtSerializer<Unit> {
+  override val qtType: QtType = QtType.Void
+  override val javaType: Class<out Unit> = Unit::class.java
+
+  override fun serialize(buffer: ChainedByteBuffer, data: Unit, featureSet: FeatureSet) = Unit
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet)  = Unit
 }
-
-inline fun <reified T> Flags<*, T>.of(
-  vararg values: T
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-inline fun <reified T> Flags<*, T>.of(
-  values: Collection<T>
-) where T: Flag<*>, T: Enum<T> = values.toEnumSet()
-
-inline fun <reified T: Enum<T>> Array<out T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }
-
-inline fun <reified T: Enum<T>> Collection<T>.toEnumSet() =
-  EnumSet.noneOf(T::class.java).apply {
-    addAll(this@toEnumSet)
-  }

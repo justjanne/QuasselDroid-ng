@@ -26,23 +26,49 @@ import de.kuschku.libquassel.protocol.variant.QuasselType
 import java.util.*
 
 object Serializers {
-  private val qtSerializers = listOf<QtSerializer<*>>(
+  private val qtSerializers = setOf<QtSerializer<*>>(
+    VoidSerializer,
     BoolSerializer,
-    UByteSerializer,
-    ByteSerializer,
-    ShortSerializer,
-    UShortSerializer,
     IntSerializer,
     UIntSerializer,
-    LongSerializer,
-    ULongSerializer,
-    ByteBufferSerializer,
-    StringSerializerUtf16,
+
     QCharSerializer,
-    QStringListSerializer,
-    QVariantSerializer,
-    QVariantListSerializer,
     QVariantMapSerializer,
+    QVariantListSerializer,
+
+    StringSerializerUtf16,
+    QStringListSerializer,
+    ByteBufferSerializer,
+
+    DateSerializer,
+    TimeSerializer,
+    DateTimeSerializer,
+
+    LongSerializer,
+    ShortSerializer,
+    ByteSerializer,
+    ULongSerializer,
+
+    UShortSerializer,
+    UByteSerializer,
+
+    QVariantSerializer,
+
+    BufferIdSerializer,
+    BufferInfoSerializer,
+    //DccConfigIpDetectionModeSerializer,
+    //DccConfigPortSelectionModeSerializer,
+    //IrcUserSerializer,
+    //IrcChannelSerializer,
+    //IdentitySerializer,
+    IdentityIdSerializer,
+    MessageSerializer,
+    MsgIdSerializer,
+    NetworkIdSerializer,
+    //NetworkInfoSerializer,
+    //NetworkServerSerializer,
+    //QHostAddressSerializer,
+    PeerPtrSerializer,
   ).associateBy(QtSerializer<*>::qtType)
 
   private val quasselSerializers = listOf<QuasselSerializer<*>>(

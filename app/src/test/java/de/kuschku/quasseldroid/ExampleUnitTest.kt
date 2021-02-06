@@ -1,10 +1,11 @@
 package de.kuschku.quasseldroid
 
-import de.kuschku.bitflags.flags
+import de.kuschku.bitflags.of
 import de.kuschku.libquassel.protocol.connection.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.features.LegacyFeature
+import de.kuschku.libquassel.protocol.features.QuasselFeature
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.io.print
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitAckSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitRejectSerializer
@@ -15,7 +16,6 @@ import de.kuschku.libquassel.protocol.serializers.primitive.UIntSerializer
 import de.kuschku.libquassel.protocol.variant.into
 import de.kuschku.quasseldroid.protocol.io.CoroutineChannel
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.net.InetSocketAddress
 import java.nio.ByteBuffer
@@ -44,7 +44,7 @@ class ExampleUnitTest {
     }), null)
 
     runBlocking {
-      val connectionFeatureSet = FeatureSet.build()
+      val connectionFeatureSet = FeatureSet.all()
       val sizeBuffer = ByteBuffer.allocateDirect(4)
       val sendBuffer = ChainedByteBuffer(direct = true)
       val channel = CoroutineChannel()
@@ -105,8 +105,8 @@ class ExampleUnitTest {
           ClientInitSerializer.serialize(ClientInit(
             clientVersion = "Quasseldroid test",
             buildDate = "Never",
-            clientFeatures = flags(),
-            featureList = emptyList()
+            clientFeatures = connectionFeatureSet.legacyFeatures(),
+            featureList = connectionFeatureSet.featureList()
           )),
           connectionFeatureSet
         )

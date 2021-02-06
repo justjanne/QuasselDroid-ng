@@ -19,7 +19,6 @@
 
 package de.kuschku.libquassel.protocol.serializers.handshake
 
-import de.kuschku.bitflags.flags
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf

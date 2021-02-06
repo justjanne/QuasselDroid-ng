@@ -19,19 +19,19 @@
 
 package de.kuschku.libquassel.protocol.features
 
-import de.kuschku.bitflags.flags
+import de.kuschku.bitflags.of
 
 class FeatureSet internal constructor(
   private val features: Set<QuasselFeature>,
   private val additional: Set<QuasselFeatureName> = emptySet()
 ) {
-  fun enabled(feature: QuasselFeature) = features.contains(feature)
+  fun hasFeature(feature: QuasselFeature) = features.contains(feature)
 
   fun featureList(): List<QuasselFeatureName> =
     features.map(QuasselFeature::feature) + additional
 
   fun legacyFeatures(): LegacyFeatures =
-    flags(features.mapNotNull(LegacyFeature.Companion::get))
+    LegacyFeature.of(features.mapNotNull(LegacyFeature.Companion::get))
 
   companion object {
     fun parse(
