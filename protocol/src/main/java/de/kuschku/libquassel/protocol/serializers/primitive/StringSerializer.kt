@@ -38,7 +38,9 @@ abstract class StringSerializer(
   private val encoderLocal = ThreadLocal<StringEncoder>()
   private fun encoder() = encoderLocal.getOrSet { StringEncoder(charset) }
 
+  @Suppress("NOTHING_TO_INLINE")
   private inline fun addNullBytes(before: Int) = if (nullLimited) before + 1 else before
+  @Suppress("NOTHING_TO_INLINE")
   private inline fun removeNullBytes(before: Int) = if (nullLimited) before - 1 else before
 
   override fun serialize(buffer: ChainedByteBuffer, data: String?, featureSet: FeatureSet) {
