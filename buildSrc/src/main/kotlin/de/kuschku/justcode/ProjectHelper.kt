@@ -21,7 +21,6 @@ package de.kuschku.justcode
 
 import org.gradle.api.Project
 import java.io.ByteArrayOutputStream
-import java.io.OutputStream
 import java.util.*
 
 fun Project.cmd(vararg command: String) = try {
@@ -29,7 +28,7 @@ fun Project.cmd(vararg command: String) = try {
   exec {
     commandLine(*command)
     standardOutput = stdOut
-    errorOutput = OutputStream.nullOutputStream()
+    errorOutput = NullOutputStream()
   }
   stdOut.toString(Charsets.UTF_8.name()).trim()
 } catch (e: Throwable) {
@@ -51,7 +50,7 @@ inline fun <reified T> setBuildConfigField(
   value: T
 ) {
   if (T::class == Long::class) {
-    setter("long", name, "${value?:0}L")
+    setter("long", name, "${value ?: 0}L")
   } else if (T::class == String::class) {
     setter("String", name, "\"${value}\"")
   }
