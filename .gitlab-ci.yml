@@ -1,7 +1,4 @@
-image: "k8r.eu/justjanne/android-sdk:29-29.0.3"
-
-variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+image: "k8r.eu/justjanne/android-sdk:30-30.0.3"
 
 cache:
   key: "$CI_PROJECT_NAME"
@@ -11,8 +8,6 @@ cache:
 
 before_script:
   - "export GRADLE_USER_HOME=$(pwd)/.gradle"
-  - "export ANDROID_HOME=/android-sdk-linux"
-  - "export PATH=$PATH:/android-sdk-linux/platform-tools/"
   - "chmod +x ./gradlew"
 
   - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
