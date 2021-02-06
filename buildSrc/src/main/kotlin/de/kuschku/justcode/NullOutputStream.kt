@@ -41,7 +41,6 @@ class NullOutputStream : OutputStream() {
 
   @Throws(IOException::class)
   override fun write(b: ByteArray, off: Int, len: Int) {
-      Objects.checkFromIndexSize(off, len, b.size)
     ensureOpen()
   }
 
