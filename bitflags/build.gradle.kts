@@ -1,6 +1,7 @@
 plugins {
   kotlin("jvm")
   id("jacoco")
+  id("de.kuschku.coverageconverter")
 }
 
 tasks.withType<Test> {

@@ -36,7 +36,10 @@ test:
     paths:
       - "*/build/test-results/**/TEST-*.xml"
       - "*/build/reports/*.xml"
+      - "*/build/reports/cobertura/*.xml"
     reports:
+      cobertura:
+        - "*/build/reports/cobertura/*.xml"
       junit:
         - "*/build/test-results/**/TEST-*.xml"
         - "*/build/reports/*.xml"
