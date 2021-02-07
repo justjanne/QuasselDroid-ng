@@ -31,7 +31,7 @@ build:
 test:
   stage: "test"
   script:
-    - "./gradlew check -x connectedCheck"
+    - "./gradlew check -x connectedCheck coberturaTestReport"
   artifacts:
     paths:
       - "*/build/test-results/**/TEST-*.xml"
