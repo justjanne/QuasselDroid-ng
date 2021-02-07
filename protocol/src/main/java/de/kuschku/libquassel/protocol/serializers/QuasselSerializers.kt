@@ -42,12 +42,11 @@ object QuasselSerializers {
     PeerPtrSerializer,
   ).associateBy(QuasselSerializer<*>::quasselType)
 
-  @PublishedApi
-  internal fun find(type: QuasselType) = serializers[type]
+  operator fun get(type: QuasselType) = serializers[type]
 
   @Suppress("UNCHECKED_CAST")
-  inline operator fun <reified T> get(type: QuasselType): QuasselSerializer<T> {
-    val serializer = find(type)
+  inline fun <reified T> find(type: QuasselType): QuasselSerializer<T> {
+    val serializer = get(type)
       ?: throw NoSerializerForTypeException.Quassel(type, T::class.java)
     if (serializer.javaType == T::class.java) {
       return serializer as QuasselSerializer<T>

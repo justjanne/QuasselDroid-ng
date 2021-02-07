@@ -72,10 +72,10 @@ sealed class QVariant<T> constructor(
 }
 
 inline fun <reified T> qVariant(data: T, type: QtType): QVariant<T> =
-  QVariant.of(data, QtSerializers[type])
+  QVariant.of(data, QtSerializers.find(type))
 
 inline fun <reified T> qVariant(data: T, type: QuasselType): QVariant<T> =
-  QVariant.of(data, QuasselSerializers[type])
+  QVariant.of(data, QuasselSerializers.find(type))
 
 inline fun <reified T> QVariant_?.into(): T? =
   this?.withType<T>()?.value()

@@ -4,6 +4,7 @@ import de.kuschku.libquassel.protocol.connection.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
+import de.kuschku.libquassel.protocol.serializers.HandshakeSerializers
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitAckSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitRejectSerializer
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitSerializer
@@ -111,10 +112,9 @@ class ExampleUnitTest {
       read {
         val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
         println(data)
-        when (data["MsgType"].into<String>()) {
-          "ClientInitAck" -> println(ClientInitAckSerializer.deserialize(data))
-          "ClientInitReject" -> println(ClientInitRejectSerializer.deserialize(data))
-        }
+        val msgType: String = data["MsgType"].into("")
+        val message: Any? = HandshakeSerializers[msgType]?.deserialize(data)
+        println(message)
       }
     }
   }

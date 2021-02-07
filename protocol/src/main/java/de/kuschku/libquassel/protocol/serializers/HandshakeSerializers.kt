@@ -33,12 +33,11 @@ object HandshakeSerializers {
     ClientInitRejectSerializer,
   ).associateBy(HandshakeSerializer<*>::type)
 
-  @PublishedApi
-  internal fun find(type: String) = serializers[type]
+  operator fun get(type: String) = serializers[type]
 
   @Suppress("UNCHECKED_CAST")
-  inline operator fun <reified T> get(type: String): HandshakeSerializer<T> {
-    val serializer = find(type)
+  inline fun <reified T> find(type: String): HandshakeSerializer<T> {
+    val serializer = get(type)
       ?: throw NoSerializerForTypeException.Handshake(type, T::class.java)
     if (serializer.javaType == T::class.java) {
       return serializer as HandshakeSerializer<T>

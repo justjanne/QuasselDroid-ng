@@ -54,12 +54,11 @@ object QtSerializers {
     QVariantMapSerializer,
   ).associateBy(QtSerializer<*>::qtType)
 
-  @PublishedApi
-  internal fun find(type: QtType) = serializers[type]
+  operator fun get(type: QtType) = serializers[type]
 
   @Suppress("UNCHECKED_CAST")
-  inline operator fun <reified T> get(type: QtType): QtSerializer<T> {
-    val serializer = find(type)
+  inline fun <reified T> find(type: QtType): QtSerializer<T> {
+    val serializer = get(type)
       ?: throw NoSerializerForTypeException.Qt(type, T::class.java)
     if (serializer.javaType == T::class.java) {
       return serializer as QtSerializer<T>

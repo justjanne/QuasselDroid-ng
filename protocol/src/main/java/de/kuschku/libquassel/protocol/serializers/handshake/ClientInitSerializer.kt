@@ -34,6 +34,7 @@ object ClientInitSerializer : HandshakeSerializer<ClientInit> {
   override val javaType: Class<out ClientInit> = ClientInit::class.java
 
   override fun serialize(data: ClientInit) = mapOf(
+    "MsgType" to qVariant(type, QtType.QString),
     "ClientVersion" to qVariant(data.clientVersion, QtType.QString),
     "ClientDate" to qVariant(data.buildDate, QtType.QString),
     "Features" to qVariant(data.clientFeatures.toBits(), QtType.UInt),

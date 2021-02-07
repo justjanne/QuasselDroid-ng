@@ -62,7 +62,7 @@ object QVariantSerializer : QtSerializer<QVariant_> {
 
   @Suppress("UNCHECKED_CAST")
   private fun deserialize(type: QtType, buffer: ByteBuffer, featureSet: FeatureSet): QVariant_ {
-    val serializer = QtSerializers.find(type)
+    val serializer = QtSerializers[type]
       ?: throw NoSerializerForTypeException.Qt(type)
     val value = serializer.deserialize(buffer, featureSet)
     return QVariant.of(value, serializer as QtSerializer<Any?>)
@@ -70,7 +70,7 @@ object QVariantSerializer : QtSerializer<QVariant_> {
 
   @Suppress("UNCHECKED_CAST")
   private fun deserialize(type: QuasselType, buffer: ByteBuffer, featureSet: FeatureSet): QVariant_ {
-    val serializer = QuasselSerializers.find(type)
+    val serializer = QuasselSerializers[type]
       ?: throw NoSerializerForTypeException.Quassel(type)
     val value = serializer.deserialize(buffer, featureSet)
     return QVariant.of(value, serializer as QuasselSerializer<Any?>)
