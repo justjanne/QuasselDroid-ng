@@ -20,7 +20,6 @@ package de.kuschku.libquassel.protocol.testutil
 
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.io.print
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
 import org.hamcrest.Matcher
@@ -33,10 +32,9 @@ fun <T> testHandshakeSerializerEncoded(
   featureSet: FeatureSet = FeatureSet.all(),
   matcher: Matcher<T>? = null
 ) {
-  val buffer = ChainedByteBuffer()
+  val buffer = ChainedByteBuffer(limit = 16384)
   HandshakeMapSerializer.serialize(buffer, serializer.serialize(data), featureSet)
   val result = buffer.toBuffer()
-  result.print()
   val after = serializer.deserialize(HandshakeMapSerializer.deserialize(result, featureSet))
   assertEquals(0, result.remaining())
   if (matcher != null) {

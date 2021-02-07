@@ -20,25 +20,42 @@ package de.kuschku.libquassel.protocol.testutil
 
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
+import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
+import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
+import java.nio.ByteBuffer
 
-fun <T> testQuasselSerializerDirect(
-  serializer: QuasselSerializer<T>,
+fun <T> serialize(
+  serializer: QtSerializer<T>,
   data: T,
-  featureSet: FeatureSet = FeatureSet.all(),
-  matcher: Matcher<T>? = null
-) {
-  val buffer = ChainedByteBuffer(limit = 16384)
+  featureSet: FeatureSet = FeatureSet.all()
+): ByteBuffer {
+  val buffer = ChainedByteBuffer()
   serializer.serialize(buffer, data, featureSet)
-  val result = buffer.toBuffer()
-  val after = serializer.deserialize(result, featureSet)
-  assertEquals(0, result.remaining())
-  if (matcher != null) {
-    assertThat(after, matcher)
-  } else {
-    assertEquals(data, after)
-  }
+  return buffer.toBuffer()
+}
+
+fun <T> testSerialize(
+  serializer: QtSerializer<T>,
+  data: T,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+) {
+  val after = serialize(serializer, data, featureSet)
+  assertThat(after, ByteBufferMatcher(buffer))
+}
+
+fun <T> testSerialize(
+  serializer: HandshakeSerializer<T>,
+  data: T,
+  buffer: ByteBuffer,
+  featureSet: FeatureSet = FeatureSet.all()
+) {
+  val map = serializer.serialize(data)
+  val after = serialize(HandshakeMapSerializer, map, featureSet)
+  assertThat(after, ByteBufferMatcher(buffer))
 }

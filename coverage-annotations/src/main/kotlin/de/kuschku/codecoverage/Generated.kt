@@ -17,14 +17,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.io
+package de.kuschku.codecoverage
 
-import kotlin.concurrent.getOrSet
-
-private val ascii = ThreadLocal<StringEncoder>()
-private val utf8 = ThreadLocal<StringEncoder>()
-private val utf16 = ThreadLocal<StringEncoder>()
-
-fun stringEncoderAscii() = ascii.getOrSet { StringEncoder(Charsets.ISO_8859_1) }
-fun stringEncoderUtf8() = utf8.getOrSet { StringEncoder(Charsets.UTF_8) }
-fun stringEncoderUtf16() = utf16.getOrSet { StringEncoder(Charsets.UTF_16BE) }
+/**
+ * Used to mark inline functions as generated for jacoco
+ */
+@Retention(AnnotationRetention.SOURCE)
+annotation class Generated

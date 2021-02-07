@@ -30,7 +30,7 @@ object ByteBufferSerializer : QtSerializer<ByteBuffer?> {
   override val javaType: Class<out ByteBuffer?> = ByteBuffer::class.java
 
   override fun serialize(buffer: ChainedByteBuffer, data: ByteBuffer?, featureSet: FeatureSet) {
-    IntSerializer.serialize(buffer, data?.remaining() ?: 0, featureSet)
+    IntSerializer.serialize(buffer, data?.remaining() ?: -1, featureSet)
     if (data != null) {
       buffer.put(data)
     }

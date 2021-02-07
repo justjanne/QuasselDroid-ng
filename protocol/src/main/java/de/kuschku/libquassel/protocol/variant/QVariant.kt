@@ -35,7 +35,7 @@ typealias QVariantMap = Map<String, QVariant_>
 typealias QStringList = List<String?>
 
 sealed class QVariant<T> constructor(
-  internal val data: T,
+  private val data: T,
   open val serializer: QtSerializer<T>,
 ) {
   class Typed<T> internal constructor(data: T, serializer: QtSerializer<T>) :
@@ -54,8 +54,6 @@ sealed class QVariant<T> constructor(
   override fun toString() = when (data) {
     is ByteBuffer ->
       "QVariant(${serializer::class.java.simpleName}, ${data.contentToString()})"
-    is Array<*> ->
-      "QVariant(${serializer::class.java.simpleName}, ${Arrays.toString(data)})"
     else ->
       "QVariant(${serializer::class.java.simpleName}, $data)"
   }
@@ -64,6 +62,25 @@ sealed class QVariant<T> constructor(
   inline fun <reified T> withType(): QVariant<T>? =
     if (serializer.javaType == T::class.java && this.value() is T) this as QVariant<T>
     else null
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as QVariant<*>
+
+    if (data != other.data) return false
+    if (serializer != other.serializer) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = data?.hashCode() ?: 0
+    result = 31 * result + serializer.hashCode()
+    return result
+  }
+
 
   companion object {
     fun <T> of(data: T, serializer: QtSerializer<T>) = Typed(data, serializer)

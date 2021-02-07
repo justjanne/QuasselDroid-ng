@@ -22,6 +22,7 @@ import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import org.junit.jupiter.api.Test
+import java.nio.ByteBuffer
 
 class ByteBufferSerializerTest {
   @Test
@@ -39,4 +40,30 @@ class ByteBufferSerializerTest {
     byteBufferOf(0, 0, 0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9),
     ::ByteBufferMatcher
   )
+
+  @Test
+  fun testEmpty() = qtSerializerTest(
+    ByteBufferSerializer,
+    ByteBuffer.allocate(0),
+    byteBufferOf(0, 0, 0, 0),
+    ::ByteBufferMatcher
+  )
+
+  @Test
+  fun testNull() {
+    qtSerializerTest(
+      ByteBufferSerializer,
+      null,
+      byteBufferOf(0, 0, 0, 0),
+      ::ByteBufferMatcher,
+      serializeFeatureSet = null
+    )
+
+    qtSerializerTest(
+      ByteBufferSerializer,
+      null,
+      byteBufferOf(-1, -1, -1, -1),
+      ::ByteBufferMatcher
+    )
+  }
 }

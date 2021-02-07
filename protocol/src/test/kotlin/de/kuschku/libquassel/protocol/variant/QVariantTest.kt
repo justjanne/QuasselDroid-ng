@@ -17,29 +17,30 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.types
+package de.kuschku.libquassel.protocol.variant
 
-import de.kuschku.codecoverage.Generated
-import java.io.Serializable
+import de.kuschku.libquassel.protocol.testutil.byteBufferOf
+import de.kuschku.libquassel.protocol.variant.QtType
+import de.kuschku.libquassel.protocol.variant.qVariant
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
-typealias SignedIdType = Int
-typealias SignedId64Type = Long
-
-interface SignedId<T> : Serializable, Comparable<SignedId<T>>
-  where T : Number, T : Comparable<T> {
-  val id: T
-
-  override fun compareTo(other: SignedId<T>): Int {
-    return id.compareTo(other.id)
+class QVariantTest {
+  @Test
+  fun testString() {
+    assertEquals(
+      "QVariant(ByteBufferSerializer, DEADBEEF)",
+      qVariant(
+        byteBufferOf(0xDEu, 0xADu, 0xBEu, 0xEFu),
+        QtType.QByteArray
+      ).toString()
+    )
+    assertEquals(
+      "QVariant(StringSerializerUtf16, DEADBEEF)",
+      qVariant(
+        "DEADBEEF",
+        QtType.QString
+      ).toString()
+    )
   }
 }
-
-@Suppress("NOTHING_TO_INLINE")
-@JvmName("isValidId")
-@Generated
-inline fun SignedId<SignedIdType>.isValid() = id > 0
-
-@Suppress("NOTHING_TO_INLINE")
-@JvmName("isValidId64")
-@Generated
-inline fun SignedId<SignedId64Type>.isValid() = id > 0

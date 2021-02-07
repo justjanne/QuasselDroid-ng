@@ -37,7 +37,7 @@ object QVariantSerializer : QtSerializer<QVariant_> {
   override fun serialize(buffer: ChainedByteBuffer, data: QVariant_, featureSet: FeatureSet) {
     IntSerializer.serialize(buffer, data.serializer.qtType.id, featureSet)
     BoolSerializer.serialize(buffer, false, featureSet)
-    if (data is QVariant.Custom && data.serializer.qtType == QtType.UserType) {
+    if (data is QVariant.Custom) {
       StringSerializerAscii.serialize(buffer, data.serializer.quasselType.typeName, featureSet)
     }
     data.serialize(buffer, featureSet)

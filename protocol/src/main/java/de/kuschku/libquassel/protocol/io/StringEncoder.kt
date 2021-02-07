@@ -22,83 +22,71 @@ package de.kuschku.libquassel.protocol.io
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
 import java.nio.charset.Charset
-import java.nio.charset.CoderResult
 
 class StringEncoder(charset: Charset) {
   private val encoder = charset.newEncoder()
   private val decoder = charset.newDecoder()
   private val charBuffer = CharBuffer.allocate(1024)
 
-  private fun charBuffer(length: Int): CharBuffer =
-    if (length < 1024) charBuffer.clear()
-    else CharBuffer.allocate(length)
+  private fun charBuffer(length: Int): CharBuffer {
+    if (length < 1024) {
+      return charBuffer.clear()
+    } else {
+      return CharBuffer.allocate(length)
+    }
+  }
 
-  fun encode(data: String?, target: ChainedByteBuffer) {
-    if (data == null) return
-
-    val charBuffer = charBuffer(data.length)
-    charBuffer.put(data)
-    charBuffer.flip()
+  private fun encodeInternal(data: CharBuffer): ByteBuffer {
     encoder.reset()
-    var result: CoderResult
-    do {
-      result = target.withBuffer(charBuffer.remaining()) {
-        encoder.encode(charBuffer, it, true)
-      }
-    } while (result == CoderResult.OVERFLOW)
+    return encoder.encode(data)
   }
 
   fun encode(data: String?): ByteBuffer {
-    if (data == null) {
+    if (data == null || !encoder.canEncode(data)) {
       return ByteBuffer.allocateDirect(0)
     }
 
     val charBuffer = charBuffer(data.length)
     charBuffer.put(data)
     charBuffer.flip()
-    encoder.reset()
-    return encoder.encode(charBuffer)
+    return encodeInternal(charBuffer)
   }
 
-  fun encodeChar(data: Char?, target: ChainedByteBuffer) {
-    if (data == null) {
-      target.putShort(0)
-    } else {
-      target.putChar(data)
+  fun encodeChar(data: Char?): ByteBuffer {
+    if (!encoder.canEncode(data ?: '\u0000')) {
+      return ByteBuffer.allocateDirect(2)
     }
+
+    val charBuffer = charBuffer(2)
+    charBuffer.put(data ?: '\u0000')
+    charBuffer.flip()
+    return encodeInternal(charBuffer)
   }
 
-  fun decode(source: ByteBuffer, length: Int): String {
+  private fun decodeInternal(source: ByteBuffer, length: Int): CharBuffer {
     val charBuffer = charBuffer(length)
     val oldlimit = source.limit()
     source.limit(source.position() + length)
     decoder.reset()
     decoder.decode(source, charBuffer, true).also {
       if (it.isError) {
+        charBuffer.put('\uFFFD')
         source.position(source.position() + it.length())
       }
     }
     source.limit(oldlimit)
-    charBuffer.flip()
-    return charBuffer.toString()
+    return charBuffer.flip()
+  }
+
+  fun decode(source: ByteBuffer, length: Int): String {
+    return decodeInternal(source, length).toString()
   }
 
   fun decode(source: ByteBuffer): String {
-    println("Called to decode ${source.contentToString()}")
-    val charBuffer = charBuffer(source.remaining())
-    decoder.reset()
-    decoder.decode(source, charBuffer, true).also {
-      if (it.isError) {
-        println("Encountered error: $it")
-        source.position(source.position() + it.length())
-      }
-    }
-    charBuffer.flip()
-    println("Result: $charBuffer")
-    return charBuffer.toString()
+    return decodeInternal(source, source.remaining()).toString()
   }
 
   fun decodeChar(source: ByteBuffer): Char {
-    return source.getChar()
+    return decodeInternal(source, 2).get()
   }
 }

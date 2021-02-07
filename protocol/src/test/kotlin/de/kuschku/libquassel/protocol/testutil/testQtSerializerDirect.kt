@@ -20,7 +20,7 @@ package de.kuschku.libquassel.protocol.testutil
 
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
-import de.kuschku.libquassel.protocol.io.print
+import de.kuschku.libquassel.protocol.io.contentToString
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
@@ -32,10 +32,10 @@ fun <T> testQtSerializerDirect(
   featureSet: FeatureSet = FeatureSet.all(),
   matcher: Matcher<T>? = null
 ) {
-  val buffer = ChainedByteBuffer()
+  val buffer = ChainedByteBuffer(limit = 16384)
   serializer.serialize(buffer, data, featureSet)
   val result = buffer.toBuffer()
-  result.print()
+  println(result.contentToString())
   val after = serializer.deserialize(result, featureSet)
   assertEquals(0, result.remaining())
   if (matcher != null) {

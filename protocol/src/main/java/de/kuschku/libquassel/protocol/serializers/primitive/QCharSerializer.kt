@@ -34,7 +34,7 @@ object QCharSerializer : QtSerializer<Char> {
   private fun encoder() = encoderLocal.getOrSet { StringEncoder(Charsets.UTF_16BE) }
 
   override fun serialize(buffer: ChainedByteBuffer, data: Char, featureSet: FeatureSet) {
-    encoder().encodeChar(data, buffer)
+    buffer.put(encoder().encodeChar(data))
   }
 
   override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): Char {

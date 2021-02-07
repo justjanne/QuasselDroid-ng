@@ -23,7 +23,7 @@ import org.hamcrest.Description
 
 class BomMatcherChar(private val expected: Char) : BaseMatcher<Char>() {
   private val malformed = charArrayOf(
-    '￾', '﻿'
+    '\uFFFE', '\uFEFF', '\uFFFD', '﻿'
   )
 
   override fun describeTo(description: Description?) {

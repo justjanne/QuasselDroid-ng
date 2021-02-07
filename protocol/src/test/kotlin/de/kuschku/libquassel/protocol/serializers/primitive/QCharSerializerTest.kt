@@ -44,7 +44,7 @@ class QCharSerializerTest {
   fun testBOM1() = qtSerializerTest(
     QCharSerializer,
     '\uFFFE',
-    byteBufferOf(-2, -1),
+    byteBufferOf(-1, -2),
     ::BomMatcherChar,
   )
 
@@ -52,7 +52,7 @@ class QCharSerializerTest {
   fun testBOM2() = qtSerializerTest(
     QCharSerializer,
     '\uFEFF',
-    byteBufferOf(-1, -2),
+    byteBufferOf(-2, -1),
     ::BomMatcherChar,
   )
 

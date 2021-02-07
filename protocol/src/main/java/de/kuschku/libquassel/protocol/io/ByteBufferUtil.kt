@@ -21,49 +21,42 @@ package de.kuschku.libquassel.protocol.io
 
 import java.nio.ByteBuffer
 
-fun copyData(from: ByteBuffer, to: ByteBuffer, amount: Int = -1) {
-  val actualAmount =
-    if (amount >= 0) minOf(from.remaining(), to.remaining(), amount)
-    else minOf(from.remaining(), to.remaining())
-  for (i in 0 until actualAmount) {
-    to.put(from.get())
-  }/*
-  if (actualAmount > 0) {
-    val fromLimit = from.limit()
-    val toLimit = to.limit()
-    from.limit(from.position() + actualAmount)
-    to.limit(to.position() + actualAmount)
-    to.put(from)
-    from.limit(fromLimit)
-    to.limit(toLimit)
-  }
-  */
+fun copyData(from: ByteBuffer, to: ByteBuffer, desiredAmount: Int = -1) {
+  val limit = from.limit()
+  val availableAmount = minOf(from.remaining(), to.remaining())
+  val amount =
+    if (desiredAmount < 0) availableAmount
+    else minOf(availableAmount, desiredAmount)
+  from.limit(from.position() + amount)
+  to.put(from)
+  from.limit(limit)
 }
 
-val alphabet = charArrayOf(
+fun copyData(from: ByteBuffer, desiredAmount: Int): ByteBuffer {
+  val to = ByteBuffer.allocate(minOf(from.remaining(), desiredAmount))
+  copyData(from, to, desiredAmount)
+  return to.flip()
+}
+
+fun ByteBuffer?.isEmpty() = this == null || !this.hasRemaining()
+
+private val alphabet = charArrayOf(
   '0', '1', '2', '3', '4', '5', '6', '7',
   '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
 )
 
 fun ByteBuffer.contentToString(): String {
-  mark()
+  val position = position()
+  val limit = limit()
   var result = ""
-  while (remaining() > 0) {
+  while (hasRemaining()) {
     val byte = get()
     val upperNibble = byte.toInt() shr 4
     val lowerNibble = byte.toInt() % 16
     result += alphabet[(upperNibble + 16) % 16]
     result += alphabet[(lowerNibble + 16) % 16]
   }
-  reset()
+  limit(limit)
+  position(position)
   return result
-}
-
-fun ByteBuffer.print() = println(contentToString())
-
-fun copyData(from: ByteBuffer, amount: Int) = ByteBuffer.allocateDirect(amount).also {
-  if (amount > 0) {
-    copyData(from, it, amount)
-    it.clear()
-  }
 }

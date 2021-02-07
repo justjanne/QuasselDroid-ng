@@ -23,5 +23,6 @@ rootProject.buildFileName = "build.gradle.kts"
 include(
   ":app",
   ":bitflags",
-  ":protocol"
+  ":protocol",
+  ":coverage-annotations"
 )

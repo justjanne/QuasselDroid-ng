@@ -9,7 +9,7 @@ tasks.withType<Test> {
 }
 
 jacoco {
-  toolVersion = "0.8.6"
+  toolVersion = "0.8.3"
 }
 
 tasks.getByName<JacocoReport>("jacocoTestReport") {
@@ -26,6 +26,7 @@ dependencies {
   implementation(kotlin("stdlib"))
   implementation("org.threeten", "threetenbp", "1.4.0")
   api(project(":bitflags"))
+  api(project(":coverage-annotations"))
 
   val junit5Version: String by project.extra
   testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)

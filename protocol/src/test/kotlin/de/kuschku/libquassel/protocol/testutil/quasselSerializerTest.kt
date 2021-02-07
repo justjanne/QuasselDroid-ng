@@ -29,17 +29,23 @@ fun <T> quasselSerializerTest(
   encoded: ByteBuffer? = null,
   matcher: ((T) -> Matcher<T>)? = null,
   featureSets: List<FeatureSet> = listOf(FeatureSet.none(), FeatureSet.all()),
-  deserializeFeatureSet: FeatureSet = FeatureSet.all(),
+  deserializeFeatureSet: FeatureSet? = FeatureSet.all(),
+  serializeFeatureSet: FeatureSet? = FeatureSet.all(),
 ) {
+  if (encoded != null) {
+    if (deserializeFeatureSet != null) {
+      if (matcher != null) {
+        testDeserialize(serializer, matcher(value), encoded.rewind(), deserializeFeatureSet)
+      } else {
+        testDeserialize(serializer, value, encoded.rewind(), deserializeFeatureSet)
+      }
+    }
+    if (serializeFeatureSet != null) {
+      testSerialize(serializer, value, encoded.rewind(), serializeFeatureSet)
+    }
+  }
   for (featureSet in featureSets) {
     testQuasselSerializerDirect(serializer, value, featureSet, matcher?.invoke(value))
     testQuasselSerializerVariant(serializer, value, featureSet, matcher?.invoke(value))
-  }
-  if (encoded != null) {
-    if (matcher != null) {
-      testDeserialize(serializer, matcher(value), encoded.rewind(), deserializeFeatureSet)
-    } else {
-      testDeserialize(serializer, value, encoded.rewind(), deserializeFeatureSet)
-    }
   }
 }

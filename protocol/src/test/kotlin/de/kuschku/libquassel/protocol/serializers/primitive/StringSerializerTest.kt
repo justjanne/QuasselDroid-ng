@@ -24,6 +24,7 @@ import de.kuschku.libquassel.protocol.testutil.matchers.BomMatcherString
 import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
 import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
 import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -35,6 +36,17 @@ class StringSerializerTest {
       if (!it.startsWith('#')) {
         testQtSerializerDirect(StringSerializerUtf8, it, matcher = BomMatcherString(it))
         testQtSerializerDirect(StringSerializerUtf16, it, matcher = BomMatcherString(it))
+        testQtSerializerVariant(StringSerializerUtf16, it, matcher = BomMatcherString(it))
+
+        val bufferUtf8 = StringSerializerUtf8.serializeRaw(it)
+        testQtSerializerDirect(ByteBufferSerializer, bufferUtf8, matcher = ByteBufferMatcher(bufferUtf8))
+        testQtSerializerVariant(ByteBufferSerializer, bufferUtf8, matcher = ByteBufferMatcher(bufferUtf8))
+        assertEquals(it, StringSerializerUtf8.deserializeRaw(bufferUtf8.rewind()))
+
+        val bufferUtf16 = StringSerializerUtf16.serializeRaw(it)
+        testQtSerializerDirect(ByteBufferSerializer, bufferUtf16, matcher = ByteBufferMatcher(bufferUtf16))
+        testQtSerializerVariant(ByteBufferSerializer, bufferUtf16, matcher = ByteBufferMatcher(bufferUtf16))
+        assertThat(StringSerializerUtf16.deserializeRaw(bufferUtf16.rewind()), BomMatcherString(it))
       }
     }
   }
@@ -47,26 +59,38 @@ class StringSerializerTest {
       DAS KOMPUTERMASCHINE IST NICHT FÜR DER GEFINGERPOKEN UND MITTENGRABEN! ODERWISE IST EASY TO SCHNAPPEN DER SPRINGENWERK, BLOWENFUSEN UND POPPENCORKEN MIT SPITZENSPARKEN.
       IST NICHT FÜR GEWERKEN BEI DUMMKOPFEN. DER RUBBERNECKEN SIGHTSEEREN KEEPEN DAS COTTONPICKEN HÄNDER IN DAS POCKETS MUSS.
       ZO RELAXEN UND WATSCHEN DER BLINKENLICHTEN.
+      : ACHTUNG!
+      ALLES TURISTEN UND NONTEKNISCHEN LOOKENPEEPERS!
+      DAS KOMPUTERMASCHINE IST NICHT FÜR DER GEFINGERPOKEN UND MITTENGRABEN! ODERWISE IST EASY TO SCHNAPPEN DER SPRINGENWERK, BLOWENFUSEN UND POPPENCORKEN MIT SPITZENSPARKEN.
+      IST NICHT FÜR GEWERKEN BEI DUMMKOPFEN. DER RUBBERNECKEN SIGHTSEEREN KEEPEN DAS COTTONPICKEN HÄNDER IN DAS POCKETS MUSS.
+      ZO RELAXEN UND WATSCHEN DER BLINKENLICHTEN.
     """.trimIndent()
 
-    testQtSerializerDirect(StringSerializerAscii, data)
+    testQtSerializerDirect(StringSerializerAscii, data, matcher = BomMatcherString(data))
 
     val bufferAscii = StringSerializerAscii.serializeRaw(data)
     testQtSerializerDirect(ByteBufferSerializer, bufferAscii, matcher = ByteBufferMatcher(bufferAscii))
     testQtSerializerVariant(ByteBufferSerializer, bufferAscii, matcher = ByteBufferMatcher(bufferAscii))
+    assertEquals(data, StringSerializerAscii.deserializeRaw(bufferAscii.rewind()))
 
-    testQtSerializerDirect(StringSerializerUtf8, data)
+    testUtf(data)
+  }
 
-    val bufferUtf8 = StringSerializerUtf8.serializeRaw(data)
-    testQtSerializerDirect(ByteBufferSerializer, bufferUtf8, matcher = ByteBufferMatcher(bufferUtf8))
-    testQtSerializerVariant(ByteBufferSerializer, bufferUtf8, matcher = ByteBufferMatcher(bufferUtf8))
-
+  @Test
+  fun testRoundtripEnglishUtf16() {
+    val data = """
+      : ACHTUNG!
+      ALLES TURISTEN UND NONTEKNISCHEN LOOKENPEEPERS!
+      DAS KOMPUTERMASCHINE IST NICHT FÜR DER GEFINGERPOKEN UND MITTENGRABEN! ODERWISE IST EASY TO SCHNAPPEN DER SPRINGENWERK, BLOWENFUSEN UND POPPENCORKEN MIT SPITZENSPARKEN.
+      IST NICHT FÜR GEWERKEN BEI DUMMKOPFEN. DER RUBBERNECKEN SIGHTSEEREN KEEPEN DAS COTTONPICKEN HÄNDER IN DAS POCKETS MUSS.
+      ZO RELAXEN UND WATSCHEN DER BLINKENLICHTEN.
+      : ACHTUNG!
+      ALLES TURISTEN UND NONTEKNISCHEN LOOKENPEEPERS!
+      DAS KOMPUTERMASCHINE IST NICHT FÜR DER GEFINGERPOKEN UND MITTENGRABEN! ODERWISE IST EASY TO SCHNAPPEN DER SPRINGENWERK, BLOWENFUSEN UND POPPENCORKEN MIT SPITZENSPARKEN.
+      IST NICHT FÜR GEWERKEN BEI DUMMKOPFEN. DER RUBBERNECKEN SIGHTSEEREN KEEPEN DAS COTTONPICKEN HÄNDER IN DAS POCKETS MUSS.
+      ZO RELAXEN UND WATSCHEN DER BLINKENLICHTEN.
+    """.trimIndent()
     testQtSerializerDirect(StringSerializerUtf16, data)
-    testQtSerializerVariant(StringSerializerUtf16, data)
-
-    val bufferUtf16 = StringSerializerUtf16.serializeRaw(data)
-    testQtSerializerDirect(ByteBufferSerializer, bufferUtf16, matcher = ByteBufferMatcher(bufferUtf16))
-    testQtSerializerVariant(ByteBufferSerializer, bufferUtf16, matcher = ByteBufferMatcher(bufferUtf16))
   }
 
   @Test
@@ -96,5 +120,22 @@ class StringSerializerTest {
     testQtSerializerDirect(ByteBufferSerializer, bufferAscii, matcher = ByteBufferMatcher(bufferAscii))
     testQtSerializerVariant(ByteBufferSerializer, bufferAscii, matcher = ByteBufferMatcher(bufferAscii))
     assertEquals(data, StringSerializerAscii.deserializeRaw(bufferAscii.rewind()))
+  }
+
+  private fun testUtf(data: String) {
+    testQtSerializerDirect(StringSerializerUtf8, data, matcher = BomMatcherString(data))
+
+    val bufferUtf8 = StringSerializerUtf8.serializeRaw(data)
+    testQtSerializerDirect(ByteBufferSerializer, bufferUtf8, matcher = ByteBufferMatcher(bufferUtf8))
+    testQtSerializerVariant(ByteBufferSerializer, bufferUtf8, matcher = ByteBufferMatcher(bufferUtf8))
+    assertEquals(data, StringSerializerUtf8.deserializeRaw(bufferUtf8.rewind()))
+
+    //testQtSerializerDirect(StringSerializerUtf16, data, matcher = BomMatcherString(data))
+    //testQtSerializerVariant(StringSerializerUtf16, data, matcher = BomMatcherString(data))
+
+    //val bufferUtf16 = StringSerializerUtf16.serializeRaw(data)
+    //testQtSerializerDirect(ByteBufferSerializer, bufferUtf16, matcher = ByteBufferMatcher(bufferUtf16))
+    //testQtSerializerVariant(ByteBufferSerializer, bufferUtf16, matcher = ByteBufferMatcher(bufferUtf16))
+    //assertEquals(data, StringSerializerUtf16.deserializeRaw(bufferUtf16.rewind()))
   }
 }

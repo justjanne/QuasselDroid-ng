@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid
 import de.kuschku.libquassel.protocol.connection.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.io.contentToString
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
 import de.kuschku.libquassel.protocol.serializers.HandshakeSerializers
 import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitAckSerializer
@@ -68,6 +69,7 @@ class ExampleUnitTest {
           channel.write(sizeBuffer)
           sizeBuffer.clear()
         }
+        println(sendBuffer.toBuffer().contentToString())
         channel.write(sendBuffer)
         channel.flush()
         sendBuffer.clear()

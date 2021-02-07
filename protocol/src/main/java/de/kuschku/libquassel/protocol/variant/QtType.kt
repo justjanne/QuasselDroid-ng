@@ -14,34 +14,32 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * with this program. If not, see <http:
  */
 
 package de.kuschku.libquassel.protocol.variant
 
-import java.util.*
-
 enum class QtType(val id: kotlin.Int) {
-  Void(0),//, VoidSerializer),
-  Bool(1),//, BoolSerializer),
-  Int(2),//, IntSerializer),
-  UInt(3),//, UIntSerializer),
+  Void(0),
+  Bool(1),
+  Int(2),
+  UInt(3),
   LongLong(4),
   ULongLong(5),
 
   Double(6),
-  QChar(7),//, CharSerializer),
-  QVariantMap(8),//, VariantMapSerializer),
-  QVariantList(9),//, VariantListSerializer),
+  QChar(7),
+  QVariantMap(8),
+  QVariantList(9),
 
-  QString(10),//, StringSerializer.UTF16),
-  QStringList(11),//, StringListSerializer),
-  QByteArray(12),//, ByteArraySerializer),
+  QString(10),
+  QStringList(11),
+  QByteArray(12),
 
   QBitArray(13),
   QDate(14),
-  QTime(15),//, TimeSerializer),
-  QDateTime(16),//, DateTimeSerializer),
+  QTime(15),
+  QDateTime(16),
   QUrl(17),
 
   QLocale(18),
@@ -91,25 +89,21 @@ enum class QtType(val id: kotlin.Int) {
   QQuaternion(86),
 
   VoidStar(128),
-  Long(129),//, LongSerializer),
-  Short(130),//, ShortSerializer),
-  Char(131),//, ByteSerializer),
-  ULong(132),//, ULongSerializer),
+  Long(129),
+  Short(130),
+  Char(131),
+  ULong(132),
 
-  UShort(133),//, UShortSerializer),
-  UChar(134),//, UByteSerializer),
+  UShort(133),
+  UChar(134),
   Float(135),
   QObjectStar(136),
   QWidgetStar(137),
 
-  QVariant(138),//, VariantSerializer),
+  QVariant(138),
 
   User(256),
   UserType(127);
-
-  val serializableName =
-    if (name.startsWith("Q")) name
-    else name.toLowerCase(Locale.ENGLISH)
 
   companion object {
     private val values = values().associateBy(QtType::id)

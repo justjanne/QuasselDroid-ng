@@ -16,41 +16,47 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package de.kuschku.libquassel.protocol.testutil.matchers
 
-import de.kuschku.libquassel.protocol.io.contentToString
-import de.kuschku.libquassel.protocol.io.isEmpty
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
-import java.nio.ByteBuffer
-import kotlin.math.exp
 
-class ByteBufferMatcher(buffer: ByteBuffer?) : BaseMatcher<ByteBuffer>() {
-  private val expected = buffer?.let { original ->
-    val copy = ByteBuffer.allocateDirect(original.limit())
-    original.rewind()
-    copy.put(original)
-    copy.rewind()
-    original.rewind()
-    copy
-  }
-
+class MapMatcher<K, V>(
+  private val expected: Map<K, V>
+) : BaseMatcher<Map<K, V>>() {
   override fun describeTo(description: Description?) {
-    description?.appendText(expected?.contentToString())
+    description?.appendText(expected.toString())
   }
 
   override fun describeMismatch(item: Any?, description: Description?) {
-    description?.appendText("was ")
-    description?.appendText((item as? ByteBuffer)?.rewind()?.contentToString())
+    if (item is Map<*, *>) {
+      for (key in expected.keys) {
+        if (!item.containsKey(key)) {
+          description?.appendText(" did not have key $key")
+        }
+        if (expected[key] != item[key]) {
+          description?.appendText(" key $key was: ${item[key]} instead of ${expected[key]}")
+        }
+      }
+    } else {
+      description?.appendText("was: $item")
+    }
   }
 
   override fun matches(item: Any?): Boolean {
-    val actual = item as? ByteBuffer
-
-    if (actual.isEmpty() && expected.isEmpty()) {
+    if (item is Map<*, *>) {
+      for (key in expected.keys) {
+        if (!item.containsKey(key)) {
+          return false
+        }
+        if (expected[key] != item[key]) {
+          return false
+        }
+      }
       return true
+    } else {
+      return false
     }
-
-    return actual?.rewind()?.contentToString() == expected?.rewind()?.contentToString()
   }
 }
