@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/android-sdk:30-30.0.3"
+image: "k8r.eu/justjanne/quasseldroid-build-env:30-30.0.3"
 
 cache:
   key: "$CI_PROJECT_NAME"
