@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid
 
-import de.kuschku.libquassel.protocol.connection.ProtocolInfoSerializer
+import de.kuschku.bitflags.of
+import de.kuschku.libquassel.protocol.connection.*
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.io.contentToString
@@ -84,9 +85,22 @@ class ExampleUnitTest {
 
       println("Writing protocol")
       write(sizePrefix = false) {
-        UIntSerializer.serialize(it, 0x42b3_3f00u or 0x03u, connectionFeatureSet)
-        IntSerializer.serialize(it, 2, connectionFeatureSet)
-        UIntSerializer.serialize(it, 0x8000_0000u, connectionFeatureSet)
+        ConnectionHeaderSerializer.serialize(
+          it,
+          ConnectionHeader(
+            features = ProtocolFeature.of(
+              ProtocolFeature.Compression,
+              ProtocolFeature.TLS
+            ),
+            versions = listOf(
+              ProtocolMeta(
+                0x0000u,
+                ProtocolVersion.Datastream,
+              ),
+            )
+          ),
+          connectionFeatureSet
+        )
       }
 
       println("Reading protocol")

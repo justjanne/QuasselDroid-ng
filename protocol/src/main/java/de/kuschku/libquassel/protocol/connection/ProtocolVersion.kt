@@ -19,7 +19,15 @@
 
 package de.kuschku.libquassel.protocol.connection
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
-)
+enum class ProtocolVersion(
+  val value: UByte,
+) {
+  Legacy(0x01u),
+  Datastream(0x02u);
+
+  companion object {
+    private val values = values().associateBy(ProtocolVersion::value)
+    fun of(value: UByte): ProtocolVersion = values[value]
+      ?: throw IllegalArgumentException("Protocol not supported: $value")
+  }
+}

@@ -19,7 +19,7 @@
 
 package de.kuschku.libquassel.protocol.connection
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
+data class ConnectionHeader(
+  val features: ProtocolFeatures,
+  val versions: List<ProtocolMeta>
 )

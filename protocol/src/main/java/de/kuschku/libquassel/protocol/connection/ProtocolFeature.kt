@@ -19,7 +19,21 @@
 
 package de.kuschku.libquassel.protocol.connection
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
-)
+import de.kuschku.bitflags.Flag
+import de.kuschku.bitflags.Flags
+import de.kuschku.bitflags.toEnumSet
+
+enum class ProtocolFeature(
+  override val value: UByte,
+) : Flag<UByte> {
+  None(0x00u),
+  TLS(0x01u),
+  Compression(0x02u);
+
+  companion object : Flags<UByte, ProtocolFeature> {
+    private val values = values().associateBy(ProtocolFeature::value)
+    override val all: ProtocolFeatures = values.values.toEnumSet()
+  }
+}
+
+typealias ProtocolFeatures = Set<ProtocolFeature>

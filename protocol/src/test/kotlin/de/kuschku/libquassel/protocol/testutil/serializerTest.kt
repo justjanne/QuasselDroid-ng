@@ -16,25 +16,31 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package de.kuschku.libquassel.protocol.testutil
 
-package de.kuschku.libquassel.protocol.connection
-
-import de.kuschku.bitflags.of
-import de.kuschku.bitflags.toBits
 import de.kuschku.libquassel.protocol.features.FeatureSet
-import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.serializers.primitive.Serializer
-import de.kuschku.libquassel.protocol.serializers.primitive.UByteSerializer
+import org.hamcrest.Matcher
 import java.nio.ByteBuffer
 
-object ProtocolInfoSerializer : Serializer<ProtocolInfo> {
-  override fun serialize(buffer: ChainedByteBuffer, data: ProtocolInfo, featureSet: FeatureSet) {
-    UByteSerializer.serialize(buffer, data.flags.toBits(), featureSet)
-    ProtocolMetaSerializer.serialize(buffer, data.meta, featureSet)
+fun <T : Any?> serializerTest(
+  serializer: Serializer<T>,
+  value: T,
+  encoded: ByteBuffer? = null,
+  matcher: ((T) -> Matcher<T>)? = null,
+  deserializeFeatureSet: FeatureSet? = FeatureSet.all(),
+  serializeFeatureSet: FeatureSet? = FeatureSet.all(),
+) {
+  if (encoded != null) {
+    if (deserializeFeatureSet != null) {
+      if (matcher != null) {
+        testDeserialize(serializer, matcher(value), encoded.rewind(), deserializeFeatureSet)
+      } else {
+        testDeserialize(serializer, value, encoded.rewind(), deserializeFeatureSet)
+      }
+    }
+    if (serializeFeatureSet != null) {
+      testSerialize(serializer, value, encoded.rewind(), serializeFeatureSet)
+    }
   }
-
-  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet) = ProtocolInfo(
-    ProtocolFeature.of(UByteSerializer.deserialize(buffer, featureSet)),
-    ProtocolMetaSerializer.deserialize(buffer, featureSet)
-  )
 }

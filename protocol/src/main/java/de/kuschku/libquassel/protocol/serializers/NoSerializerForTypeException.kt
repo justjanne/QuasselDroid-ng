@@ -31,6 +31,12 @@ sealed class NoSerializerForTypeException : Exception() {
       type: QtType,
       javaType: Class<*>? = null
     ) : this(type.id, javaType)
+
+    override fun toString(): String {
+      return "NoSerializerForTypeException.Qt(type=$type, javaType=$javaType)"
+    }
+
+
   }
 
   data class Quassel(
@@ -48,10 +54,18 @@ sealed class NoSerializerForTypeException : Exception() {
       type: QuasselType,
       javaType: Class<*>? = null
     ) : this(type.qtType, type.typeName, javaType)
+
+    override fun toString(): String {
+      return "NoSerializerForTypeException.Quassel(type=$type, typename=$typename, javaType=$javaType)"
+    }
   }
 
   data class Handshake(
     private val type: String,
     private val javaType: Class<*>? = null
-  ) : NoSerializerForTypeException()
+  ) : NoSerializerForTypeException() {
+    override fun toString(): String {
+      return "NoSerializerForTypeException.Handshake(type='$type', javaType=$javaType)"
+    }
+  }
 }

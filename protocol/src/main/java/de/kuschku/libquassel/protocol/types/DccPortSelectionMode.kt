@@ -17,9 +17,21 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.connection
+package de.kuschku.libquassel.protocol.types
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
-)
+/**
+ * Mode for selecting the port range for DCC
+ */
+enum class DccPortSelectionMode(
+  val value: UByte,
+) {
+  /** Automatic port selection */
+  Automatic(0x00u),
+  /** Manually specified port range */
+  Manual(0x01u);
+
+  companion object {
+    private val values = values().associateBy(DccPortSelectionMode::value)
+    fun of(value: UByte): DccPortSelectionMode? = values[value]
+  }
+}

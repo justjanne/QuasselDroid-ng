@@ -19,14 +19,9 @@
 
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.features.FeatureSet
-import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.variant.QtType
-import java.nio.ByteBuffer
 
-interface QtSerializer<T> {
+interface QtSerializer<T> : Serializer<T> {
   val qtType: QtType
   val javaType: Class<out T>
-  fun serialize(buffer: ChainedByteBuffer, data: T, featureSet: FeatureSet)
-  fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): T
 }

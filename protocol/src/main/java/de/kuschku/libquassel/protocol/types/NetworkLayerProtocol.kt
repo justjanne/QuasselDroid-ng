@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2021 Janne Mareike Koschinski
- * Copyright (c) 2021 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -17,9 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.connection
+package de.kuschku.libquassel.protocol.types
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
-)
+enum class NetworkLayerProtocol(
+  val value: UByte,
+) {
+  IPv4Protocol(0x00u),
+  IPv6Protocol(0x01u),
+  AnyIPProtocol(0x02u),
+  UnknownNetworkLayerProtocol(0xFFu);
+
+  companion object {
+    private val values = values().associateBy(NetworkLayerProtocol::value)
+    fun of(value: UByte): NetworkLayerProtocol? = values[value]
+  }
+}

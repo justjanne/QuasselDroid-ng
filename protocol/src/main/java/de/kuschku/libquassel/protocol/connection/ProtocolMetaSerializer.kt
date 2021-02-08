@@ -19,22 +19,21 @@
 
 package de.kuschku.libquassel.protocol.connection
 
-import de.kuschku.bitflags.of
-import de.kuschku.bitflags.toBits
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.serializers.primitive.Serializer
 import de.kuschku.libquassel.protocol.serializers.primitive.UByteSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.UShortSerializer
 import java.nio.ByteBuffer
 
-object ProtocolInfoSerializer : Serializer<ProtocolInfo> {
-  override fun serialize(buffer: ChainedByteBuffer, data: ProtocolInfo, featureSet: FeatureSet) {
-    UByteSerializer.serialize(buffer, data.flags.toBits(), featureSet)
-    ProtocolMetaSerializer.serialize(buffer, data.meta, featureSet)
+object ProtocolMetaSerializer : Serializer<ProtocolMeta> {
+  override fun serialize(buffer: ChainedByteBuffer, data: ProtocolMeta, featureSet: FeatureSet) {
+    UShortSerializer.serialize(buffer, data.data, featureSet)
+    UByteSerializer.serialize(buffer, data.version.value, featureSet)
   }
 
-  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet) = ProtocolInfo(
-    ProtocolFeature.of(UByteSerializer.deserialize(buffer, featureSet)),
-    ProtocolMetaSerializer.deserialize(buffer, featureSet)
+  override fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet) = ProtocolMeta(
+    UShortSerializer.deserialize(buffer, featureSet),
+    ProtocolVersion.of(UByteSerializer.deserialize(buffer, featureSet))
   )
 }

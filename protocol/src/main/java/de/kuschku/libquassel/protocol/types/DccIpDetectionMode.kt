@@ -17,9 +17,21 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.connection
+package de.kuschku.libquassel.protocol.types
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
-)
+/**
+ * Mode for detecting the outgoing IP
+ */
+enum class DccIpDetectionMode(
+  val value: UByte,
+) {
+  /** Automatic detection (network socket or USERHOST) */
+  Automatic(0x00u),
+  /** Manually specified IP */
+  Manual(0x01u);
+
+  companion object {
+    private val values = values().associateBy(DccIpDetectionMode::value)
+    fun of(value: UByte): DccIpDetectionMode? = values[value]
+  }
+}

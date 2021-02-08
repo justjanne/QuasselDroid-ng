@@ -17,9 +17,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol.connection
+package de.kuschku.libquassel.protocol.serializers.primitive
 
-data class ProtocolInfo(
-  val flags: ProtocolFeatures,
-  val meta: ProtocolMeta,
-)
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
+import java.nio.ByteBuffer
+
+interface Serializer<T> {
+  fun serialize(buffer: ChainedByteBuffer, data: T, featureSet: FeatureSet)
+  fun deserialize(buffer: ByteBuffer, featureSet: FeatureSet): T
+}

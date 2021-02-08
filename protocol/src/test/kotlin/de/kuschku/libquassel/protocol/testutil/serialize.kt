@@ -23,6 +23,7 @@ import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
 import de.kuschku.libquassel.protocol.serializers.handshake.HandshakeSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
+import de.kuschku.libquassel.protocol.serializers.primitive.Serializer
 import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import java.nio.ByteBuffer
 
 fun <T> serialize(
-  serializer: QtSerializer<T>,
+  serializer: Serializer<T>,
   data: T,
   featureSet: FeatureSet = FeatureSet.all()
 ): ByteBuffer {
@@ -40,7 +41,7 @@ fun <T> serialize(
 }
 
 fun <T> testSerialize(
-  serializer: QtSerializer<T>,
+  serializer: Serializer<T>,
   data: T,
   buffer: ByteBuffer,
   featureSet: FeatureSet = FeatureSet.all()

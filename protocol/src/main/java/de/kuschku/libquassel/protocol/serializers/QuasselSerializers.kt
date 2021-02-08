@@ -27,8 +27,8 @@ object QuasselSerializers {
   private val serializers = listOf<QuasselSerializer<*>>(
     BufferIdSerializer,
     BufferInfoSerializer,
-    //DccConfigIpDetectionModeSerializer,
-    //DccConfigPortSelectionModeSerializer,
+    DccIpDetectionModeSerializer,
+    DccPortSelectionModeSerializer,
     //IrcUserSerializer,
     //IrcChannelSerializer,
     //IdentitySerializer,
@@ -38,7 +38,7 @@ object QuasselSerializers {
     NetworkIdSerializer,
     //NetworkInfoSerializer,
     //NetworkServerSerializer,
-    //QHostAddressSerializer,
+    QHostAddressSerializer,
     PeerPtrSerializer,
   ).associateBy(QuasselSerializer<*>::quasselType)
 
