@@ -18,17 +18,27 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.deserialize
 import de.kuschku.libquassel.protocol.testutil.matchers.BomMatcherString
 import de.kuschku.libquassel.protocol.testutil.matchers.ByteBufferMatcher
 import de.kuschku.libquassel.protocol.testutil.testQtSerializerDirect
 import de.kuschku.libquassel.protocol.testutil.testQtSerializerVariant
+import de.kuschku.libquassel.protocol.variant.QtType
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class StringSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      StringSerializerUtf16,
+      QtSerializers.find<String>(QtType.QString),
+    )
+  }
+
   @Test
   fun testBigListOfNaughtyStrings() {
     this::class.java.getResourceAsStream("/blns.txt")!!.bufferedReader(Charsets.UTF_8).forEachLine {

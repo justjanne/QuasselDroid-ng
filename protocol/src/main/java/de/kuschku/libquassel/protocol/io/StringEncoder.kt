@@ -52,13 +52,21 @@ class StringEncoder(charset: Charset) {
     return encodeInternal(charBuffer)
   }
 
-  fun encodeChar(data: Char?): ByteBuffer {
-    if (!encoder.canEncode(data ?: '\u0000')) {
-      return ByteBuffer.allocateDirect(2)
+  private fun replacementChar(data: Char?): Char {
+    return if (data == null || !encoder.canEncode(data)) {
+      if (encoder.canEncode('\uFFFD')) {
+        '\uFFFD'
+      } else {
+        '\u0000'
+      }
+    } else {
+      data
     }
+  }
 
-    val charBuffer = charBuffer(2)
-    charBuffer.put(data ?: '\u0000')
+  fun encodeChar(data: Char?): ByteBuffer {
+    val charBuffer = charBuffer(1)
+    charBuffer.put(replacementChar(data))
     charBuffer.flip()
     return encodeInternal(charBuffer)
   }

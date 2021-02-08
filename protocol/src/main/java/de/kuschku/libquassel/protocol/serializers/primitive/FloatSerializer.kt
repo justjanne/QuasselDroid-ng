@@ -26,7 +26,7 @@ import java.nio.ByteBuffer
 
 object FloatSerializer : QtSerializer<Float> {
   override val qtType: QtType = QtType.Float
-  override val javaType: Class<Float> = Float::class.java
+  override val javaType: Class<Float> = Float::class.javaObjectType
 
   override fun serialize(buffer: ChainedByteBuffer, data: Float, featureSet: FeatureSet) {
     buffer.putFloat(data)

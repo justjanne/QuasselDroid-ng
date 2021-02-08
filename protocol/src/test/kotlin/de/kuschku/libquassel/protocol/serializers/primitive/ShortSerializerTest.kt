@@ -18,12 +18,24 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import de.kuschku.libquassel.protocol.variant.QtType
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.experimental.inv
 
 class ShortSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      ShortSerializer,
+      QtSerializers.find<Short>(QtType.Short),
+    )
+  }
+
   @Test
   fun testZero() = qtSerializerTest(
     ShortSerializer,

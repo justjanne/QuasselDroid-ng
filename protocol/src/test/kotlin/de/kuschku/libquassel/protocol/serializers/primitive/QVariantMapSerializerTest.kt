@@ -18,14 +18,26 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.matchers.MapMatcher
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import de.kuschku.libquassel.protocol.variant.QVariantMap
 import de.kuschku.libquassel.protocol.variant.QtType
 import de.kuschku.libquassel.protocol.variant.qVariant
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class QVariantMapSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      QVariantMapSerializer,
+      QtSerializers.find<QVariantMap>(QtType.QVariantMap),
+    )
+  }
+
   @Test
   fun testEmpty() = qtSerializerTest(
     QVariantMapSerializer,
@@ -50,8 +62,20 @@ class QVariantMapSerializerTest {
     mapOf(
       "" to qVariant<String?>(null, QtType.QString)
     ),
-    byteBufferOf(0x00u, 0x00u, 0x00u, 0x01u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x0Au, 0x00u, 0xFFu, 0xFFu, 0xFFu, 0xFFu),
-    ::MapMatcher
+    byteBufferOf(
+      // length
+      0x00u, 0x00u, 0x00u, 0x01u,
+      // length of key
+      0xFFu, 0xFFu, 0xFFu, 0xFFu,
+      // type of value
+      0x00u, 0x00u, 0x00u, 0x0Au,
+      // isNull of value
+      0x00u,
+      // length of value
+      0xFFu, 0xFFu, 0xFFu, 0xFFu
+    ),
+    ::MapMatcher,
+    serializeFeatureSet = null
   )
 }
 

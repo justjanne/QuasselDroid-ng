@@ -33,7 +33,6 @@ enum class BufferActivity(
 
   companion object : Flags<UInt, BufferActivity> {
     private val values = values().associateBy(BufferActivity::value)
-    override fun get(value: UInt) = values[value]
     override val all: BufferActivities = values.values.toEnumSet()
   }
 }

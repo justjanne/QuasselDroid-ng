@@ -69,7 +69,6 @@ class ExampleUnitTest {
           channel.write(sizeBuffer)
           sizeBuffer.clear()
         }
-        println(sendBuffer.toBuffer().contentToString())
         channel.write(sendBuffer)
         channel.flush()
         sendBuffer.clear()

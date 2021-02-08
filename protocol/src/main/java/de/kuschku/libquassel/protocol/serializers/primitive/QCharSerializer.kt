@@ -28,7 +28,7 @@ import kotlin.concurrent.getOrSet
 
 object QCharSerializer : QtSerializer<Char> {
   override val qtType: QtType = QtType.QChar
-  override val javaType: Class<out Char> = Char::class.java
+  override val javaType: Class<out Char> = Char::class.javaObjectType
 
   private val encoderLocal = ThreadLocal<StringEncoder>()
   private fun encoder() = encoderLocal.getOrSet { StringEncoder(Charsets.UTF_16BE) }

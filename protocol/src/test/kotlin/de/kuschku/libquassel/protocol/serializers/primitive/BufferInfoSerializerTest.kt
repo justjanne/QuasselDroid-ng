@@ -20,15 +20,29 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 
 import de.kuschku.bitflags.none
 import de.kuschku.bitflags.validValues
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.quasselSerializerTest
 import de.kuschku.libquassel.protocol.types.BufferId
 import de.kuschku.libquassel.protocol.types.BufferInfo
 import de.kuschku.libquassel.protocol.types.BufferType
 import de.kuschku.libquassel.protocol.types.NetworkId
+import de.kuschku.libquassel.protocol.variant.QtType
+import de.kuschku.libquassel.protocol.variant.QuasselType
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class BufferInfoSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      BufferInfoSerializer,
+      QuasselSerializers.find<BufferInfo>(QuasselType.BufferInfo),
+    )
+  }
+
   @Test
   fun testBaseCase() = quasselSerializerTest(
     BufferInfoSerializer,

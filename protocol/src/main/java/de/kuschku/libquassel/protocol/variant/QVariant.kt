@@ -27,22 +27,29 @@ import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.serializers.primitive.QtSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.QuasselSerializer
 import java.nio.ByteBuffer
-import java.util.*
 
 typealias QVariant_ = QVariant<*>
 typealias QVariantList = List<QVariant_>
 typealias QVariantMap = Map<String, QVariant_>
 typealias QStringList = List<String?>
 
-sealed class QVariant<T> constructor(
-  private val data: T,
-  open val serializer: QtSerializer<T>,
-) {
-  class Typed<T> internal constructor(data: T, serializer: QtSerializer<T>) :
-    QVariant<T>(data, serializer)
+sealed class QVariant<T> {
+  abstract val data: T
+  abstract val serializer: QtSerializer<T>
 
-  class Custom<T> internal constructor(data: T, override val serializer: QuasselSerializer<T>) :
-    QVariant<T>(data, serializer)
+  data class Typed<T> internal constructor(
+    override val data: T,
+    override val serializer: QtSerializer<T>
+  ) : QVariant<T>() {
+    override fun toString() = super.toString()
+  }
+
+  data class Custom<T> internal constructor(
+    override val data: T,
+    override val serializer: QuasselSerializer<T>
+  ) : QVariant<T>() {
+    override fun toString() = super.toString()
+  }
 
   fun value(): T = data
 
@@ -51,36 +58,19 @@ sealed class QVariant<T> constructor(
     serializer.serialize(buffer, data, featureSet)
   }
 
-  override fun toString() = when (data) {
-    is ByteBuffer ->
-      "QVariant(${serializer::class.java.simpleName}, ${data.contentToString()})"
-    else ->
-      "QVariant(${serializer::class.java.simpleName}, $data)"
+  override fun toString() = data.let {
+    when (it) {
+      is ByteBuffer ->
+        "QVariant(${serializer::class.java.simpleName}, ${it.contentToString()})"
+      else ->
+        "QVariant(${serializer::class.java.simpleName}, $it)"
+    }
   }
 
   @Suppress("UNCHECKED_CAST")
   inline fun <reified T> withType(): QVariant<T>? =
     if (serializer.javaType == T::class.java && this.value() is T) this as QVariant<T>
     else null
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as QVariant<*>
-
-    if (data != other.data) return false
-    if (serializer != other.serializer) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    var result = data?.hashCode() ?: 0
-    result = 31 * result + serializer.hashCode()
-    return result
-  }
-
 
   companion object {
     fun <T> of(data: T, serializer: QtSerializer<T>) = Typed(data, serializer)

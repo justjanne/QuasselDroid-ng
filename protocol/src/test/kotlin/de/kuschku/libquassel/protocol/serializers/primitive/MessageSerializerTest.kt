@@ -22,13 +22,28 @@ package de.kuschku.libquassel.protocol.serializers.primitive
 import de.kuschku.bitflags.none
 import de.kuschku.bitflags.validValues
 import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.quasselSerializerTest
 import de.kuschku.libquassel.protocol.types.*
+import de.kuschku.libquassel.protocol.variant.QtType
+import de.kuschku.libquassel.protocol.variant.QuasselType
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.threeten.bp.Instant
+import java.nio.ByteBuffer
 
 class MessageSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      MessageSerializer,
+      QuasselSerializers.find<Message>(QuasselType.Message),
+    )
+  }
+
   @Test
   fun testEmpty() = quasselSerializerTest(
     MessageSerializer,

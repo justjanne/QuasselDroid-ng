@@ -18,48 +18,53 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.features.FeatureSet
+import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
-import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
-import de.kuschku.libquassel.protocol.variant.QtType
-import org.junit.jupiter.api.Assertions
+import de.kuschku.libquassel.protocol.testutil.quasselSerializerTest
+import de.kuschku.libquassel.protocol.types.MsgId
+import de.kuschku.libquassel.protocol.variant.QuasselType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class ULongSerializerTest {
+class PeerPtrSerializerTest {
   @Test
   fun testIsRegistered() {
     assertEquals(
-      ULongSerializer,
-      QtSerializers.find<ULong>(QtType.ULong),
+      PeerPtrSerializer,
+      QuasselSerializers.find<ULong>(QuasselType.PeerPtr),
     )
   }
 
   @Test
-  fun testZero() = qtSerializerTest(
-    ULongSerializer,
-    0.toULong(),
-    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0)
+  fun testZero() = quasselSerializerTest(
+    PeerPtrSerializer,
+    0uL,
+    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0),
+    featureSets = listOf(FeatureSet.all())
   )
 
   @Test
-  fun testMinimal() = qtSerializerTest(
-    ULongSerializer,
+  fun testMinimal() = quasselSerializerTest(
+    PeerPtrSerializer,
     ULong.MIN_VALUE,
-    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0)
+    byteBufferOf(0, 0, 0, 0, 0, 0, 0, 0),
+    featureSets = listOf(FeatureSet.all())
   )
 
   @Test
-  fun testMaximal() = qtSerializerTest(
-    ULongSerializer,
+  fun testMaximal() = quasselSerializerTest(
+    PeerPtrSerializer,
     ULong.MAX_VALUE,
-    byteBufferOf(255u, 255u, 255u, 255u, 255u, 255u, 255u, 255u)
+    byteBufferOf(-1, -1, -1, -1, -1, -1, -1, -1),
+    featureSets = listOf(FeatureSet.all())
   )
 
   @Test
-  fun testAllOnes() = qtSerializerTest(
-    ULongSerializer,
-    0.toULong().inv(),
-    byteBufferOf(255u, 255u, 255u, 255u, 255u, 255u, 255u, 255u)
+  fun testAllOnes() = quasselSerializerTest(
+    PeerPtrSerializer,
+    0uL.inv(),
+    byteBufferOf(-1, -1, -1, -1, -1, -1, -1, -1),
+    featureSets = listOf(FeatureSet.all())
   )
 }

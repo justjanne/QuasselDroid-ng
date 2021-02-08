@@ -78,7 +78,6 @@ enum class LegacyFeature(
     fun get(feature: QuasselFeature) = features[feature]
 
     private val values = values().associateBy(LegacyFeature::value)
-    override fun get(value: UInt) = values[value]
     override val all: LegacyFeatures = values.values.toEnumSet()
   }
 }

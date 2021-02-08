@@ -22,5 +22,5 @@ package de.kuschku.codecoverage
 /**
  * Used to mark inline functions as generated for jacoco
  */
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class Generated

@@ -26,7 +26,7 @@ import java.nio.ByteBuffer
 
 object BoolSerializer : QtSerializer<Boolean> {
   override val qtType: QtType = QtType.Bool
-  override val javaType: Class<Boolean> = Boolean::class.java
+  override val javaType: Class<Boolean> = Boolean::class.javaObjectType
 
   override fun serialize(buffer: ChainedByteBuffer, data: Boolean, featureSet: FeatureSet) {
     buffer.put(

@@ -18,16 +18,27 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.matchers.TemporalMatcher
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import de.kuschku.libquassel.protocol.variant.QtType
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.threeten.bp.*
 import org.threeten.bp.chrono.JapaneseDate
+import org.threeten.bp.temporal.Temporal
 
 class DateTimeSerializerTest {
-  private val serializer = DateTimeSerializer
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      DateTimeSerializer,
+      QtSerializers.find<Temporal>(QtType.QDateTime),
+    )
+  }
 
   @Test
   fun testEpoch() = qtSerializerTest(

@@ -18,11 +18,23 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
+import de.kuschku.libquassel.protocol.variant.QtType
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class IntSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      IntSerializer,
+      QtSerializers.find<Int>(QtType.Int),
+    )
+  }
+
   @Test
   fun testZero() = qtSerializerTest(
     IntSerializer,

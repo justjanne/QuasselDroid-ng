@@ -21,12 +21,10 @@ package de.kuschku.libquassel.protocol.io
 
 import java.nio.ByteBuffer
 
-fun copyData(from: ByteBuffer, to: ByteBuffer, desiredAmount: Int = -1) {
+fun copyData(from: ByteBuffer, to: ByteBuffer, desiredAmount: Int) {
   val limit = from.limit()
   val availableAmount = minOf(from.remaining(), to.remaining())
-  val amount =
-    if (desiredAmount < 0) availableAmount
-    else minOf(availableAmount, desiredAmount)
+  val amount = minOf(availableAmount, desiredAmount)
   from.limit(from.position() + amount)
   to.put(from)
   from.limit(limit)

@@ -19,6 +19,9 @@
 
 package de.kuschku.libquassel.protocol.features
 
+import de.kuschku.codecoverage.Generated
+
+@Generated
 inline class QuasselFeatureName(
   val name: String,
 )

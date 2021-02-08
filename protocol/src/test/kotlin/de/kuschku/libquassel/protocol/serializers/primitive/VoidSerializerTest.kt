@@ -22,46 +22,22 @@ import de.kuschku.libquassel.protocol.serializers.QtSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
 import de.kuschku.libquassel.protocol.variant.QtType
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.nio.ByteBuffer
-import kotlin.experimental.inv
 
-class ByteSerializerTest {
+class VoidSerializerTest {
   @Test
   fun testIsRegistered() {
     assertEquals(
-      ByteSerializer,
-      QtSerializers.find<Byte>(QtType.Char),
+      VoidSerializer,
+      QtSerializers.find<Unit>(QtType.Void),
     )
   }
 
   @Test
-  fun testZero() = qtSerializerTest(
-    ByteSerializer,
-    0.toByte(),
-    byteBufferOf(0)
-  )
-
-  @Test
-  fun testMinimal() = qtSerializerTest(
-    ByteSerializer,
-    Byte.MIN_VALUE,
-    byteBufferOf(-128)
-  )
-
-  @Test
-  fun testMaximal() = qtSerializerTest(
-    ByteSerializer,
-    Byte.MAX_VALUE,
-    byteBufferOf(127)
-  )
-
-  @Test
-  fun testAllOnes() = qtSerializerTest(
-    ByteSerializer,
-    0.toByte().inv(),
-    byteBufferOf(-1)
+  fun test() = qtSerializerTest(
+    VoidSerializer,
+    Unit,
+    byteBufferOf()
   )
 }

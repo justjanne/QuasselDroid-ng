@@ -48,7 +48,6 @@ enum class MessageType(
 
   companion object : Flags<UInt, MessageType> {
     private val values = values().associateBy(MessageType::value)
-    override fun get(value: UInt) = values[value]
     override val all: MessageTypes = values.values.toEnumSet()
   }
 }

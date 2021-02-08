@@ -26,7 +26,7 @@ import java.nio.ByteBuffer
 
 object LongSerializer : QtSerializer<Long> {
   override val qtType: QtType = QtType.Long
-  override val javaType: Class<Long> = Long::class.java
+  override val javaType: Class<Long> = Long::class.javaObjectType
 
   override fun serialize(buffer: ChainedByteBuffer, data: Long, featureSet: FeatureSet) {
     buffer.putLong(data)

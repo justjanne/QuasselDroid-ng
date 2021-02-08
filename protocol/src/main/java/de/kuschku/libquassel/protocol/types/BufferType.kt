@@ -34,7 +34,6 @@ enum class BufferType(
 
   companion object : Flags<UShort, BufferType> {
     private val values = values().associateBy(BufferType::value)
-    override fun get(value: UShort) = values[value]
     override val all: BufferTypes = values.values.toEnumSet()
   }
 }

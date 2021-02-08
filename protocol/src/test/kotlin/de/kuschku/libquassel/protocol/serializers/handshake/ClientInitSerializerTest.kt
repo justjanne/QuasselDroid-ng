@@ -22,11 +22,25 @@ import de.kuschku.bitflags.none
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.features.LegacyFeature
 import de.kuschku.libquassel.protocol.messages.handshake.ClientInit
+import de.kuschku.libquassel.protocol.serializers.HandshakeSerializers
+import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.serializers.primitive.BoolSerializer
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.handshakeSerializerTest
+import de.kuschku.libquassel.protocol.variant.QtType
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals as assertEquals
 
 class ClientInitSerializerTest {
+  @Test
+  fun testIsRegistered() {
+    assertEquals(
+      ClientInitSerializer,
+      HandshakeSerializers.find<ClientInit>("ClientInit"),
+    )
+  }
+
   @Test
   fun testSimple() = handshakeSerializerTest(
     ClientInitSerializer,

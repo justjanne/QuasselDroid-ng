@@ -26,7 +26,7 @@ import java.nio.ByteBuffer
 
 object ShortSerializer : QtSerializer<Short> {
   override val qtType: QtType = QtType.Short
-  override val javaType: Class<Short> = Short::class.java
+  override val javaType: Class<Short> = Short::class.javaObjectType
 
   override fun serialize(buffer: ChainedByteBuffer, data: Short, featureSet: FeatureSet) {
     buffer.putShort(data)

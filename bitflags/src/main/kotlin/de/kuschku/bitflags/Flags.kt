@@ -20,6 +20,5 @@
 package de.kuschku.bitflags
 
 interface Flags<T, U> where U : Flag<T>, U : Enum<U> {
-  operator fun get(value: T): U?
   val all: Set<U>
 }

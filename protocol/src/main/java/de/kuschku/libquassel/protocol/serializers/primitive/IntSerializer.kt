@@ -26,7 +26,7 @@ import java.nio.ByteBuffer
 
 object IntSerializer : QtSerializer<Int> {
   override val qtType: QtType = QtType.Int
-  override val javaType: Class<Int> = Int::class.java
+  override val javaType: Class<Int> = Int::class.javaObjectType
 
   override fun serialize(buffer: ChainedByteBuffer, data: Int, featureSet: FeatureSet) {
     buffer.putInt(data)

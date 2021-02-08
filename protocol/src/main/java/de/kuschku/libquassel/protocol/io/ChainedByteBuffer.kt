@@ -90,8 +90,11 @@ class ChainedByteBuffer(
       val requested = minOf(value.remaining(), chunkSize)
       if (bufferList.lastOrNull()?.hasRemaining() != true) {
         ensureSpace(requested)
+      } else {
+        ensureSpace(minOf(bufferList.last().remaining(), requested))
       }
-      copyData(value, bufferList.last())
+
+      copyData(value, bufferList.last(), requested)
     }
   }
 

@@ -20,5 +20,16 @@ package de.kuschku.libquassel.protocol.testutil
 
 import java.nio.ByteBuffer
 
-inline fun byteBufferOf(vararg elements: Byte) = ByteBuffer.wrap(byteArrayOf(*elements))
-inline fun byteBufferOf(vararg elements: UByte) = ByteBuffer.wrap(ubyteArrayOf(*elements).toByteArray())
+@Suppress("NOTHING_TO_INLINE")
+inline fun byteBufferOf(
+  vararg elements: Byte
+): ByteBuffer = ByteBuffer.wrap(byteArrayOf(*elements))
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun byteBufferOf(
+  vararg elements: UByte
+): ByteBuffer = ByteBuffer.wrap(ubyteArrayOf(*elements).toByteArray())
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun byteBufferOf(): ByteBuffer =
+  ByteBuffer.allocateDirect(0)

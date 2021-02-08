@@ -48,6 +48,18 @@ class StringEncoderTest {
   }
 
   @Test
+  fun testUnencodableString() {
+    assertEquals(
+      0,
+      ascii.encode("\uFFFF").remaining()
+    )
+    assertThat(
+      ascii.encode("\uFFFF"),
+      ByteBufferMatcher(byteBufferOf())
+    )
+  }
+
+  @Test
   fun testNullChar() {
     assertEquals(
       1,
@@ -58,13 +70,9 @@ class StringEncoderTest {
       ByteBufferMatcher(byteBufferOf(0))
     )
 
-    assertEquals(
-      1,
-      utf8.encodeChar(null).remaining()
-    )
     assertThat(
       utf8.encodeChar(null),
-      ByteBufferMatcher(byteBufferOf(0))
+      ByteBufferMatcher(byteBufferOf(0xEFu, 0xBFu, 0xBDu))
     )
 
     assertEquals(
@@ -73,19 +81,19 @@ class StringEncoderTest {
     )
     assertThat(
       utf16.encodeChar(null),
-      ByteBufferMatcher(byteBufferOf(0, 0)),
+      ByteBufferMatcher(byteBufferOf(0xFFu, 0xFDu)),
     )
   }
 
   @Test
   fun testUnencodableChar() {
     assertEquals(
-      2,
+      1,
       ascii.encodeChar('\uFFFF').remaining()
     )
     assertThat(
       ascii.encodeChar('\uFFFF'),
-      ByteBufferMatcher(byteBufferOf(0, 0))
+      ByteBufferMatcher(byteBufferOf(0))
     )
   }
 }

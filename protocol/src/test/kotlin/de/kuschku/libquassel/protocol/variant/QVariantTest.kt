@@ -20,6 +20,7 @@
 package de.kuschku.libquassel.protocol.variant
 
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
+import de.kuschku.libquassel.protocol.types.BufferId
 import de.kuschku.libquassel.protocol.variant.QtType
 import de.kuschku.libquassel.protocol.variant.qVariant
 import org.junit.jupiter.api.Assertions.*
@@ -40,6 +41,13 @@ class QVariantTest {
       qVariant(
         "DEADBEEF",
         QtType.QString
+      ).toString()
+    )
+    assertEquals(
+      "QVariant(BufferIdSerializer, BufferId(-1))",
+      qVariant(
+        BufferId(-1),
+        QuasselType.BufferId
       ).toString()
     )
   }

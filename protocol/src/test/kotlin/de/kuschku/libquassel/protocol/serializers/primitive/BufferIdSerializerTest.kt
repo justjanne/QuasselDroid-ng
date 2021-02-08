@@ -18,50 +18,49 @@
  */
 package de.kuschku.libquassel.protocol.serializers.primitive
 
-import de.kuschku.libquassel.protocol.serializers.QtSerializers
+import de.kuschku.libquassel.protocol.serializers.QuasselSerializers
 import de.kuschku.libquassel.protocol.testutil.byteBufferOf
 import de.kuschku.libquassel.protocol.testutil.qtSerializerTest
-import de.kuschku.libquassel.protocol.variant.QtType
-import org.junit.jupiter.api.Assertions
+import de.kuschku.libquassel.protocol.testutil.quasselSerializerTest
+import de.kuschku.libquassel.protocol.types.BufferId
+import de.kuschku.libquassel.protocol.variant.QuasselType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.nio.ByteBuffer
-import kotlin.experimental.inv
 
-class ByteSerializerTest {
+class BufferIdSerializerTest {
   @Test
   fun testIsRegistered() {
     assertEquals(
-      ByteSerializer,
-      QtSerializers.find<Byte>(QtType.Char),
+      BufferIdSerializer,
+      QuasselSerializers.find<BufferId>(QuasselType.BufferId),
     )
   }
 
   @Test
-  fun testZero() = qtSerializerTest(
-    ByteSerializer,
-    0.toByte(),
-    byteBufferOf(0)
+  fun testZero() = quasselSerializerTest(
+    BufferIdSerializer,
+    BufferId(0),
+    byteBufferOf(0, 0, 0, 0)
   )
 
   @Test
-  fun testMinimal() = qtSerializerTest(
-    ByteSerializer,
-    Byte.MIN_VALUE,
-    byteBufferOf(-128)
+  fun testMinimal() = quasselSerializerTest(
+    BufferIdSerializer,
+    BufferId.MIN_VALUE,
+    byteBufferOf(-128, 0, 0, 0)
   )
 
   @Test
-  fun testMaximal() = qtSerializerTest(
-    ByteSerializer,
-    Byte.MAX_VALUE,
-    byteBufferOf(127)
+  fun testMaximal() = quasselSerializerTest(
+    BufferIdSerializer,
+    BufferId.MAX_VALUE,
+    byteBufferOf(127, -1, -1, -1)
   )
 
   @Test
-  fun testAllOnes() = qtSerializerTest(
-    ByteSerializer,
-    0.toByte().inv(),
-    byteBufferOf(-1)
+  fun testAllOnes() = quasselSerializerTest(
+    BufferIdSerializer,
+    BufferId(0.inv()),
+    byteBufferOf(-1, -1, -1, -1)
   )
 }
