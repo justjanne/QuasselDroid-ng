@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/quasseldroid-build-env:30-30.0.3"
+image: "k8r.eu/justjanne/quasseldroid-build-env:1eb7fa8"
 
 cache:
   key: "$CI_PROJECT_NAME"
@@ -31,6 +31,7 @@ build:
 test:
   stage: "test"
   script:
+    - "dockerd-rootless.sh"
     - "./gradlew check -x connectedCheck coberturaTestReport"
   artifacts:
     paths:

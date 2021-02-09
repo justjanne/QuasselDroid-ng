@@ -17,9 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.protocol.io
+package de.kuschku.libquassel.io
 
-import android.util.Log
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel
@@ -61,7 +60,7 @@ class ReadableWrappedChannel(
         }
 
         if (readData <= 0) {
-          Log.e("ReadableWrappedChannel", "Read: $readData")
+          error("[ReadableWrappedChannel] Read: $readData")
         }
 
         // read is negative if no data was read, in that case, terminate

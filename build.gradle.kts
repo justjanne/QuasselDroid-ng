@@ -43,6 +43,7 @@ allprojects {
   extra["junit4Version"] = "4.13.1"
   extra["junit5Version"] = "5.3.1"
   extra["mdcVersion"] = "1.2.1"
+  extra["testContainersVersion"] = "1.15.1"
 
   repositories {
     google()

@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.protocol.io
 
+import de.kuschku.libquassel.io.ReadableWrappedChannel
 import de.kuschku.quasseldroid.util.TlsInfo
 import java.io.Flushable
 import java.io.InputStream
