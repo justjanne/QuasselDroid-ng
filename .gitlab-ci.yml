@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/quasseldroid-build-env:895ba8e"
+image: "k8r.eu/justjanne/quasseldroid-build-env:6799737"
 
 cache:
   key: "$CI_PROJECT_NAME"
