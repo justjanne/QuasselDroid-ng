@@ -34,9 +34,9 @@ test:
     - name: "k8r.eu/justjanne/quassel-docker"
       alias: "quasselcore"
   variables:
-    QUASSEL_CONTAINER: "quassel:4242"
+    QUASSEL_CONTAINER: "quasselcore:4242"
   script:
-    - "./gradlew check -x connectedCheck coberturaTestReport"
+    - "./gradlew check -x connectedCheck coberturaTestReport --stacktrace"
   artifacts:
     paths:
       - "*/build/test-results/**/TEST-*.xml"
