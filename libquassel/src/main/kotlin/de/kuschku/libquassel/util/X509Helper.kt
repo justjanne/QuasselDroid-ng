@@ -20,15 +20,12 @@
 package de.kuschku.quasseldroid.util
 
 import java.io.ByteArrayInputStream
+import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate as javaCertificate
-import javax.security.cert.X509Certificate as javaxCertificate
+import java.security.cert.X509Certificate
 
 private val certificateFactory = CertificateFactory.getInstance("X.509")
 
-fun javaxCertificate.toJavaCertificate(): javaCertificate =
+fun Certificate.toX509(): X509Certificate =
   certificateFactory.generateCertificate(ByteArrayInputStream(this.encoded))
-    as javaCertificate
-
-fun javaCertificate.toJavaXCertificate(): javaxCertificate =
-  javaxCertificate.getInstance(this.encoded)
+    as X509Certificate

@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.util
 
+import java.security.cert.Certificate
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLSession
 
@@ -63,8 +64,7 @@ data class TlsInfo(
         session.protocol,
         cipherSuite,
         keyExchangeMechanism,
-        session.peerCertificateChain
-          .map(javax.security.cert.X509Certificate::toJavaCertificate)
+        session.peerCertificates.map(Certificate::toX509)
       )
     }
   }
