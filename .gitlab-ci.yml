@@ -36,7 +36,6 @@ test:
   variables:
     QUASSEL_CONTAINER: "quassel:4242"
   script:
-    - "dockerd-rootless.sh"
     - "./gradlew check -x connectedCheck coberturaTestReport"
   artifacts:
     paths:
