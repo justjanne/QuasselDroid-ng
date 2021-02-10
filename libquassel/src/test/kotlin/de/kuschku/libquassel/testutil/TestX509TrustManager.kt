@@ -17,11 +17,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel
+package de.kuschku.libquassel.testutil
 
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.utility.DockerImageName
+import java.security.cert.X509Certificate
+import javax.net.ssl.X509TrustManager
 
-class QuasselContainer : GenericContainer<QuasselContainer>(
-        DockerImageName.parse("k8r.eu/justjanne/quassel-docker:latest")
-)
+object TestX509TrustManager : X509TrustManager {
+  override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+    // FIXME: accept everything
+  }
+
+  override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+    // FIXME: accept everything
+  }
+
+  override fun getAcceptedIssuers(): Array<X509Certificate> {
+    // FIXME: accept nothing
+    return emptyArray()
+  }
+}

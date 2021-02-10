@@ -17,22 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel
+package de.kuschku.libquassel.testutil
 
-import java.security.cert.X509Certificate
-import javax.net.ssl.X509TrustManager
-
-object TestX509TrustManager : X509TrustManager {
-  override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-    // FIXME: accept everything
-  }
-
-  override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-    // FIXME: accept everything
-  }
-
-  override fun getAcceptedIssuers(): Array<X509Certificate> {
-    // FIXME: accept nothing
-    return emptyArray()
-  }
+fun quasselContainer() = providedContainer("QUASSEL_CONTAINER") {
+  TestContainersProvidedContainer(
+    QuasselCoreContainer(),
+    QuasselCoreContainer.QUASSEL_PORT
+  )
 }

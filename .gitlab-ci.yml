@@ -30,6 +30,11 @@ build:
 
 test:
   stage: "test"
+  services:
+    - name: "k8r.eu/justjanne/quassel-docker"
+      alias: "quasselcore"
+  variables:
+    QUASSEL_CONTAINER: "quassel:4242"
   script:
     - "dockerd-rootless.sh"
     - "./gradlew check -x connectedCheck coberturaTestReport"

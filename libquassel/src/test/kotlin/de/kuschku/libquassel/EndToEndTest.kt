@@ -29,36 +29,20 @@ import de.kuschku.libquassel.protocol.serializers.handshake.ClientInitSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.HandshakeMapSerializer
 import de.kuschku.libquassel.protocol.serializers.primitive.IntSerializer
 import de.kuschku.libquassel.protocol.variant.into
+import de.kuschku.libquassel.testutil.TestX509TrustManager
+import de.kuschku.libquassel.testutil.quasselContainer
 import de.kuschku.quasseldroid.protocol.io.CoroutineChannel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
-import org.testcontainers.containers.BindMode
-import org.testcontainers.containers.output.Slf4jLogConsumer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
-import org.testcontainers.utility.MountableFile
-import java.net.InetSocketAddress
 import java.nio.ByteBuffer
 import javax.net.ssl.SSLContext
 
 @ExperimentalCoroutinesApi
-@Testcontainers
 class EndToEndTest {
-  @Container
-  val quassel = QuasselContainer()
-    .withExposedPorts(4242)
-    .withClasspathResourceMapping("/quasseltest.crt", "/quasseltest.crt", BindMode.READ_WRITE)
-    .withEnv("SSL_CERT_FILE", "/quasseltest.crt")
-    .withClasspathResourceMapping("/quasseltest.key", "/quasseltest.key", BindMode.READ_WRITE)
-    .withEnv("SSL_KEY_FILE", "/quasseltest.key")
-    .withEnv("CONFIG_FROM_ENVIRONMENT", "true")
-    .withEnv("DB_BACKEND", "SQLite")
-    .withEnv("AUTH_AUTHENTICATOR", "Database")
+  private val quassel = quasselContainer()
 
   private val sslContext = SSLContext.getInstance("TLSv1.3").apply {
     init(null, arrayOf(TestX509TrustManager), null)
@@ -70,16 +54,18 @@ class EndToEndTest {
   private val channel = CoroutineChannel()
 
   @BeforeEach
-  fun setUp() {
-    quassel.followOutput(Slf4jLogConsumer(LoggerFactory.getLogger(EndToEndTest::class.java)))
+  fun start() {
+    quassel.start()
+  }
+
+  @AfterEach
+  fun stop() {
+    quassel.stop()
   }
 
   @Test
   fun testConnect() = runBlocking {
-    channel.connect(InetSocketAddress(
-      quassel.host,
-      quassel.getMappedPort(4242)
-    ))
+    channel.connect(quassel.address)
 
     println("Writing protocol")
     write(sizePrefix = false) {
