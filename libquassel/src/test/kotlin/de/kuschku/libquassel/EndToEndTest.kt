@@ -20,6 +20,8 @@
 package de.kuschku.libquassel
 
 import de.kuschku.bitflags.of
+import de.kuschku.ci_containers.CiContainers
+import de.kuschku.ci_containers.CiContainersExtension
 import de.kuschku.libquassel.protocol.connection.*
 import de.kuschku.libquassel.protocol.features.FeatureSet
 import de.kuschku.libquassel.protocol.io.ChainedByteBuffer
@@ -34,13 +36,13 @@ import de.kuschku.libquassel.testutil.quasselContainer
 import de.kuschku.quasseldroid.protocol.io.CoroutineChannel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.nio.ByteBuffer
 import javax.net.ssl.SSLContext
 
 @ExperimentalCoroutinesApi
+@CiContainers
 class EndToEndTest {
   private val quassel = quasselContainer()
 
@@ -52,16 +54,6 @@ class EndToEndTest {
   private val sizeBuffer = ByteBuffer.allocateDirect(4)
   private val sendBuffer = ChainedByteBuffer(direct = true)
   private val channel = CoroutineChannel()
-
-  @BeforeEach
-  fun start() {
-    quassel.start()
-  }
-
-  @AfterEach
-  fun stop() {
-    quassel.stop()
-  }
 
   @Test
   fun testConnect() = runBlocking {

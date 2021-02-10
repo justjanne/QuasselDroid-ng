@@ -31,8 +31,7 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)
   val hamcrestVersion: String by project.extra
   testImplementation("org.hamcrest", "hamcrest-library", hamcrestVersion)
-  val testContainersVersion: String by project.extra
-  testImplementation("org.testcontainers", "testcontainers", testContainersVersion)
-  testImplementation("org.testcontainers", "junit-jupiter", testContainersVersion)
+
+  testImplementation(project(":ci-containers"))
   testImplementation("org.slf4j", "slf4j-simple", "1.7.30")
 }

@@ -17,13 +17,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.testutil
+package de.kuschku.ci_containers
 
 import java.net.InetSocketAddress
 
-interface ProvidedContainer {
-  fun start()
-  fun stop()
-
-  val address: InetSocketAddress
+fun providedContainer(
+  envVariable: String,
+  f: () -> ProvidedContainer
+) = when {
+  !System.getenv(envVariable).isNullOrEmpty() -> {
+    val (host, port) = System.getenv(envVariable).split(":")
+    GitlabCiProvidedContainer(InetSocketAddress(host, port.toInt()))
+  }
+  else -> f()
 }

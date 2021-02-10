@@ -25,5 +25,6 @@ include(
   ":bitflags",
   ":protocol",
   ":coverage-annotations",
-  ":libquassel"
+  ":libquassel",
+  ":ci-containers"
 )

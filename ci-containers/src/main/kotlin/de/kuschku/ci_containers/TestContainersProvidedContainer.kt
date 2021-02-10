@@ -17,13 +17,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.testutil
+package de.kuschku.ci_containers
 
+import org.testcontainers.containers.GenericContainer
 import java.net.InetSocketAddress
 
-class GitlabCiProvidedContainer(
-  override val address: InetSocketAddress
+class TestContainersProvidedContainer<T : GenericContainer<T>>(
+  private val container: T,
+  private val port: Int
 ) : ProvidedContainer {
-  override fun start() = Unit
-  override fun stop() = Unit
+  override fun start() = container.start()
+  override fun stop() = container.stop()
+  override val address
+    get() = InetSocketAddress(
+      container.containerIpAddress,
+      container.getMappedPort(port)
+    )
 }

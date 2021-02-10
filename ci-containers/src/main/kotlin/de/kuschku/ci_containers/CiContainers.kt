@@ -17,14 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.testutil
+package de.kuschku.ci_containers
 
-import de.kuschku.ci_containers.TestContainersProvidedContainer
-import de.kuschku.ci_containers.providedContainer
+import org.junit.jupiter.api.extension.ExtendWith
 
-fun quasselContainer() = providedContainer("QUASSEL_CONTAINER") {
-  TestContainersProvidedContainer(
-    QuasselCoreContainer(),
-    QuasselCoreContainer.QUASSEL_PORT
-  )
-}
+@MustBeDocumented
+@Target(AnnotationTarget.CLASS, AnnotationTarget.ANNOTATION_CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+@ExtendWith(CiContainersExtension::class)
+annotation class CiContainers
