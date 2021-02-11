@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/quasseldroid-build-env:6799737"
+image: "k8r.eu/justjanne/quasseldroid-build-env:5d24a78"
 
 cache:
   key: "$CI_PROJECT_NAME"
@@ -31,7 +31,7 @@ build:
 test:
   stage: "test"
   services:
-    - name: "k8r.eu/justjanne/quassel-docker"
+    - name: "k8r.eu/justjanne/quassel-docker:0.13.1"
       alias: "quasselcore"
   variables:
     QUASSEL_CONTAINER: "quasselcore:4242"
