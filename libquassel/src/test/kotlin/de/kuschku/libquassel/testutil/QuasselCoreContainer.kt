@@ -26,7 +26,7 @@ import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.utility.DockerImageName
 
 class QuasselCoreContainer : GenericContainer<QuasselCoreContainer>(
-  DockerImageName.parse("k8r.eu/justjanne/quassel-docker:0.13.1")
+  DockerImageName.parse("k8r.eu/justjanne/quassel-docker:v0.13.1")
 ) {
   init {
     withExposedPorts(QUASSEL_PORT)

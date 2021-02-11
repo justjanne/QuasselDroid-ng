@@ -31,7 +31,7 @@ build:
 test:
   stage: "test"
   services:
-    - name: "k8r.eu/justjanne/quassel-docker:0.13.1"
+    - name: "k8r.eu/justjanne/quassel-docker:v0.13.1"
       alias: "quasselcore"
   variables:
     QUASSEL_CONTAINER: "quasselcore:4242"
