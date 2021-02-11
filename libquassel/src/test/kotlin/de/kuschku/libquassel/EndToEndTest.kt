@@ -36,6 +36,8 @@ import de.kuschku.libquassel.testutil.quasselContainer
 import de.kuschku.quasseldroid.protocol.io.CoroutineChannel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.nio.ByteBuffer
@@ -82,7 +84,14 @@ class EndToEndTest {
     println("Reading protocol")
     read(4) {
       val protocol = ProtocolInfoSerializer.deserialize(it, connectionFeatureSet)
-      println(protocol)
+      assertEquals(
+        ProtocolFeature.of(
+          ProtocolFeature.TLS,
+          ProtocolFeature.Compression
+        ),
+        protocol.flags
+      )
+      println("Negotiated protocol $protocol")
       if (protocol.flags.contains(ProtocolFeature.TLS)) {
         channel.enableTLS(sslContext)
       }

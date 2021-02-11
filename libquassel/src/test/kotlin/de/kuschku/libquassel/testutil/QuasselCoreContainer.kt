@@ -43,6 +43,7 @@ class QuasselCoreContainer : GenericContainer<QuasselCoreContainer>(
     withEnv("CONFIG_FROM_ENVIRONMENT", "true")
     withEnv("DB_BACKEND", "SQLite")
     withEnv("AUTH_AUTHENTICATOR", "Database")
+    withEnv("SSL_REQUIRED", "true")
   }
 
   override fun start() {
