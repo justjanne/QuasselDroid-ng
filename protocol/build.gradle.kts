@@ -1,40 +1,28 @@
 plugins {
   kotlin("jvm")
   jacoco
-  id("de.kuschku.coverageconverter")
+  id("de.justjanne.jacoco-cobertura-converter") version "1.0"
 }
 
 tasks.withType<Test> {
   useJUnitPlatform()
 }
 
-jacoco {
-  toolVersion = "0.8.3"
-}
-
-tasks.getByName<JacocoReport>("jacocoTestReport") {
-  reports {
-    sourceDirectories.from(fileTree("src/main/kotlin"))
-    xml.destination = File("$buildDir/reports/jacoco/report.xml")
-    html.isEnabled = true
-    xml.isEnabled = true
-    csv.isEnabled = false
-  }
+coverage {
+  autoConfigureCoverage = true
 }
 
 dependencies {
   implementation(kotlin("stdlib"))
   api("org.threeten", "threetenbp", "1.4.0")
-  api(project(":bitflags"))
+  val kotlinBitflagsVersion: String by project
+  api("de.justjanne", "kotlin-bitflags", kotlinBitflagsVersion)
   api(project(":coverage-annotations"))
 
-  val junit5Version: String by project.extra
+  val junit5Version: String by project
   testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)
   testImplementation("org.junit.jupiter", "junit-jupiter-params", junit5Version)
   testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)
-  val hamcrestVersion: String by project.extra
+  val hamcrestVersion: String by project
   testImplementation("org.hamcrest", "hamcrest-library", hamcrestVersion)
-  val testContainersVersion: String by project.extra
-  testImplementation("org.testcontainers", "testcontainers", testContainersVersion)
-  testImplementation("org.testcontainers", "junit-jupiter", testContainersVersion)
 }

@@ -33,22 +33,11 @@ buildscript {
 }
 
 allprojects {
-  extra["androidxAppcompatVersion"] = "1.2.0"
-  extra["androidxCoreVersion"] = "1.2.0"
-  extra["androidxComposeVersion"] = "1.0.0-alpha11"
-  extra["androidxLifecycleVersion"] = "2.3.0-rc01"
-  extra["androidxMultidexVersion"] = "2.0.1"
-  extra["daggerHiltVersion"] = "2.31.2-alpha"
-  extra["hamcrestVersion"] = "2.1"
-  extra["junit4Version"] = "4.13.1"
-  extra["junit5Version"] = "5.3.1"
-  extra["mdcVersion"] = "1.2.1"
-  extra["testContainersVersion"] = "1.15.1"
-
   repositories {
     google()
     mavenCentral()
     jcenter()
+    mavenLocal()
   }
 
   tasks.withType<KotlinCompile>().configureEach {

@@ -18,7 +18,7 @@ android {
   }
 
   composeOptions {
-    val androidxComposeVersion: String by project.extra
+    val androidxComposeVersion: String by project
     kotlinCompilerExtensionVersion = androidxComposeVersion
   }
 
@@ -32,27 +32,27 @@ kapt {
 }
 
 dependencies {
-  val androidxCoreVersion: String by project.extra
+  val androidxCoreVersion: String by project
   implementation("androidx.core", "core-ktx", androidxCoreVersion)
 
-  val androidxAppcompatVersion: String by project.extra
+  val androidxAppcompatVersion: String by project
   implementation("androidx.appcompat", "appcompat", androidxAppcompatVersion)
 
-  val mdcVersion: String by project.extra
+  val mdcVersion: String by project
   implementation("com.google.android.material", "material", mdcVersion)
 
-  val androidxComposeVersion: String by project.extra
+  val androidxComposeVersion: String by project
   implementation("androidx.compose.ui", "ui", androidxComposeVersion)
   implementation("androidx.compose.material", "material", androidxComposeVersion)
   implementation("androidx.compose.ui", "ui-tooling", androidxComposeVersion)
 
-  val androidxLifecycleVersion: String by project.extra
+  val androidxLifecycleVersion: String by project
   implementation("androidx.lifecycle", "lifecycle-runtime-ktx", androidxLifecycleVersion)
 
-  val androidxMultidexVersion: String by project.extra
+  val androidxMultidexVersion: String by project
   implementation("androidx.multidex", "multidex", androidxMultidexVersion)
 
-  val daggerHiltVersion: String by project.extra
+  val daggerHiltVersion: String by project
   implementation("com.google.dagger", "hilt-android", daggerHiltVersion)
   annotationProcessor("com.google.dagger", "hilt-android-compiler", daggerHiltVersion)
   testImplementation("com.google.dagger", "hilt-android-testing", daggerHiltVersion)
@@ -67,7 +67,7 @@ dependencies {
   implementation("io.coil-kt", "coil", "1.1.1")
   implementation("dev.chrisbanes.accompanist", "accompanist-coil", "0.5.0")
 
-  val junit4Version: String by project.extra
+  val junit4Version: String by project
   testImplementation("junit", "junit", junit4Version)
   androidTestImplementation("androidx.test.ext", "junit", "1.1.2")
   androidTestImplementation("androidx.test.espresso", "espresso-core", "3.3.0")

@@ -22,9 +22,15 @@ rootProject.buildFileName = "build.gradle.kts"
 
 include(
   ":app",
-  ":bitflags",
   ":protocol",
   ":coverage-annotations",
   ":libquassel",
   ":ci-containers"
 )
+
+pluginManagement {
+  repositories {
+    mavenLocal()
+    gradlePluginPortal()
+  }
+}
