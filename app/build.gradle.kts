@@ -1,16 +1,49 @@
 plugins {
   id("com.android.application")
-  id("kotlin-android")
-  id("kotlin-kapt")
-  id("de.kuschku.justcode")
+  kotlin("android")
+  kotlin("kapt")
+  id("de.justjanne.git-version")
+  id("de.justjanne.android-signing")
 }
 
 android {
+  setCompileSdkVersion(30)
+  buildToolsVersion = "30.0.3"
+
   defaultConfig {
     applicationId = "com.iskrembilen.quasseldroid"
 
     setMinSdkVersion(21)
     setTargetSdkVersion(30)
+
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    // Disable test runner analytics
+    testInstrumentationRunnerArguments(mapOf(
+      "disableAnalytics" to "true"
+    ))
+  }
+
+  buildTypes {
+    getByName("release") {
+      isMinifyEnabled = true
+      isShrinkResources = true
+      multiDexEnabled = true
+
+      proguardFiles(
+        getDefaultProguardFile("proguard-android.txt"),
+        "proguard-rules.pro"
+      )
+    }
+
+    getByName("debug") {
+      applicationIdSuffix = ".debug"
+      multiDexEnabled = true
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
 
   buildFeatures {

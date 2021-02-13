@@ -1,7 +1,7 @@
 plugins {
   kotlin("jvm")
-  jacoco
-  id("de.justjanne.jacoco-cobertura-converter") version "1.0"
+  id("jacoco")
+  id("de.justjanne.jacoco-cobertura-converter")
 }
 
 tasks.withType<Test> {

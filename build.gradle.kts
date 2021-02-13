@@ -19,6 +19,10 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+plugins {
+  id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+}
+
 buildscript {
   repositories {
     google()
@@ -37,7 +41,6 @@ allprojects {
     google()
     mavenCentral()
     jcenter()
-    mavenLocal()
   }
 
   tasks.withType<KotlinCompile>().configureEach {
