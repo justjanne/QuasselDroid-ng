@@ -105,6 +105,17 @@ class DateTimeSerializerTest {
   )
 
   @Test
+  fun testInvalidDateTime() = qtSerializerTest(
+    DateTimeSerializer,
+    LocalDateTime
+      .of(2019, Month.JANUARY, 15, 20, 25),
+    byteBufferOf(0x00u, 0x25u, 0x83u, 0x83u, 0x04u, 0x61u, 0x85u, 0x60u, 0x09u),
+    matcher = ::TemporalMatcher,
+    serializeFeatureSet = null,
+    featureSets = emptyList(),
+  )
+
+  @Test
   fun testOldJavaDate() {
     assertThrows<IllegalArgumentException>("Unsupported Format: org.threeten.bp.chrono.JapaneseDate") {
       qtSerializerTest(

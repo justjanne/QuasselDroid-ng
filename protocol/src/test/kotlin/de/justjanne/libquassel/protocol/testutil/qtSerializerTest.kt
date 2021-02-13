@@ -19,6 +19,7 @@
 package de.justjanne.libquassel.protocol.testutil
 
 import de.justjanne.libquassel.protocol.features.FeatureSet
+import de.justjanne.libquassel.protocol.io.contentToString
 import de.justjanne.libquassel.protocol.serializers.primitive.QtSerializer
 import org.hamcrest.Matcher
 import java.nio.ByteBuffer
@@ -31,6 +32,7 @@ fun <T : Any?> qtSerializerTest(
   featureSets: List<FeatureSet> = listOf(FeatureSet.none(), FeatureSet.all()),
   deserializeFeatureSet: FeatureSet? = FeatureSet.all(),
   serializeFeatureSet: FeatureSet? = FeatureSet.all(),
+  supportsVariant: Boolean = true,
 ) {
   if (encoded != null) {
     if (deserializeFeatureSet != null) {
@@ -46,6 +48,8 @@ fun <T : Any?> qtSerializerTest(
   }
   for (featureSet in featureSets) {
     testQtSerializerDirect(serializer, value, featureSet, matcher?.invoke(value))
-    testQtSerializerVariant(serializer, value, featureSet, matcher?.invoke(value))
+    if (supportsVariant) {
+      testQtSerializerVariant(serializer, value, featureSet, matcher?.invoke(value))
+    }
   }
 }

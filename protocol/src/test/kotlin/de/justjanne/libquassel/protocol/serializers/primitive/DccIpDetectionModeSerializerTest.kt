@@ -18,6 +18,7 @@
  */
 package de.justjanne.libquassel.protocol.serializers.primitive
 
+import de.justjanne.libquassel.protocol.features.FeatureSet
 import de.justjanne.libquassel.protocol.serializers.QuasselSerializers
 import de.justjanne.libquassel.protocol.testutil.byteBufferOf
 import de.justjanne.libquassel.protocol.testutil.quasselSerializerTest
@@ -49,5 +50,14 @@ class DccIpDetectionModeSerializerTest {
     DccIpDetectionModeSerializer,
     DccIpDetectionMode.Manual,
     byteBufferOf(0x01u)
+  )
+
+  @Test
+  fun testNull() = quasselSerializerTest(
+    DccIpDetectionModeSerializer,
+    null,
+    byteBufferOf(0x00u),
+    deserializeFeatureSet = null,
+    featureSets = emptyList(),
   )
 }

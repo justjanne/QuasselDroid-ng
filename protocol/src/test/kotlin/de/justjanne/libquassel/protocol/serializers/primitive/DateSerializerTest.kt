@@ -18,45 +18,42 @@
  */
 package de.justjanne.libquassel.protocol.serializers.primitive
 
-import de.justjanne.libquassel.protocol.serializers.QuasselSerializers
+import de.justjanne.libquassel.protocol.serializers.QtSerializers
 import de.justjanne.libquassel.protocol.testutil.byteBufferOf
-import de.justjanne.libquassel.protocol.testutil.quasselSerializerTest
-import de.justjanne.libquassel.protocol.types.DccPortSelectionMode
-import de.justjanne.libquassel.protocol.variant.QuasselType
+import de.justjanne.libquassel.protocol.testutil.matchers.TemporalMatcher
+import de.justjanne.libquassel.protocol.testutil.qtSerializerTest
+import de.justjanne.libquassel.protocol.variant.QtType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.threeten.bp.*
+import org.threeten.bp.chrono.JapaneseDate
+import org.threeten.bp.temporal.Temporal
 
-class DccPortSelectionModeSerializerTest {
+class DateSerializerTest {
   @Test
   fun testIsRegistered() {
     assertEquals(
-      DccPortSelectionModeSerializer,
-      QuasselSerializers.find<DccPortSelectionMode>(
-        QuasselType.DccConfigPortSelectionMode
-      ),
+      DateSerializer,
+      QtSerializers.find<LocalDate>(QtType.QDate),
     )
   }
 
   @Test
-  fun testAutomatic() = quasselSerializerTest(
-    DccPortSelectionModeSerializer,
-    DccPortSelectionMode.Automatic,
-    byteBufferOf(0x00u)
+  fun testEpoch() = qtSerializerTest(
+    DateSerializer,
+    LocalDate
+      .of(1970, 1, 1),
+    byteBufferOf(0, 37, 61, -116),
+    matcher = ::TemporalMatcher
   )
 
   @Test
-  fun testManual() = quasselSerializerTest(
-    DccPortSelectionModeSerializer,
-    DccPortSelectionMode.Manual,
-    byteBufferOf(0x01u)
-  )
-
-  @Test
-  fun testNull() = quasselSerializerTest(
-    DccPortSelectionModeSerializer,
-    null,
-    byteBufferOf(0x00u),
-    deserializeFeatureSet = null,
-    featureSets = emptyList(),
+  fun testNormalCase() = qtSerializerTest(
+    DateSerializer,
+    LocalDate
+      .of(2019, Month.JANUARY, 15),
+    byteBufferOf(0, 37, -125, -125),
+    matcher = ::TemporalMatcher
   )
 }

@@ -18,45 +18,39 @@
  */
 package de.justjanne.libquassel.protocol.serializers.primitive
 
-import de.justjanne.libquassel.protocol.serializers.QuasselSerializers
+import de.justjanne.libquassel.protocol.serializers.QtSerializers
 import de.justjanne.libquassel.protocol.testutil.byteBufferOf
-import de.justjanne.libquassel.protocol.testutil.quasselSerializerTest
-import de.justjanne.libquassel.protocol.types.DccPortSelectionMode
-import de.justjanne.libquassel.protocol.variant.QuasselType
+import de.justjanne.libquassel.protocol.testutil.matchers.TemporalMatcher
+import de.justjanne.libquassel.protocol.testutil.qtSerializerTest
+import de.justjanne.libquassel.protocol.variant.QtType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.threeten.bp.LocalTime
 
-class DccPortSelectionModeSerializerTest {
+class TimeSerializerTest {
   @Test
   fun testIsRegistered() {
     assertEquals(
-      DccPortSelectionModeSerializer,
-      QuasselSerializers.find<DccPortSelectionMode>(
-        QuasselType.DccConfigPortSelectionMode
-      ),
+      TimeSerializer,
+      QtSerializers.find<LocalTime>(QtType.QTime),
     )
   }
 
   @Test
-  fun testAutomatic() = quasselSerializerTest(
-    DccPortSelectionModeSerializer,
-    DccPortSelectionMode.Automatic,
-    byteBufferOf(0x00u)
+  fun testEpoch() = qtSerializerTest(
+    TimeSerializer,
+    LocalTime
+      .of(0, 0),
+    byteBufferOf(0, 0, 0, 0),
+    matcher = ::TemporalMatcher
   )
 
   @Test
-  fun testManual() = quasselSerializerTest(
-    DccPortSelectionModeSerializer,
-    DccPortSelectionMode.Manual,
-    byteBufferOf(0x01u)
-  )
-
-  @Test
-  fun testNull() = quasselSerializerTest(
-    DccPortSelectionModeSerializer,
-    null,
-    byteBufferOf(0x00u),
-    deserializeFeatureSet = null,
-    featureSets = emptyList(),
+  fun testNormalCase() = qtSerializerTest(
+    TimeSerializer,
+    LocalTime
+      .of(20, 25),
+    byteBufferOf(0x04u, 0x61u, 0x85u, 0x60u),
+    matcher = ::TemporalMatcher
   )
 }
