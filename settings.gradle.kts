@@ -21,11 +21,7 @@ rootProject.name = "Quasseldroid"
 rootProject.buildFileName = "build.gradle.kts"
 
 include(
-  ":app",
-  ":protocol",
-  ":coverage-annotations",
-  ":libquassel",
-  ":ci-containers"
+  ":app"
 )
 
 pluginManagement {

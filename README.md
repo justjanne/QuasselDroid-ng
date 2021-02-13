@@ -53,63 +53,6 @@ Authors of legacy Quasseldroid:
 * **Ken Børge Viktil** (Kenji)
   Legacy UI
 
-## Used Libraries
-
-### Quasseldroid
-
-* [**Android X**](https://developer.android.com/jetpack/androidx/)
-  Apache-2.0
-* [**atinject**](https://code.google.com/archive/p/atinject/)
-  Apache-2.0
-* [**AutoService**](https://github.com/google/auto/tree/master/service)
-  Apache-2.0
-* [**Better Link Movement Method**](https://github.com/Saketme/Better-Link-Movement-Method)
-  Apache-2.0
-* [**Butter Knife**](http://jakewharton.github.io/butterknife/)
-  Apache-2.0
-* [**Dagger 2**](https://google.github.io/dagger/)
-  Apache-2.0
-* [**Glide**](https://bumptech.github.io/glide/)
-  Apache-2.0
-* [**Gson**](https://github.com/google/gson)
-  Apache-2.0
-* [**JavaPoet**](https://github.com/square/javapoet)
-  Apache-2.0
-* [**JetBrains Java Annotations**](https://github.com/JetBrains/java-annotations)
-  Apache-2.0
-* [**Kotlin Standard Library**](https://kotlinlang.org/)
-  Apache-2.0
-* [**LeakCanary**](https://github.com/square/leakcanary)
-  Apache-2.0
-* [**Material Design Icons: Community**](https://github.com/Templarian/MaterialDesign)
-  SIL Open Font License v1.1
-* [**Material Design Icons: Google**](https://github.com/google/material-design-icons)
-  Apache-2.0
-* [**Material Dialogs**](https://github.com/afollestad/material-dialogs)
-  MIT
-* [**MaterialProgressBar**](https://github.com/DreaminginCodeZH/MaterialProgressBar)
-  Apache-2.0
-* [**Quassel**](https://quassel-irc.org/)
-  GPLv3
-* [**Reactive Streams**](https://github.com/ReactiveX/RxJava)
-  CC0
-* [**Retrofit**](https://square.github.io/retrofit/)
-  Apache-2.0
-* [**RecyclerView-FastScroll**](https://github.com/timusus/RecyclerView-FastScroll)
-  Apache-2.0
-* [**RxJava**](https://github.com/ReactiveX/RxJava)
-  Apache-2.0
-* [**ThreeTen backport project**](http://www.threeten.org/threetenbp/)
-  BSD 3-clause
-
-## Themes
-* [**Dracula**](https://draculatheme.com/)
-  MIT
-* [**Gruvbox**](https://github.com/morhetz/gruvbox)
-  MIT
-* [**Solarized**](http://ethanschoonover.com/solarized)
-  MIT
-
 ## License
 
 > This program is free software: you can redistribute it and/or modify it

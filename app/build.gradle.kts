@@ -95,10 +95,11 @@ dependencies {
 
   implementation("org.threeten", "threetenbp", "1.4.0")
 
-  implementation(project(":protocol"))
-
   implementation("io.coil-kt", "coil", "1.1.1")
   implementation("dev.chrisbanes.accompanist", "accompanist-coil", "0.5.0")
+
+  val libquasselVersion: String by project
+  implementation("de.justjanne.libquassel", "libquassel-client", libquasselVersion)
 
   val junit4Version: String by project
   testImplementation("junit", "junit", junit4Version)
