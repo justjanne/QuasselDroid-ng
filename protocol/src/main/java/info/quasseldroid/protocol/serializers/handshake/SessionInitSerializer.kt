@@ -19,22 +19,30 @@
 
 package info.quasseldroid.protocol.serializers.handshake
 
-import info.quasseldroid.protocol.messages.handshake.ClientInitReject
+import info.quasseldroid.protocol.messages.handshake.SessionInit
 import info.quasseldroid.protocol.variant.QVariantMap
 import info.quasseldroid.protocol.variant.QtType
 import info.quasseldroid.protocol.variant.into
 import info.quasseldroid.protocol.variant.qVariant
 
-object ClientInitRejectSerializer : HandshakeSerializer<ClientInitReject> {
-  override val type: String = "ClientInitReject"
-  override val javaType: Class<out ClientInitReject> = ClientInitReject::class.java
+object SessionInitSerializer : HandshakeSerializer<SessionInit> {
+  override val type: String = "SessionInit"
+  override val javaType: Class<out SessionInit> = SessionInit::class.java
 
-  override fun serialize(data: ClientInitReject) = mapOf(
+  override fun serialize(data: SessionInit) = mapOf(
     "MsgType" to qVariant(type, QtType.QString),
-    "Error" to qVariant(data.errorString, QtType.QString)
+    "SessionState" to qVariant(mapOf(
+      "BufferInfos" to qVariant(data.bufferInfos, QtType.QVariantList),
+      "NetworkIds" to qVariant(data.networkIds, QtType.QVariantList),
+      "Identities" to qVariant(data.identities, QtType.QVariantList),
+    ), QtType.QVariantMap)
   )
 
-  override fun deserialize(data: QVariantMap) = ClientInitReject(
-    errorString = data["Error"].into()
-  )
+  override fun deserialize(data: QVariantMap) = data["SessionState"].into<QVariantMap>().let {
+    SessionInit(
+      bufferInfos = it?.get("BufferInfos").into(),
+      networkIds = it?.get("NetworkIds").into(),
+      identities = it?.get("Identities").into(),
+    )
+  }
 }

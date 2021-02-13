@@ -19,22 +19,24 @@
 
 package info.quasseldroid.protocol.serializers.handshake
 
-import info.quasseldroid.protocol.messages.handshake.ClientInitReject
+import info.quasseldroid.protocol.messages.handshake.ClientLogin
 import info.quasseldroid.protocol.variant.QVariantMap
 import info.quasseldroid.protocol.variant.QtType
 import info.quasseldroid.protocol.variant.into
 import info.quasseldroid.protocol.variant.qVariant
 
-object ClientInitRejectSerializer : HandshakeSerializer<ClientInitReject> {
-  override val type: String = "ClientInitReject"
-  override val javaType: Class<out ClientInitReject> = ClientInitReject::class.java
+object ClientLoginSerializer : HandshakeSerializer<ClientLogin> {
+  override val type: String = "ClientLogin"
+  override val javaType: Class<out ClientLogin> = ClientLogin::class.java
 
-  override fun serialize(data: ClientInitReject) = mapOf(
+  override fun serialize(data: ClientLogin) = mapOf(
     "MsgType" to qVariant(type, QtType.QString),
-    "Error" to qVariant(data.errorString, QtType.QString)
+    "User" to qVariant(data.user, QtType.QString),
+    "Password" to qVariant(data.password, QtType.QString)
   )
 
-  override fun deserialize(data: QVariantMap) = ClientInitReject(
-    errorString = data["Error"].into()
+  override fun deserialize(data: QVariantMap) = ClientLogin(
+    user = data["User"].into(),
+    password = data["Password"].into(),
   )
 }

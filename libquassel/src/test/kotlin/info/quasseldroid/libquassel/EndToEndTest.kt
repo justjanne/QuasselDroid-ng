@@ -28,15 +28,18 @@ import info.quasseldroid.libquassel.testutil.TestX509TrustManager
 import info.quasseldroid.protocol.connection.*
 import info.quasseldroid.protocol.features.FeatureSet
 import info.quasseldroid.protocol.io.ChainedByteBuffer
-import info.quasseldroid.protocol.messages.handshake.ClientInit
+import info.quasseldroid.protocol.messages.handshake.*
 import info.quasseldroid.protocol.serializers.HandshakeSerializers
 import info.quasseldroid.protocol.serializers.handshake.ClientInitSerializer
+import info.quasseldroid.protocol.serializers.handshake.ClientLoginSerializer
+import info.quasseldroid.protocol.serializers.handshake.CoreSetupDataSerializer
 import info.quasseldroid.protocol.serializers.primitive.HandshakeMapSerializer
 import info.quasseldroid.protocol.serializers.primitive.IntSerializer
 import info.quasseldroid.protocol.variant.into
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Test
 import java.net.InetSocketAddress
 import java.nio.ByteBuffer
@@ -58,8 +61,11 @@ class EndToEndTest {
   private val sendBuffer = ChainedByteBuffer(direct = true)
   private val channel = CoroutineChannel()
 
+  private val username = "AzureDiamond"
+  private val password = "hunter2"
+
   @Test
-  fun testConnect() = runBlocking {
+  fun testConnect(): Unit = runBlocking {
     channel.connect(
       InetSocketAddress(
         quassel.address,
@@ -118,12 +124,107 @@ class EndToEndTest {
         connectionFeatureSet
       )
     }
+    println("Reading clientInit response")
     read {
       val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
-      println(data)
       val msgType: String = data["MsgType"].into("")
-      val message: Any? = HandshakeSerializers[msgType]?.deserialize(data)
-      println(message)
+      HandshakeSerializers[msgType]?.deserialize(data)
+        as? ClientInitAck
+        ?: fail("Could not deserialize message $data")
+    }
+    println("Writing invalid core init")
+    write {
+      HandshakeMapSerializer.serialize(
+        it,
+        CoreSetupDataSerializer.serialize(CoreSetupData(
+          adminUser = username,
+          adminPassword = password,
+          backend = "MongoDB",
+          setupData = emptyMap(),
+          authenticator = "OAuth2",
+          authSetupData = emptyMap(),
+        )),
+        connectionFeatureSet
+      )
+    }
+    println("Reading invalid clientInit response")
+    read {
+      val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
+      val msgType: String = data["MsgType"].into("")
+      assertEquals(
+        CoreSetupReject("Could not setup storage!"),
+        HandshakeSerializers[msgType]?.deserialize(data)
+      )
+    }
+    println("Writing valid core init")
+    write {
+      HandshakeMapSerializer.serialize(
+        it,
+        CoreSetupDataSerializer.serialize(CoreSetupData(
+          adminUser = username,
+          adminPassword = password,
+          backend = "SQLite",
+          setupData = emptyMap(),
+          authenticator = "Database",
+          authSetupData = emptyMap(),
+        )),
+        connectionFeatureSet
+      )
+    }
+    println("Reading valid clientInit response")
+    read {
+      val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
+      val msgType: String = data["MsgType"].into("")
+      HandshakeSerializers[msgType]?.deserialize(data)
+        as? CoreSetupAck
+        ?: fail("Could not deserialize message $data")
+    }
+    println("Writing invalid clientLogin")
+    write {
+      HandshakeMapSerializer.serialize(
+        it,
+        ClientLoginSerializer.serialize(ClientLogin(
+          user = "acidburn",
+          password = "ineverweardresses"
+        )),
+        connectionFeatureSet
+      )
+    }
+    println("Reading invalid clientLogin response")
+    read {
+      val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
+      val msgType: String = data["MsgType"].into("")
+      assertEquals(
+        ClientLoginReject("<b>Invalid username or password!</b><br>The username/password combination you supplied could not be found in the database."),
+        HandshakeSerializers[msgType]?.deserialize(data)
+      )
+    }
+    println("Writing valid clientLogin")
+    write {
+      HandshakeMapSerializer.serialize(
+        it,
+        ClientLoginSerializer.serialize(ClientLogin(
+          user = username,
+          password = password
+        )),
+        connectionFeatureSet
+      )
+    }
+    println("Reading valid clientLogin response")
+    read {
+      val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
+      val msgType: String = data["MsgType"].into("")
+      HandshakeSerializers[msgType]?.deserialize(data)
+        as? ClientLoginAck
+        ?: fail("Could not deserialize message $data")
+    }
+    println("Reading valid session init")
+    read {
+      val data = HandshakeMapSerializer.deserialize(it, connectionFeatureSet)
+      val msgType: String = data["MsgType"].into("")
+      HandshakeSerializers[msgType]?.deserialize(data)
+        as? SessionInit
+        ?: fail("Could not deserialize message $data")
     }
   }
 

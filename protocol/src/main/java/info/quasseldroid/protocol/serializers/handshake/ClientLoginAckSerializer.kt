@@ -24,28 +24,16 @@ import de.justjanne.bitflags.toBits
 import info.quasseldroid.protocol.features.LegacyFeature
 import info.quasseldroid.protocol.features.QuasselFeatureName
 import info.quasseldroid.protocol.messages.handshake.ClientInitAck
+import info.quasseldroid.protocol.messages.handshake.ClientLoginAck
 import info.quasseldroid.protocol.variant.*
 
-object ClientInitAckSerializer : HandshakeSerializer<ClientInitAck> {
-  override val type: String = "ClientInitAck"
-  override val javaType: Class<out ClientInitAck> = ClientInitAck::class.java
+object ClientLoginAckSerializer : HandshakeSerializer<ClientLoginAck> {
+  override val type: String = "ClientLoginAck"
+  override val javaType: Class<out ClientLoginAck> = ClientLoginAck::class.java
 
-  override fun serialize(data: ClientInitAck) = mapOf(
+  override fun serialize(data: ClientLoginAck) = mapOf(
     "MsgType" to qVariant(type, QtType.QString),
-    "CoreFeatures" to qVariant(data.coreFeatures.toBits(), QtType.UInt),
-    "StorageBackends" to qVariant(data.backendInfo, QtType.QVariantList),
-    "Authenticator" to qVariant(data.authenticatorInfo, QtType.QVariantList),
-    "Configured" to qVariant(data.coreConfigured, QtType.Bool),
-    "FeatureList" to qVariant(data.featureList, QtType.QStringList)
   )
 
-  override fun deserialize(data: QVariantMap) = ClientInitAck(
-    coreFeatures = LegacyFeature.of(data["CoreFeatures"].into<UInt>()),
-    backendInfo = data["StorageBackends"].into(emptyList()),
-    authenticatorInfo = data["Authenticators"].into(emptyList()),
-    coreConfigured = data["Configured"].into(),
-    featureList = data["FeatureList"].into<QStringList>(emptyList())
-      .filterNotNull()
-      .map(::QuasselFeatureName),
-  )
+  override fun deserialize(data: QVariantMap) = ClientLoginAck
 }

@@ -40,9 +40,6 @@ class QuasselCoreContainer : GenericContainer<QuasselCoreContainer>(
       "/quasseltest.key",
       BindMode.READ_WRITE)
     withEnv("SSL_KEY_FILE", "/quasseltest.key")
-    withEnv("CONFIG_FROM_ENVIRONMENT", "true")
-    withEnv("DB_BACKEND", "SQLite")
-    withEnv("AUTH_AUTHENTICATOR", "Database")
     withEnv("SSL_REQUIRED", "true")
   }
 

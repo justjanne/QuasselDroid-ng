@@ -44,12 +44,10 @@ object ClientInitSerializer : HandshakeSerializer<ClientInit> {
     ),
   )
 
-  override fun deserialize(data: QVariantMap): ClientInit {
-    return ClientInit(
-      clientVersion = data["ClientVersion"].into(),
-      buildDate = data["ClientDate"].into(),
-      clientFeatures = LegacyFeature.of(data["Features"].into<UInt>()),
-      featureList = data["FeatureList"].into(emptyList<String>()).map(::QuasselFeatureName),
-    )
-  }
+  override fun deserialize(data: QVariantMap) = ClientInit(
+    clientVersion = data["ClientVersion"].into(),
+    buildDate = data["ClientDate"].into(),
+    clientFeatures = LegacyFeature.of(data["Features"].into<UInt>()),
+    featureList = data["FeatureList"].into(emptyList<String>()).map(::QuasselFeatureName),
+  )
 }

@@ -19,10 +19,7 @@
 
 package info.quasseldroid.protocol.serializers
 
-import info.quasseldroid.protocol.serializers.handshake.ClientInitAckSerializer
-import info.quasseldroid.protocol.serializers.handshake.ClientInitRejectSerializer
-import info.quasseldroid.protocol.serializers.handshake.ClientInitSerializer
-import info.quasseldroid.protocol.serializers.handshake.HandshakeSerializer
+import info.quasseldroid.protocol.serializers.handshake.*
 import info.quasseldroid.protocol.serializers.primitive.*
 import java.util.*
 
@@ -31,6 +28,16 @@ object HandshakeSerializers {
     ClientInitSerializer,
     ClientInitAckSerializer,
     ClientInitRejectSerializer,
+
+    CoreSetupDataSerializer,
+    CoreSetupAckSerializer,
+    CoreSetupRejectSerializer,
+
+    ClientLoginSerializer,
+    ClientLoginAckSerializer,
+    ClientLoginRejectSerializer,
+
+    SessionInitSerializer,
   ).associateBy(HandshakeSerializer<*>::type)
 
   operator fun get(type: String) = serializers[type]
