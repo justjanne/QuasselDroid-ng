@@ -19,7 +19,6 @@
 package de.justjanne.libquassel.protocol.testutil
 
 import de.justjanne.libquassel.protocol.features.FeatureSet
-import de.justjanne.libquassel.protocol.io.contentToString
 import de.justjanne.libquassel.protocol.serializers.primitive.QtSerializer
 import org.hamcrest.Matcher
 import java.nio.ByteBuffer

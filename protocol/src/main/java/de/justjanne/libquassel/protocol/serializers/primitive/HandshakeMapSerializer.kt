@@ -21,7 +21,11 @@ package de.justjanne.libquassel.protocol.serializers.primitive
 
 import de.justjanne.libquassel.protocol.features.FeatureSet
 import de.justjanne.libquassel.protocol.io.ChainedByteBuffer
-import de.justjanne.libquassel.protocol.variant.*
+import de.justjanne.libquassel.protocol.variant.QVariantList
+import de.justjanne.libquassel.protocol.variant.QVariantMap
+import de.justjanne.libquassel.protocol.variant.QtType
+import de.justjanne.libquassel.protocol.variant.into
+import de.justjanne.libquassel.protocol.variant.qVariant
 import java.nio.ByteBuffer
 
 object HandshakeMapSerializer : QtSerializer<QVariantMap> {

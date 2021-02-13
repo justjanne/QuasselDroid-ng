@@ -25,7 +25,14 @@ import de.justjanne.libquassel.protocol.features.FeatureSet
 import de.justjanne.libquassel.protocol.serializers.QuasselSerializers
 import de.justjanne.libquassel.protocol.testutil.byteBufferOf
 import de.justjanne.libquassel.protocol.testutil.quasselSerializerTest
-import de.justjanne.libquassel.protocol.types.*
+import de.justjanne.libquassel.protocol.types.BufferId
+import de.justjanne.libquassel.protocol.types.BufferInfo
+import de.justjanne.libquassel.protocol.types.BufferType
+import de.justjanne.libquassel.protocol.types.Message
+import de.justjanne.libquassel.protocol.types.MessageFlag
+import de.justjanne.libquassel.protocol.types.MessageType
+import de.justjanne.libquassel.protocol.types.MsgId
+import de.justjanne.libquassel.protocol.types.NetworkId
 import de.justjanne.libquassel.protocol.variant.QuasselType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

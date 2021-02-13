@@ -18,7 +18,6 @@
  */
 package de.justjanne.libquassel.protocol.serializers.primitive
 
-import de.justjanne.libquassel.protocol.features.FeatureSet
 import de.justjanne.libquassel.protocol.serializers.QuasselSerializers
 import de.justjanne.libquassel.protocol.testutil.byteBufferOf
 import de.justjanne.libquassel.protocol.testutil.quasselSerializerTest

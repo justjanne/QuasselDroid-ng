@@ -24,7 +24,11 @@ import de.justjanne.bitflags.toBits
 import de.justjanne.libquassel.protocol.features.LegacyFeature
 import de.justjanne.libquassel.protocol.features.QuasselFeatureName
 import de.justjanne.libquassel.protocol.messages.handshake.ClientInitAck
-import de.justjanne.libquassel.protocol.variant.*
+import de.justjanne.libquassel.protocol.variant.QStringList
+import de.justjanne.libquassel.protocol.variant.QVariantMap
+import de.justjanne.libquassel.protocol.variant.QtType
+import de.justjanne.libquassel.protocol.variant.into
+import de.justjanne.libquassel.protocol.variant.qVariant
 
 object ClientInitAckSerializer : HandshakeSerializer<ClientInitAck> {
   override val type: String = "ClientInitAck"

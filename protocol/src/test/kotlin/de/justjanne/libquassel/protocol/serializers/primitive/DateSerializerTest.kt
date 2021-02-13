@@ -25,10 +25,8 @@ import de.justjanne.libquassel.protocol.testutil.qtSerializerTest
 import de.justjanne.libquassel.protocol.variant.QtType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.threeten.bp.*
-import org.threeten.bp.chrono.JapaneseDate
-import org.threeten.bp.temporal.Temporal
+import org.threeten.bp.LocalDate
+import org.threeten.bp.Month
 
 class DateSerializerTest {
   @Test

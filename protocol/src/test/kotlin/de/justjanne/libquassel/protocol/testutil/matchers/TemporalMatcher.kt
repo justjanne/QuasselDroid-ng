@@ -20,7 +20,12 @@ package de.justjanne.libquassel.protocol.testutil.matchers
 
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
-import org.threeten.bp.*
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.temporal.Temporal
 
 class TemporalMatcher<T: Temporal>(

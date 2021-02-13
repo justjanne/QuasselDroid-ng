@@ -26,7 +26,11 @@ import de.justjanne.libquassel.protocol.variant.QtType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.threeten.bp.*
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Month
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZoneOffset
 import org.threeten.bp.chrono.JapaneseDate
 import org.threeten.bp.temporal.Temporal
 
