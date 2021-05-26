@@ -191,10 +191,10 @@
   <string name="deceptive_network_freenode"><![CDATA[
     <p>
       Das Team dieses Netzwerkes hat die Kontrolle über die offiziellen Kanäle mehrerer Projekte gegen die Wünsche der Channel-Operatoren übernommen.
-      Diese Projekte sind auf andere IRC-Netzwerke wie <a href="https://libera.chat/">libera.chat</a> und <a href="https://www.oftc.net/">OFTC</a> umgezogen.
+      Ein Großteil dieser Projekte ist auf andere IRC-Netzwerke wie <a href="https://libera.chat/">libera.chat</a> und <a href="https://www.oftc.net/">OFTC</a> umgezogen.
     </p>
     <p>
-      Bitte verifiziere vor dem Betreten und Chatten in Kanälen, ob die Channels umgezogen sind oder von neuen Moderatoren übernommen wurden.
+      Bitte verifiziere vor dem Betreten der Channels und dem Chatten, ob die Channels umgezogen sind oder ob sie von neue Moderatoren übernommen wurden.
     </p>
   ]]></string>
 

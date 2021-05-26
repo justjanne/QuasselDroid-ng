@@ -191,7 +191,9 @@
   <string name="deceptive_network_freenode"><![CDATA[
     <p>
       The staff of this network have taken over several official project channels against the wishes of the channel operators.
-      Those projects have moved to other networks such as <a href="https://libera.chat/">libera.chat</a> and <a href="https://www.oftc.net/">OFTC</a>.
+      Many of these projects have moved to other networks such as <a href="https://libera.chat/">libera.chat</a> and <a href="https://www.oftc.net/">OFTC</a>.
+    </p>
+    <p>
       Before joining or chatting in any project channel make sure to verify that the channel you are in hasn’t moved or been taken over.
     </p>
   ]]></string>
