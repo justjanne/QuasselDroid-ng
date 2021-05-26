@@ -103,7 +103,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.4.31"))
+  implementation(kotlin("stdlib", "1.5.0"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.1.0-alpha10")
@@ -120,7 +120,7 @@ dependencies {
 
   withVersion("2.2.5") {
     implementation("androidx.room", "room-runtime", version)
-    annotationProcessor("androidx.room", "room-compiler", version)
+    kapt("androidx.room", "room-compiler", version)
     implementation("androidx.room", "room-rxjava2", version)
     testImplementation("androidx.room", "room-testing", version)
   }

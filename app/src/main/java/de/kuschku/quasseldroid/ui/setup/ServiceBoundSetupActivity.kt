@@ -187,7 +187,9 @@ abstract class ServiceBoundSetupActivity :
     }
 
     adapter = SlidePagerAdapter(supportFragmentManager)
-    fragments.forEach(adapter::addFragment)
+    for (fragment in fragments) {
+      adapter.addFragment(fragment)
+    }
     viewPager.adapter = adapter
 
     pageChangeListener = SetupActivityViewPagerPageChangeListener(this)

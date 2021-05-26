@@ -109,8 +109,8 @@
   <string name="label_reply">Réponse</string>
   <string name="label_reset">Réinitialiser</string>
   <string name="label_save">Sauvegarder</string>
-  <string name="label_saving">En sauvegarde...</string>
-  <string name="label_search">Rechercher...</string>
+  <string name="label_saving">En sauvegarde…</string>
+  <string name="label_search">Rechercher…</string>
   <string name="label_search_buffer">Rechercher des chats</string>
   <string name="label_search_channels">Rechercher des salons</string>
   <string name="label_select">Sélectionner</string>

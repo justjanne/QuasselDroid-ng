@@ -18,6 +18,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+plugins {
+  java
+}
 
 buildscript {
   repositories {
@@ -26,7 +29,7 @@ buildscript {
   }
   dependencies {
     classpath("com.android.tools.build:gradle:4.1.2")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0")
   }
 }
 
@@ -39,11 +42,11 @@ allprojects {
 
   tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-      freeCompilerArgs += listOf(
-        "-XXLanguage:+InlineClasses",
-        "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"
+      freeCompilerArgs = listOf(
+        "-Xinline-classes",
+        "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
       )
-      jvmTarget = "1.6"
+      jvmTarget = "1.8"
     }
   }
 }

@@ -58,7 +58,7 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
                 val buffer = bufferSyncer.find(networkId = networkId,
                                                type = Buffer_Type.of(Buffer_Type.StatusBuffer))
                 if (buffer != null) {
-                  data.getStringArray("channels")?.toList().orEmpty().forEach {
+                  for (it in data.getStringArray("channels").orEmpty()) {
                     sendInput(buffer, "/join $it")
                   }
                 }

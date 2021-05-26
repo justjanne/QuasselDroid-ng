@@ -139,8 +139,8 @@ class AutoCompleteHelper(
           else                            -> it
         }
       }
-      dataListeners.forEach {
-        it(data)
+      for (dataListener in dataListeners) {
+        dataListener(data)
       }
     })
   }

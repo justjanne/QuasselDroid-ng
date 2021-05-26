@@ -148,7 +148,9 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     }
 
     adapter = SlidePagerAdapter(supportFragmentManager)
-    fragments.forEach(adapter::addFragment)
+    for (fragment in fragments) {
+      adapter.addFragment(fragment)
+    }
     viewPager.adapter = adapter
 
     pageChangeListener = SetupActivityViewPagerPageChangeListener(this)

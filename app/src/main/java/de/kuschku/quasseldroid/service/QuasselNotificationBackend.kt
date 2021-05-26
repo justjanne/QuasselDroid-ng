@@ -256,7 +256,7 @@ class QuasselNotificationBackend @Inject constructor(
     if (show) {
       executor.schedule(
         {
-          results.map(NotificationData::bufferId).distinct().forEach { buffer ->
+          for (buffer in results.map(NotificationData::bufferId).distinct()) {
             this.showNotification(buffer)
           }
         },
@@ -267,13 +267,13 @@ class QuasselNotificationBackend @Inject constructor(
   }
 
   fun showConnectedNotifications() {
-    database.notifications().buffers().forEach { buffer ->
+    for (buffer in database.notifications().buffers()) {
       this.showNotification(buffer, true)
     }
   }
 
   fun showDisconnectedNotifications() {
-    database.notifications().buffers().forEach { buffer ->
+    for (buffer in database.notifications().buffers()) {
       this.showNotification(buffer, false)
     }
   }

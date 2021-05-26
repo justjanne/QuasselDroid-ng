@@ -32,8 +32,8 @@ class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
 
   val result = Bundle()
     get() {
-      (0 until retainedFragments.size()).map(retainedFragments::valueAt).forEach {
-        it.save(field)
+      for (index in 0 until retainedFragments.size()) {
+        retainedFragments.valueAt(index).save(field)
       }
       return field
     }
