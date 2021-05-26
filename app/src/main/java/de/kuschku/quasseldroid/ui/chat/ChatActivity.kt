@@ -769,7 +769,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       if (modelHelper.connectionProgress.value?.first == ConnectionState.CONNECTED
         && modelHelper.deceptiveNetwork.value == true) {
         DeceptiveNetworkDialog.Builder(this)
-          .message(R.raw.untrustworthy_network_freenode)
+          .message(R.string.deceptive_network_freenode)
           .show()
       } else {
         modelHelper.sessionManager.value?.orNull()?.apply {
@@ -789,6 +789,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           ConnectionState.CLOSED     -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
 
+            binding.layoutMain.connectionStatus.icon.setImageResource(R.drawable.ic_disconnected)
             binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
             binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_disconnected))
           }
@@ -818,8 +819,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
           ConnectionState.CONNECTED  -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
-            if (deceptive) {
+            if (deceptive && appearanceSettings.deceptiveNetworks) {
               binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
+              binding.layoutMain.connectionStatus.icon.setImageResource(R.drawable.ic_alert)
               binding.layoutMain.connectionStatus.setText(R.string.deceptive_network)
             } else {
               binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_NONE)

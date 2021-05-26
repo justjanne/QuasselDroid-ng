@@ -298,21 +298,16 @@
     ]
   },
   {
-    "name": "Freenode",
+    "name": "Libera.Chat",
     "default": true,
     "defaultChannels": [
       "#quassel"
     ],
     "servers": [
       {
-        "host": "chat.freenode.net",
+        "host": "irc.libera.chat",
         "port": 6697,
         "secure": true
-      },
-      {
-        "host": "chat.freenode.net",
-        "port": 6667,
-        "secure": false
       }
     ]
   },

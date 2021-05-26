@@ -188,6 +188,14 @@
   <string name="notification_channel_old_highlight_title">Old Highlights</string>
 
   <string name="deceptive_network">Deceptive Network detected</string>
+  <string name="deceptive_network_freenode"><![CDATA[
+    <p>
+      The staff of this network have taken over several official project channels.
+      This happened against the wishes of the channel operators.
+      Those projects have moved to other networks such as <a href="https://libera.chat/">libera.chat</a> and <a href="https://www.oftc.net/">OFTC</a>.
+      Before joining or chatting in any project channel make sure to verify that the channel you are in hasn’t moved or been taken over.
+    </p>
+  ]]></string>
 
   <string name="label_missing_features">Missing Features</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Your core is missing features that are required for Quasseldroid to work correctly. You should &lt;a href="https://quassel-irc.org&gt;upgrade&lt;/a&gt; your Quassel core to %1$s or newer.</string>

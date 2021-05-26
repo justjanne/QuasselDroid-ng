@@ -187,6 +187,18 @@
   <string name="notification_channel_highlight_title">Benachrichtigungen</string>
   <string name="notification_channel_old_highlight_title">Alte Benachrichtigungen</string>
 
+  <string name="deceptive_network">Irreführendes IRC-Netzwerk</string>
+  <string name="deceptive_network_freenode"><![CDATA[
+    <p>
+      Das Team dieses Netzwerkes hat die Kontrolle über die offiziellen Kanäle mehrerer Projekte übernommen.
+      Dies geschah gegen die Wünsche der Channel-Operatoren.
+      Diese Projekte sind auf andere IRC-Netzwerke wie <a href="https://libera.chat/">libera.chat</a> und <a href="https://www.oftc.net/">OFTC</a> umgezogen.
+    </p>
+    <p>
+      Bitte verifiziere vor dem Betreten und Chatten in Kanälen, ob die Channels umgezogen sind oder von neuen Moderatoren übernommen wurden.
+    </p>
+  ]]></string>
+
   <string name="label_missing_features">Fehlende Features</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann. Du solltest deinen Quassel Core auf Version %1$s oder neuer &lt;a href="https://quassel-irc.org&gt;updaten&lt;/a&gt;.</string>
 

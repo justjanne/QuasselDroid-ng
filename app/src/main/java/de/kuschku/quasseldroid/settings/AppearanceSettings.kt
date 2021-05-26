@@ -27,7 +27,8 @@ data class AppearanceSettings(
   val showLag: Boolean = true,
   val theme: Theme = Theme.MATERIAL_LIGHT,
   val language: String = "",
-  val keepScreenOn: Boolean = false
+  val keepScreenOn: Boolean = false,
+  val deceptiveNetworks: Boolean = true
 ) {
   enum class InputEnterMode {
     EMOJI,

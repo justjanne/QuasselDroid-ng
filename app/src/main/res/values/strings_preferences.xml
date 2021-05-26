@@ -36,21 +36,26 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Light)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dark)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
+
   <string name="preference_input_enter_key" translatable="false">input_enter</string>
   <string name="preference_input_enter_title">Enter key on keyboard</string>
+
+  <string name="preference_deceptive_networks_key" translatable="false">deceptive_networks</string>
+  <string name="preference_deceptive_networks_title">Warn against deceptive networks</string>
 
   <string name="preference_input_enter_entry_emoji">Emoji</string>
   <string name="preference_input_enter_entry_send">Send</string>
   <string name="preference_input_enter_entry_newline">New Line</string>
+
   <string name="preference_show_lag_key" translatable="false">show_lag</string>
   <string name="preference_show_lag_title">Show Lag</string>
   <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
-  <string name="preference_keep_screen_on_key" translatable="false">keep_screen_on</string>
 
+  <string name="preference_keep_screen_on_key" translatable="false">keep_screen_on</string>
   <string name="preference_keep_screen_on_title">Keep Screen Active</string>
   <string name="preference_keep_screen_on_summary">Prevents the device from going to sleep while the app is in foreground</string>
-  <string name="preference_language_key" translatable="false">language</string>
 
+  <string name="preference_language_key" translatable="false">language</string>
   <string name="preference_language_title">Language</string>
   <string name="preference_language_entry_auto">System Default</string>
   <string name="preference_language_entry_en" translatable="false">English</string>
@@ -64,14 +69,13 @@
   <string name="preference_language_entry_nl" translatable="false">Nederlands</string>
   <string name="preference_language_entry_pt" translatable="false">Português</string>
   <string name="preference_language_entry_sr" translatable="false">Srpski (latinica)</string>
+
   <string name="preference_redirection_title">Message Redirection</string>
   <string name="preference_redirection_user_notices_key" translatable="false">redirection_user_notices</string>
   <string name="preference_redirection_user_notices_title">Redirect User Notices</string>
   <string name="preference_redirection_user_notices_summary">Displays user notices in the currently open channel</string>
   <string name="preference_redirection_server_notices_key" translatable="false">redirection_user_notices</string>
   <string name="preference_redirection_server_notices_title">Redirect Server Notices</string>
-
-
   <string name="preference_redirection_server_notices_summary">Displays server notices in the currently open channel</string>
 
   <string name="preference_redirection_errors_key" translatable="false">redirection_errors</string>

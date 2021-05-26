@@ -60,6 +60,11 @@
       android:entryValues="@array/preference_language_entryvalues"
       android:key="@string/preference_language_key"
       android:title="@string/preference_language_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_deceptive_networks_key"
+      android:title="@string/preference_deceptive_networks_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />

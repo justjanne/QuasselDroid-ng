@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.text.Html
 import android.widget.TextView
 import androidx.annotation.RawRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -32,6 +33,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 
 class DeceptiveNetworkDialog : DialogFragment() {
   private var builder: Builder? = null
@@ -44,12 +46,12 @@ class DeceptiveNetworkDialog : DialogFragment() {
     val dialog = MaterialDialog.Builder(requireContext())
       .customView(R.layout.dialog_deceptive_network, true)
       .title(R.string.deceptive_network)
+      .negativeText(R.string.label_close)
       .build()
     ButterKnife.bind(this, dialog.customView!!)
     builder?.message?.let {
-      message.text = Html.fromHtml(
-        resources.openRawResource(it).bufferedReader(Charsets.UTF_8).readText()
-      )
+      message.text = Html.fromHtml(getString(it))
+      message.movementMethod = BetterLinkMovementMethod.newInstance()
     }
     return dialog
   }
@@ -70,10 +72,10 @@ class DeceptiveNetworkDialog : DialogFragment() {
   class Builder(private val fragmentManager: FragmentManager) {
     constructor(context: FragmentActivity) : this(context.supportFragmentManager)
 
-    @RawRes
+    @StringRes
     var message: Int? = null
 
-    fun message(@RawRes message: Int?): Builder {
+    fun message(@StringRes message: Int?): Builder {
       this.message = message
       return this
     }

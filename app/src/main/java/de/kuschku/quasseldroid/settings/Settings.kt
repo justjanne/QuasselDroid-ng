@@ -51,7 +51,11 @@ object Settings {
       language = getString(
         context.getString(R.string.preference_language_key),
         AppearanceSettings.DEFAULT.language
-      ) ?: ""
+      ) ?: "",
+      deceptiveNetworks = getBoolean(
+        context.getString(R.string.preference_deceptive_networks_key),
+        AppearanceSettings.DEFAULT.deceptiveNetworks
+      )
     )
   }
 

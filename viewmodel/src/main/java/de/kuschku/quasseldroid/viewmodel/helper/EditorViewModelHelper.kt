@@ -33,6 +33,7 @@ import de.kuschku.libquassel.util.helper.mapNullable
 import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.quasseldroid.util.emoji.EmojiData
+import de.kuschku.quasseldroid.util.safety.DeceptiveNetworkManager
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -44,9 +45,10 @@ import javax.inject.Inject
 
 open class EditorViewModelHelper @Inject constructor(
   val editor: EditorViewModel,
+  deceptiveNetworkManager: DeceptiveNetworkManager,
   chat: ChatViewModel,
   quassel: QuasselViewModel
-) : ChatViewModelHelper(chat, quassel) {
+) : ChatViewModelHelper(chat, deceptiveNetworkManager, quassel) {
   val rawAutoCompleteData: Observable<Triple<Optional<ISession>, BufferId, Pair<String, IntRange>>> =
     combineLatest(
       connectedSession,
