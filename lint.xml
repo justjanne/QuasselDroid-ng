@@ -39,4 +39,7 @@
 
   <!-- Because Autofill isn’t a priority at the moment -->
   <issue id="Autofill" severity="informational" />
+
+  <!-- We’re not using AGP 5 yet, and once we are, we’ll use compose anyway -->
+  <issue id="NonConstantResourceId" severity="informational" />
 </lint>
