@@ -147,7 +147,7 @@ open class ChatViewModelHelper @Inject constructor(
 
                     val lowestMode = userModes.asSequence().mapNotNull {
                       prefixModes.indexOf(it)
-                    }.min() ?: prefixModes.size
+                    }.minOrNull() ?: prefixModes.size
 
                     IrcUserItem(
                       bufferInfo.networkId,

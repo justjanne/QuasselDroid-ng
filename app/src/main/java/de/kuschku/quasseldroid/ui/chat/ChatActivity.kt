@@ -336,12 +336,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     val maxBufferActivity = modelHelper.processBufferList(modelHelper.bufferViewConfig,
                                                           filtered).map { (config, bufferList) ->
-      val minimumActivity: Buffer_Activity = config?.minimumActivity()?.enabledValues()?.max()
+      val minimumActivity: Buffer_Activity = config?.minimumActivity()?.enabledValues()?.maxOrNull()
                                              ?: Buffer_Activity.NoActivity
 
       val maxActivity: Buffer_Activity = bufferList.mapNotNull {
-        it.bufferActivity.enabledValues().max()
-      }.max() ?: Buffer_Activity.NoActivity
+        it.bufferActivity.enabledValues().maxOrNull()
+      }.maxOrNull() ?: Buffer_Activity.NoActivity
 
       val hasNotifications = bufferList.any { props ->
         when {

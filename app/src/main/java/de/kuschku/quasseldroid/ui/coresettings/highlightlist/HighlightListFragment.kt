@@ -184,8 +184,8 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
     ignoreRulesHelper.startDrag(holder)
 
   private fun nextId(): Int {
-    val maxRuleId = rulesAdapter.list.maxBy { it.id }?.id
-    val maxIgnoreRuleId = ignoreRulesAdapter.list.maxBy { it.id }?.id
+    val maxRuleId = rulesAdapter.list.maxByOrNull { it.id }?.id
+    val maxIgnoreRuleId = ignoreRulesAdapter.list.maxByOrNull { it.id }?.id
 
     return when {
       maxRuleId != null && maxIgnoreRuleId != null -> maxOf(maxRuleId, maxIgnoreRuleId) + 1

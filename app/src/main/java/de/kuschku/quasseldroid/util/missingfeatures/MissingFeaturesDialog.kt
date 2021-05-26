@@ -57,7 +57,7 @@ class MissingFeaturesDialog : DialogFragment() {
       }
       .build()
     ButterKnife.bind(this, dialog.customView!!)
-    val version = builder?.missingFeatures?.maxBy(MissingFeature::minimumVersion)?.minimumVersion
+    val version = builder?.missingFeatures?.maxByOrNull(MissingFeature::minimumVersion)?.minimumVersion
                   ?: QuasselVersion.VERSION_0_13
     message.text = Html.fromHtml(getString(R.string.info_missing_features, version.humanName))
     message.movementMethod = BetterLinkMovementMethod.newInstance()

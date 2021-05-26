@@ -29,7 +29,7 @@ class SettingsMigrationManager(
   migrations: List<SettingsMigration>
 ) {
   private val migrationMap = migrations.associateBy(SettingsMigration::from)
-  private val currentVersion = migrations.map(SettingsMigration::to).max()
+  private val currentVersion = migrations.map(SettingsMigration::to).maxOrNull()
 
   // This runs during initial start and has to run synchronously
   @SuppressLint("ApplySharedPref")

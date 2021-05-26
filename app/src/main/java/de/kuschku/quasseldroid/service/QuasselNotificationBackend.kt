@@ -283,7 +283,7 @@ class QuasselNotificationBackend @Inject constructor(
     val data = database.notifications().all(buffer)
     data.lastOrNull()?.let {
       // Only send a loud notification if it has any new messages
-      val max = data.maxBy { it.creationTime }
+      val max = data.maxByOrNull { it.creationTime }
       val isLoud = max?.creationTime?.isAfter(initTime) == true
 
       val buffer = NotificationBuffer(

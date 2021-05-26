@@ -148,7 +148,7 @@ open class EditorViewModelHelper @Inject constructor(
                     val userModes = ircChannel.userModes(user)
                     val prefixModes = network.prefixModes()
 
-                    val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
+                    val lowestMode = userModes.mapNotNull(prefixModes::indexOf).minOrNull()
                                      ?: prefixModes.size
 
                     AutoCompleteItem.UserItem(

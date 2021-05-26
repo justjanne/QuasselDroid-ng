@@ -71,7 +71,7 @@ class BacklogRequester(
             val hasLoadedAll = missing == 0
             val hasLoadedAny = missing < amount
             if (untilAllVisible && !hasLoadedAll || !untilAllVisible && !hasLoadedAny) {
-              val messageId = it.map(Message::messageId).min()
+              val messageId = it.map(Message::messageId).minOrNull()
               loadMore(accountId,
                        buffer,
                        missing,

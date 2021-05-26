@@ -58,9 +58,7 @@ android {
     setProperty("archivesBaseName", "Quasseldroid-$versionName")
 
     // Disable test runner analytics
-    testInstrumentationRunnerArguments = mapOf(
-      "disableAnalytics" to "true"
-    )
+    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
     testInstrumentationRunner = "de.kuschku.quasseldroid.util.TestRunner"
   }
 
@@ -96,16 +94,16 @@ android {
 
   lintOptions {
     isWarningsAsErrors = true
-    setLintConfig(file("../lint.xml"))
+    lintConfig = file("../lint.xml")
   }
 
-  viewBinding {
-    isEnabled = true
+  buildFeatures {
+    viewBinding = true
   }
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.72"))
+  implementation(kotlin("stdlib", "1.5.0"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.1.0-alpha10")

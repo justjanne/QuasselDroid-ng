@@ -32,18 +32,16 @@ android {
     consumerProguardFiles("proguard-rules.pro")
 
     // Disable test runner analytics
-    testInstrumentationRunnerArguments = mapOf(
-      "disableAnalytics" to "true"
-    )
+    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
   }
 
   lintOptions {
     isWarningsAsErrors = true
-    setLintConfig(file("../lint.xml"))
+    lintConfig = file("../lint.xml")
   }
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.72"))
+  implementation(kotlin("stdlib", "1.5.0"))
   implementation("androidx.appcompat", "appcompat", "1.1.0")
 }

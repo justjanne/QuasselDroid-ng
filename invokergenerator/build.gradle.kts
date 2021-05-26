@@ -29,10 +29,10 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.72"))
+  implementation(kotlin("stdlib", "1.5.0"))
   implementation(project(":invokerannotations"))
-  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.72")
-  implementation("com.squareup", "kotlinpoet", "1.3.0")
-  compileOnly("com.google.auto.service:auto-service:1.0-rc6")
-  kapt("com.google.auto.service:auto-service:1.0-rc6")
+  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.5.0")
+  implementation("com.squareup", "kotlinpoet", "1.8.0")
+  compileOnly("com.google.auto.service:auto-service:1.0-rc7")
+  kapt("com.google.auto.service:auto-service:1.0-rc7")
 }
