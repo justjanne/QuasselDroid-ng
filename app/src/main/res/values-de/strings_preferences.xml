@@ -35,10 +35,15 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
+
   <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
+
+  <string name="preference_deceptive_networks_title">Vor irreführenden Netzwerken warnen</string>
+
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
   <string name="preference_input_enter_entry_send">Senden</string>
   <string name="preference_input_enter_entry_newline">Neue Zeile</string>
+
   <string name="preference_show_lag_title">Latenz anzeigen</string>
   <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
 
@@ -48,23 +53,18 @@
   <string name="preference_language_title">Sprache</string>
   <string name="preference_language_entry_auto">System-Standardsprache</string>
   <string name="preference_redirection_title">Nachrichtenumleitung</string>
-
   <string name="preference_redirection_user_notices_title">Benutzernotizen umleiten</string>
   <string name="preference_redirection_user_notices_summary">Zeigt Benutzernotizen im momentan geöffneten Chat an</string>
-
   <string name="preference_redirection_server_notices_title">Servernotizen umleiten</string>
   <string name="preference_redirection_server_notices_summary">Zeigt Servernotizen im momentan geöffneten Chat an</string>
 
   <string name="preference_redirection_errors_title">Fehler umleiten</string>
   <string name="preference_redirection_errors_summary">Zeigt Fehler im momentan geöffneten Chat an</string>
 
-
   <string name="preference_notifications_title">Benachrichtigungen</string>
-
   <string name="preference_notification_query_title">Direktnachrichten</string>
 
   <string name="preference_notification_channel_title">Räume</string>
-
   <string name="preference_notification_other_title">Andere Nachrichten</string>
 
   <string name="preference_notification_sound_title">Benachrichtigungston</string>
@@ -74,16 +74,14 @@
   <string name="preference_notification_light_title">LED</string>
 
   <string name="preference_notification_mark_read_on_swipe_title">Wegwischen einer Benachrichtigung markiert den Channel als gelesen</string>
+
   <string name="preference_notification_mark_read_on_swipe_summary">Markiert alle Nachrichten in einem Channel als gelesen wenn eine Benachrichtigung für den Channel weggewischt wird</string>
-
   <string name="preference_notification_network_name_in_notification_title_title">Netzwerknamen in Benachrichtigungstitel anzeigen</string>
-
   <string name="preference_notification_show_all_activities_in_toolbar_title">Alle Aktivitäten in Toolbar markieren</string>
   <string name="preference_notification_show_all_activities_in_toolbar_summary">Zeigt eine farbige Meldung für alle Aktivitäten in der Toolbar</string>
-
   <string name="preference_notification_configure_title">Benachrichtigungen konfigurieren</string>
-
   <string name="preference_notifications_level_all">Alle Nachrichten</string>
+
   <string name="preference_notifications_level_highlight">Erwähnungen</string>
   <string name="preference_notifications_level_none">Niemals</string>
   <string name="preference_messages_title">Nachrichten</string>
@@ -91,33 +89,32 @@
   <string name="preference_monospace_title">Monospace-Schrift verwenden</string>
 
   <string name="preference_textsize_title">Schriftgröße</string>
-
   <string name="preference_show_seconds_title">Sekunden anzeigen</string>
-
   <string name="preference_use_24h_clock_title">24h-Format verwenden</string>
 
   <string name="preference_colorize_mirc_title">mIRC-Farben verwenden</string>
+
   <string name="preference_colorize_mirc_summaryon">Zeigt Farben und Formatierungen in Nachrichten an</string>
   <string name="preference_colorize_mirc_summaryoff">Farben und Formatierungen werden aus Nachrichten entfernt</string>
 
   <string name="preference_colorize_nicknames_title">Benutzernamen farblich hervorheben</string>
+
   <string name="preference_colorize_nicknames_entry_all">Alle Benutzernamen</string>
   <string name="preference_colorize_nicknames_entry_all_but_mine">Alle außer Eigenem</string>
+
   <string name="preference_colorize_nicknames_entry_none">Keine</string>
   <string name="preference_show_prefix_title">Sendermodi anzeigen</string>
   <string name="preference_show_prefix_entry_all">Alle Modi</string>
+
   <string name="preference_show_prefix_entry_highest">Höchsten Modus</string>
   <string name="preference_show_prefix_entry_none">Keine</string>
   <string name="preference_hostmask_actions_title">Hostmaske in Aktionen</string>
   <string name="preference_hostmask_actions_summary">Zeigt Ident und Host in Betreten/Verlassen-Nachrichten</string>
-
   <string name="preference_nicks_on_new_line_title">Separate Spitznamen</string>
+
   <string name="preference_nicks_on_new_line_summary">Zeigt Spitznamen in einer eigenen Zeile an</string>
-
   <string name="preference_show_realnames_title">Echtnamen anzeigen</string>
-
   <string name="preference_show_avatars_title">Avatare anzeigen</string>
-
   <string name="preference_square_avatars_title">Quadratische Avatare</string>
 
   <string name="preference_show_irccloud_avatars_title">IRCCloud Avatare anzeigen</string>
@@ -127,8 +124,8 @@
   <string name="preference_show_gravatar_avatars_summary">Zeigt für Nutzer ohne Avatare den Gravatar-Avatar an, falls verfügbar</string>
 
   <string name="preference_show_matrix_avatars_title">Matrix Avatare anzeigen</string>
-  <string name="preference_show_matrix_avatars_summary">Zeigt für Nutzer ohne Avatare den Matrix-Avatar an, falls verfügbar</string>
 
+  <string name="preference_show_matrix_avatars_summary">Zeigt für Nutzer ohne Avatare den Matrix-Avatar an, falls verfügbar</string>
   <string name="preference_time_at_end_title">Rechts-Ausgerichtete Zeit</string>
   <string name="preference_time_at_end_summary">Zeigt die Zeit rechts in Nachrichten an</string>
 
@@ -141,49 +138,46 @@
   <string name="preference_replace_emoji_title">Emoji Shortcodes ersetzen</string>
   <string name="preference_replace_emoji_summary">Ersetzt Shortcodes wie :+1: oder :like: durch Emoji</string>
 
-
   <string name="preference_autocomplete_title">Autovervollständigung</string>
-
   <string name="preference_autocomplete_sender_doubleclick_title">Sender-Autovervollständigung</string>
+
   <string name="preference_autocomplete_sender_doubleclick_summary">Vervollständigt den Sender einer Nachricht, wenn auf diese doppelgeklickt wird</string>
-
   <string name="preference_autocomplete_button_title">Autovervollständigungsknopf</string>
+
   <string name="preference_autocomplete_button_summary">Zeigt einen Knopf um Namen und Chats zu vervollständigen</string>
-
   <string name="preference_autocomplete_doubletap_title">Doppelclick-Autocomplete</string>
-  <string name="preference_autocomplete_doubletap_summary">Vervollständigt Namen und Chats automatisch, wenn auf das Eingabefeld doppelgeklickt wird</string>
 
+  <string name="preference_autocomplete_doubletap_summary">Vervollständigt Namen und Chats automatisch, wenn auf das Eingabefeld doppelgeklickt wird</string>
   <string name="preference_autocomplete_auto_title">Automatisch anzeigen</string>
+
+
   <string name="preference_autocomplete_auto_summary">Vervollständigt Namen und Chats automatischen nach den ersten 3 Buchstaben</string>
 
   <string name="preference_autocomplete_prefix_title">Nach Präfix anzeigen</string>
   <string name="preference_autocomplete_prefix_summary">Vervollständigt Namen und Chats automatisch nach einem @ oder #</string>
 
   <string name="preference_autocomplete_nicks_title">Autovervollständigung für  Spitznamen</string>
-
   <string name="preference_autocomplete_buffers_title">Autovervollständigung für  Chats</string>
-
   <string name="preference_autocomplete_aliases_title">Autovervollständigung für  Aliase</string>
 
   <string name="preference_autocomplete_emoji_title">Autovervollständigung für Emoji</string>
-
-
   <string name="preference_backlog_title">Verlauf</string>
 
   <string name="preference_page_size_title">Seitengröße</string>
   <string name="preference_page_size_summary">Anzahl an Nachrichten die pro Mal geladen und im Speicher gehalten werden</string>
 
   <string name="preference_initial_amount_title">Anfängliche Verlaufsgröße</string>
+
   <string name="preference_initial_amount_summary">Anzahl an Nachrichten die beim ersten Öffnen eines Chats geladen werden</string>
-
   <string name="preference_clear_cache_title">Nachrichten-Cache leeren</string>
-
   <string name="preference_connection_title">Verbindung</string>
 
   <string name="preference_show_notification_title">Benachrichtigung anzeigen</string>
+
+
   <string name="preference_show_notification_summary">Zeigt eine permanente Benachrichtigung an, damit Quasseldroid durchgehend verbunden bleiben kann</string>
 
   <string name="preference_ignore_network_changes_title">Netzwerkänderung ignorieren</string>
   <string name="preference_ignore_network_changes_summary">Hindert Quasseldroid daran, bei Netzwerkänderungen automatisch die Verbindung neu herzustellen</string>
 
-</resources>
+  </resources>

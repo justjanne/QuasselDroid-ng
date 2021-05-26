@@ -18,10 +18,6 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <plurals name="label_user_count">
-    <item quantity="one">%1$d utente</item>
-    <item quantity="other">%1$d utenti</item>
-  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Un client Android per utilizzare IRC in modo decentralizzato con Quassel.</string>
 
@@ -147,7 +143,6 @@
   <string name="label_unknown_sender">&lt;Sconosciuto&gt;</string>
   <string name="label_update_user_password">Aggiorna il nome utente e la password</string>
   <string name="label_use_default">Utilizza i valori predefiniti</string>
-  <string name="label_user_count">Numero di utenti</string>
   <string name="label_website">Sito web</string>
   <string name="label_whitelist">Ignora</string>
   <string name="label_whitelist_certificates">Certificati</string>

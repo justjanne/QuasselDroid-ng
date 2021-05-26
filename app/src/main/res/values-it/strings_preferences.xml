@@ -35,10 +35,13 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Chiaro)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Scuro)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
+
   <string name="preference_input_enter_title">Tasto invio della tastiera</string>
+
   <string name="preference_input_enter_entry_emoji">Emoji</string>
   <string name="preference_input_enter_entry_send">Invio</string>
   <string name="preference_input_enter_entry_newline">A capo</string>
+
   <string name="preference_show_lag_title">Mostra latenza</string>
   <string name="preference_show_lag_summary">Mostra il ritardo tra il client ed il core nella barra delle azioni</string>
 
@@ -48,23 +51,18 @@
   <string name="preference_language_title">Lingua</string>
   <string name="preference_language_entry_auto">Predefinita di sistema</string>
   <string name="preference_redirection_title">Reindirizzamento messaggi</string>
-
   <string name="preference_redirection_user_notices_title">Reindirizzare avvisi utente</string>
   <string name="preference_redirection_user_notices_summary">Mostra gli avvisi utente nel canale in uso</string>
-
   <string name="preference_redirection_server_notices_title">Reindirizzare avvisi server</string>
   <string name="preference_redirection_server_notices_summary">Mostra gli avvisi del server nel canale in uso</string>
 
   <string name="preference_redirection_errors_title">Reindirizzare errori</string>
   <string name="preference_redirection_errors_summary">Mostra gli errori nel canale in uso</string>
 
-
   <string name="preference_notifications_title">Notifiche</string>
-
   <string name="preference_notification_query_title">Messaggi privati</string>
 
   <string name="preference_notification_channel_title">Messaggi del canale</string>
-
   <string name="preference_notification_other_title">Altri messaggi</string>
 
   <string name="preference_notification_sound_title">Suono di notifica</string>
@@ -74,16 +72,14 @@
   <string name="preference_notification_light_title">LED</string>
 
   <string name="preference_notification_mark_read_on_swipe_title">Considera canale letto allo swipe sulle notifiche</string>
+
   <string name="preference_notification_mark_read_on_swipe_summary">Imposta tutti i messaggi del canale come letti allo swipe della notifica per il canale</string>
-
   <string name="preference_notification_network_name_in_notification_title_title">Mostra il nome della rete nel titolo delle notifiche</string>
-
   <string name="preference_notification_show_all_activities_in_toolbar_title">Segna tutte le attività nella barra degli strumenti</string>
   <string name="preference_notification_show_all_activities_in_toolbar_summary">Mostra una bolla colorata nella barra degli strumenti per l’attività di qualunque chat</string>
-
   <string name="preference_notification_configure_title">Configura notifiche</string>
-
   <string name="preference_notifications_level_all">Tutti i messaggi</string>
+
   <string name="preference_notifications_level_highlight">Solo se menzionato</string>
   <string name="preference_notifications_level_none">Mai</string>
   <string name="preference_messages_title">Messaggi</string>
@@ -91,33 +87,32 @@
   <string name="preference_monospace_title">Usa carattere a spaziatura fissa</string>
 
   <string name="preference_textsize_title">Dimensione del testo</string>
-
   <string name="preference_show_seconds_title">Mostra secondi</string>
-
   <string name="preference_use_24h_clock_title">Usa orologio 24 ore</string>
 
   <string name="preference_colorize_mirc_title">Usa colori di mIRC</string>
+
   <string name="preference_colorize_mirc_summaryon">Mostra i colori di mIRC nei messaggi</string>
   <string name="preference_colorize_mirc_summaryoff">Rimuovi i colori di mIRC dai messaggi</string>
 
   <string name="preference_colorize_nicknames_title">Nick colorati</string>
+
   <string name="preference_colorize_nicknames_entry_all">Tutti i nick</string>
   <string name="preference_colorize_nicknames_entry_all_but_mine">Tutti tranne il proprio nick</string>
+
   <string name="preference_colorize_nicknames_entry_none">Nessun nick</string>
   <string name="preference_show_prefix_title">Mostra modi utente come prefisso</string>
   <string name="preference_show_prefix_entry_all">Tutti i modi utente</string>
+
   <string name="preference_show_prefix_entry_highest">Solo il modo più alto</string>
   <string name="preference_show_prefix_entry_none">Nessun modo</string>
   <string name="preference_hostmask_actions_title">Mostra identità completa nelle azioni</string>
   <string name="preference_hostmask_actions_summary">Mostra nick!ident@host nei messaggi di entrata, uscita e disconnessione</string>
-
   <string name="preference_nicks_on_new_line_title">Separa nick degli utenti</string>
+
   <string name="preference_nicks_on_new_line_summary">Mostra nick degli utenti su una riga separata</string>
-
   <string name="preference_show_realnames_title">Mostra nomi reali</string>
-
   <string name="preference_show_avatars_title">Mostra avatar</string>
-
   <string name="preference_square_avatars_title">Avatar quadrati</string>
 
   <string name="preference_show_irccloud_avatars_title">Mostra avatar di IRCCloud</string>
@@ -127,8 +122,8 @@
   <string name="preference_show_gravatar_avatars_summary">Per gli utenti privi di avatar mostra quello di Gravatar, se disponibile</string>
 
   <string name="preference_show_matrix_avatars_title">Mostra avatar di Matrix</string>
-  <string name="preference_show_matrix_avatars_summary">Per gli utenti privi di avatar mostra quello di Matrix, se disponibile</string>
 
+  <string name="preference_show_matrix_avatars_summary">Per gli utenti privi di avatar mostra quello di Matrix, se disponibile</string>
   <string name="preference_time_at_end_title">Ora dei messaggi allineata a destra</string>
   <string name="preference_time_at_end_summary">Allinea l’ora dei messaggi alla fine di ogni messaggio</string>
 
@@ -141,49 +136,46 @@
   <string name="preference_replace_emoji_title">Sostitiuisci abbreviazioni con emoji</string>
   <string name="preference_replace_emoji_summary">Sostituisci automaticamente le abbreviazioni come :+1: o :like: con emoji</string>
 
-
   <string name="preference_autocomplete_title">Completamento automatico</string>
-
   <string name="preference_autocomplete_sender_doubleclick_title">Completa automaticamente il mittente</string>
+
   <string name="preference_autocomplete_sender_doubleclick_summary">Fai doppio clic su un messaggio per completare automaticamente il mittente</string>
-
   <string name="preference_autocomplete_button_title">Pulsante di completamento automatico</string>
+
   <string name="preference_autocomplete_button_summary">Mostra un pulsante a sinistra della riga di input per attivare il completamento</string>
-
   <string name="preference_autocomplete_doubletap_title">Doppio tocco per completare automaticamente</string>
-  <string name="preference_autocomplete_doubletap_summary">Suggerisci nick e canali dopo al doppio clic del campo di input</string>
 
+  <string name="preference_autocomplete_doubletap_summary">Suggerisci nick e canali dopo al doppio clic del campo di input</string>
   <string name="preference_autocomplete_auto_title">Mostra automaticamente</string>
+
+
   <string name="preference_autocomplete_auto_summary">Suggerisci nick e canali dopo aver inserito i primi 3 caratteri</string>
 
   <string name="preference_autocomplete_prefix_title">Mostra dopo il prefisso</string>
   <string name="preference_autocomplete_prefix_summary">Suggerisci nick e canali dopo aver scritto @ o #</string>
 
   <string name="preference_autocomplete_nicks_title">Completa nick automaticamente</string>
-
   <string name="preference_autocomplete_buffers_title">Completa automaticamente chat</string>
-
   <string name="preference_autocomplete_aliases_title">Completa automaticamente comandi</string>
 
   <string name="preference_autocomplete_emoji_title">Completa automaticamente emoji</string>
-
-
   <string name="preference_backlog_title">Registro storico</string>
 
   <string name="preference_page_size_title">Dimensioni della pagina</string>
   <string name="preference_page_size_summary">Il numero di messaggi caricati e conservati in memoria contemporaneamente</string>
 
   <string name="preference_initial_amount_title">Quantità iniziale</string>
+
   <string name="preference_initial_amount_summary">Numero di messaggi da caricare all’apertura di una chat la prima volta</string>
-
   <string name="preference_clear_cache_title">Cancella cache registro storico</string>
-
   <string name="preference_connection_title">Connessione</string>
 
   <string name="preference_show_notification_title">Mostra notifica</string>
+
+
   <string name="preference_show_notification_summary">Mantiene Quasseldroid sempre collegato mostrando una notifica permanente</string>
 
   <string name="preference_ignore_network_changes_title">Ignora cambi di rete</string>
   <string name="preference_ignore_network_changes_summary">Interrompi la riconnessione automatica di Quasseldroid se la rete cambia</string>
 
-</resources>
+  </resources>

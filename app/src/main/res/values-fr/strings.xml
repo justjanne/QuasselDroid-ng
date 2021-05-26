@@ -17,14 +17,14 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Un client basé sur Android pour décentraliser le client Quassel IRC.</string>
+
   <string name="app_description_long">Quassel est un client IRC distribué et décentralisé, écrit en C++ et en Qt. Quasseldroid est un client pour Quassel core en pure kotlin, vous permettant de vous connecter à votre Quassel core en utilisant votre téléphone Android™.</string>
-
   <string name="connection_service_title">Service de connexion</string>
-  <string name="connection_service_description">Garder une connexion au core pour permettre les notifications et transmettre des messages.</string>
 
+  <string name="connection_service_description">Garder une connexion au core pour permettre les notifications et transmettre des messages.</string>
   <string name="label_about">À propos</string>
   <string name="label_accept">Accepter</string>
   <string name="label_acknowledgements">Remerciements</string>
@@ -74,4 +74,45 @@
   <string name="label_join_long">Joindre le salon</string>
   <string name="label_libraries">Librairies</string>
   <string name="label_license">Licence</string>
-</resources>
+  <string name="label_mark_read">Marquer lu</string>
+  <string name="label_mention">Mentionner</string>
+  <string name="label_network">Réseau</string>
+  <string name="label_new_account">Nouveau compte</string>
+  <string name="label_new_chatlist">Nouvelle liste de discussion</string>
+  <string name="label_new_identity">Nouvelle identité</string>
+  <string name="label_new_network">Nouveau réseau</string>
+  <string name="label_new_nick">Nouveau nom</string>
+  <string name="label_new_server">Nouveau serveur</string>
+  <string name="label_next">Suivant</string>
+  <string name="label_nick">Utilisateur</string>
+  <string name="label_nicklist">Liste des utilisateurs</string>
+  <string name="label_no">Non</string>
+  <string name="label_no_sound">Aucun</string>
+  <string name="label_open">Ouvrir</string>
+  <string name="label_part">Quitter</string>
+  <string name="label_part_long">Quitter le salon</string>
+  <string name="label_password_change">Changer le mot de passe</string>
+  <string name="label_password_error_wrong">Mauvais mot de passe</string>
+  <string name="label_password_new">Nouveau mot de passe</string>
+  <string name="label_password_old">Ancien mot de passe</string>
+  <string name="label_password_repeat">Répéter mot de passe</string>
+  <string name="label_permanently_archived">Archivé en permanence</string>
+  <string name="label_permanently_archived_empty">Vous n\'avez pas de chat archivés en permanence</string>
+  <string name="label_placeholder_message">Écrire un message</string>
+  <string name="label_placeholder_topic">Décrire le sujet du salon</string>
+  <string name="label_privacy_policy">Politique de confidentialité</string>
+  <string name="label_query">Requête</string>
+  <string name="label_query_long">Ouvrir un chat privé avec un utilisateur</string>
+  <string name="label_query_medium">Ouvrir un chat privé</string>
+  <string name="label_rename">Renommer</string>
+  <string name="label_reorder">Réorganiser</string>
+  <string name="label_reply">Réponse</string>
+  <string name="label_reset">Réinitialiser</string>
+  <string name="label_save">Sauvegarder</string>
+  <string name="label_saving">En sauvegarde...</string>
+  <string name="label_search">Rechercher...</string>
+  <string name="label_search_buffer">Rechercher des chats</string>
+  <string name="label_search_channels">Rechercher des salons</string>
+  <string name="label_select">Sélectionner</string>
+  <string name="label_send">Envoyer</string>
+  </resources>

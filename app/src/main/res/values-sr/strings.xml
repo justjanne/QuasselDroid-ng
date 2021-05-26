@@ -20,11 +20,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Android baziran klijent za decentralizovani Quassel IRC klijent.</string>
+
   <string name="app_description_long">Quassel je distribuirani, decentralizovani IRC klijent, napisan koristeći C++ i Qt. Quasseldroid je klijent za Quassel jezgro napisan u Kotlinu, koji vam omogućava povezivanje na Quassel jezgro koristeći svoj Android™ telefon.</string>
-
   <string name="connection_service_title">Usluga Povezivanja</string>
-  <string name="connection_service_description">Održava vezu sa vašim jezgrom što omogućava dobijanje obaveštenja i slanje poruka.</string>
 
+  <string name="connection_service_description">Održava vezu sa vašim jezgrom što omogućava dobijanje obaveštenja i slanje poruka.</string>
   <string name="label_about">O aplikaciji</string>
   <string name="label_accept">Prihvati</string>
   <string name="label_autocomplete">Automatsko dovršavanje</string>
@@ -111,6 +111,7 @@
   <string name="label_who_long">Ažuriraj korisničke informacije svakog korisnika</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Ažuriraj korisničke informacije</string>
+
   <string name="label_yes">Da</string>
 
   <string name="label_feature_synchronizedmarkerline">Potrebno za sinhronizovanje poslednje pozicije u kanalima</string>
@@ -145,4 +146,4 @@
   <string name="info_copied_version">Verzija kopirana u klipbord</string>
 
   <string name="advertisement_support_patreon">Molimo Vas da podržite razvoj ove aplikacije na Patreonu</string>
-</resources>
+  </resources>

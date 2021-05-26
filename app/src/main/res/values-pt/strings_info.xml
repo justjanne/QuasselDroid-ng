@@ -36,7 +36,6 @@
   <string name="label_core_connection_verified_by">Ligação verificada por %1$s</string>
   <string name="label_core_connection_protocol">A ligação utiliza %1$s</string>
   <string name="label_core_connection_ciphersuite">A ligação é encriptada e autenticada utilizando %1$s e usa  %2$s como mecanismo de troca de chaves</string>
-  <string name="label_core_connection_ciphersuite_13">A ligação é encriptada e autenticada utilizando %1$s</string>
   <string name="label_core_connection_verified_by_unknown">Desconhecido</string>
   <string name="label_core_connection_insecure">Ligação insegura</string>
 

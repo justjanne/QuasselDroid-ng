@@ -17,10 +17,9 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="connection_service_description">Houdt een verbinding met je core om meldingen mogelijk te maken en berichten te verzenden. </string>
-
   <string name="label_about">Over</string>
   <string name="label_ascending">Oplopend</string>
   <string name="label_authors">Auteurs</string>
@@ -78,4 +77,4 @@
   <string name="label_translators">Vertalers</string>
   <string name="label_yes">Ja</string>
 
-</resources>
+  </resources>

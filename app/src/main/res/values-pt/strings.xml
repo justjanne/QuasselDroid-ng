@@ -18,10 +18,6 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <plurals name="label_user_count">
-    <item quantity="one">%1$d utilizadores</item>
-    <item quantity="other">%1$d utilizadores</item>
-  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
 
@@ -108,6 +104,7 @@
   <string name="label_password_old">Antiga palavra-passe</string>
   <string name="label_password_repeat">Confirme a palavra-passe</string>
   <string name="label_permanently_archived">Arquivado Permanentemente</string>
+  <string name="label_permanently_archived_empty">Você não tem conversas permanentemente arquivadas</string>
   <string name="label_permanently_archived_long"> Chats permanentemente arquivados ficam escondidos até que escolha desarquiva-los manualmente.</string>
   <string name="label_placeholder_message">Escrever uma mensagem…</string>
   <string name="label_placeholder_topic">Descreva o tópico do canal…</string>
@@ -138,6 +135,7 @@
   <string name="label_sort">Ordenar</string>
   <string name="label_source">Fonte</string>
   <string name="label_temporarily_archived">Arquivado temporariamente</string>
+  <string name="label_temporarily_archived_empty">Você não tem conversas permanentemente arquivadas</string>
   <string name="label_temporarily_archived_long">  Chats arquivados temporariamente serão mostrados novamente assim que tenham uma mensagem nova.</string>
   <string name="label_topic">Tópico do Canal</string>
   <string name="label_translators">Tradutores</string>
@@ -145,7 +143,6 @@
   <string name="label_unknown_sender">&lt;Desconhecido&gt;</string>
   <string name="label_update_user_password">Actualizar Utilizador/Senha</string>
   <string name="label_use_default">Utilizar Padrão</string>
-  <string name="label_user_count">Contagem de utilizadores</string>
   <string name="label_website">Site</string>
   <string name="label_whitelist">Ignorar</string>
   <string name="label_whitelist_certificates">Certificados</string>
@@ -198,4 +195,5 @@
   <string name="info_copied_version">Versão copiada para a área de transferência</string>
 
   <string name="advertisement_support_patreon">Por favor, ajudem a apoiar o desenvolvimento deste aplicativo através de Patreon</string>
+  <string name="advertisement_support_button">Suporte o desenvolvimento do App</string>
 </resources>

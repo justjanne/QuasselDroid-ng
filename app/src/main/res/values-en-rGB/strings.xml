@@ -17,9 +17,9 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_description">An Android-based client for the decentralised Quassel IRC client.</string>
-  <string name="app_description_long">Quassel is a distributed, decentralised IRC client, written using C++ and Qt. Quasseldroid is a pure-kotlin client for the Quassel core, allowing you to connect to your Quassel core using your Android™ phone.</string>
 
+  <string name="app_description_long">Quassel is a distributed, decentralised IRC client, written using C++ and Qt. Quasseldroid is a pure-kotlin client for the Quassel core, allowing you to connect to your Quassel core using your Android™ phone.</string>
   <string name="label_feature_synchronizedmarkerline">Required for synchronising the last position in channels</string>
-</resources>
+  </resources>

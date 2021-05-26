@@ -17,14 +17,14 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Un client Android pour Quassel, un client IRC décentralisé.</string>
+
   <string name="app_description_long">Quassel est un client IRC distribué et décentralisé, écrit en C++ et en Qt. Quasseldroid est un client pour le Quassel Core écrit purement en Kotlin, vous offrant la possibilité de vous connecter à un Quassel Core avec votre téléphone Android™.</string>
-
   <string name="connection_service_title">Service de Connection</string>
-  <string name="connection_service_description">Maintient une connection a un Core pour recevoir des notifications et transmettre des messages.</string>
 
+  <string name="connection_service_description">Maintient une connection a un Core pour recevoir des notifications et transmettre des messages.</string>
   <string name="label_about">À Propos</string>
   <string name="label_accept">Accepter</string>
   <string name="label_avatar">Avatar</string>
@@ -104,6 +104,7 @@
   <string name="label_who_long">Mettre à jour les informations sur tous les utilisateurs</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Mettre à jour les informations sur l\'utilisateur</string>
+
   <string name="label_yes">Oui</string>
 
   <string name="label_feature_synchronizedmarkerline">Requis pour synchroniser la dernière position du tchat dans les chaînes</string>
@@ -129,4 +130,4 @@
 
   <string name="info_copied_version">Version copiée au clipboard</string>
 
-</resources>
+  </resources>

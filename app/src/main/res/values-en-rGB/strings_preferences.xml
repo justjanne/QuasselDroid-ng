@@ -19,10 +19,11 @@
 
 <resources>
   <string name="preference_notification_show_all_activities_in_toolbar_summary">Displays a coloured bubble in the toolbar for all chat activities</string>
-
   <string name="preference_colorize_mirc_title">Use mIRC Colours</string>
+
   <string name="preference_colorize_mirc_summaryon">Show mIRC colours in messages</string>
   <string name="preference_colorize_mirc_summaryoff">Strip mIRC colours from messages</string>
 
   <string name="preference_colorize_nicknames_title">Colourise nicknames</string>
-</resources>
+
+  </resources>

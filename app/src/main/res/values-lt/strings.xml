@@ -18,12 +18,6 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <plurals name="label_user_count" tools:ignore="UnusedQuantity">
-    <item quantity="one">%1$d vartotojas</item>
-    <item quantity="few">%1$d vartotojai</item>
-    <item quantity="many">%1$d vartotojų</item>
-    <item quantity="other">%1$d vartotojų</item>
-  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Android klientas decentralizuotam Quassel IRC klientui.</string>
 
@@ -147,7 +141,6 @@
   <string name="label_unknown_sender">&lt;Nežinoma&gt;</string>
   <string name="label_update_user_password">Atnaujinti Vartotoją/Slaptažodį</string>
   <string name="label_use_default">Naudoti numatytas parinktis</string>
-  <string name="label_user_count">Vartotojų skaičius</string>
   <string name="label_website">Tinklalapis</string>
   <string name="label_whitelist">Ignoruoti</string>
   <string name="label_whitelist_certificates">Sertifikatai</string>
@@ -200,4 +193,4 @@
   <string name="info_copied_version">Versija nukopijuota į atmintinę</string>
 
   <string name="advertisement_support_patreon">Padėkite mums toliau plėtoti šią programėlę prisidėdami per Patreon</string>
-</resources>
+  </resources>

@@ -19,8 +19,8 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
   <plurals name="label_user_count">
-    <item quantity="one">%1$d Benutzer</item>
-    <item quantity="other">%1$d Benutzer</item>
+    <item quantity="one">%1$d Nutzer</item>
+    <item quantity="other">%1$d Nutzer</item>
   </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Ein Android-Client für das dezentralen Quassel IRC Client.</string>
@@ -60,13 +60,13 @@
   <string name="label_disconnect">Verbindung trennen</string>
   <string name="label_edit_core">Account bearbeiten</string>
   <string name="label_edit_nick">Spitznamen bearbeiten</string>
-  <string name="label_edit_topic">Thema ändern</string>
-  <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
+  <string name="label_edit_topic">Topic ändern</string>
+  <string name="label_edit_topic_long">Dialog öffnen um Topic zu ändern</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_finish">Fertig</string>
-  <string name="label_generate_crash_report">Crash Report erzeugen</string>
+  <string name="label_generate_crash_report">Absturzmeldung erzeugen</string>
   <string name="label_ignore">Ignorieren</string>
-  <string name="label_ignore_long">Add/remove user to/from ignore list</string>
+  <string name="label_ignore_long">Ignorierregel für Nutzer erstellen/löschen</string>
   <string name="label_info">Info</string>
   <string name="label_info_certificate">Zertifikat</string>
   <string name="label_info_channel">Kanalinformationen</string>
@@ -149,7 +149,7 @@
   <string name="label_unknown_sender">&lt;Unbekannt&gt;</string>
   <string name="label_update_user_password">Benutzernamen/Passwort ändern</string>
   <string name="label_use_default">Standardwerte benutzen</string>
-  <string name="label_user_count">Anzahl Nutzer</string>
+  <string name="label_user_count">Benutzeranzahl</string>
   <string name="label_website">Webseite</string>
   <string name="label_whitelist">Ignorieren</string>
   <string name="label_whitelist_certificates">Zertifikate</string>
@@ -191,14 +191,14 @@
 
   <string name="deceptive_network">Irreführendes IRC-Netzwerk</string>
   <string name="deceptive_network_freenode"><![CDATA[
-    <p>
-      Das Team dieses Netzwerkes hat die Kontrolle über die offiziellen Kanäle mehrerer Projekte gegen die Wünsche der Channel-Operatoren übernommen.
-      Ein Großteil dieser Projekte ist auf andere IRC-Netzwerke wie <a href="https://libera.chat/">libera.chat</a> und <a href="https://www.oftc.net/">OFTC</a> umgezogen.
-    </p>
-    <p>
-      Bitte verifiziere vor dem Betreten der Channels und dem Chatten, ob die Channels umgezogen sind oder ob sie von neue Moderatoren übernommen wurden.
-    </p>
-  ]]></string>
+<p>
+Das Team dieses Netzwerkes hat die Kontrolle über die offiziellen Kanäle mehrerer Projekte gegen die Wünsche der Channel-Operatoren übernommen.
+Ein Großteil dieser Projekte ist auf andere IRC-Netzwerke wie <a href="https://libera.chat/">libera.chat</a> und <a href="https://www.oftc.net/">OFTC</a> umgezogen.
+</p>
+<p>
+Bitte verifiziere vor dem Betreten der Channels und dem Chatten, ob die Channels umgezogen sind oder ob sie von neue Moderatoren übernommen wurden.
+</p>
+]]></string>
 
   <string name="label_missing_features">Fehlende Features</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann. Du solltest deinen Quassel Core auf Version %1$s oder neuer &lt;a href="https://quassel-irc.org&gt;updaten&lt;/a&gt;.</string>
