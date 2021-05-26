@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.0"))
+  implementation(kotlin("stdlib", "1.4.31"))
 
   implementation("androidx.appcompat", "appcompat", "1.1.0")
   withVersion("2.2.0") {
