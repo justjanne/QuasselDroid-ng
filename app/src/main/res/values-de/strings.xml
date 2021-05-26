@@ -190,8 +190,7 @@
   <string name="deceptive_network">Irreführendes IRC-Netzwerk</string>
   <string name="deceptive_network_freenode"><![CDATA[
     <p>
-      Das Team dieses Netzwerkes hat die Kontrolle über die offiziellen Kanäle mehrerer Projekte übernommen.
-      Dies geschah gegen die Wünsche der Channel-Operatoren.
+      Das Team dieses Netzwerkes hat die Kontrolle über die offiziellen Kanäle mehrerer Projekte gegen die Wünsche der Channel-Operatoren übernommen.
       Diese Projekte sind auf andere IRC-Netzwerke wie <a href="https://libera.chat/">libera.chat</a> und <a href="https://www.oftc.net/">OFTC</a> umgezogen.
     </p>
     <p>
