@@ -51,6 +51,7 @@
     android:visibility="gone"
     app:backgroundTint="#8A808080"
     app:elevation="0dip"
+    android:contentDescription="@string/label_scroll_to_latest"
     app:fabSize="mini"
     app:pressedTranslationZ="0dip"
     app:srcCompat="@drawable/ic_scroll_down" />

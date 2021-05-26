@@ -46,6 +46,7 @@
     app:backgroundTint="#8A000000"
     app:elevation="0dip"
     app:fabSize="normal"
+    android:contentDescription="@string/label_next"
     app:pressedTranslationZ="0dip"
     app:srcCompat="@drawable/ic_forward"
     app:tint="#ffffffff"

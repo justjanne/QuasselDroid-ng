@@ -35,6 +35,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="end|bottom"
     android:layout_margin="16dp"
+    android:contentDescription="@string/label_new_alias"
     app:fabSize="normal"
     app:srcCompat="@drawable/ic_add"
     app:tint="?colorTextPrimaryInverse" />

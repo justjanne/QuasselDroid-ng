@@ -195,19 +195,17 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     super.onSaveInstanceState(outState)
   }
 
-  override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
-    if (savedInstanceState != null) {
-      if (savedInstanceState.containsKey(resultKey)) {
-        adapter.result.putAll(savedInstanceState.getBundle(resultKey))
-        adapter.allChanged()
-      }
-      if (savedInstanceState.containsKey(lastValidItemKey))
-        adapter.lastValidItem = savedInstanceState.getInt(lastValidItemKey)
-      if (savedInstanceState.containsKey(currentItemKey))
-        viewPager.currentItem = savedInstanceState.getInt(currentItemKey)
-      currentPage.value = adapter.getItem(viewPager.currentItem)
+    if (savedInstanceState.containsKey(resultKey)) {
+      adapter.result.putAll(savedInstanceState.getBundle(resultKey))
+      adapter.allChanged()
     }
+    if (savedInstanceState.containsKey(lastValidItemKey))
+      adapter.lastValidItem = savedInstanceState.getInt(lastValidItemKey)
+    if (savedInstanceState.containsKey(currentItemKey))
+      viewPager.currentItem = savedInstanceState.getInt(currentItemKey)
+    currentPage.value = adapter.getItem(viewPager.currentItem)
     pageChanged()
   }
 

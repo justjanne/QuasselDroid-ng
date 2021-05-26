@@ -24,7 +24,7 @@ plugins {
 }
 
 android {
-  compileSdkVersion(29)
+  compileSdkVersion(30)
 
   signingConfigs {
     SigningData.of(project.rootProject.properties("signing.properties"))?.let {
@@ -39,7 +39,7 @@ android {
 
   defaultConfig {
     minSdkVersion(20)
-    targetSdkVersion(29)
+    targetSdkVersion(30)
 
     applicationId = "com.iskrembilen.quasseldroid"
     versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
@@ -120,7 +120,7 @@ dependencies {
 
   withVersion("2.2.5") {
     implementation("androidx.room", "room-runtime", version)
-    kapt("androidx.room", "room-compiler", version)
+    annotationProcessor("androidx.room", "room-compiler", version)
     implementation("androidx.room", "room-rxjava2", version)
     testImplementation("androidx.room", "room-testing", version)
   }

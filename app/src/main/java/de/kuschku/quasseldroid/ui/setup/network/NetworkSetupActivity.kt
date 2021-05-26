@@ -36,12 +36,11 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
   @Inject
   lateinit var modelHelper: EditorViewModelHelper
 
-  private lateinit var arguments: Bundle
-  override val initData: Bundle
-    get() = arguments
+  override var initData: Bundle = Bundle.EMPTY
+    private set
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    arguments = intent.getBundleExtra("link")
+    initData = intent.getBundleExtra("link") ?: Bundle.EMPTY
     super.onCreate(savedInstanceState)
   }
 

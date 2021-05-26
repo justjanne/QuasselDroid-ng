@@ -24,11 +24,11 @@ plugins {
 }
 
 android {
-  compileSdkVersion(29)
+  compileSdkVersion(30)
 
   defaultConfig {
     minSdkVersion(20)
-    targetSdkVersion(29)
+    targetSdkVersion(30)
 
     consumerProguardFiles("proguard-rules.pro")
 
@@ -55,7 +55,7 @@ dependencies {
 
   withVersion("2.2.5") {
     implementation("androidx.room", "room-runtime", version)
-    kapt("androidx.room", "room-compiler", version)
+    annotationProcessor("androidx.room", "room-compiler", version)
     implementation("androidx.room", "room-rxjava2", version)
     testImplementation("androidx.room", "room-testing", version)
   }

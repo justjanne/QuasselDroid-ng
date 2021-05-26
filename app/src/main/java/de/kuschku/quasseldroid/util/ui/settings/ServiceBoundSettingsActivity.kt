@@ -95,7 +95,7 @@ abstract class ServiceBoundSettingsActivity(private val fragment: Fragment? = nu
     super.onBackPressed()
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     android.R.id.home -> {
       shouldNavigateAway {
         if (supportParentActivityIntent != null) {

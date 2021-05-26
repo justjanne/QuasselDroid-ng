@@ -84,6 +84,7 @@
   <string name="label_mention_long">Copy username into input line</string>
   <string name="label_network">Network</string>
   <string name="label_new_account">New Account</string>
+  <string name="label_new_alias">New Alias</string>
   <string name="label_new_chatlist">New Chatlist</string>
   <string name="label_new_highlight_ignore_rule">New Highlight Ignore Rule</string>
   <string name="label_new_highlight_rule">New Highlight Rule</string>
@@ -122,6 +123,7 @@
   <string name="label_reset">Reset</string>
   <string name="label_save">Save</string>
   <string name="label_saving">Saving…</string>
+  <string name="label_scroll_to_latest">Scroll to latest messages</string>
   <string name="label_search">Search…</string>
   <string name="label_search_buffer">Search Chats</string>
   <string name="label_search_channels">Search Channels</string>

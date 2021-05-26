@@ -85,6 +85,7 @@ import de.kuschku.quasseldroid.ui.setup.network.LinkNetwork
 import de.kuschku.quasseldroid.ui.setup.network.NetworkSetupActivity
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
 import de.kuschku.quasseldroid.util.backport.OsConstants
+import de.kuschku.quasseldroid.util.deceptive_networks.DeceptiveNetworkDialog
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
@@ -94,7 +95,6 @@ import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.drawable.DrawerToggleActivityDrawable
 import de.kuschku.quasseldroid.util.ui.drawable.NickCountDrawable
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
-import de.kuschku.quasseldroid.util.deceptive_networks.DeceptiveNetworkDialog
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
@@ -185,7 +185,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
         intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL)   -> {
           val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
-          val channel = intent.getStringExtra(KEY_CHANNEL)
+          val channel = intent.getStringExtra(KEY_CHANNEL) ?: ""
 
           val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
 
@@ -943,25 +943,19 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     outState.putBoolean(KEY_OPEN_DRAWER_END, binding.drawerLayout.isDrawerOpen(GravityCompat.END))
   }
 
-  override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
-    if (savedInstanceState != null) {
-      chatViewModel.onRestoreInstanceState(savedInstanceState)
-    }
+    chatViewModel.onRestoreInstanceState(savedInstanceState)
 
-    connectedAccount = AccountId(savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L)
+    connectedAccount = AccountId(savedInstanceState.getLong(KEY_CONNECTED_ACCOUNT, -1L))
 
-    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true &&
-        resources.getBoolean(R.bool.buffer_drawer_exists)) {
+    if (savedInstanceState.getBoolean(KEY_OPEN_DRAWER_START) && resources.getBoolean(R.bool.buffer_drawer_exists)) {
       binding.drawerLayout.openDrawer(GravityCompat.START)
     }
-    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) == true) {
+    if (savedInstanceState.getBoolean(KEY_OPEN_DRAWER_END)) {
       binding.drawerLayout.openDrawer(GravityCompat.END)
     }
-    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) != null ||
-        savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) != null) {
-      restoredDrawerState = true
-    }
+    restoredDrawerState = true
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -984,7 +978,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     return super.onCreateOptionsMenu(menu)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     android.R.id.home           -> {
       drawerToggle.onOptionsItemSelected(item)
     }

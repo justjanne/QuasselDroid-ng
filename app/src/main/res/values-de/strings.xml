@@ -84,6 +84,7 @@
   <string name="label_mention_long">Kopiert den Nutzernamen in die Eingabezeile</string>
   <string name="label_network">Netzwerk</string>
   <string name="label_new_account">Account hinzufügen</string>
+  <string name="label_new_alias">Alias hinzufügen</string>
   <string name="label_new_chatlist">Chatliste hinzufügen</string>
   <string name="label_new_highlight_ignore_rule">Neue Hervorhebungsignorierregel</string>
   <string name="label_new_highlight_rule">Neue Hervorhebungsregel</string>
@@ -122,6 +123,7 @@
   <string name="label_reset">Zurücksetzen</string>
   <string name="label_save">Speichern</string>
   <string name="label_saving">Speichern…</string>
+  <string name="label_scroll_to_latest">Zu neuesten Nachrichten scrollen</string>
   <string name="label_search">Suchen…</string>
   <string name="label_search_buffer">Chats suchen</string>
   <string name="label_search_channels">Kanäle suchen</string>

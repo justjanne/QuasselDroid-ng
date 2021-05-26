@@ -94,7 +94,7 @@ abstract class SettingsActivity(protected val fragment: Fragment? = null) : Them
     super.onBackPressed()
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     android.R.id.home -> {
       shouldNavigateAway {
         if (supportParentActivityIntent != null) {

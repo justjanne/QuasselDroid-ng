@@ -47,6 +47,7 @@
     app:elevation="0dip"
     app:fabSize="normal"
     app:pressedTranslationZ="0dip"
+    android:contentDescription="@string/label_next"
     app:srcCompat="@drawable/ic_forward"
     app:tint="#ffffffff"
     tools:ignore="RtlHardcoded" />

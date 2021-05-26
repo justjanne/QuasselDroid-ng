@@ -47,6 +47,7 @@
     app:fabSize="normal"
     app:srcCompat="@drawable/ic_forward"
     app:tint="#ffffffff"
+    android:contentDescription="@string/label_next"
     tools:ignore="RtlHardcoded"
     tools:src="@drawable/ic_arrow_right" />
 
