@@ -25,9 +25,11 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
+import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.*
+import de.kuschku.quasseldroid.util.safety.DeceptiveNetworkManager
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
@@ -38,6 +40,7 @@ import javax.inject.Inject
 
 open class ChatViewModelHelper @Inject constructor(
   val chat: ChatViewModel,
+  val deceptiveNetworkManager: DeceptiveNetworkManager,
   quassel: QuasselViewModel
 ) : QuasselViewModelHelper(quassel) {
   val bufferViewConfig = bufferViewManager.flatMapSwitchMap { manager ->
@@ -171,6 +174,11 @@ open class ChatViewModelHelper @Inject constructor(
     nickData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
   val selectedBuffer = processSelectedBuffer(bufferViewConfig, chat.selectedBufferId)
+
+  val deceptiveNetwork =
+    network.mapSwitchMap(Network::liveNetworkInfo)
+      .mapMap(deceptiveNetworkManager::isDeceptive)
+      .mapOrElse(false)
 
   fun processChatBufferList(
     filtered: Observable<Pair<Map<BufferId, Int>, Int>>

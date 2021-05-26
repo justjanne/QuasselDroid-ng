@@ -187,6 +187,8 @@
   <string name="notification_channel_highlight_title">Highlights</string>
   <string name="notification_channel_old_highlight_title">Old Highlights</string>
 
+  <string name="deceptive_network">Deceptive Network detected</string>
+
   <string name="label_missing_features">Missing Features</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Your core is missing features that are required for Quasseldroid to work correctly. You should &lt;a href="https://quassel-irc.org&gt;upgrade&lt;/a&gt; your Quassel core to %1$s or newer.</string>
 

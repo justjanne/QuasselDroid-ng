@@ -94,6 +94,7 @@ import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.drawable.DrawerToggleActivityDrawable
 import de.kuschku.quasseldroid.util.ui.drawable.NickCountDrawable
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
+import de.kuschku.quasseldroid.util.deceptive_networks.DeceptiveNetworkDialog
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
@@ -765,54 +766,67 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       })
 
     binding.layoutMain.connectionStatus.setOnClickListener {
-      modelHelper.sessionManager.value?.orNull()?.apply {
-        log(INFO, "ChatActivity", "Reconnect triggered: User action")
-        backend.safeValue.orNull()?.autoConnect(ignoreErrors = true, ignoreSetting = true)
+      if (modelHelper.connectionProgress.value?.first == ConnectionState.CONNECTED
+        && modelHelper.deceptiveNetwork.value == true) {
+        DeceptiveNetworkDialog.Builder(this)
+          .message(R.raw.untrustworthy_network_freenode)
+          .show()
+      } else {
+        modelHelper.sessionManager.value?.orNull()?.apply {
+          log(INFO, "ChatActivity", "Reconnect triggered: User action")
+          backend.safeValue.orNull()?.autoConnect(ignoreErrors = true, ignoreSetting = true)
+        }
       }
     }
 
     // Show Connection Progress Bar
-    modelHelper.connectionProgress.toLiveData().observe(this, Observer {
-      val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
-      when (state) {
-        ConnectionState.DISCONNECTED,
-        ConnectionState.CLOSED     -> {
-          binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
+    combineLatest(modelHelper.connectionProgress, modelHelper.deceptiveNetwork)
+      .toLiveData().observe(this, Observer {
+        val (connection, deceptive) = it ?: Pair(Triple(ConnectionState.DISCONNECTED, 0, 0), false)
+        val (state, progress, max) = connection
+        when (state) {
+          ConnectionState.DISCONNECTED,
+          ConnectionState.CLOSED     -> {
+            binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
 
-          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
-          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_disconnected))
-        }
-        ConnectionState.CONNECTING -> {
-          binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
-          binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
+            binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
+            binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_disconnected))
+          }
+          ConnectionState.CONNECTING -> {
+            binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
+            binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
 
-          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
-          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_connecting))
-        }
-        ConnectionState.HANDSHAKE  -> {
-          binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
-          binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
+            binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
+            binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_connecting))
+          }
+          ConnectionState.HANDSHAKE  -> {
+            binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
+            binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
 
-          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
-          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_handshake))
-        }
-        ConnectionState.INIT       -> {
-          binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
-          // Show indeterminate when no progress has been made yet
-          binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = progress == 0 || max == 0
-          binding.layoutMain.layoutToolbar.progressBar.progress = progress
-          binding.layoutMain.layoutToolbar.progressBar.max = max
+            binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
+            binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_handshake))
+          }
+          ConnectionState.INIT       -> {
+            binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
+            // Show indeterminate when no progress has been made yet
+            binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = progress == 0 || max == 0
+            binding.layoutMain.layoutToolbar.progressBar.progress = progress
+            binding.layoutMain.layoutToolbar.progressBar.max = max
 
-          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
-          binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_init))
+            binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
+            binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_init))
+          }
+          ConnectionState.CONNECTED  -> {
+            binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
+            if (deceptive) {
+              binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
+              binding.layoutMain.connectionStatus.setText(R.string.deceptive_network)
+            } else {
+              binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_NONE)
+            }
+          }
         }
-        ConnectionState.CONNECTED  -> {
-          binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
-
-          binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_NONE)
-        }
-      }
-    })
+      })
 
     // Only show nick list when we’re in a channel bufferId
     modelHelper.bufferDataThrottled.toLiveData().observe(this, Observer {
