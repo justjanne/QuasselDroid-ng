@@ -192,7 +192,8 @@
   <string name="deceptive_network">Deceptive Network detected</string>
   <string name="deceptive_network_freenode"><![CDATA[
     <p>
-      The staff of this network have taken over several official project channels against the wishes of the channel operators.
+      The staff of this network has been replaced.<br/>
+      The new staff have taken over several official project channels against the wishes of the channel operators.
       Many of these projects have moved to other networks such as <a href="https://libera.chat/">libera.chat</a> and <a href="https://www.oftc.net/">OFTC</a>.
     </p>
     <p>
