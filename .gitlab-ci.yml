@@ -1,87 +1,65 @@
-image: "k8r.eu/justjanne/android-sdk:29-29.0.3"
-
-variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+image: "k8r.eu/justjanne/quasseldroid-build-env:5d24a78"
 
 cache:
   key: "$CI_PROJECT_NAME"
   paths:
-    - ".gradle/wrapper"
     - ".gradle/caches"
 
 before_script:
   - "export GRADLE_USER_HOME=$(pwd)/.gradle"
-  - "export ANDROID_HOME=/android-sdk-linux"
-  - "export PATH=$PATH:/android-sdk-linux/platform-tools/"
   - "chmod +x ./gradlew"
 
   - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
   - "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
 
 stages:
-  - "build"
   - "test"
   - "deploy"
-
-build:
-  stage: "build"
-  script:
-    - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
-    - "cp app/build/outputs/apk/release/*.apk ."
-  artifacts:
-    paths:
-      - "*.apk"
-  except:
-    - "tags"
 
 test:
   stage: "test"
   script:
-    - "./gradlew check -x connectedCheck"
+    - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
+    - "cp app/build/outputs/apk/release/*.apk ."
+    - "./gradlew check -x connectedCheck --stacktrace"
   artifacts:
     paths:
+      - "*.apk"
       - "*/build/test-results/**/TEST-*.xml"
       - "*/build/reports/*.xml"
     reports:
       junit:
         - "*/build/test-results/**/TEST-*.xml"
         - "*/build/reports/*.xml"
-  except:
-    - "tags"
+  rules:
+    - if: "$CI_COMMIT_BRANCH == 'main'"
+      when: on_success
 
 deploy-local:
   stage: "deploy"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
-  cache: {}
-  only:
-    refs:
-      - "main"
-    variables:
-      - "$S3_CONFIG"
-  except:
-    - "tags"
+  cache: { }
   dependencies:
-    - "build"
+    - "test"
   script:
     - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
     - "export VERSION=$(ls *.apk)"
     - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
     - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
+  rules:
+    - if: "$CI_COMMIT_BRANCH == 'main' && $S3_CONFIG != ''"
+      when: on_success
 
 deploy-beta:
   stage: "deploy"
   image: "k8r.eu/justjanne/docker-fastlane:latest"
-  cache: {}
-  only:
-    refs:
-      - "main"
-    variables:
-      - "$FASTLANE_CONFIG"
-  except:
-    - "tags"
+  cache: { }
   dependencies:
-    - "build"
+    - "test"
   script:
     - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
     - "export VERSION=$(ls *.apk)"
     - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
+  rules:
+    - if: "$CI_COMMIT_BRANCH == 'main' && $FASTLANE_CONFIG != ''"
+      when: on_success
