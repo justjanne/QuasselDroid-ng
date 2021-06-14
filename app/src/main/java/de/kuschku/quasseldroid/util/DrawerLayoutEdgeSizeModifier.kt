@@ -19,14 +19,15 @@
 
 package de.kuschku.quasseldroid.util
 
+import androidx.core.view.ViewCompat.LAYOUT_DIRECTION_RTL
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
 
 fun DrawerLayout.setEdgeSize(edgeSize: Int) {
-  val leftDragger: ViewDragHelper = getField("mLeftDragger") ?: return
-  val rightDragger: ViewDragHelper = getField("mRightDragger") ?: return
+  val resources = context.resources
+  val rtl = resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL
+  val density = resources.displayMetrics.density
 
-  val density = context.resources.displayMetrics.density
-  leftDragger.setField("mEdgeSize", (edgeSize * density + 0.5f).toInt())
-  rightDragger.setField("mEdgeSize", (edgeSize * density + 0.5f).toInt())
+  val dragger: ViewDragHelper = getField(if (rtl) "mRightDragger" else "mLeftDragger") ?: return
+  dragger.setField("mEdgeSize", (edgeSize * density + 0.5f).toInt())
 }
