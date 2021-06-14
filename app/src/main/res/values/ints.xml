@@ -19,4 +19,5 @@
 
 <resources>
   <integer name="shortcut_image_size">432</integer>
+  <integer name="drawer_edge_size">96</integer>
 </resources>

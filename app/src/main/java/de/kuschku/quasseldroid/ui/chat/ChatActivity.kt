@@ -91,6 +91,7 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
+import de.kuschku.quasseldroid.util.setEdgeSize
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.drawable.DrawerToggleActivityDrawable
 import de.kuschku.quasseldroid.util.ui.drawable.NickCountDrawable
@@ -293,6 +294,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     setSupportActionBar(binding.layoutMain.layoutToolbar.toolbar)
 
+    binding.drawerLayout.setEdgeSize(resources.getInteger(R.integer.drawer_edge_size))
     chatViewModel.bufferOpened.toLiveData().observe(this, Observer {
       actionMode?.finish()
       if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
