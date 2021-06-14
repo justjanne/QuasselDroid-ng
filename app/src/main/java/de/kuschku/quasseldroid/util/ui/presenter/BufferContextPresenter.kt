@@ -55,7 +55,7 @@ object BufferContextPresenter {
         )
 
         val visibilityActions = when (buffer.hiddenState) {
-          BufferHiddenState.VISIBLE          -> setOf(
+          BufferHiddenState.VISIBLE -> setOf(
             R.id.action_archive
           )
           BufferHiddenState.HIDDEN_TEMPORARY -> setOf(
@@ -67,15 +67,15 @@ object BufferContextPresenter {
         }
 
         val availableActions = when (buffer.info?.type?.enabledValues()?.firstOrNull()) {
-          Buffer_Type.StatusBuffer  -> {
+          Buffer_Type.StatusBuffer -> {
             when (buffer.connectionState) {
               INetwork.ConnectionState.Disconnected -> setOf(
                 R.id.action_configure, R.id.action_connect
               )
-              INetwork.ConnectionState.Initialized  -> setOf(
+              INetwork.ConnectionState.Initialized -> setOf(
                 R.id.action_channellist, R.id.action_configure, R.id.action_disconnect
               )
-              else                                  -> setOf(
+              else -> setOf(
                 R.id.action_configure, R.id.action_connect, R.id.action_disconnect
               )
             }
@@ -87,10 +87,10 @@ object BufferContextPresenter {
               setOf(R.id.action_join, R.id.action_delete)
             } + visibilityActions
           }
-          Buffer_Type.QueryBuffer   -> {
+          Buffer_Type.QueryBuffer -> {
             setOf(R.id.action_delete, R.id.action_rename) + visibilityActions
           }
-          else                      -> visibilityActions
+          else -> visibilityActions
         }
 
         val unavailableActions = allActions - availableActions
@@ -111,9 +111,9 @@ object BufferContextPresenter {
     context: Context,
     actionMode: ActionMode,
     item: MenuItem,
-    info: BufferInfo,
-    session: ISession,
-    bufferSyncer: BufferSyncer,
+    info: BufferInfo?,
+    session: ISession?,
+    bufferSyncer: BufferSyncer?,
     bufferViewConfig: BufferViewConfig?,
     network: Network?
   ) = when (item.itemId) {
@@ -124,101 +124,125 @@ object BufferContextPresenter {
       actionMode.finish()
       true
     }
-    R.id.action_configure   -> {
+    R.id.action_configure -> {
       network?.let {
         NetworkEditActivity.launch(context, network = it.networkId())
       }
       actionMode.finish()
       true
     }
-    R.id.action_connect     -> {
+    R.id.action_connect -> {
       network?.requestConnect()
       actionMode.finish()
       true
     }
-    R.id.action_disconnect  -> {
+    R.id.action_disconnect -> {
       network?.requestDisconnect()
       actionMode.finish()
       true
     }
-    R.id.action_join        -> {
-      session.rpcHandler.sendInput(info, "/join ${info.bufferName}")
-      actionMode.finish()
-      true
+    R.id.action_join -> {
+      if (info != null) {
+        session?.rpcHandler?.sendInput(info, "/join ${info.bufferName}")
+        actionMode.finish()
+        true
+      } else {
+        false
+      }
     }
-    R.id.action_part        -> {
-      session.rpcHandler.sendInput(info, "/part ${info.bufferName}")
-      actionMode.finish()
-      true
+    R.id.action_part -> {
+      if (info != null) {
+        session?.rpcHandler?.sendInput(info, "/part ${info.bufferName}")
+        actionMode.finish()
+        true
+      } else {
+        false
+      }
     }
-    R.id.action_delete      -> {
-      MaterialDialog.Builder(context)
-        .content(R.string.buffer_delete_confirmation)
-        .positiveText(R.string.label_yes)
-        .negativeText(R.string.label_no)
-        .negativeColorAttr(R.attr.colorTextPrimary)
-        .backgroundColorAttr(R.attr.colorBackgroundCard)
-        .contentColorAttr(R.attr.colorTextPrimary)
-        .onPositive { _, _ ->
-          session.bufferSyncer.requestRemoveBuffer(info.bufferId)
-        }
-        .onAny { _, _ ->
-          actionMode.finish()
-        }
-        .build()
-        .show()
-      true
-    }
-    R.id.action_rename      -> {
-      MaterialDialog.Builder(context)
-        .input(
-          context.getString(R.string.label_buffer_name),
-          info.bufferName,
-          false
-        ) { _, input ->
-          session.bufferSyncer.requestRenameBuffer(info.bufferId, input.toString())
-        }
-        .positiveText(R.string.label_save)
-        .negativeText(R.string.label_cancel)
-        .negativeColorAttr(R.attr.colorTextPrimary)
-        .backgroundColorAttr(R.attr.colorBackgroundCard)
-        .contentColorAttr(R.attr.colorTextPrimary)
-        .onAny { _, _ ->
-          actionMode.finish()
-        }
-        .build()
-        .show()
-      true
-    }
-    R.id.action_unhide      -> {
-      bufferViewConfig?.insertBufferSorted(info, bufferSyncer)
-      actionMode.finish()
-      true
-    }
-    R.id.action_archive     -> {
-      MaterialDialog.Builder(context)
-        .title(R.string.label_archive_chat)
-        .content(R.string.buffer_archive_confirmation)
-        .checkBoxPromptRes(R.string.buffer_archive_temporarily, true, null)
-        .positiveText(R.string.label_archive)
-        .negativeText(R.string.label_cancel)
-        .negativeColorAttr(R.attr.colorTextPrimary)
-        .backgroundColorAttr(R.attr.colorBackgroundCard)
-        .contentColorAttr(R.attr.colorTextPrimary)
-        .onAny { _, _ ->
-          actionMode.finish()
-        }
-        .onPositive { dialog, _ ->
-          if (dialog.isPromptCheckBoxChecked) {
-            bufferViewConfig?.requestRemoveBuffer(info.bufferId)
-          } else {
-            bufferViewConfig?.requestRemoveBufferPermanently(info.bufferId)
+    R.id.action_delete -> {
+      if (info != null) {
+        MaterialDialog.Builder(context)
+          .content(R.string.buffer_delete_confirmation)
+          .positiveText(R.string.label_yes)
+          .negativeText(R.string.label_no)
+          .negativeColorAttr(R.attr.colorTextPrimary)
+          .backgroundColorAttr(R.attr.colorBackgroundCard)
+          .contentColorAttr(R.attr.colorTextPrimary)
+          .onPositive { _, _ ->
+            session?.bufferSyncer?.requestRemoveBuffer(info.bufferId)
           }
-        }
-        .build()
-        .show()
-      true
+          .onAny { _, _ ->
+            actionMode.finish()
+          }
+          .build()
+          .show()
+        true
+      } else {
+        false
+      }
     }
-    else                    -> false
+    R.id.action_rename -> {
+      if (info != null && bufferSyncer != null) {
+        MaterialDialog.Builder(context)
+          .input(
+            context.getString(R.string.label_buffer_name),
+            info.bufferName,
+            false
+          ) { _, input ->
+            session?.bufferSyncer?.requestRenameBuffer(info.bufferId, input.toString())
+          }
+          .positiveText(R.string.label_save)
+          .negativeText(R.string.label_cancel)
+          .negativeColorAttr(R.attr.colorTextPrimary)
+          .backgroundColorAttr(R.attr.colorBackgroundCard)
+          .contentColorAttr(R.attr.colorTextPrimary)
+          .onAny { _, _ ->
+            actionMode.finish()
+          }
+          .build()
+          .show()
+        true
+      } else {
+        false
+      }
+    }
+    R.id.action_unhide -> {
+      if (info != null && bufferSyncer != null) {
+        bufferViewConfig?.insertBufferSorted(info, bufferSyncer)
+        actionMode.finish()
+        true
+      } else {
+        false
+      }
+    }
+    R.id.action_archive -> {
+      if (info != null) {
+        MaterialDialog.Builder(context)
+          .title(R.string.label_archive_chat)
+          .content(R.string.buffer_archive_confirmation)
+          .checkBoxPromptRes(R.string.buffer_archive_temporarily, true, null)
+          .positiveText(R.string.label_archive)
+          .negativeText(R.string.label_cancel)
+          .negativeColorAttr(R.attr.colorTextPrimary)
+          .backgroundColorAttr(R.attr.colorBackgroundCard)
+          .contentColorAttr(R.attr.colorTextPrimary)
+          .onAny { _, _ ->
+            actionMode.finish()
+          }
+          .onPositive { dialog, _ ->
+            if (dialog.isPromptCheckBoxChecked) {
+              bufferViewConfig?.requestRemoveBuffer(info.bufferId)
+            } else {
+              bufferViewConfig?.requestRemoveBufferPermanently(info.bufferId)
+            }
+          }
+          .build()
+          .show()
+        true
+      } else {
+        false
+      }
+    }
+    else -> false
   }
 }

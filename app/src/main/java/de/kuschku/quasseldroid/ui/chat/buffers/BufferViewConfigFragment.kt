@@ -133,20 +133,16 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       val network = session?.networks?.get(networkId)
       val bufferViewConfig = modelHelper.bufferViewConfig.value?.orNull()
 
-      return if (info != null) {
-        BufferContextPresenter.handleAction(
-          requireContext(),
-          mode,
-          item,
-          info,
-          session,
-          bufferSyncer,
-          bufferViewConfig,
-          network
-        )
-      } else {
-        false
-      }
+      return BufferContextPresenter.handleAction(
+        requireContext(),
+        mode,
+        item,
+        info,
+        session,
+        bufferSyncer,
+        bufferViewConfig,
+        network
+      )
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
