@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2018 Janne Mareike Koschinski
- * Copyright (c) 2018 The Quassel Project
+ * Copyright (c) 2021 Janne Mareike Koschinski
+ * Copyright (c) 2021 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -42,6 +42,6 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.0"))
+  implementation(kotlin("stdlib", "1.5.10"))
   implementation("androidx.appcompat", "appcompat", "1.1.0")
 }

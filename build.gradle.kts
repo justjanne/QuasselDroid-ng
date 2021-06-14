@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2018 Janne Mareike Koschinski
- * Copyright (c) 2018 The Quassel Project
+ * Copyright (c) 2021 Janne Mareike Koschinski
+ * Copyright (c) 2021 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -28,8 +28,8 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("com.android.tools.build:gradle:4.1.2")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0")
+    classpath("com.android.tools.build:gradle:4.2.1")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
   }
 }
 
