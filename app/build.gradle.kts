@@ -13,14 +13,11 @@ android {
   defaultConfig {
     applicationId = "com.iskrembilen.quasseldroid"
 
-    setMinSdkVersion(21)
-    setTargetSdkVersion(30)
+    minSdk = 21
+    targetSdk = 30
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    // Disable test runner analytics
-    testInstrumentationRunnerArguments(mapOf(
-      "disableAnalytics" to "true"
-    ))
+    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
   }
 
   buildTypes {
@@ -54,10 +51,6 @@ android {
     val androidxComposeVersion: String by project
     kotlinCompilerExtensionVersion = androidxComposeVersion
   }
-
-  kotlinOptions {
-    useIR = true
-  }
 }
 
 kapt {
@@ -75,9 +68,19 @@ dependencies {
   implementation("com.google.android.material", "material", mdcVersion)
 
   val androidxComposeVersion: String by project
-  implementation("androidx.compose.ui", "ui", androidxComposeVersion)
+  implementation("androidx.compose.foundation", "foundation", androidxComposeVersion)
+  implementation("androidx.compose.foundation", "foundation-layout", androidxComposeVersion)
   implementation("androidx.compose.material", "material", androidxComposeVersion)
+  implementation("androidx.compose.material", "material-icons-extended", androidxComposeVersion)
+  implementation("androidx.compose.runtime", "runtime", androidxComposeVersion)
+  implementation("androidx.compose.runtime", "runtime-livedata", androidxComposeVersion)
   implementation("androidx.compose.ui", "ui-tooling", androidxComposeVersion)
+  implementation("androidx.compose.ui", "ui-util", androidxComposeVersion)
+  implementation("androidx.compose.ui", "ui-viewbinding", androidxComposeVersion)
+  testImplementation("androidx.compose.ui", "ui-test", androidxComposeVersion)
+
+  val androidxActivityComposeVersion: String by project
+  implementation("androidx.activity", "activity-compose", androidxActivityComposeVersion)
 
   val androidxLifecycleVersion: String by project
   implementation("androidx.lifecycle", "lifecycle-runtime-ktx", androidxLifecycleVersion)
@@ -93,10 +96,10 @@ dependencies {
   androidTestImplementation("com.google.dagger", "hilt-android-testing", daggerHiltVersion)
   androidTestAnnotationProcessor("com.google.dagger", "hilt-android-compiler", daggerHiltVersion)
 
-  implementation("org.threeten", "threetenbp", "1.4.0")
+  implementation("org.threeten", "threetenbp", "1.5.1")
 
-  implementation("io.coil-kt", "coil", "1.1.1")
-  implementation("dev.chrisbanes.accompanist", "accompanist-coil", "0.5.0")
+  implementation("io.coil-kt", "coil", "1.2.2")
+  implementation("com.google.accompanist", "accompanist-coil", "0.11.1")
 
   val libquasselVersion: String by project
   implementation("de.justjanne.libquassel", "libquassel-client", libquasselVersion)

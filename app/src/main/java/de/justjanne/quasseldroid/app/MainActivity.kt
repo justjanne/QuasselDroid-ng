@@ -20,7 +20,9 @@
 package de.justjanne.quasseldroid.app
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,14 +49,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import dev.chrisbanes.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.threeten.bp.ZonedDateTime
@@ -63,7 +64,8 @@ import kotlin.random.Random
 
 val time = MutableStateFlow(ZonedDateTime.now())
 
-inline class Password1(private val s: String)
+@JvmInline
+value class Password1(private val s: String)
 
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,8 +94,11 @@ fun UserPhoto(
   modifier: Modifier = Modifier,
 ) {
   val ringColor = remember { randomColor() }
-  CoilImage(
-    data = imageUrl as Any,
+  Image(
+    painter = rememberCoilPainter(
+      imageUrl,
+      fadeIn = true
+    ),
     contentDescription = null,
     modifier = modifier
       .border(2.dp, ringColor, CircleShape)
@@ -224,7 +229,7 @@ fun JetChat() {
     Scaffold(
       topBar = { TimeDisplay() },
       bottomBar = { InputLine() },
-      bodyContent = {
+      content = {
         Column {
           ChatMessage(
             authorName = "Ali Conors",
