@@ -212,7 +212,4 @@
   <string name="cancel_confirmation">You have unsaved changes. Do you wish to discard them?</string>
 
   <string name="info_copied_version">Version copied to clipboard</string>
-
-  <string name="advertisement_support_patreon">Please help support the development of this app on Patreon</string>
-  <string name="advertisement_support_button">Support development</string>
 </resources>

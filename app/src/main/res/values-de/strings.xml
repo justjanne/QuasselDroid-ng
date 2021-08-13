@@ -212,7 +212,4 @@ Bitte verifiziere vor dem Betreten der Channels und dem Chatten, ob die Channels
   <string name="cancel_confirmation">Du hast nicht gespeicherte Änderungen. Möchtest du sie verwerfen?</string>
 
   <string name="info_copied_version">Version in die Zwischenablage kopiert</string>
-
-  <string name="advertisement_support_patreon">Bitte hilf uns, indem du die Entwicklung dieser App auf Patreon unterstützt</string>
-  <string name="advertisement_support_button">Entwicklung Unterstützen</string>
 </resources>

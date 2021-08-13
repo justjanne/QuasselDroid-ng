@@ -92,17 +92,6 @@
       android:layout_height="wrap_content"
       android:text="@string/label_source" />
 
-    <Space
-      android:layout_width="8dp"
-      android:layout_height="wrap_content" />
-
-    <com.google.android.material.button.MaterialButton
-      android:id="@+id/action_donate"
-      style="@style/Widget.Button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/advertisement_support_button" />
-
   </com.google.android.flexbox.FlexboxLayout>
 
   <TextView

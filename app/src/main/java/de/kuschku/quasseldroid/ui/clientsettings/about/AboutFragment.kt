@@ -55,9 +55,6 @@ class AboutFragment : DaggerFragment() {
   @BindView(R.id.action_source)
   lateinit var source: Button
 
-  @BindView(R.id.action_donate)
-  lateinit var donate: Button
-
   @BindView(R.id.action_privacy_policy)
   lateinit var privacyPolicy: Button
 
@@ -95,12 +92,6 @@ class AboutFragment : DaggerFragment() {
     source.setOnClickListener {
       context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse("https://git.kuschku.de/justJanne/QuasselDroid-ng")
-      })
-    }
-
-    donate.setOnClickListener {
-      context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse("https://www.patreon.com/justjanne")
       })
     }
 
