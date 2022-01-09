@@ -24,14 +24,10 @@ import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.BiFunction
 
-fun <T> Observable<T>.or(default: T): T = try {
-  this.blockingLatest().firstOrNull() ?: default
-} catch (_: Throwable) {
-  default
-}
+fun <T> Observable<T>.or(default: T): T = this.blockingFirst(default)
 
-val <T : Any> Observable<T>.value
-  get() = this.map { Optional.of(it) }.blockingMostRecent(Optional.empty()).firstOrNull()?.orNull()
+val <T : Any> Observable<T>.value: T?
+  get() = this.blockingFirst(null)
 
 fun <T : Any, U : Any> Observable<Optional<T>>.mapMap(mapper: (T) -> U): Observable<Optional<U>> =
   map { it.map(mapper) }
@@ -132,7 +128,7 @@ inline fun <reified T> combineLatest(
   else Observable.combineLatest(sources) { t -> t.toList() as List<T> }
 
 inline operator fun <T, U> Observable<T>.invoke(f: (T) -> U?) =
-  blockingLatest().firstOrNull()?.let(f)
+  blockingFirst()?.let(f)
 
 data class Tuple4<out A, out B, out C, out D>(
   val first: A,
