@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/android-sdk:cc6bd28f"
+image: "k8r.eu/justjanne/android-sdk:e9718176"
 
 cache:
   key: "$CI_PROJECT_NAME"
