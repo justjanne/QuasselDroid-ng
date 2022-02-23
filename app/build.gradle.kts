@@ -59,7 +59,7 @@ android {
 
 dependencies {
   // App Compat
-  implementation(libs.androidx.material)
+  implementation(libs.google.material)
 
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.browser)
@@ -72,12 +72,13 @@ dependencies {
   implementation(libs.androidx.constraintlayout)
 
   implementation(libs.androidx.room.runtime)
-  kapt(libs.androidx.room.compiler)
+  ksp(libs.androidx.room.compiler)
   implementation(libs.androidx.room.rxjava)
   testImplementation(libs.androidx.room.testing)
-  implementation(libs.androidx.lifecycle.extensions)
+  implementation(libs.androidx.lifecycle.viewmodel)
+  implementation(libs.androidx.lifecycle.livedata)
   implementation(libs.androidx.lifecycle.reactivestreams)
-  implementation(project(":lifecycle-ktx"))
+  implementation(libs.androidx.lifecycle.service)
   implementation(libs.androidx.paging.runtime)
   implementation(libs.androidx.multidex)
 

@@ -1,5 +1,5 @@
 repositories {
-  google()
   mavenCentral()
+  google()
   maven(url = "https://jitpack.io")
 }

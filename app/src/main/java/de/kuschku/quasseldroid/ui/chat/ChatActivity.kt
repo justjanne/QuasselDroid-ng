@@ -284,6 +284,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
         }
       }
+      setIntent(null)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -296,12 +297,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     setSupportActionBar(binding.layoutMain.layoutToolbar.toolbar)
 
     binding.drawerLayout.setEdgeSize(resources.getInteger(R.integer.drawer_edge_size))
-    chatViewModel.bufferOpened.toLiveData().observe(this, Observer {
+    chatViewModel.bufferOpened.toLiveData().observe(this) {
       actionMode?.finish()
       if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
         binding.drawerLayout.closeDrawer(GravityCompat.START, true)
       }
-    })
+    }
 
     // Don’t show a drawer toggle if in tablet landscape mode
     if (resources.getBoolean(R.bool.buffer_drawer_exists)) {

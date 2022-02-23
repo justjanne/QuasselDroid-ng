@@ -84,18 +84,18 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
 
   override fun onStart() {
     super.onStart()
-    preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     initSummary(preferenceScreen)
   }
 
   override fun onStop() {
-    preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     super.onStop()
   }
 
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
     updateSummary(findPreference(key) as? ListPreference)
-    val appearanceSettings = Settings.appearance(context!!)
+    val appearanceSettings = Settings.appearance(requireContext())
     if (this.appearanceSettings.theme != appearanceSettings.theme ||
         this.appearanceSettings.language != appearanceSettings.language) {
       activity?.recreate()

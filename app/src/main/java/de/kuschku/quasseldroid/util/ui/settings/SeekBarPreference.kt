@@ -91,9 +91,9 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
                                       defaultValue: String) =
     attrs.getAttributeValue(namespace, name) ?: defaultValue
 
-  override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+  override fun onBindViewHolder(holder: PreferenceViewHolder) {
     super.onBindViewHolder(holder)
-    holder?.itemView?.let { view ->
+    holder.itemView.let { view ->
       ButterKnife.bind(this, view)
       seekBar?.max = maxValue - minValue
       seekBar?.setOnSeekBarChangeListener(this)

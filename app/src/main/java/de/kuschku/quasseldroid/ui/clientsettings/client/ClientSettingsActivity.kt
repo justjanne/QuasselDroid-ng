@@ -29,7 +29,7 @@ import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
 
 class ClientSettingsActivity : SettingsActivity(ClientSettingsFragment()),
                                PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
-  override fun onPreferenceDisplayDialog(caller: PreferenceFragmentCompat, pref: Preference?) =
+  override fun onPreferenceDisplayDialog(caller: PreferenceFragmentCompat, pref: Preference) =
     when (pref) {
       is ListPreference -> {
         val f = ListPreferenceDialogFragmentCompat.newInstance(pref.getKey())

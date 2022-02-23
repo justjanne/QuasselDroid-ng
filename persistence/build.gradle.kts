@@ -25,7 +25,7 @@ dependencies {
   implementation(libs.androidx.appcompat)
 
   implementation(libs.androidx.room.runtime)
-  kapt(libs.androidx.room.compiler)
+  ksp(libs.androidx.room.compiler)
   implementation(libs.androidx.room.rxjava)
   testImplementation(libs.androidx.room.testing)
 

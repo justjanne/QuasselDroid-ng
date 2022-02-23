@@ -16,7 +16,7 @@ import de.justjanne.libquassel.annotations.ProtocolSide
 import de.justjanne.libquassel.annotations.SyncedCall
 import de.justjanne.libquassel.generator.util.findAnnotationWithType
 import de.justjanne.libquassel.generator.util.getMember
-import de.justjanne.libquassel.generator.util.toEnum
+import de.justjanne.libquassel.generator.util.ksp.toEnum
 
 data class RpcFunctionAnnotation(
   val name: String?,

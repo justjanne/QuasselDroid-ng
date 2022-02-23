@@ -494,7 +494,7 @@ class QuasselService : DaggerLifecycleService(),
     super.onDestroy()
   }
 
-  override fun onBind(intent: Intent?): QuasselBinder {
+  override fun onBind(intent: Intent): QuasselBinder {
     super.onBind(intent)
     return QuasselBinder(asyncBackend)
   }

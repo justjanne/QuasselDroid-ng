@@ -28,7 +28,6 @@ include(
   ":invokerannotations",
   ":invokergenerator",
   ":lib",
-  ":lifecycle-ktx",
   ":malheur",
   ":persistence",
   ":viewmodel",

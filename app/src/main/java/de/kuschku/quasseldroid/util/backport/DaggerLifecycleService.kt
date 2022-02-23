@@ -19,10 +19,10 @@
 
 package de.kuschku.quasseldroid.util.backport
 
+import androidx.lifecycle.LifecycleService
 import dagger.android.AndroidInjection
-import de.kuschku.quasseldroid.util.compatibility.FixedLifecycleService
 
-abstract class DaggerLifecycleService : FixedLifecycleService() {
+abstract class DaggerLifecycleService : LifecycleService() {
   override fun onCreate() {
     AndroidInjection.inject(this)
     super.onCreate()

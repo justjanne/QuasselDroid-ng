@@ -7,12 +7,12 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package de.justjanne.libquassel.generator.util
+package de.justjanne.libquassel.generator.util.ksp
 
 import com.google.devtools.ksp.symbol.KSType
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.DelicateKotlinPoetApi
 import com.squareup.kotlinpoet.asClassName
-import de.justjanne.libquassel.generator.util.ksp.asClassName
 
 internal inline fun <reified T : Enum<T>> KSType.toEnum(): T? {
   return asClassName().toEnum(T::class.java)
