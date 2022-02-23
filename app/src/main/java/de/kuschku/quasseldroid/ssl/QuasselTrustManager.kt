@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ssl
 
+import android.annotation.SuppressLint
 import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.quasseldroid.ssl.custom.QuasselCertificateManager
 import java.security.GeneralSecurityException
@@ -28,6 +29,7 @@ import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
+@SuppressLint("CustomX509TrustManager")
 class QuasselTrustManager private constructor(
   private val certificateManager: QuasselCertificateManager,
   private val trustManager: X509TrustManager?

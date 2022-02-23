@@ -81,10 +81,10 @@ class NetworkTest {
     original.addSupport("CHANTYPES", "#")
     original.addSupport("CHARSET", "ascii")
     original.addSupport("ELIST", "MU")
-    original.addSupport("ESILENCE", null)
+    original.addSupport("ESILENCE", "")
     original.addSupport("EXCEPTS", "e")
     original.addSupport("EXTBAN", ",ABCNOQRSTUcjmprsz")
-    original.addSupport("FNC", null)
+    original.addSupport("FNC", "")
     original.addSupport("INVEX", "I")
     for (i in 0 until 8) {
       original.newIrcUser(randomString() + "!" + randomString() + "@" + randomString()).apply {
@@ -208,10 +208,10 @@ class NetworkTest {
     original.addSupport("CHANTYPES", "#")
     original.addSupport("CHARSET", "ascii")
     original.addSupport("ELIST", "MU")
-    original.addSupport("ESILENCE", null)
+    original.addSupport("ESILENCE", "")
     original.addSupport("EXCEPTS", "e")
     original.addSupport("EXTBAN", ",ABCNOQRSTUcjmprsz")
-    original.addSupport("FNC", null)
+    original.addSupport("FNC", "")
     original.addSupport("INVEX", "I")
     for (i in 0 until 8) {
       original.newIrcUser(randomString() + "!" + randomString() + "@" + randomString()).apply {

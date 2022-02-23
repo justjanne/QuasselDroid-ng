@@ -29,11 +29,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 object AppModule {
   @Provides
-  @JvmStatic
   fun provideGson() = GsonBuilder().setPrettyPrinting().create()
 
   @Provides
-  @JvmStatic
   fun provideMatrixApi() = Retrofit.Builder()
     .baseUrl("https://matrix.org/")
     .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))

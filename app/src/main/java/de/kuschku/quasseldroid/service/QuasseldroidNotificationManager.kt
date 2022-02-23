@@ -118,7 +118,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       ChatActivity.intent(context.applicationContext, bufferId = buffer.id).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       },
-      0
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 0
+      else PendingIntent.FLAG_MUTABLE
     )
 
     val remoteInput = RemoteInput.Builder("reply_content")
@@ -132,7 +133,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
         context,
         bufferId = buffer.id
       ),
-      0
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 0
+      else PendingIntent.FLAG_MUTABLE
     )
 
     val markReadPendingIntent = PendingIntent.getService(
@@ -143,7 +145,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
         bufferId = buffer.id,
         markReadMessage = notifications.last().messageId
       ),
-      0
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 0
+      else PendingIntent.FLAG_MUTABLE
     )
 
     val deletePendingIntent = PendingIntent.getService(
@@ -154,7 +157,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
         bufferId = buffer.id,
         hideMessage = notifications.last().messageId
       ),
-      0
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 0
+      else PendingIntent.FLAG_MUTABLE
     )
 
     val notification = NotificationCompat.Builder(
@@ -248,14 +252,16 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       ChatActivity.intent(context.applicationContext).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       },
-      0
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 0
+      else PendingIntent.FLAG_MUTABLE
     )
 
     val pendingIntentDisconnect = PendingIntent.getService(
       context,
       System.currentTimeMillis().toInt(),
       QuasselService.intent(context.applicationContext, disconnect = true),
-      0
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 0
+      else PendingIntent.FLAG_MUTABLE
     )
 
     val notification = NotificationCompat.Builder(

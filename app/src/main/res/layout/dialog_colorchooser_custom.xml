@@ -61,7 +61,8 @@
       android:textColor="?colorTextPrimary"
       android:textColorHint="?colorTextSecondary"
       android:textSize="@dimen/md_title_textsize"
-      tools:ignore="HardcodedText" />
+      tools:ignore="HardcodedText"
+      android:importantForAutofill="no" />
 
   </LinearLayout>
 

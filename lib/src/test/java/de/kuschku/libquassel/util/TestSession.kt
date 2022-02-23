@@ -21,11 +21,33 @@ package de.kuschku.libquassel.util
 
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.Features
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.Message_Types
+import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.quassel.syncables.AliasManager
+import de.kuschku.libquassel.quassel.syncables.BacklogManager
+import de.kuschku.libquassel.quassel.syncables.BufferSyncer
+import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
+import de.kuschku.libquassel.quassel.syncables.BufferViewManager
+import de.kuschku.libquassel.quassel.syncables.CertManager
+import de.kuschku.libquassel.quassel.syncables.CoreInfo
+import de.kuschku.libquassel.quassel.syncables.DccConfig
+import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
+import de.kuschku.libquassel.quassel.syncables.Identity
+import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
+import de.kuschku.libquassel.quassel.syncables.IrcChannel
+import de.kuschku.libquassel.quassel.syncables.IrcListHelper
+import de.kuschku.libquassel.quassel.syncables.IrcUser
+import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.quassel.syncables.NetworkConfig
+import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.session.ISession
@@ -91,6 +113,7 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     }
 
     fun callRpc(slotName: String, params: QVariantList?) {
+      println(rpc)
       val matchingNames = rpc.filter {
         it.slotName == slotName
       }

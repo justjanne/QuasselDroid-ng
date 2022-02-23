@@ -23,9 +23,7 @@
       <solid android:color="@color/ripple_dark" />
     </shape>
   </item>
-  <item android:state_pressed="true">
-    <shape android:shape="rectangle">
-      <solid android:color="@color/ripple_dark" />
-    </shape>
+  <item>
+    <ripple android:color="@color/ripple_dark" />
   </item>
 </selector>

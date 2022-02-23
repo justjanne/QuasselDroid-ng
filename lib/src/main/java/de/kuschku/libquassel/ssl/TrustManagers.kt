@@ -35,6 +35,7 @@ object TrustManagers {
 
   fun trustAll() = TrustAllX509TrustManager()
 
+  @Suppress("CustomX509TrustManager")
   class TrustAllX509TrustManager : X509TrustManager {
     override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
     override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit

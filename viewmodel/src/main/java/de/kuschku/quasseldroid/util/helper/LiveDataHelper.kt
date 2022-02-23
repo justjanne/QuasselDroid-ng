@@ -20,6 +20,7 @@
 
 package de.kuschku.quasseldroid.util.helper
 
+import android.annotation.SuppressLint
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import io.reactivex.Observable
@@ -33,6 +34,7 @@ inline fun <X, Y> LiveData<X?>.safeSwitchMap(
     this, object : Observer<X?> {
     var mSource: LiveData<Y>? = null
 
+    @SuppressLint("NullSafeMutableLiveData")
     override fun onChanged(x: X?) {
       val newLiveData = if (x == null) null else func(x)
       if (mSource === newLiveData) {
@@ -59,6 +61,7 @@ inline fun <X, Y> LiveData<X>.switchMapNotNull(
     this, object : Observer<X> {
     var mSource: LiveData<Y>? = null
 
+    @SuppressLint("NullSafeMutableLiveData")
     override fun onChanged(x: X?) {
       val newLiveData = if (x == null) null else func(x)
       if (mSource === newLiveData) {

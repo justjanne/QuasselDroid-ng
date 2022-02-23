@@ -34,6 +34,8 @@
 
   <!-- Can’t request a translation without a release, can’t release without translation -->
   <issue id="MissingTranslation" severity="informational" />
+  <!-- Because we don’t use app bundles and never will use them -->
+  <issue id="AppBundleLocaleChanges" severity="informational" />
   <!-- Because this tries to apply english orthography to other locales -->
   <issue id="Typos" severity="ignore" />
 
@@ -42,4 +44,10 @@
 
   <!-- We’re not using AGP 5 yet, and once we are, we’ll use compose anyway -->
   <issue id="NonConstantResourceId" severity="informational" />
+
+  <!-- It’s only used for testing -->
+  <issue id="TrustAllX509TrustManager" severity="informational" />
+
+  <!-- TODO for the future -->
+  <issue id="DataExtractionRules" severity="informational" />
 </lint>

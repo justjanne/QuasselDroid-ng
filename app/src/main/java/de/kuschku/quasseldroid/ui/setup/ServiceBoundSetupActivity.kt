@@ -137,9 +137,7 @@ abstract class ServiceBoundSetupActivity :
   }
 
   fun updateRecentsHeader() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-      updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
-    }
+    updateRecentsHeader(title.toString(), icon, recentsHeaderColor)
   }
 
   override fun setTitle(title: CharSequence?) {
@@ -200,8 +198,7 @@ abstract class ServiceBoundSetupActivity :
       else
         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
     }
-    isValid.observeSticky(
-      this, Observer {
+    isValid.observeSticky(this) {
       if (it == true) {
         button.show()
         adapter.lastValidItem = viewPager.currentItem
@@ -209,7 +206,7 @@ abstract class ServiceBoundSetupActivity :
         button.hide()
         adapter.lastValidItem = viewPager.currentItem - 1
       }
-    })
+    }
     viewPager.addOnPageChangeListener(pageChangeListener)
     pageChanged()
     updateRecentsHeader()

@@ -45,7 +45,6 @@
     <activity
       android:name=".ui.chat.ChatActivity"
       android:exported="true"
-      android:label="@string/app_name"
       android:launchMode="singleTask"
       android:windowSoftInputMode="adjustResize">
       <intent-filter>
@@ -257,13 +256,11 @@
     <activity
       android:name=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:exported="false"
-      android:label="@string/app_name"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.setup.accounts.setup.AccountSetupActivity"
       android:exported="false"
-      android:label="@string/app_name"
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
 
@@ -271,7 +268,6 @@
     <activity
       android:name=".ui.setup.accounts.edit.AccountEditActivity"
       android:exported="false"
-      android:label="@string/app_name"
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity

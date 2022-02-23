@@ -20,9 +20,9 @@
 package de.kuschku.libquassel.integration
 
 import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.QType
+import de.kuschku.libquassel.protocol.QuasselType
 import de.kuschku.libquassel.protocol.QVariant_
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.util.TestSession
 import de.kuschku.libquassel.util.setupTestSession
 import de.kuschku.libquassel.util.with
@@ -46,8 +46,8 @@ class BufferViewConfigTest {
       bufferViewConfig.insertBufferSorted(bufferSyncer.bufferInfo(BufferId(4))!!, bufferSyncer)
     }.does {
       callSync(bufferViewConfig, "requestAddBuffer", listOf(
-        QVariant_.of(BufferId(4), QType.BufferId),
-        QVariant_.of(2, Type.Int)
+        QVariant_.of(BufferId(4), QuasselType.BufferId),
+        QVariant_.of(2, QtType.Int)
       ))
     }
   }

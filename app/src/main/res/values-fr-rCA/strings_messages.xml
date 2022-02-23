@@ -17,12 +17,12 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-  <plurals name="message_netsplit_join">
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <plurals name="message_netsplit_join" tools:ignore="MissingQuantity">
     <item quantity="one">Netsplit entre %1$s et %2$s est terminé: %3$d nouvel utilisateur: %4$s</item>
     <item quantity="other">Netsplit entre %1$s et %2$s est terminé: %3$d nouveaux utilisateurs: %4$s</item>
   </plurals>
-  <plurals name="message_netsplit_quit">
+  <plurals name="message_netsplit_quit" tools:ignore="MissingQuantity">
     <item quantity="one">Netsplit entre %1$s et %2$s: %3$d utilisateur a quitté: %4$s</item>
     <item quantity="other">Netsplit entre %1$s et %2$s: %3$d utilisateurs ont quittés: %4$s</item>
   </plurals>

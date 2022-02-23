@@ -20,9 +20,9 @@
 package de.kuschku.libquassel.integration
 
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.protocol.QType
+import de.kuschku.libquassel.protocol.QuasselType
 import de.kuschku.libquassel.protocol.QVariant_
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.util.withTestSession
 import org.junit.Test
 
@@ -30,15 +30,15 @@ class SampleIntegrationTest {
   @Test
   fun test() = withTestSession {
     ensure {
-      rpcHandler.changePassword(0L, "user", "pass", "p@ssword1")
+      rpcHandler.changePassword(0UL, "user", "pass", "p@ssword1")
     }.does {
       callRpc(
         "2changePassword(PeerPtr,QString,QString,QString)",
         listOf(
-          QVariant_.of(0L, QType.PeerPtr),
-          QVariant_.of("user", Type.QString),
-          QVariant_.of("pass", Type.QString),
-          QVariant_.of("p@ssword1", Type.QString)
+          QVariant_.of(0UL, QuasselType.PeerPtr),
+          QVariant_.of("user", QtType.QString),
+          QVariant_.of("pass", QtType.QString),
+          QVariant_.of("p@ssword1", QtType.QString)
         )
       )
     }

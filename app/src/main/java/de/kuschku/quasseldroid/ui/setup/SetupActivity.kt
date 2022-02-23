@@ -21,13 +21,11 @@ package de.kuschku.quasseldroid.ui.setup
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.ActionMenuView
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -39,7 +37,11 @@ import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity
 import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity
-import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.helper.observeSticky
+import de.kuschku.quasseldroid.util.helper.or
+import de.kuschku.quasseldroid.util.helper.safeSwitchMap
+import de.kuschku.quasseldroid.util.helper.setTooltip
+import de.kuschku.quasseldroid.util.helper.updateRecentsHeader
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 
 abstract class SetupActivity : DaggerAppCompatActivity() {
@@ -99,9 +101,7 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
   }
 
   fun updateRecentsHeader() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-      updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
-    }
+    updateRecentsHeader(title.toString(), icon, recentsHeaderColor)
   }
 
   override fun setTitle(title: CharSequence?) {
@@ -161,8 +161,7 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
       else
         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
     }
-    isValid.observeSticky(
-      this, Observer {
+    isValid.observeSticky(this) {
       if (it == true) {
         button.show()
         adapter.lastValidItem = viewPager.currentItem
@@ -170,7 +169,7 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
         button.hide()
         adapter.lastValidItem = viewPager.currentItem - 1
       }
-    })
+    }
     viewPager.addOnPageChangeListener(pageChangeListener)
     pageChanged()
     updateRecentsHeader()

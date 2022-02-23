@@ -39,7 +39,7 @@ import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
-import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
+import de.kuschku.quasseldroid.util.helper.updateRecentsHeader
 import de.kuschku.quasseldroid.util.ui.ThemedActivity
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
@@ -105,9 +105,7 @@ abstract class ServiceBoundActivity :
   }
 
   fun updateRecentsHeader() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-      updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
-    }
+    updateRecentsHeader(title.toString(), icon, recentsHeaderColor)
   }
 
   override fun setTitle(title: CharSequence?) {

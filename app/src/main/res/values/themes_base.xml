@@ -37,25 +37,29 @@
     <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_light</item>
   </style>
 
-  <style name="Theme.AppTheme.NoActionBar" parent="Theme.AppTheme">
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-
-    <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
-    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_dark</item>
+  <style name="Theme.AppTheme.NoActionBar" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
   </style>
 
-  <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.AppTheme.Light">
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-
-    <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
-    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_light</item>
+  <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
   </style>
 
-  <style name="Theme.Base.ChatTheme" parent="Theme.AppTheme.NoActionBar" />
+  <style name="Base.ChatTheme" parent="Theme.AppTheme.NoActionBar">
+    <item name="android:statusBarColor">#0000</item>
+  </style>
 
-  <style name="Theme.Base.ChatTheme.Light" parent="Theme.AppTheme.Light.NoActionBar" />
+  <style name="Base.ChatTheme.Light" parent="Theme.AppTheme.Light.NoActionBar">
+    <item name="android:statusBarColor">#0000</item>
+  </style>
 
   <style name="Theme.SetupTheme" parent="Theme.AppTheme.Light">
     <item name="windowActionBar">false</item>

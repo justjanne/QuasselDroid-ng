@@ -35,7 +35,7 @@
     android:layout_height="32dp"
     android:layout_gravity="center_vertical"
     android:layout_marginEnd="16dp"
-    android:tint="#727272"
+    app:tint="#727272"
     app:srcCompat="@drawable/ic_add"
     tools:ignore="ContentDescription" />
 

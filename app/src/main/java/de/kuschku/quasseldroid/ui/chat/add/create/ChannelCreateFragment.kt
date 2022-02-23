@@ -48,6 +48,7 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ChannelCreateFragment : ServiceBoundSettingsFragment() {
@@ -180,8 +181,8 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
               sendInput(statusBuffer, "/join $channelName")
               modelHelper.networks.safeSwitchMap {
                 it[selectedNetworkId]?.liveIrcChannel(channelName)
-                ?: Observable.empty()
-              }.subscribe {
+                  ?: Observable.empty()
+              }.toLiveData().observe(viewLifecycleOwner) {
                 if (it.ircUsers().size <= 1) {
                   if (isInviteOnly) {
                     sendInput(statusBuffer, "/mode $channelName +i")
@@ -199,8 +200,8 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
                 activity?.let {
                   it.finish()
                   ChatActivity.launch(it,
-                                      networkId = selectedNetworkId,
-                                      channel = channelName
+                    networkId = selectedNetworkId,
+                    channel = channelName
                   )
                 }
               }

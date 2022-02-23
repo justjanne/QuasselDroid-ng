@@ -111,12 +111,7 @@ class CutoutDrawable extends MaterialShapeDrawable {
   }
 
   private void saveCanvasLayer(@NonNull Canvas canvas) {
-    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-      savedLayer = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
-    } else {
-      savedLayer =
-        canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, Canvas.ALL_SAVE_FLAG);
-    }
+    savedLayer = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
   }
 
   private void postDraw(@NonNull Canvas canvas) {

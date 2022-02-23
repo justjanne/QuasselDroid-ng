@@ -706,9 +706,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                                  getString(R.string.label_error_connection, errorName, errorCode),
                                  Toast.LENGTH_LONG).show()
                 }
-                it is ConnectException &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                cause is ErrnoException            -> {
+                it is ConnectException && cause is ErrnoException -> {
                   val errorCode = OsConstants.errnoName(cause.errno)
                   val errorName = OsConstants.strerror(cause.errno)
 
@@ -936,6 +934,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
     chatViewModel.onSaveInstanceState(outState)
 
     outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount.id)

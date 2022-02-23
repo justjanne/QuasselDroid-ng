@@ -39,6 +39,15 @@ class RpcHandler(
   private val backlogStorage: BacklogStorage? = null,
   private val notificationManager: NotificationManager? = null
 ) : SyncableObject(session.proxy, "RpcHandler"), IRpcHandler {
+  override fun deinit() {
+    super.deinit()
+    session = ISession.NULL
+  }
+
+  init {
+    initialized = true
+  }
+
   override fun displayStatusMsg(net: String?, msg: String?) {
   }
 

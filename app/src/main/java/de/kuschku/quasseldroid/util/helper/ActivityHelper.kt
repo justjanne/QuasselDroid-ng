@@ -19,12 +19,11 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -38,11 +37,13 @@ import androidx.annotation.StringRes
  * @param colorPrimary The color used as background for the header of the recents card - passed as Android
  * Color Resource
  */
-fun Activity.updateRecentsHeaderIfExisting(label: String, @DrawableRes icon: Int,
-                                           @ColorRes colorPrimary: Int) {
-  val iconRaw = BitmapFactory.decodeResource(resources, icon)
+fun Activity.updateRecentsHeader(
+  label: String,
+  @DrawableRes icon: Int,
+  @ColorRes colorPrimary: Int
+) {
   val colorPrimaryRaw = resources.getColorBackport(colorPrimary, theme)
-  updateRecentsHeaderIfExisting(label, iconRaw, colorPrimaryRaw)
+  updateRecentsHeaderInternal(label, icon, colorPrimaryRaw)
 }
 
 /**
@@ -54,26 +55,14 @@ fun Activity.updateRecentsHeaderIfExisting(label: String, @DrawableRes icon: Int
  * @param colorPrimary The color used as background for the header of the recents card - passed as Android
  * Color Resource
  */
-fun Activity.updateRecentsHeaderIfExisting(@StringRes label: Int, @DrawableRes icon: Int,
-                                           @ColorRes colorPrimary: Int) {
+fun Activity.updateRecentsHeader(
+  @StringRes label: Int,
+  @DrawableRes icon: Int,
+  @ColorRes colorPrimary: Int
+) {
   val labelRaw = resources.getString(label)
-  val iconRaw = BitmapFactory.decodeResource(resources, icon)
   val colorPrimaryRaw = resources.getColorBackport(colorPrimary, theme)
-  updateRecentsHeaderIfExisting(labelRaw, iconRaw, colorPrimaryRaw)
-}
-
-/**
- * Modifies the display of an {@see Activity} in the Android Recents menu if the current version
- * of Android supports doing so.
- *
- * @param label The text shown in recents as label
- * @param icon The icon displayed in recents
- * @param colorPrimary The color used as background for the header of the recents card
- */
-fun Activity.updateRecentsHeaderIfExisting(label: String, icon: Bitmap, colorPrimary: Int) {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-    updateRecentsHeader(label, icon, colorPrimary)
-  }
+  updateRecentsHeaderInternal(labelRaw, icon, colorPrimaryRaw)
 }
 
 /**
@@ -82,10 +71,17 @@ fun Activity.updateRecentsHeaderIfExisting(label: String, icon: Bitmap, colorPri
  * @param label The text shown in recents as label
  * @param icon The icon displayed in recents
  * @param colorPrimary The color used as background for the header of the recents card
- * @since Lollipop
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-private fun Activity.updateRecentsHeader(label: String, icon: Bitmap,
-                                         colorPrimary: Int) {
-  setTaskDescription(ActivityManager.TaskDescription(label, icon, colorPrimary))
+private fun Activity.updateRecentsHeaderInternal(
+  label: String,
+  @DrawableRes icon: Int,
+  @ColorInt colorPrimary: Int
+) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    setTaskDescription(ActivityManager.TaskDescription(label, icon, colorPrimary))
+  } else {
+    val iconRaw = BitmapFactory.decodeResource(resources, icon)
+    @Suppress("DEPRECATION")
+    setTaskDescription(ActivityManager.TaskDescription(label, iconRaw, colorPrimary))
+  }
 }

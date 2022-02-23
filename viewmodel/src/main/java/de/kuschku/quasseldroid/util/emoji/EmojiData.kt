@@ -1735,20 +1735,7 @@ object EmojiData {
     "\u2139\uFE0F" to "\u2139", // INFORMATION_SOURCE
     "\u3297\uFE0F" to "\u3297", // CONGRATULATIONS
     "\u3299\uFE0F" to "\u3299" // SECRET
-  ) + if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-    mapOf(
-      "\uD83C\uDDEF\uD83C\uDDF5" to "\uDBB9\uDCE5", // JP
-      "\uD83C\uDDF0\uD83C\uDDF7" to "\uDBB9\uDCEE", // KR
-      "\uD83C\uDDE9\uD83C\uDDEA" to "\uDBB9\uDCE8", // DE
-      "\uD83C\uDDE8\uD83C\uDDF3" to "\uDBB9\uDCED", // CN
-      "\uD83C\uDDFA\uD83C\uDDF8" to "\uDBB9\uDCE6", // US
-      "\uD83C\uDDEB\uD83C\uDDF7" to "\uDBB9\uDCE7", // FR
-      "\uD83C\uDDEA\uD83C\uDDF8" to "\uDBB9\uDCEB", // ES
-      "\uD83C\uDDEE\uD83C\uDDF9" to "\uDBB9\uDCE9", // IT
-      "\uD83C\uDDF7\uD83C\uDDFA" to "\uDBB9\uDCEC", // RU
-      "\uD83C\uDDEC\uD83C\uDDE7" to "\uDBB9\uDCEA" // GB
-    )
-  } else emptyMap()
+  )
 
   val emojis = conversionMap.values.toSet() + rawEmojiMap.values.toSet() + "\u200d" + "\ufe0f"
 
