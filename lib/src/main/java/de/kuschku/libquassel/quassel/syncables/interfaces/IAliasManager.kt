@@ -19,27 +19,35 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 import de.kuschku.libquassel.quassel.BufferInfo
 import java.io.Serializable
 
-@Syncable(name = "AliasManager")
+@SyncedObject(name = "AliasManager")
 interface IAliasManager : ISyncableObject {
   fun initAliases(): QVariantMap
   fun initSetAliases(aliases: QVariantMap)
-  @Slot
-  fun addAlias(name: String?, expansion: String?) {
-    SYNC("addAlias", ARG(name, Type.QString), ARG(expansion, Type.QString))
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun addAlias(name: String, expansion: String) {
+    sync(
+      target = ProtocolSide.CORE,
+      "addAlias",
+      qVariant(name, QtType.QString),
+      qVariant(expansion, QtType.QString)
+    )
   }
 
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
-  }
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 
   data class Alias(
     val name: String?,

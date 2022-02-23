@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class LogCollector : Collector<Map<String, List<String>>, LogConfig> {
-  private val logcatTimeFormatter = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
+  private val logcatTimeFormatter = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.ROOT)
 
   override fun collect(context: CrashContext, config: LogConfig): Map<String, List<String>> {
     val since = logcatTimeFormatter.format(context.startTime)

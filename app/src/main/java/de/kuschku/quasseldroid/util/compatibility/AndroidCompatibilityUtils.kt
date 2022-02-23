@@ -35,9 +35,9 @@ object AndroidCompatibilityUtils {
   }
 
   private fun isChromeBook(): Boolean {
-    return Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("chromium") ||
-           Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("chrome") ||
-           Build.BRAND.toLowerCase(Locale.ENGLISH).contains("chromium") ||
-           Build.BRAND.toLowerCase(Locale.ENGLISH).contains("chrome")
+    return Build.MANUFACTURER.lowercase(Locale.ROOT).contains("chromium") ||
+           Build.MANUFACTURER.lowercase(Locale.ROOT).contains("chrome") ||
+           Build.BRAND.lowercase(Locale.ROOT).contains("chromium") ||
+           Build.BRAND.lowercase(Locale.ROOT).contains("chrome")
   }
 }

@@ -30,7 +30,7 @@ data class ExceptionInfo(
     type = throwable.javaClass.canonicalName,
     message = throwable.message,
     localizedMessage = throwable.localizedMessage,
-    stackTrace = throwable.stackTrace?.map(::TraceElement),
+    stackTrace = throwable.stackTrace.map(::TraceElement),
     cause = throwable.cause?.let(::ExceptionInfo)
   )
 }

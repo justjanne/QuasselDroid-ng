@@ -19,119 +19,196 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.QStringList
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "Identity")
+@SyncedObject(name = "Identity")
 interface IIdentity : ISyncableObject {
 
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap)
 
-  @Slot
-  fun copyFrom(other: IIdentity) {
-    SYNC("copyFrom", ARG(other, QType.Identity))
-  }
-
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoAwayEnabled(enabled: Boolean) {
-    SYNC("setAutoAwayEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoAwayEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoAwayReason(reason: String?) {
-    SYNC("setAutoAwayReason", ARG(reason, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoAwayReason",
+      qVariant(reason, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoAwayReasonEnabled(enabled: Boolean) {
-    SYNC("setAutoAwayReasonEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoAwayReasonEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoAwayTime(time: Int) {
-    SYNC("setAutoAwayTime", ARG(time, Type.Int))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoAwayTime",
+      qVariant(time, QtType.Int),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAwayNick(awayNick: String?) {
-    SYNC("setAwayNick", ARG(awayNick, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAwayNick",
+      qVariant(awayNick, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAwayNickEnabled(enabled: Boolean) {
-    SYNC("setAwayNickEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAwayNickEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAwayReason(awayReason: String?) {
-    SYNC("setAwayReason", ARG(awayReason, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAwayReason",
+      qVariant(awayReason, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAwayReasonEnabled(enabled: Boolean) {
-    SYNC("setAwayReasonEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAwayReasonEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setDetachAwayEnabled(enabled: Boolean) {
-    SYNC("setDetachAwayEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setDetachAwayEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setDetachAwayReason(reason: String?) {
-    SYNC("setDetachAwayReason", ARG(reason, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setDetachAwayReason",
+      qVariant(reason, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setDetachAwayReasonEnabled(enabled: Boolean) {
-    SYNC("setDetachAwayReasonEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setDetachAwayReasonEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setId(id: IdentityId) {
-    SYNC("setId", ARG(id, QType.IdentityId))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setId",
+      qVariant(id, QuasselType.IdentityId),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setIdent(ident: String?) {
-    SYNC("setIdent", ARG(ident, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setIdent",
+      qVariant(ident, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setIdentityName(name: String?) {
-    SYNC("setIdentityName", ARG(name, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setIdentityName",
+      qVariant(name, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setKickReason(reason: String?) {
-    SYNC("setKickReason", ARG(reason, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setKickReason",
+      qVariant(reason, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setNicks(nicks: QStringList) {
-    SYNC("setNicks", ARG(nicks, Type.QStringList))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setNicks",
+      qVariant(nicks, QtType.QStringList),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setPartReason(reason: String?) {
-    SYNC("setPartReason", ARG(reason, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setPartReason",
+      qVariant(reason, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setQuitReason(reason: String?) {
-    SYNC("setQuitReason", ARG(reason, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setQuitReason",
+      qVariant(reason, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setRealName(realName: String?) {
-    SYNC("setRealName", ARG(realName, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setRealName",
+      qVariant(realName, QtType.QString),
+    )
   }
 
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
-  }
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

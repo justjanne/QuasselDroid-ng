@@ -24,12 +24,12 @@ import de.kuschku.libquassel.util.flag.Flags
 
 object ClientInitAckSerializer : HandshakeMessageSerializer<HandshakeMessage.ClientInitAck> {
   override fun serialize(data: HandshakeMessage.ClientInitAck) = mapOf(
-    "MsgType" to QVariant.of<All_>("ClientInitAck", Type.QString),
-    "CoreFeatures" to QVariant.of<All_>(data.coreFeatures?.toUInt(), Type.UInt),
-    "StorageBackends" to QVariant.of<All_>(data.backendInfo, Type.QVariantList),
-    "Authenticator" to QVariant.of<All_>(data.authenticatorInfo, Type.QVariantList),
-    "Configured" to QVariant.of<All_>(data.coreConfigured, Type.Bool),
-    "FeatureList" to QVariant.of<All_>(data.featureList, Type.QStringList)
+    "MsgType" to QVariant.of<All_>("ClientInitAck", QtType.QString),
+    "CoreFeatures" to QVariant.of<All_>(data.coreFeatures?.toUInt(), QtType.UInt),
+    "StorageBackends" to QVariant.of<All_>(data.backendInfo, QtType.QVariantList),
+    "Authenticator" to QVariant.of<All_>(data.authenticatorInfo, QtType.QVariantList),
+    "Configured" to QVariant.of<All_>(data.coreConfigured, QtType.Bool),
+    "FeatureList" to QVariant.of<All_>(data.featureList, QtType.QStringList)
   )
 
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientInitAck(

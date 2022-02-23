@@ -44,7 +44,7 @@ class ThreadCollector : Collector<ThreadsInfo, ThreadConfig> {
     id = thread.id,
     name = thread.name,
     group = thread.threadGroup?.name,
-    status = thread.state?.name,
+    status = thread.state.name,
     stackTrace = ArrayList(sanitize(stackTrace.map(::TraceElement))),
     isDaemon = thread.isDaemon,
     priority = thread.priority

@@ -39,9 +39,9 @@ class HighlightRuleManager(
   ) : Serializable
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "HighlightRuleList" to QVariant.of(initHighlightRuleList(), Type.QVariantMap),
-    "highlightNick" to QVariant.of(_highlightNick.value, Type.Int),
-    "nicksCaseSensitive" to QVariant.of(_nicksCaseSensitive, Type.Bool)
+    "HighlightRuleList" to QVariant.of(initHighlightRuleList(), QtType.QVariantMap),
+    "highlightNick" to QVariant.of(_highlightNick.value, QtType.Int),
+    "nicksCaseSensitive" to QVariant.of(_nicksCaseSensitive, QtType.Bool)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -55,29 +55,29 @@ class HighlightRuleManager(
 
   override fun initHighlightRuleList(): QVariantMap = mapOf(
     "id" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.id, Type.Int)
-    }, Type.QVariantList),
+      QVariant.of(it.id, QtType.Int)
+    }, QtType.QVariantList),
     "name" to QVariant.of(_highlightRuleList.map {
       it.name
-    }, Type.QStringList),
+    }, QtType.QStringList),
     "isRegEx" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.isRegEx, Type.Bool)
-    }, Type.QVariantList),
+      QVariant.of(it.isRegEx, QtType.Bool)
+    }, QtType.QVariantList),
     "isCaseSensitive" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.isCaseSensitive, Type.Bool)
-    }, Type.QVariantList),
+      QVariant.of(it.isCaseSensitive, QtType.Bool)
+    }, QtType.QVariantList),
     "isEnabled" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.isEnabled, Type.Bool)
-    }, Type.QVariantList),
+      QVariant.of(it.isEnabled, QtType.Bool)
+    }, QtType.QVariantList),
     "isInverse" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.isInverse, Type.Bool)
-    }, Type.QVariantList),
+      QVariant.of(it.isInverse, QtType.Bool)
+    }, QtType.QVariantList),
     "sender" to QVariant.of(_highlightRuleList.map {
       it.sender
-    }, Type.QStringList),
+    }, QtType.QStringList),
     "channel" to QVariant.of(_highlightRuleList.map {
       it.channel
-    }, Type.QStringList)
+    }, QtType.QStringList)
   )
 
   override fun initSetHighlightRuleList(highlightRuleList: QVariantMap) {

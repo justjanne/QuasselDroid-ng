@@ -18,53 +18,22 @@
  */
 
 plugins {
-  id("com.android.application")
-  kotlin("android")
-  kotlin("kapt")
+  id("justjanne.android.signing")
+  id("justjanne.android.app")
 }
 
 android {
-  compileSdkVersion(30)
-
-  signingConfigs {
-    SigningData.of(project.rootProject.properties("signing.properties"))?.let {
-      create("default") {
-        storeFile = file(it.storeFile)
-        storePassword = it.storePassword
-        keyAlias = it.keyAlias
-        keyPassword = it.keyPassword
-      }
-    }
-  }
 
   defaultConfig {
-    minSdkVersion(20)
-    targetSdkVersion(30)
-
-    applicationId = "com.iskrembilen.quasseldroid"
-    versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
-    versionName = cmd("git", "describe", "--always", "--tags", "HEAD") ?: "1.0.0"
-
-    buildConfigField("String", "GIT_HEAD", "\"${cmd("git", "rev-parse", "HEAD") ?: ""}\"")
-    buildConfigField("String", "FANCY_VERSION_NAME", "\"${fancyVersionName() ?: ""}\"")
-    buildConfigField("long", "GIT_COMMIT_DATE", "${cmd("git", "show", "-s", "--format=%ct") ?: 0}L")
-
-    signingConfig = signingConfigs.findByName("default")
-
-    resConfigs("en", "en-rGB", "de", "fr", "fr-rCA", "it", "lt", "pt", "sr")
-
+    resourceConfigurations += setOf(
+      "en", "en-rGB", "de", "fr", "fr-rCA", "it", "lt", "pt", "sr"
+    )
     vectorDrawables.useSupportLibrary = true
-
-    setProperty("archivesBaseName", "Quasseldroid-$versionName")
-
-    // Disable test runner analytics
-    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
     testInstrumentationRunner = "de.kuschku.quasseldroid.util.TestRunner"
   }
 
   buildTypes {
     getByName("release") {
-      isZipAlignEnabled = true
       isMinifyEnabled = true
       isShrinkResources = true
 
@@ -83,27 +52,13 @@ android {
     }
   }
 
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-  }
-
-  testOptions {
-    unitTests.isIncludeAndroidResources = true
-  }
-
-  lintOptions {
-    isWarningsAsErrors = true
-    lintConfig = file("../lint.xml")
-  }
-
   buildFeatures {
     viewBinding = true
   }
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.10"))
+  implementation(kotlin("stdlib", "1.6.10"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.1.0-alpha10")
@@ -199,4 +154,12 @@ dependencies {
   androidTestImplementation("androidx.test.ext", "junit", "1.1.2-alpha02")
   androidTestImplementation("androidx.test", "runner", "1.3.0-alpha02")
   androidTestImplementation("androidx.test", "rules", "1.3.0-alpha02")
+}
+
+data class VersionContext<T>(val version: T)
+
+inline fun <T> withVersion(version: T?, f: VersionContext<T>.() -> Unit) {
+  version?.let {
+    f.invoke(VersionContext(version))
+  }
 }

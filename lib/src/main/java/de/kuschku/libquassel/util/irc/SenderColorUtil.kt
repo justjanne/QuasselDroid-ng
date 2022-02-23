@@ -25,7 +25,7 @@ import java.util.*
 object SenderColorUtil {
   fun senderColor(nick: String): Int {
     return 0xf and CRCUtils.qChecksum(
-      nick.trimEnd('_').toLowerCase(Locale.US).toByteArray(Charsets.ISO_8859_1)
+      nick.trimEnd('_').toLowerCase(Locale.ROOT).toByteArray(Charsets.ISO_8859_1)
     )
   }
 }

@@ -50,7 +50,7 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
   override fun onDone(data: Bundle) {
     val network = data.getSerializable("network") as? DefaultNetwork
     if (network != null) {
-      modelHelper.backend?.value?.ifPresent { backend ->
+      modelHelper.backend.value?.ifPresent { backend ->
         modelHelper.connectedSession.value?.orNull()?.rpcHandler?.apply {
           createIdentity(Defaults.identity(this@UserSetupActivity).apply {
             setIdentityName(this@UserSetupActivity.getString(R.string.default_identity_identity_name))

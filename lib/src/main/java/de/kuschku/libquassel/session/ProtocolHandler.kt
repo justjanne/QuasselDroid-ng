@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.session
 
+import de.justjanne.libquassel.annotations.ProtocolSide
 import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
@@ -38,7 +39,8 @@ abstract class ProtocolHandler(
   protected abstract val objectStorage: ObjectStorage
   protected abstract val rpcHandler: RpcHandler
 
-  private val toInit = mutableMapOf<ISyncableObject, MutableList<SignalProxyMessage.SyncMessage>>()
+  private val toInit =
+    mutableMapOf<ISyncableObject, MutableList<SignalProxyMessage.SyncMessage>>()
   private val syncQueue = mutableListOf<SignalProxyMessage.SyncMessage>()
 
   protected var isInitializing = false
@@ -82,9 +84,11 @@ abstract class ProtocolHandler(
   }
 
   override fun handle(f: SignalProxyMessage.InitData): Boolean {
+    if (f.className == "Network") {
+      System.err.println("Received: $f")
+    }
     val obj: ISyncableObject = objectStorage.get(f.className, f.objectName)
-                               ?: throw ObjectNotFoundException(f.className, f.objectName)
-
+      ?: throw ObjectNotFoundException(f.className, f.objectName)
     obj.fromVariantMap(f.initData)
     obj.initialized = true
     synchronize(obj)
@@ -124,8 +128,8 @@ abstract class ProtocolHandler(
         return true
       }
 
-      val invoker = Invokers.get(f.className)
-                    ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
+      val invoker = Invokers.get(ProtocolSide.CLIENT, f.className)
+        ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
       currentCallClass = f.className
       currentCallInstance = f.objectName
       currentCallSlot = f.slotName
@@ -139,7 +143,7 @@ abstract class ProtocolHandler(
 
   override fun handle(f: SignalProxyMessage.RpcCall): Boolean {
     currentCallSlot = f.slotName
-    Invokers.RPC?.invoke(rpcHandler, f.slotName, f.params)
+    Invokers.get(ProtocolSide.CLIENT, "RpcHandler")?.invoke(rpcHandler, f.slotName, f.params)
     currentCallSlot = ""
     return true
   }
@@ -149,14 +153,15 @@ abstract class ProtocolHandler(
     return true
   }
 
-  override fun shouldSync(type: String, instance: String,
-                          slot: String): Boolean = type != currentCallClass || slot != currentCallSlot || instance != currentCallInstance
+  override fun shouldSync(target: ProtocolSide): Boolean =
+    target != ProtocolSide.CLIENT
 
   override fun callSync(type: String, instance: String, slot: String, params: QVariantList) {
     dispatch(SignalProxyMessage.SyncMessage(type, instance, slot, params))
   }
 
-  override fun shouldRpc(slot: String): Boolean = slot != currentCallSlot
+  override fun shouldRpc(target: ProtocolSide): Boolean =
+    target != ProtocolSide.CLIENT
 
   override fun callRpc(slot: String, params: QVariantList) {
     dispatch(SignalProxyMessage.RpcCall(slot, params))

@@ -19,13 +19,16 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QStringList
 import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 
-@Syncable(name = "IrcChannel")
+@SyncedObject(name = "IrcChannel")
 interface IIrcChannel : ISyncableObject {
   fun initChanModes(): QVariantMap
   fun initUserModes(): QVariantMap
@@ -35,47 +38,111 @@ interface IIrcChannel : ISyncableObject {
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap, i: Int? = null)
 
-  @Slot
-  fun addChannelMode(mode: Char, value: String? = null)
-
   fun addUserMode(ircuser: IrcUser?, mode: String? = null)
-
-  @Slot
-  fun addUserMode(nick: String?, mode: String? = null)
-
-  @Slot
+  fun part(ircuser: IrcUser?)
+  fun removeUserMode(ircuser: IrcUser?, mode: String? = null)
+  fun setUserModes(ircuser: IrcUser?, modes: String? = null)
   fun joinIrcUser(ircuser: IrcUser)
 
-  @Slot
-  fun joinIrcUsers(nicks: QStringList, modes: QStringList)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addChannelMode(mode: Char, value: String? = null) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addChannelMode",
+      qVariant(mode, QtType.QChar),
+      qVariant(value, QtType.QString),
+    )
+  }
 
-  fun part(ircuser: IrcUser?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addUserMode(nick: String, mode: String? = null) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addUserMode",
+      qVariant(nick, QtType.QString),
+      qVariant(mode, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun part(nick: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun joinIrcUsers(nicks: QStringList, modes: QStringList) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "joinIrcUsers",
+      qVariant(nicks, QtType.QStringList),
+      qVariant(modes, QtType.QStringList),
+    )
+  }
 
-  @Slot
-  fun removeChannelMode(mode: Char, value: String? = null)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun part(nick: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "part",
+      qVariant(nick, QtType.QString),
+    )
+  }
 
-  fun removeUserMode(ircuser: IrcUser?, mode: String? = null)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeChannelMode(mode: Char, value: String? = null) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeChannelMode",
+      qVariant(mode, QtType.QChar),
+      qVariant(value, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun removeUserMode(nick: String?, mode: String? = null)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeUserMode(nick: String, mode: String? = null) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeUserMode",
+      qVariant(nick, QtType.QString),
+      qVariant(mode, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setEncrypted(encrypted: Boolean)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setEncrypted(encrypted: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setEncrypted",
+      qVariant(encrypted, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setPassword(password: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setPassword(password: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setPassword",
+      qVariant(password, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setTopic(topic: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setTopic(topic: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setTopic",
+      qVariant(topic, QtType.QString),
+    )
+  }
 
-  fun setUserModes(ircuser: IrcUser?, modes: String? = null)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUserModes(nick: String, modes: String? = null) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUserModes",
+      qVariant(nick, QtType.QString),
+      qVariant(modes, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setUserModes(nick: String?, modes: String? = null)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
 
-  @Slot
-  override fun update(properties: QVariantMap)
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

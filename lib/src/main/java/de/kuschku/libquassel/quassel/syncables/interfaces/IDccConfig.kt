@@ -19,74 +19,115 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
-import de.kuschku.libquassel.protocol.QType
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
+import de.kuschku.libquassel.protocol.qVariant
 import java.net.InetAddress
 
-@Syncable(name = "DccConfig")
+@SyncedObject(name = "DccConfig")
 interface IDccConfig : ISyncableObject {
 
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap)
-
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setDccEnabled(enabled: Boolean) {
-    SYNC("setDccEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setDccEnabled",
+      qVariant(enabled, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setOutgoingIp(outgoingIp: InetAddress) {
-    SYNC("setOutgoingIp", ARG(outgoingIp, QType.QHostAddress))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setOutgoingIp",
+      qVariant(outgoingIp, QuasselType.QHostAddress),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setIpDetectionMode(ipDetectionMode: IpDetectionMode) {
-    SYNC("setIpDetectionMode", ARG(ipDetectionMode, QType.DccConfig_IpDetectionMode))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setIpDetectionMode",
+      qVariant(ipDetectionMode, QuasselType.DccConfig_IpDetectionMode),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setPortSelectionMode(portSelectionMode: PortSelectionMode) {
-    SYNC("setPortSelectionMode", ARG(portSelectionMode, QType.DccConfig_PortSelectionMode))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setPortSelectionMode",
+      qVariant(portSelectionMode, QuasselType.DccConfig_PortSelectionMode),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setMinPort(port: UShort) {
-    SYNC("setMinPort", ARG(port, Type.UShort))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setMinPort",
+      qVariant(port, QtType.UShort),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setMaxPort(port: UShort) {
-    SYNC("setMaxPort", ARG(port, Type.UShort))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setMaxPort",
+      qVariant(port, QtType.UShort),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setChunkSize(chunkSize: Int) {
-    SYNC("setChunkSize", ARG(chunkSize, Type.Int))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setChunkSize",
+      qVariant(chunkSize, QtType.Int),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setSendTimeout(timeout: Int) {
-    SYNC("setSendTimeout", ARG(timeout, Type.Int))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setSendTimeout",
+      qVariant(timeout, QtType.Int),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setUsePassiveDcc(use: Boolean) {
-    SYNC("setUsePassiveDcc", ARG(use, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUsePassiveDcc",
+      qVariant(use, QtType.Bool),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setUseFastSend(use: Boolean) {
-    SYNC("setUseFastSend", ARG(use, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUseFastSend",
+      qVariant(use, QtType.Bool),
+    )
   }
 
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
-  }
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 
   /**
    * Mode for detecting the outgoing IP
@@ -98,7 +139,7 @@ interface IDccConfig : ISyncableObject {
     Manual(0x01u);
 
     companion object {
-      private val byId = IpDetectionMode.values().associateBy(IpDetectionMode::value)
+      private val byId = values().associateBy(IpDetectionMode::value)
       fun of(value: UByte) = byId[value] ?: Automatic
     }
   }
@@ -113,7 +154,7 @@ interface IDccConfig : ISyncableObject {
     Manual(0x01u);
 
     companion object {
-      private val byId = PortSelectionMode.values().associateBy(PortSelectionMode::value)
+      private val byId = values().associateBy(PortSelectionMode::value)
       fun of(value: UByte) = byId[value] ?: Automatic
     }
   }

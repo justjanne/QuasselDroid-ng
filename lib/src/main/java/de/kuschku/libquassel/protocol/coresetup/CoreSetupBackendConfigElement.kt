@@ -33,10 +33,10 @@ class CoreSetupBackendConfigElement(
 
   val defaultValue: QVariant_
     get() {
-      val type = Type.of(typeId)
-      return if (type == Type.UserType) {
+      val type = QtType.of(typeId)
+      return if (type == QtType.UserType) {
         val name = customType
-        val qType = QType.of(name) ?: throw IllegalArgumentException("No such type: $name")
+        val qType = QuasselType.of(name) ?: throw IllegalArgumentException("No such type: $name")
         QVariant.of<All_>(rawDefaultValue, qType)
       } else {
         QVariant.of<All_>(rawDefaultValue,

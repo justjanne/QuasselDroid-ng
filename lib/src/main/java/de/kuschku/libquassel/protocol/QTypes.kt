@@ -57,8 +57,8 @@ typealias Buffer_Types = ShortFlags<Buffer_Type>
 typealias Buffer_Activity = BufferInfo.Activity
 typealias Buffer_Activities = Flags<Buffer_Activity>
 
-inline fun <T> ARG(data: T?, type: Type) = QVariant.of(data, type)
-inline fun <T> ARG(data: T?, type: QType) = QVariant.of(data, type)
+inline fun <T> ARG(data: T?, type: QtType) = QVariant.of(data, type)
+inline fun <T> ARG(data: T?, type: QuasselType) = QVariant.of(data, type)
 
 fun QVariantList.toVariantMap(): QVariantMap {
   val map = HashMap<String, QVariant_>()

@@ -39,8 +39,9 @@ class DisplayCollector(application: Application) :
     Context.WINDOW_SERVICE
   ) as WindowManager
 
-  override fun collect(context: CrashContext, config: Boolean): DisplayInfo? {
-    val display = windowManager.defaultDisplay
+  @Suppress("DEPRECATION")
+  override fun collect(context: CrashContext, config: Boolean): DisplayInfo {
+    val display = context.application.display ?: windowManager.defaultDisplay
     val hdrCapabilities = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       val capabilitiesEnum = getHdrCapabilitiesEnum()
       display.hdrCapabilities.supportedHdrTypes.map(capabilitiesEnum::get)

@@ -39,26 +39,26 @@ class CertManager constructor(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "sslKey" to QVariant.of(sslKeyPem(), Type.QByteArray),
-    "sslCert" to QVariant.of(sslCertPem(), Type.QByteArray)
+    "sslKey" to QVariant.of(sslKeyPem(), QtType.QByteArray),
+    "sslCert" to QVariant.of(sslCertPem(), QtType.QByteArray)
   )
 
   override fun initSetProperties(properties: QVariantMap) {
-    setSslKey(properties["sslKey"].value())
-    setSslCert(properties["sslCert"].value())
+    setSslKey(properties["sslKey"].value(_sslKey))
+    setSslCert(properties["sslCert"].value(_sslCert))
   }
 
   fun sslCertPem() = _sslCert
   fun sslKeyPem() = _sslKey
 
-  override fun setSslCert(encoded: ByteBuffer?) {
+  override fun setSslCert(encoded: ByteBuffer) {
     _sslCert = encoded
   }
 
-  override fun setSslKey(encoded: ByteBuffer?) {
+  override fun setSslKey(encoded: ByteBuffer) {
     _sslKey = encoded
   }
 
-  private var _sslKey: ByteBuffer? = null
-  private var _sslCert: ByteBuffer? = null
+  private var _sslKey: ByteBuffer = ByteBuffer.allocate(0)
+  private var _sslCert: ByteBuffer = ByteBuffer.allocate(0)
 }

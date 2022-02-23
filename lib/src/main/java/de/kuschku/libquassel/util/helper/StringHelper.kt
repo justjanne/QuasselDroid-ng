@@ -28,8 +28,4 @@ import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
  */
 fun String.split() = Array(length) { this.substring(it, it + 1) }
 
-fun String?.serializeString(serializer: StringSerializer) = if (this == null) {
-  null
-} else {
-  serializer.serialize(this)
-}
+fun String.serializeString(serializer: StringSerializer) = serializer.serialize(this)

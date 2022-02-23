@@ -19,10 +19,7 @@
 
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.QType
-import de.kuschku.libquassel.protocol.QVariant
-import de.kuschku.libquassel.protocol.Type
-import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import de.kuschku.libquassel.protocol.QuasselType
 import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.util.helper.removeIfEqual
@@ -68,20 +65,9 @@ class ObjectStorage(private var proxy: SignalProxy) {
     if (get(obj.className, old) == obj) {
       throw IllegalStateException("Object should not be referenced by the old name")
     }
-    if (proxy.shouldRpc("__objectRenamed__")) {
-      proxy.dispatch(
-        SignalProxyMessage.RpcCall(
-          "__objectRenamed__",
-          listOf(
-            QVariant.of(obj.className, Type.QString), QVariant.of(new, Type.QString),
-            QVariant.of(old, Type.QString)
-          )
-        )
-      )
-    }
   }
 
-  fun get(className: QType, objectName: String) = get(className.typeName, objectName)
+  fun get(className: QuasselType, objectName: String) = get(className.typeName, objectName)
   fun get(className: String, objectName: String) = objectTree[Pair(className, objectName)]
 
   fun clear() = objectTree.clear()

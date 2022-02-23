@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.session
 
+import de.justjanne.libquassel.annotations.ProtocolSide
 import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
@@ -53,8 +54,8 @@ interface SignalProxy {
   fun callSync(type: String, instance: String, slot: String, params: QVariantList)
   fun callRpc(slot: String, params: QVariantList)
 
-  fun shouldSync(type: String, instance: String, slot: String): Boolean
-  fun shouldRpc(slot: String): Boolean
+  fun shouldSync(target: ProtocolSide): Boolean
+  fun shouldRpc(target: ProtocolSide): Boolean
 
   fun network(id: NetworkId): Network?
   fun identity(id: IdentityId): Identity?
@@ -75,8 +76,8 @@ interface SignalProxy {
                             params: QVariantList) = Unit
 
       override fun callRpc(slot: String, params: QVariantList) = Unit
-      override fun shouldSync(type: String, instance: String, slot: String) = false
-      override fun shouldRpc(slot: String) = false
+      override fun shouldSync(target: ProtocolSide) = false
+      override fun shouldRpc(target: ProtocolSide) = false
       override fun network(id: NetworkId): Network? = null
       override fun identity(id: IdentityId): Identity? = null
       override fun renameObject(syncableObject: ISyncableObject, newName: String,

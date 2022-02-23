@@ -31,6 +31,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.temporal.Temporal
 import java.nio.charset.Charset
 
+@Suppress("MemberVisibilityCanBePrivate")
 class IrcUser(
   hostmask: String,
   network: Network,
@@ -50,25 +51,25 @@ class IrcUser(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "user" to QVariant.of(user(), Type.QString),
-    "host" to QVariant.of(host(), Type.QString),
-    "nick" to QVariant.of(nick(), Type.QString),
-    "realName" to QVariant.of(realName(), Type.QString),
-    "account" to QVariant.of(account(), Type.QString),
-    "away" to QVariant.of(isAway(), Type.Bool),
-    "awayMessage" to QVariant.of(awayMessage(), Type.QString),
-    "idleTime" to QVariant.of(idleTime(), Type.QDateTime),
-    "loginTime" to QVariant.of(loginTime(), Type.QDateTime),
-    "server" to QVariant.of(server(), Type.QString),
-    "ircOperator" to QVariant.of(ircOperator(), Type.QString),
-    "lastAwayMessage" to QVariant.of(lastAwayMessage(), Type.Int),
-    "lastAwayMessageTime" to QVariant.of(lastAwayMessageTime(), Type.QDateTime),
-    "whoisServiceReply" to QVariant.of(whoisServiceReply(), Type.QString),
-    "suserHost" to QVariant.of(suserHost(), Type.QString),
-    "encrypted" to QVariant.of(encrypted(), Type.Bool),
+    "user" to QVariant.of(user(), QtType.QString),
+    "host" to QVariant.of(host(), QtType.QString),
+    "nick" to QVariant.of(nick(), QtType.QString),
+    "realName" to QVariant.of(realName(), QtType.QString),
+    "account" to QVariant.of(account(), QtType.QString),
+    "away" to QVariant.of(isAway(), QtType.Bool),
+    "awayMessage" to QVariant.of(awayMessage(), QtType.QString),
+    "idleTime" to QVariant.of(idleTime(), QtType.QDateTime),
+    "loginTime" to QVariant.of(loginTime(), QtType.QDateTime),
+    "server" to QVariant.of(server(), QtType.QString),
+    "ircOperator" to QVariant.of(ircOperator(), QtType.QString),
+    "lastAwayMessage" to QVariant.of(lastAwayMessage(), QtType.Int),
+    "lastAwayMessageTime" to QVariant.of(lastAwayMessageTime(), QtType.QDateTime),
+    "whoisServiceReply" to QVariant.of(whoisServiceReply(), QtType.QString),
+    "suserHost" to QVariant.of(suserHost(), QtType.QString),
+    "encrypted" to QVariant.of(encrypted(), QtType.Bool),
 
-    "channels" to QVariant.of(channels(), Type.QStringList),
-    "userModes" to QVariant.of(userModes(), Type.QString)
+    "channels" to QVariant.of(channels(), QtType.QStringList),
+    "userModes" to QVariant.of(userModes(), QtType.QString)
   )
 
   private inline fun QVariant_?.indexed(index: Int?) = this?.let {
@@ -126,43 +127,43 @@ class IrcUser(
   fun userModes() = _userModes
   fun channels() = _channels.map(IrcChannel::name)
 
-  override fun addUserModes(modes: String?) {
-    (_userModes.toSet() + modes?.toSet().orEmpty()).joinToString()
+  override fun addUserModes(modes: String) {
+    (_userModes.toSet() + modes.toSet()).joinToString()
   }
 
-  override fun removeUserModes(modes: String?) {
-    (_userModes.toSet() - modes?.toSet().orEmpty()).joinToString()
+  override fun removeUserModes(modes: String) {
+    (_userModes.toSet() - modes.toSet()).joinToString()
   }
 
-  override fun setUser(user: String?) {
-    if (_user != user ?: "") {
-      _user = user ?: ""
+  override fun setUser(user: String) {
+    if (_user != user ) {
+      _user = user 
     }
   }
 
-  override fun setHost(host: String?) {
-    if (_host != host ?: "") {
-      _host = host ?: ""
+  override fun setHost(host: String) {
+    if (_host != host ) {
+      _host = host 
     }
   }
 
-  override fun setNick(nick: String?) {
-    if (!nick.isNullOrEmpty() && _nick != nick) {
+  override fun setNick(nick: String) {
+    if (!nick.isEmpty() && _nick != nick) {
       network().ircUserNickChanged(_nick, nick)
       _nick = nick
       updateObjectName()
     }
   }
 
-  override fun setRealName(realName: String?) {
-    if (_realName != realName ?: "") {
-      _realName = realName ?: ""
+  override fun setRealName(realName: String) {
+    if (_realName != realName ) {
+      _realName = realName 
     }
   }
 
-  override fun setAccount(account: String?) {
-    if (_account != account ?: "") {
-      _account = account ?: ""
+  override fun setAccount(account: String) {
+    if (_account != account ) {
+      _account = account 
     }
   }
 
@@ -172,9 +173,9 @@ class IrcUser(
     }
   }
 
-  override fun setAwayMessage(awayMessage: String?) {
-    if (_awayMessage != awayMessage ?: "") {
-      _awayMessage = awayMessage ?: ""
+  override fun setAwayMessage(awayMessage: String) {
+    if (_awayMessage != awayMessage ) {
+      _awayMessage = awayMessage 
     }
   }
 
@@ -191,9 +192,9 @@ class IrcUser(
     }
   }
 
-  override fun setIrcOperator(ircOperator: String?) {
-    if (_ircOperator != ircOperator ?: "") {
-      _ircOperator = ircOperator ?: ""
+  override fun setIrcOperator(ircOperator: String) {
+    if (_ircOperator != ircOperator ) {
+      _ircOperator = ircOperator 
     }
   }
 
@@ -208,15 +209,15 @@ class IrcUser(
     _lastAwayMessageTime = Instant.from(lastAwayMessageTime)
   }
 
-  override fun setWhoisServiceReply(whoisServiceReply: String?) {
-    if (_whoisServiceReply != whoisServiceReply ?: "") {
-      _whoisServiceReply = whoisServiceReply ?: ""
+  override fun setWhoisServiceReply(whoisServiceReply: String) {
+    if (_whoisServiceReply != whoisServiceReply ) {
+      _whoisServiceReply = whoisServiceReply 
     }
   }
 
-  override fun setSuserHost(suserHost: String?) {
-    if (_suserHost != suserHost ?: "") {
-      _suserHost = suserHost ?: ""
+  override fun setSuserHost(suserHost: String) {
+    if (_suserHost != suserHost ) {
+      _suserHost = suserHost 
     }
   }
 
@@ -226,23 +227,23 @@ class IrcUser(
     }
   }
 
-  override fun setServer(server: String?) {
-    if (_server != server ?: "") {
-      _server = server ?: ""
+  override fun setServer(server: String) {
+    if (_server != server ) {
+      _server = server 
     }
   }
 
-  override fun updateHostmask(mask: String?) {
-    if (hostMask() != mask ?: "") {
-      val (user, host, _) = HostmaskHelper.split(mask ?: "")
+  override fun updateHostmask(mask: String) {
+    if (hostMask() != mask ) {
+      val (user, host, _) = HostmaskHelper.split(mask )
       setUser(user)
       setHost(host)
     }
   }
 
-  override fun setUserModes(modes: String?) {
-    if (_userModes != modes ?: "") {
-      _userModes = modes ?: ""
+  override fun setUserModes(modes: String) {
+    if (_userModes != modes ) {
+      _userModes = modes 
     }
   }
 
@@ -254,8 +255,8 @@ class IrcUser(
     }
   }
 
-  override fun joinChannel(channelname: String?) {
-    joinChannel(network().newIrcChannel(channelname ?: ""))
+  override fun joinChannel(channelname: String) {
+    joinChannel(network().newIrcChannel(channelname ))
   }
 
   override fun partChannel(channel: IrcChannel) {
@@ -267,7 +268,7 @@ class IrcUser(
     }
   }
 
-  override fun partChannel(channelname: String?) {
+  override fun partChannel(channelname: String) {
     val channel = network().ircChannel(channelname) ?: throw IllegalArgumentException(
       "Received part for unknown channel : $channelname"
     )

@@ -35,6 +35,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.ssl.commonName
+import de.kuschku.libquassel.ssl.organization
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
@@ -175,7 +176,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
       if (leafCertificate != null) {
         secureCertificate.text = requireContext().getString(
           R.string.label_core_connection_verified_by,
-          leafCertificate.issuerX500Principal.commonName
+          "${leafCertificate.issuerX500Principal.organization} ${leafCertificate.issuerX500Principal.commonName}"
         )
         if (leafCertificate.isValid) {
           secureCertificateIcon.setImageDrawable(secure)

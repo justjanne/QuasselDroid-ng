@@ -21,20 +21,20 @@ package de.kuschku.libquassel.protocol.message
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.value
 
 object CoreSetupDataSerializer : HandshakeMessageSerializer<HandshakeMessage.CoreSetupData> {
   override fun serialize(data: HandshakeMessage.CoreSetupData) = mapOf(
-    "MsgType" to QVariant.of("CoreSetupData", Type.QString),
+    "MsgType" to QVariant.of("CoreSetupData", QtType.QString),
     "SetupData" to QVariant.of(mapOf(
-      "AdminUser" to QVariant.of(data.adminUser, Type.QString),
-      "AdminPasswd" to QVariant.of(data.adminPassword, Type.QString),
-      "Backend" to QVariant.of(data.backend, Type.QString),
-      "ConnectionProperties" to QVariant.of(data.setupData, Type.QVariantMap),
-      "Authenticator" to QVariant.of(data.authenticator, Type.QString),
-      "AuthProperties" to QVariant.of(data.authSetupData, Type.QVariantMap)
-    ), Type.QVariantMap
+      "AdminUser" to QVariant.of(data.adminUser, QtType.QString),
+      "AdminPasswd" to QVariant.of(data.adminPassword, QtType.QString),
+      "Backend" to QVariant.of(data.backend, QtType.QString),
+      "ConnectionProperties" to QVariant.of(data.setupData, QtType.QVariantMap),
+      "Authenticator" to QVariant.of(data.authenticator, QtType.QString),
+      "AuthProperties" to QVariant.of(data.authSetupData, QtType.QVariantMap)
+    ), QtType.QVariantMap
     )
   )
 

@@ -22,11 +22,14 @@ package de.kuschku.quasseldroid.dagger
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import dagger.Module
 import dagger.Provides
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountViewModel
-import de.kuschku.quasseldroid.viewmodel.*
+import de.kuschku.quasseldroid.viewmodel.ArchiveViewModel
+import de.kuschku.quasseldroid.viewmodel.ChatViewModel
+import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import de.kuschku.quasseldroid.viewmodel.QueryCreateViewModel
 
 @Module
 object ActivityBaseModule {
@@ -38,7 +41,7 @@ object ActivityBaseModule {
   @ActivityScope
   @Provides
   @JvmStatic
-  fun provideViewModelProvider(activity: FragmentActivity) = ViewModelProviders.of(activity)
+  fun provideViewModelProvider(activity: FragmentActivity) = ViewModelProvider(activity)
 
   @ActivityScope
   @Provides

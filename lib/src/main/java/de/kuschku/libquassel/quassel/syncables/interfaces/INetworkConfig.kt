@@ -19,100 +19,165 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "NetworkConfig")
+@SyncedObject("NetworkConfig")
 interface INetworkConfig : ISyncableObject {
 
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap)
-
-  @Slot
-  fun requestSetAutoWhoDelay(i: Int) {
-    REQUEST("requestSetAutoWhoDelay", ARG(i, Type.Int))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetAutoWhoDelay(delay: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetAutoWhoDelay",
+      qVariant(delay, QtType.Int)
+    )
   }
 
-  @Slot
-  fun requestSetAutoWhoEnabled(b: Boolean) {
-    REQUEST("requestSetAutoWhoEnabled", ARG(b, Type.Bool))
-  }
-
-  @Slot
-  fun requestSetAutoWhoInterval(i: Int) {
-    REQUEST("requestSetAutoWhoInterval", ARG(i, Type.Int))
-  }
-
-  @Slot
-  fun requestSetAutoWhoNickLimit(i: Int) {
-    REQUEST("requestSetAutoWhoNickLimit", ARG(i, Type.Int))
-  }
-
-  @Slot
-  fun requestSetMaxPingCount(i: Int) {
-    REQUEST("requestSetMaxPingCount", ARG(i, Type.Int))
-  }
-
-  @Slot
-  fun requestSetPingInterval(i: Int) {
-    REQUEST("requestSetPingInterval", ARG(i, Type.Int))
-  }
-
-  @Slot
-  fun requestSetPingTimeoutEnabled(b: Boolean) {
-    REQUEST("requestSetPingTimeoutEnabled", ARG(b, Type.Bool))
-  }
-
-  @Slot
-  fun requestSetStandardCtcp(b: Boolean) {
-    REQUEST("requestSetStandardCtcp", ARG(b, Type.Bool))
-  }
-
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoWhoDelay(delay: Int) {
-    SYNC("setAutoWhoDelay", ARG(delay, Type.Int))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoWhoDelay",
+      qVariant(delay, QtType.Int)
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetAutoWhoEnabled(enabled: Boolean) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetAutoWhoEnabled",
+      qVariant(enabled, QtType.Bool)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoWhoEnabled(enabled: Boolean) {
-    SYNC("setAutoWhoEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoWhoEnabled",
+      qVariant(enabled, QtType.Bool)
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetAutoWhoInterval(interval: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetAutoWhoInterval",
+      qVariant(interval, QtType.Int)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoWhoInterval(interval: Int) {
-    SYNC("setAutoWhoInterval", ARG(interval, Type.Int))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoWhoInterval",
+      qVariant(interval, QtType.Int)
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetAutoWhoNickLimit(limit: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetAutoWhoNickLimit",
+      qVariant(limit, QtType.Int)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
   fun setAutoWhoNickLimit(limit: Int) {
-    SYNC("setAutoWhoNickLimit", ARG(limit, Type.Int))
+    sync(
+      target = ProtocolSide.CORE,
+      "setAutoWhoNickLimit",
+      qVariant(limit, QtType.Int)
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetMaxPingCount(count: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetMaxPingCount",
+      qVariant(count, QtType.Int)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
   fun setMaxPingCount(count: Int) {
-    SYNC("setMaxPingCount", ARG(count, Type.Int))
+    sync(
+      target = ProtocolSide.CORE,
+      "setMaxPingCount",
+      qVariant(count, QtType.Int)
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetPingInterval(interval: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetPingInterval",
+      qVariant(interval, QtType.Int)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
   fun setPingInterval(interval: Int) {
-    SYNC("setPingInterval", ARG(interval, Type.Int))
+    sync(
+      target = ProtocolSide.CORE,
+      "setPingInterval",
+      qVariant(interval, QtType.Int)
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetPingTimeoutEnabled(enabled: Boolean) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetPingTimeoutEnabled",
+      qVariant(enabled, QtType.Bool)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
   fun setPingTimeoutEnabled(enabled: Boolean) {
-    SYNC("setPingTimeoutEnabled", ARG(enabled, Type.Bool))
+    sync(
+      target = ProtocolSide.CORE,
+      "setPingTimeoutEnabled",
+      qVariant(enabled, QtType.Bool)
+    )
   }
 
-  @Slot
-  fun setStandardCtcp(standardCtcp: Boolean) {
-    SYNC("setStandardCtcp", ARG(standardCtcp, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetStandardCtcp(enabled: Boolean) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetStandardCtcp",
+      qVariant(enabled, QtType.Bool)
+    )
   }
 
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun setStandardCtcp(enabled: Boolean) {
+    sync(
+      target = ProtocolSide.CORE,
+      "setStandardCtcp",
+      qVariant(enabled, QtType.Bool)
+    )
   }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

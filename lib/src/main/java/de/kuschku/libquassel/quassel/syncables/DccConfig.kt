@@ -40,25 +40,25 @@ class DccConfig constructor(
 
   override fun initProperties(): QVariantMap = mapOf(
     /// Whether DCC is enabled
-    "dccEnabled" to QVariant.of(isDccEnabled(), Type.Bool),
+    "dccEnabled" to QVariant.of(isDccEnabled(), QtType.Bool),
     /// The IP to use for outgoing traffic
-    "outgoingIp" to QVariant.of(outgoingIp(), QType.QHostAddress),
+    "outgoingIp" to QVariant.of(outgoingIp(), QuasselType.QHostAddress),
     /// The IP detection mode
-    "ipDetectionMode" to QVariant.of(ipDetectionMode(), QType.DccConfig_IpDetectionMode),
+    "ipDetectionMode" to QVariant.of(ipDetectionMode(), QuasselType.DccConfig_IpDetectionMode),
     /// The port range selection mode
-    "portSelectionMode" to QVariant.of(portSelectionMode(), QType.DccConfig_PortSelectionMode),
+    "portSelectionMode" to QVariant.of(portSelectionMode(), QuasselType.DccConfig_PortSelectionMode),
     /// Minimum port to use for incoming connections
-    "minPort" to QVariant.of(minPort(), Type.UShort),
+    "minPort" to QVariant.of(minPort(), QtType.UShort),
     /// Maximum port to use for incoming connections
-    "maxPort" to QVariant.of(maxPort(), Type.UShort),
+    "maxPort" to QVariant.of(maxPort(), QtType.UShort),
     /// The chunk size to be used
-    "chunkSize" to QVariant.of(chunkSize(), Type.Int),
+    "chunkSize" to QVariant.of(chunkSize(), QtType.Int),
     /// The timeout for DCC transfers
-    "sendTimeout" to QVariant.of(sendTimeout(), Type.Int),
+    "sendTimeout" to QVariant.of(sendTimeout(), QtType.Int),
     /// Whether passive (reverse) DCC should be used
-    "usePassiveDcc" to QVariant.of(usePassiveDcc(), Type.Bool),
+    "usePassiveDcc" to QVariant.of(usePassiveDcc(), QtType.Bool),
     /// Whether fast sending should be used
-    "useFastSend" to QVariant.of(useFastSend(), Type.Bool)
+    "useFastSend" to QVariant.of(useFastSend(), QtType.Bool)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

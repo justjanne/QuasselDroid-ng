@@ -30,7 +30,7 @@ class BufferViewManager constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "BufferViewManager"), IBufferViewManager {
   override fun toVariantMap(): QVariantMap = mapOf(
-    "BufferViewIds" to QVariant.of(initBufferViewIds(), Type.QVariantList)
+    "BufferViewIds" to QVariant.of(initBufferViewIds(), QtType.QVariantList)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -45,7 +45,7 @@ class BufferViewManager constructor(
     _bufferViewConfigs.keys == other._bufferViewConfigs.keys
 
   override fun initBufferViewIds(): QVariantList = _bufferViewConfigs.keys.map {
-    QVariant.of(it, Type.Int)
+    QVariant.of(it, QtType.Int)
   }
 
   fun bufferViewConfig(bufferViewId: Int) = _bufferViewConfigs[bufferViewId]

@@ -81,7 +81,7 @@ class ColorContext @Inject constructor(
     val senderColorIndex = SenderColorUtil.senderColor(nickName)
     val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
                      ?: nickName.firstOrNull()
-    val initial = rawInitial?.toUpperCase().toString()
+    val initial = rawInitial?.uppercase().toString()
     val senderColor = if (self) selfColor else senderColors[senderColorIndex]
 
     return buildTextDrawable(initial, senderColor)

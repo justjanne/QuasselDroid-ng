@@ -19,17 +19,29 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.QStringList
+import de.kuschku.libquassel.protocol.QVariant
+import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QVariant_
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
+import de.kuschku.libquassel.protocol.qVariant
+import de.kuschku.libquassel.protocol.value
+import de.kuschku.libquassel.protocol.valueOrThrow
 import de.kuschku.libquassel.util.flag.Flag
 import de.kuschku.libquassel.util.flag.Flags
 import de.kuschku.libquassel.util.helper.serializeString
 import java.io.Serializable
 import java.nio.ByteBuffer
 
-@Syncable(name = "Network")
+@SyncedObject("Network")
 interface INetwork : ISyncableObject {
   fun initCapsEnabled(): QVariantList
   fun initServerList(): QVariantList
@@ -45,150 +57,385 @@ interface INetwork : ISyncableObject {
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap)
 
-  @Slot
-  fun acknowledgeCap(capability: String?)
-
-  @Slot
-  fun addCap(capability: String, value: String? = null)
-
-  @Slot
-  fun addIrcChannel(channel: String?)
-
-  @Slot
-  fun addIrcUser(hostmask: String?)
-
-  @Slot
-  fun addSupport(param: String?, value: String? = null)
-
-  @Slot
-  fun clearCaps()
-
-  @Slot
-  fun emitConnectionError(error: String?)
-
-  @Slot
-  fun ircUserNickChanged(old: String?, new: String?)
-
-  @Slot
-  fun removeCap(capability: String?)
-
-  @Slot
-  fun removeSupport(param: String?)
-
-  @Slot
-  fun requestConnect() {
-    REQUEST("requestConnect")
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setNetworkName(networkName: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setNetworkName",
+      qVariant(networkName, QtType.QString),
+    )
   }
 
-  @Slot
-  fun requestDisconnect() {
-    REQUEST("requestDisconnect")
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setCurrentServer(currentServer: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setCurrentServer",
+      qVariant(currentServer, QtType.QString),
+    )
   }
 
-  @Slot
-  fun requestSetNetworkInfo(info: NetworkInfo) {
-    REQUEST("requestSetNetworkInfo", ARG(info.toVariantMap(), QType.NetworkInfo))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setMyNick(myNick: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setMyNick",
+      qVariant(myNick, QtType.QString),
+    )
   }
 
-  @Slot
-  fun setAutoIdentifyPassword(password: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setLatency(latency: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setLatency",
+      qVariant(latency, QtType.Int),
+    )
+  }
 
-  @Slot
-  fun setAutoIdentifyService(service: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setCodecForServer(codecForServer: ByteBuffer) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setCodecForServer",
+      qVariant(codecForServer, QtType.QByteArray),
+    )
+  }
 
-  @Slot
-  fun setAutoReconnectInterval(interval: UInt)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setCodecForEncoding(codecForEncoding: ByteBuffer) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setCodecForEncoding",
+      qVariant(codecForEncoding, QtType.QByteArray),
+    )
+  }
 
-  @Slot
-  fun setAutoReconnectRetries(retries: UShort)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setCodecForDecoding(codecForDecoding: ByteBuffer) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setCodecForDecoding",
+      qVariant(codecForDecoding, QtType.QByteArray),
+    )
+  }
 
-  @Slot
-  fun setCodecForDecoding(codecName: ByteBuffer?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setIdentity(identityId: IdentityId) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setIdentity",
+      qVariant(identityId, QuasselType.IdentityId),
+    )
+  }
 
-  @Slot
-  fun setCodecForEncoding(codecName: ByteBuffer?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setConnected(isConnected: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setConnected",
+      qVariant(isConnected, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setCodecForServer(codecName: ByteBuffer?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setConnectionState(connectionState: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setConnectionState",
+      qVariant(connectionState, QtType.Int),
+    )
+    setConnectionState(ConnectionState.of(connectionState))
+  }
 
-  @Slot
-  fun setConnected(isConnected: Boolean)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUseRandomServer(useRandomServer: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUseRandomServer",
+      qVariant(useRandomServer, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setConnectionState(state: Int) = setConnectionState(ConnectionState.of(state))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setPerform(perform: QStringList) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setPerform",
+      qVariant(perform, QtType.QStringList),
+    )
+  }
 
-  fun setConnectionState(state: ConnectionState)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setSkipCaps(skipCaps: QStringList) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setSkipCaps",
+      qVariant(skipCaps, QtType.QStringList),
+    )
+  }
 
-  @Slot
-  fun setCurrentServer(currentServer: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUseAutoIdentify(useAutoIdentify: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUseAutoIdentify",
+      qVariant(useAutoIdentify, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setIdentity(identity: IdentityId)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAutoIdentifyService(autoIdentifyService: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoIdentifyService",
+      qVariant(autoIdentifyService, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setLatency(latency: Int)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAutoIdentifyPassword(autoIdentifyPassword: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoIdentifyPassword",
+      qVariant(autoIdentifyPassword, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setMessageRateBurstSize(burstSize: UInt)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUseSasl(useSasl: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUseSasl",
+      qVariant(useSasl, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setMessageRateDelay(messageDelay: UInt)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setSaslAccount(saslAccount: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setSaslAccount",
+      qVariant(saslAccount, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setMyNick(mynick: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setSaslPassword(saslPassword: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setSaslPassword",
+      qVariant(saslPassword, QtType.QString),
+    )
+  }
 
-  @Slot
-  fun setNetworkName(networkName: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUseAutoReconnect(useAutoReconnect: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUseAutoReconnect",
+      qVariant(useAutoReconnect, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setNetworkInfo(info: NetworkInfo)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAutoReconnectInterval(autoReconnectInterval: UInt) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoReconnectInterval",
+      qVariant(autoReconnectInterval, QtType.UInt),
+    )
+  }
 
-  @Slot
-  fun setPerform(perform: QStringList)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAutoReconnectRetries(autoReconnectRetries: UShort) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAutoReconnectRetries",
+      qVariant(autoReconnectRetries, QtType.UShort),
+    )
+  }
 
-  @Slot
-  fun setRejoinChannels(rejoinChannels: Boolean)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUnlimitedReconnectRetries(unlimitedReconnectRetries: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUnlimitedReconnectRetries",
+      qVariant(unlimitedReconnectRetries, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setSaslAccount(account: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setRejoinChannels(rejoinChannels: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setRejoinChannels",
+      qVariant(rejoinChannels, QtType.Bool),
+    )
+  }
 
-  @Slot
-  fun setSaslPassword(password: String?)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUseCustomMessageRate(useCustomMessageRate: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUseCustomMessageRate",
+      qVariant(useCustomMessageRate, QtType.Bool),
+    )
+  }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setMessageRateBurstSize(messageRateBurstSize: UInt) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setMessageRateBurstSize",
+      qVariant(messageRateBurstSize, QtType.UInt),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setMessageRateDelay(messageRateDelay: UInt) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setMessageRateDelay",
+      qVariant(messageRateDelay, QtType.UInt),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUnlimitedMessageRate(unlimitedMessageRate: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUnlimitedMessageRate",
+      qVariant(unlimitedMessageRate, QtType.Bool),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setServerList(serverList: QVariantList) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setServerList",
+      qVariant(serverList, QtType.QVariantList),
+    )
     setActualServerList(serverList.map {
       it.valueOrThrow<QVariantMap>()
     }.map(Server.Companion::fromVariantMap))
   }
 
-  fun setActualServerList(serverList: List<INetwork.Server>)
-
-  @Slot
-  fun setUnlimitedMessageRate(unlimitedRate: Boolean)
-
-  @Slot
-  fun setUnlimitedReconnectRetries(unlimitedRetries: Boolean)
-
-  @Slot
-  fun setUseAutoIdentify(autoIdentify: Boolean)
-
-  @Slot
-  fun setUseAutoReconnect(autoReconnect: Boolean)
-
-  @Slot
-  fun setUseCustomMessageRate(useCustomRate: Boolean)
-
-  @Slot
-  fun setUseRandomServer(randomServer: Boolean)
-
-  @Slot
-  fun setUseSasl(sasl: Boolean)
-
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addSupport(param: String, value: String = "") {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addSupport",
+      qVariant(param, QtType.QString),
+      qVariant(value, QtType.QString),
+    )
   }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeSupport(param: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeSupport",
+      qVariant(param, QtType.QString)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addCap(capability: String, value: String = "") {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addCap",
+      qVariant(capability, QtType.QString),
+      qVariant(value, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun acknowledgeCap(capability: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "acknowledgeCap",
+      qVariant(capability, QtType.QString)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeCap(capability: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeCap",
+      qVariant(capability, QtType.QString)
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun clearCaps() {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "clearCaps"
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addIrcUser(hostmask: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addIrcUser",
+      qVariant(hostmask, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addIrcChannel(channel: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addIrcChannel",
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestConnect() {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "requestConnect",
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestDisconnect() {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "requestDisconnect",
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetNetworkInfo(info: NetworkInfo) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "requestSetNetworkInfo",
+      qVariant(info, QuasselType.NetworkInfo),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setNetworkInfo(info: NetworkInfo) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setNetworkInfo",
+      qVariant(info, QuasselType.NetworkInfo),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
+
+  fun setConnectionState(state: ConnectionState)
+  fun setActualServerList(serverList: List<Server>)
 
   enum class ConnectionState(val value: Int) {
     Disconnected(0),
@@ -220,7 +467,7 @@ interface INetwork : ISyncableObject {
     D_CHANMODE(0x08u);
 
     companion object : Flags.Factory<ChannelModeType> {
-      override val NONE = ChannelModeType.of()
+      override val NONE = of()
       val validValues = values().filter { it.bit != 0u }.toTypedArray()
       override fun of(bit: Int) = Flags.of<ChannelModeType>(bit)
       override fun of(bit: UInt) = Flags.of<ChannelModeType>(bit)
@@ -256,18 +503,18 @@ interface INetwork : ISyncableObject {
     val proxyPass: String? = ""
   ) : Serializable {
     fun toVariantMap(): QVariantMap = mapOf(
-      "Host" to QVariant.of(host, Type.QString),
-      "Port" to QVariant.of(port, Type.UInt),
-      "Password" to QVariant.of(password, Type.QString),
-      "UseSSL" to QVariant.of(useSsl, Type.Bool),
-      "sslVerify" to QVariant.of(sslVerify, Type.Bool),
-      "sslVersion" to QVariant.of(sslVersion, Type.Int),
-      "UseProxy" to QVariant.of(useProxy, Type.Bool),
-      "ProxyType" to QVariant.of(proxyType, Type.Int),
-      "ProxyHost" to QVariant.of(proxyHost, Type.QString),
-      "ProxyPort" to QVariant.of(proxyPort, Type.UInt),
-      "ProxyUser" to QVariant.of(proxyUser, Type.QString),
-      "ProxyPass" to QVariant.of(proxyPass, Type.QString)
+      "Host" to QVariant.of(host, QtType.QString),
+      "Port" to QVariant.of(port, QtType.UInt),
+      "Password" to QVariant.of(password, QtType.QString),
+      "UseSSL" to QVariant.of(useSsl, QtType.Bool),
+      "sslVerify" to QVariant.of(sslVerify, QtType.Bool),
+      "sslVersion" to QVariant.of(sslVersion, QtType.Int),
+      "UseProxy" to QVariant.of(useProxy, QtType.Bool),
+      "ProxyType" to QVariant.of(proxyType, QtType.Int),
+      "ProxyHost" to QVariant.of(proxyHost, QtType.QString),
+      "ProxyPort" to QVariant.of(proxyPort, QtType.UInt),
+      "ProxyUser" to QVariant.of(proxyUser, QtType.QString),
+      "ProxyPass" to QVariant.of(proxyPass, QtType.QString)
     )
 
     companion object {
@@ -311,7 +558,7 @@ interface INetwork : ISyncableObject {
     var codecForServer: String = "UTF_8",
     var codecForEncoding: String = "UTF_8",
     var codecForDecoding: String = "UTF_8",
-    var serverList: List<INetwork.Server> = emptyList(),
+    var serverList: List<Server> = emptyList(),
     var useRandomServer: Boolean = false,
     var perform: List<String> = emptyList(),
     var useAutoIdentify: Boolean = false,
@@ -331,39 +578,39 @@ interface INetwork : ISyncableObject {
     var unlimitedMessageRate: Boolean = false
   ) {
     fun toVariantMap() = mapOf(
-      "NetworkId" to QVariant.of(networkId, QType.NetworkId),
-      "NetworkName" to QVariant.of(networkName, Type.QString),
-      "Identity" to QVariant.of(identity, QType.IdentityId),
-      "UseCustomEncodings" to QVariant.of(useCustomEncodings, Type.Bool),
+      "NetworkId" to QVariant.of(networkId, QuasselType.NetworkId),
+      "NetworkName" to QVariant.of(networkName, QtType.QString),
+      "Identity" to QVariant.of(identity, QuasselType.IdentityId),
+      "UseCustomEncodings" to QVariant.of(useCustomEncodings, QtType.Bool),
       "CodecForServer" to QVariant.of(
-        codecForServer.serializeString(StringSerializer.UTF8), Type.QByteArray
+        codecForServer.serializeString(StringSerializer.UTF8), QtType.QByteArray
       ),
       "CodecForEncoding" to QVariant.of(
-        codecForEncoding.serializeString(StringSerializer.UTF8), Type.QByteArray
+        codecForEncoding.serializeString(StringSerializer.UTF8), QtType.QByteArray
       ),
       "CodecForDecoding" to QVariant.of(
-        codecForDecoding.serializeString(StringSerializer.UTF8), Type.QByteArray
+        codecForDecoding.serializeString(StringSerializer.UTF8), QtType.QByteArray
       ),
       "ServerList" to QVariant.of(serverList.map {
-        QVariant.of(it.toVariantMap(), QType.Network_Server)
-      }, Type.QVariantList),
-      "UseRandomServer" to QVariant.of(useRandomServer, Type.Bool),
-      "Perform" to QVariant.of(perform, Type.QStringList),
-      "UseAutoIdentify" to QVariant.of(useAutoIdentify, Type.Bool),
-      "AutoIdentifyService" to QVariant.of(autoIdentifyService, Type.QString),
-      "AutoIdentifyPassword" to QVariant.of(autoIdentifyPassword, Type.QString),
-      "UseSasl" to QVariant.of(useSasl, Type.Bool),
-      "SaslAccount" to QVariant.of(saslAccount, Type.QString),
-      "SaslPassword" to QVariant.of(saslPassword, Type.QString),
-      "UseAutoReconnect" to QVariant.of(useAutoReconnect, Type.Bool),
-      "AutoReconnectInterval" to QVariant.of(autoReconnectInterval, Type.UInt),
-      "AutoReconnectRetries" to QVariant.of(autoReconnectRetries, Type.UShort),
-      "UnlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries, Type.Bool),
-      "RejoinChannels" to QVariant.of(rejoinChannels, Type.Bool),
-      "UseCustomMessageRate" to QVariant.of(useCustomMessageRate, Type.Bool),
-      "MessageRateBurstSize" to QVariant.of(messageRateBurstSize, Type.UInt),
-      "MessageRateDelay" to QVariant.of(messageRateDelay, Type.UInt),
-      "UnlimitedMessageRate" to QVariant.of(unlimitedMessageRate, Type.Bool)
+        QVariant.of(it.toVariantMap(), QuasselType.Network_Server)
+      }, QtType.QVariantList),
+      "UseRandomServer" to QVariant.of(useRandomServer, QtType.Bool),
+      "Perform" to QVariant.of(perform, QtType.QStringList),
+      "UseAutoIdentify" to QVariant.of(useAutoIdentify, QtType.Bool),
+      "AutoIdentifyService" to QVariant.of(autoIdentifyService, QtType.QString),
+      "AutoIdentifyPassword" to QVariant.of(autoIdentifyPassword, QtType.QString),
+      "UseSasl" to QVariant.of(useSasl, QtType.Bool),
+      "SaslAccount" to QVariant.of(saslAccount, QtType.QString),
+      "SaslPassword" to QVariant.of(saslPassword, QtType.QString),
+      "UseAutoReconnect" to QVariant.of(useAutoReconnect, QtType.Bool),
+      "AutoReconnectInterval" to QVariant.of(autoReconnectInterval, QtType.UInt),
+      "AutoReconnectRetries" to QVariant.of(autoReconnectRetries, QtType.UShort),
+      "UnlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries, QtType.Bool),
+      "RejoinChannels" to QVariant.of(rejoinChannels, QtType.Bool),
+      "UseCustomMessageRate" to QVariant.of(useCustomMessageRate, QtType.Bool),
+      "MessageRateBurstSize" to QVariant.of(messageRateBurstSize, QtType.UInt),
+      "MessageRateDelay" to QVariant.of(messageRateDelay, QtType.UInt),
+      "UnlimitedMessageRate" to QVariant.of(unlimitedMessageRate, QtType.Bool)
     )
 
     fun fromVariantMap(map: QVariantMap) {
@@ -375,7 +622,7 @@ interface INetwork : ISyncableObject {
       codecForEncoding = map["CodecForEncoding"].value(codecForEncoding)
       codecForDecoding = map["CodecForDecoding"].value(codecForDecoding)
       serverList = map["ServerList"].value(emptyList<QVariant_>()).map {
-        INetwork.Server.fromVariantMap(it.value(emptyMap()))
+        Server.fromVariantMap(it.value(emptyMap()))
       }
       useRandomServer = map["UseRandomServer"].value(useRandomServer)
       perform = map["Perform"].value(perform)
@@ -397,9 +644,12 @@ interface INetwork : ISyncableObject {
     }
   }
 
+  fun ircUserNickChanged(old: String, new: String)
+
   /**
    * IRCv3 capability names and values
    */
+  @Suppress("MemberVisibilityCanBePrivate")
   object IrcCap {
     // NOTE: If you add or modify the constants below, update the knownCaps list.
     /**

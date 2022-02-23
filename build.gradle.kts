@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Quasseldroid - Quassel client for Android
  *
@@ -18,26 +16,5 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-plugins {
-  id("com.android.application") version "7.1.1" apply false
-  id("com.android.library") version "7.1.1" apply false
-  id("org.jetbrains.kotlin.android") version "1.6.10" apply false
-}
 
-allprojects {
-  repositories {
-    google()
-    mavenCentral()
-    maven(url = "https://jitpack.io")
-  }
-
-  tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-      freeCompilerArgs = listOf(
-        "-Xinline-classes",
-        "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
-      )
-      jvmTarget = "1.8"
-    }
-  }
-}
+group = "com.iskrembilen"

@@ -19,13 +19,14 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "HighlightRuleManager")
+@SyncedObject(name = "HighlightRuleManager")
 interface IHighlightRuleManager : ISyncableObject {
   enum class HighlightNickType(val value: Int) {
     NoNick(0x00),
@@ -41,74 +42,131 @@ interface IHighlightRuleManager : ISyncableObject {
   fun initHighlightRuleList(): QVariantMap
   fun initSetHighlightRuleList(highlightRuleList: QVariantMap)
 
-  /**
-   * Request removal of an ignore rule based on the rule itself.
-   * Use this method if you want to remove a single ignore rule
-   * and get that synced with the core immediately.
-   * @param highlightRule A valid ignore rule
-   */
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestRemoveHighlightRule(highlightRule: Int) {
-    REQUEST("requestRemoveHighlightRule", ARG(highlightRule, Type.Int))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestRemoveHighlightRule",
+      qVariant(highlightRule, QtType.Int),
+    )
   }
 
-  @Slot
-  fun removeHighlightRule(highlightRule: Int)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeHighlightRule(highlightRule: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeHighlightRule",
+      qVariant(highlightRule, QtType.Int),
+    )
+  }
 
-  /**
-   * Request toggling of "isEnabled" flag of a given ignore rule.
-   * Use this method if you want to toggle the "isEnabled" flag of a single ignore rule
-   * and get that synced with the core immediately.
-   * @param highlightRule A valid ignore rule
-   */
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestToggleHighlightRule(highlightRule: Int) {
-    REQUEST("requestToggleHighlightRule", ARG(highlightRule, Type.Int))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestToggleHighlightRule",
+      qVariant(highlightRule, QtType.Int),
+    )
   }
 
-  @Slot
-  fun toggleHighlightRule(highlightRule: Int)
-
-  /**
-   * Request an HighlightRule to be added to the ignore list
-   * Items added to the list with this method, get immediately synced with the core
-   * @param name The rule
-   * @param isRegEx If the rule should be interpreted as a nickname, or a regex
-   * @param isCaseSensitive If the rule should be interpreted as case-sensitive
-   * @param isEnabled If the rule is active
-   * @param chanName The channel in which the rule should apply
-   */
-  @Slot
-  fun requestAddHighlightRule(id: Int, name: String?, isRegEx: Boolean, isCaseSensitive: Boolean,
-                              isEnabled: Boolean, isInverse: Boolean, sender: String?,
-                              chanName: String?) {
-    REQUEST("requestAddHighlightRule", ARG(id, Type.Int), ARG(name, Type.QString),
-            ARG(isRegEx, Type.Bool), ARG(isCaseSensitive, Type.Bool), ARG(isEnabled, Type.Bool),
-            ARG(isInverse, Type.Bool), ARG(sender, Type.QString), ARG(chanName, Type.QString))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun toggleHighlightRule(highlightRule: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "toggleHighlightRule",
+      qVariant(highlightRule, QtType.Int),
+    )
   }
 
-  @Slot
-  fun addHighlightRule(id: Int, name: String?, isRegEx: Boolean, isCaseSensitive: Boolean,
-                       isEnabled: Boolean, isInverse: Boolean, sender: String?, chanName: String?)
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestAddHighlightRule(
+    id: Int,
+    content: String?,
+    isRegEx: Boolean,
+    isCaseSensitive: Boolean,
+    isEnabled: Boolean,
+    isInverse: Boolean,
+    sender: String?,
+    channel: String?
+  ) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestToggleHighlightRule",
+      qVariant(id, QtType.Int),
+      qVariant(content, QtType.QString),
+      qVariant(isRegEx, QtType.Bool),
+      qVariant(isCaseSensitive, QtType.Bool),
+      qVariant(isEnabled, QtType.Bool),
+      qVariant(isInverse, QtType.Bool),
+      qVariant(sender, QtType.QString),
+      qVariant(channel, QtType.QString),
+    )
+  }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addHighlightRule(
+    id: Int,
+    content: String?,
+    isRegEx: Boolean,
+    isCaseSensitive: Boolean,
+    isEnabled: Boolean,
+    isInverse: Boolean,
+    sender: String?,
+    channel: String?
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addHighlightRule",
+      qVariant(id, QtType.Int),
+      qVariant(content, QtType.QString),
+      qVariant(isRegEx, QtType.Bool),
+      qVariant(isCaseSensitive, QtType.Bool),
+      qVariant(isEnabled, QtType.Bool),
+      qVariant(isInverse, QtType.Bool),
+      qVariant(sender, QtType.QString),
+      qVariant(channel, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestSetHighlightNick(highlightNick: Int) {
-    REQUEST("requestSetHighlightNick", ARG(highlightNick, Type.Int))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetHighlightNick",
+      qVariant(highlightNick, QtType.Int),
+    )
   }
 
-  @Slot
-  fun setHighlightNick(highlightNick: Int)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setHighlightNick(highlightNick: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setHighlightNick",
+      qVariant(highlightNick, QtType.Int),
+    )
+  }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestSetNicksCaseSensitive(nicksCaseSensitive: Boolean) {
-    REQUEST("requestSetNicksCaseSensitive", ARG(nicksCaseSensitive, Type.Bool))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetNicksCaseSensitive",
+      qVariant(nicksCaseSensitive, QtType.Bool),
+    )
   }
 
-  @Slot
-  fun setNicksCaseSensitive(nicksCaseSensitive: Boolean)
-
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setNicksCaseSensitive(nicksCaseSensitive: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setNicksCaseSensitive",
+      qVariant(nicksCaseSensitive, QtType.Bool),
+    )
   }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

@@ -49,7 +49,7 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
     val networkId = NetworkId(data.getInt("network_id", -1))
     val identity = IdentityId(data.getInt("identity", -1))
     if (networkId.isValidId() || (network != null && identity.isValidId())) {
-      modelHelper.backend?.value?.ifPresent { backend ->
+      modelHelper.backend.value?.ifPresent { backend ->
         val session = modelHelper.connectedSession.value?.orNull()
         session?.apply {
           rpcHandler.apply {

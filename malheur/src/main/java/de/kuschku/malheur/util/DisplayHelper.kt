@@ -24,6 +24,6 @@ import android.view.Display
 
 fun Display.getMetrics(): DisplayMetrics {
   val metrics = DisplayMetrics()
-  getMetrics(metrics)
+  getRealMetrics(metrics)
   return metrics
 }

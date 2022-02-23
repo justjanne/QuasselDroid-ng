@@ -21,7 +21,7 @@ package de.kuschku.libquassel.protocol.message
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantList
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.protocol.value
 import de.kuschku.libquassel.util.helper.deserializeString
@@ -30,8 +30,8 @@ import java.nio.ByteBuffer
 
 object RpcCallSerializer : SignalProxyMessageSerializer<SignalProxyMessage.RpcCall> {
   override fun serialize(data: SignalProxyMessage.RpcCall) = listOf(
-    QVariant.of(RequestType.RpcCall.value, Type.Int),
-    QVariant.of(data.slotName.serializeString(StringSerializer.UTF8), Type.QByteArray),
+    QVariant.of(RequestType.RpcCall.value, QtType.Int),
+    QVariant.of(data.slotName.serializeString(StringSerializer.UTF8), QtType.QByteArray),
     *data.params.toTypedArray()
   )
 

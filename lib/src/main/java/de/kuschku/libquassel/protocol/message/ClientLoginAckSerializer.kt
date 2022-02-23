@@ -21,11 +21,11 @@ package de.kuschku.libquassel.protocol.message
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 
 object ClientLoginAckSerializer : HandshakeMessageSerializer<HandshakeMessage.ClientLoginAck> {
   override fun serialize(data: HandshakeMessage.ClientLoginAck) = mapOf(
-    "MsgType" to QVariant.of("ClientLoginAck", Type.QString)
+    "MsgType" to QVariant.of("ClientLoginAck", QtType.QString)
   )
 
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientLoginAck()

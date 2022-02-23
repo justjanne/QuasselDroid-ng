@@ -18,38 +18,11 @@
  */
 
 plugins {
-  id("com.android.library")
-  kotlin("android")
-  kotlin("kapt")
-}
-
-android {
-  compileSdkVersion(30)
-
-  defaultConfig {
-    minSdkVersion(20)
-    targetSdkVersion(30)
-
-    consumerProguardFiles("proguard-rules.pro")
-
-    javaCompileOptions {
-      annotationProcessorOptions {
-        arguments["room.schemaLocation"] = "$projectDir/schemas"
-      }
-    }
-
-    // Disable test runner analytics
-    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
-  }
-
-  lintOptions {
-    isWarningsAsErrors = true
-    lintConfig = file("../lint.xml")
-  }
+  id("justjanne.android.library")
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.10"))
+  implementation(kotlin("stdlib", "1.6.10"))
 
   implementation("androidx.appcompat", "appcompat", "1.1.0")
 
@@ -69,5 +42,13 @@ dependencies {
   // Quassel
   implementation(project(":lib")) {
     exclude(group = "org.threeten", module = "threetenbp")
+  }
+}
+
+data class VersionContext<T>(val version: T)
+
+inline fun <T> withVersion(version: T?, f: VersionContext<T>.() -> Unit) {
+  version?.let {
+    f.invoke(VersionContext(version))
   }
 }

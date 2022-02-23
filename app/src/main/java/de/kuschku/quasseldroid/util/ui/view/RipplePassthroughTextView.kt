@@ -27,9 +27,9 @@ import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 
 class RipplePassthroughTextView : AppCompatTextView {
-  constructor(context: Context?) : super(context)
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
+  constructor(context: Context) : super(context)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     super(context, attrs, defStyleAttr)
 
   // The goal is to provide all normal interaction to the parent view, unless a link is touched

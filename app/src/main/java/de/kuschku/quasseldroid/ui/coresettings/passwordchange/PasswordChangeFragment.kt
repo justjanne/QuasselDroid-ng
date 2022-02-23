@@ -146,7 +146,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
       waiting = account?.copy(pass = pass)
 
       modelHelper.connectedSession.value?.orNull()?.rpcHandler?.changePassword(
-        0L,
+        0UL,
         user.text.toString(),
         oldPassword.text.toString(),
         pass

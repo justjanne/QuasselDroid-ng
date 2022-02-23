@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.system.ErrnoException
 import android.text.Html
 import android.view.ActionMode
@@ -512,6 +513,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .contentColorAttr(R.attr.colorTextPrimary)
                   .build()
                   .show()
+              else -> Unit // Do Nothing
             }
           }
           is Error.SslError        -> {
@@ -848,7 +850,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
     chatlineFragment?.panelSlideListener?.let(editorBottomSheet::setBottomSheetCallback)
 
-    chatlineFragment?.historyBottomSheet?.bottomSheetCallback = object :
+    chatlineFragment?.historyBottomSheet?.addBottomSheetCallback(object :
       BottomSheetBehavior.BottomSheetCallback() {
       override fun onSlide(bottomSheet: View, slideOffset: Float) {
         val opacity = (1.0f - slideOffset) / 2.0f
@@ -858,7 +860,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       override fun onStateChanged(bottomSheet: View, newState: Int) {
         editorBottomSheet.allowDragging = newState == BottomSheetBehavior.STATE_HIDDEN
       }
-    }
+    })
 
     combineLatest(modelHelper.allBuffers,
                   modelHelper.chat.chatToJoin).map { (buffers, chatToJoinOptional) ->
@@ -898,11 +900,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       "MESSAGES" -> mode.menu?.retint(binding.layoutMain.layoutToolbar.toolbar.context)
     }
     actionMode = mode
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      statusBarColor = window.statusBarColor
-      window.statusBarColor = theme.styledAttributes(R.attr.colorPrimaryDark) {
-        getColor(0, 0)
-      }
+    statusBarColor = window.statusBarColor
+    window.statusBarColor = theme.styledAttributes(R.attr.colorPrimaryDark) {
+      getColor(0, 0)
     }
     super.onActionModeStarted(mode)
   }
@@ -910,11 +910,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   override fun onActionModeFinished(mode: ActionMode?) {
     actionMode = null
     super.onActionModeFinished(mode)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      statusBarColor?.let {
-        window.statusBarColor = it
-        statusBarColor = null
-      }
+    statusBarColor?.let {
+      window.statusBarColor = it
+      statusBarColor = null
     }
   }
 
@@ -937,7 +935,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
     chatViewModel.onSaveInstanceState(outState)
 
     outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount.id)

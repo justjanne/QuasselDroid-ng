@@ -19,53 +19,180 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
+import de.kuschku.libquassel.protocol.qVariant
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.Identity
 import java.nio.ByteBuffer
 
-@Syncable(name = "RpcHandler")
-interface IRpcHandler {
-  @Slot(value = "__objectRenamed__")
-  fun objectRenamed(classname: ByteBuffer, newname: String?, oldname: String?)
+@SyncedObject(name = "RpcHandler")
+interface IRpcHandler : ISyncableObject {
+  @SyncedCall(name = "__objectRenamed__", target = ProtocolSide.CLIENT)
+  fun objectRenamed(classname: ByteBuffer, newName: String?, oldName: String?) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "__objectRenamed__",
+      qVariant(classname, QtType.QByteArray),
+      qVariant(newName, QtType.QString),
+      qVariant(oldName, QtType.QString)
+    )
+  }
 
-  @Slot("2displayMsg(Message)")
-  fun displayMsg(message: Message)
+  @SyncedCall(name = "2displayMsg(Message)", target = ProtocolSide.CLIENT)
+  fun displayMsg(message: Message) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2displayMsg(Message)",
+      qVariant(message, QuasselType.Message)
+    )
+  }
 
-  @Slot("2displayStatusMsg(QString,QString)")
-  fun displayStatusMsg(net: String?, msg: String?)
+  @SyncedCall(name = "2displayStatusMsg(QString,QString)", target = ProtocolSide.CLIENT)
+  fun displayStatusMsg(net: String?, msg: String?) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2displayStatusMsg(QString,QString)",
+      qVariant(net, QtType.QString),
+      qVariant(msg, QtType.QString)
+    )
+  }
 
-  @Slot("2bufferInfoUpdated(BufferInfo)")
-  fun bufferInfoUpdated(bufferInfo: BufferInfo)
+  @SyncedCall(name = "2bufferInfoUpdated(BufferInfo)", target = ProtocolSide.CLIENT)
+  fun bufferInfoUpdated(bufferInfo: BufferInfo) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2bufferInfoUpdated(BufferInfo)",
+      qVariant(bufferInfo, QuasselType.BufferInfo)
+    )
+  }
 
-  @Slot("2identityCreated(Identity)")
-  fun identityCreated(identity: QVariantMap)
+  @SyncedCall(name = "2identityCreated(Identity)", target = ProtocolSide.CLIENT)
+  fun identityCreated(identity: QVariantMap) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2identityCreated(Identity)",
+      qVariant(identity, QuasselType.Identity)
+    )
+  }
 
-  @Slot("2identityRemoved(IdentityId)")
-  fun identityRemoved(identityId: IdentityId)
+  @SyncedCall(name = "2identityRemoved(IdentityId)", target = ProtocolSide.CLIENT)
+  fun identityRemoved(identityId: IdentityId) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2identityRemoved(IdentityId)",
+      qVariant(identityId, QuasselType.IdentityId)
+    )
+  }
 
-  @Slot("2networkCreated(NetworkId)")
-  fun networkCreated(networkId: NetworkId)
+  @SyncedCall(name = "2networkCreated(NetworkId)", target = ProtocolSide.CLIENT)
+  fun networkCreated(networkId: NetworkId) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2networkCreated(NetworkId)",
+      qVariant(networkId, QuasselType.NetworkId)
+    )
+  }
 
-  @Slot("2networkRemoved(NetworkId)")
-  fun networkRemoved(networkId: NetworkId)
+  @SyncedCall(name = "2networkRemoved(NetworkId)", target = ProtocolSide.CLIENT)
+  fun networkRemoved(networkId: NetworkId) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2networkRemoved(NetworkId)",
+      qVariant(networkId, QuasselType.NetworkId)
+    )
+  }
 
-  @Slot("2passwordChanged(PeerPtr,bool)")
-  fun passwordChanged(ignored: Long, success: Boolean)
+  @SyncedCall(name = "2passwordChanged(PeerPtr,bool)", target = ProtocolSide.CLIENT)
+  fun passwordChanged(peer: ULong, success: Boolean) {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2passwordChanged(PeerPtr,bool)",
+      qVariant(peer, QuasselType.PeerPtr),
+      qVariant(success, QtType.Bool)
+    )
+  }
 
-  @Slot("2disconnectFromCore()")
-  fun disconnectFromCore()
+  @SyncedCall(name = "2disconnectFromCore()", target = ProtocolSide.CLIENT)
+  fun disconnectFromCore() {
+    rpc(
+      target = ProtocolSide.CLIENT,
+      "2disconnectFromCore()",
+    )
+  }
 
-  fun createIdentity(identity: Identity, additional: QVariantMap)
-  fun removeIdentity(identityId: IdentityId)
-  fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String> = emptyList())
-  fun removeNetwork(networkId: NetworkId)
-  fun changePassword(peerPtr: Long, user: String?, old: String?, new: String?)
-  fun requestKickClient(id: Int)
-  fun sendInput(bufferInfo: BufferInfo, message: String?)
+  @SyncedCall(name = "2createIdentity(Identity,QVariantMap)", target = ProtocolSide.CORE)
+  fun createIdentity(identity: IIdentity, additional: QVariantMap) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2createIdentity(Identity,QVariantMap)",
+      qVariant(identity, QuasselType.Identity),
+      qVariant(additional, QtType.QVariantMap),
+    )
+  }
+
+  @SyncedCall(name = "2removeIdentity(IdentityId)", target = ProtocolSide.CORE)
+  fun removeIdentity(identityId: IdentityId) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2removeIdentity(IdentityId)",
+      qVariant(identityId, QuasselType.IdentityId),
+    )
+  }
+
+  @SyncedCall(name = "2createNetwork(NetworkInfo,QStringList)", target = ProtocolSide.CORE)
+  fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2createNetwork(NetworkInfo,QStringList)",
+      qVariant(networkInfo, QuasselType.NetworkInfo),
+      qVariant(channels, QtType.QStringList),
+    )
+  }
+
+  @SyncedCall(name = "2removeNetwork(NetworkId)", target = ProtocolSide.CORE)
+  fun removeNetwork(networkId: NetworkId) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2removeNetwork(NetworkId)",
+      qVariant(networkId, QuasselType.NetworkId),
+    )
+  }
+
+  @SyncedCall(name = "2changePassword(PeerPtr,QString,QString,QString)", target = ProtocolSide.CORE)
+  fun changePassword(peerPtr: ULong, user: String?, old: String?, new: String?) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2changePassword(PeerPtr,QString,QString,QString)",
+      qVariant(peerPtr, QuasselType.PeerPtr),
+      qVariant(user, QtType.QString),
+      qVariant(old, QtType.QString),
+      qVariant(new, QtType.QString)
+    )
+  }
+
+  @SyncedCall(name = "2kickClient(int)", target = ProtocolSide.CORE)
+  fun requestKickClient(id: Int) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2kickClient(int)",
+      qVariant(id, QtType.Int)
+    )
+  }
+
+  @SyncedCall(name = "2sendInput(BufferInfo,QString)", target = ProtocolSide.CORE)
+  fun sendInput(bufferInfo: BufferInfo, message: String?) {
+    rpc(
+      target = ProtocolSide.CORE,
+      "2sendInput(BufferInfo,QString)",
+      qVariant(bufferInfo, QuasselType.BufferInfo),
+      qVariant(message, QtType.QString)
+    )
+  }
 }

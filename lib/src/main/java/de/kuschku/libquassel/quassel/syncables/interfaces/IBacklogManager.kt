@@ -19,70 +19,183 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.protocol.QuasselType
+import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "BacklogManager")
+@SyncedObject(name = "BacklogManager")
 interface IBacklogManager : ISyncableObject {
-  @Slot
-  fun requestBacklog(bufferId: BufferId, first: MsgId = MsgId(-1), last: MsgId = MsgId(-1),
-                     limit: Int = -1, additional: Int = 0) {
-    REQUEST(
-      "requestBacklog", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
-      ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int)
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestBacklog(
+    bufferId: BufferId,
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0
+  ) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestBacklog",
+      qVariant(bufferId, QuasselType.BufferId),
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
     )
   }
 
-  @Slot
-  fun requestBacklogFiltered(bufferId: BufferId, first: MsgId = MsgId(-1),
-                             last: MsgId = MsgId(-1), limit: Int = -1, additional: Int = 0,
-                             type: Int = -1, flags: Int = -1) {
-    REQUEST(
-      "requestBacklogFiltered", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
-      ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int), ARG(type, Type.Int),
-      ARG(flags, Type.Int)
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestBacklogFiltered(
+    bufferId: BufferId,
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0,
+    type: Int = -1,
+    flags: Int = -1
+  ) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestBacklogFiltered",
+      qVariant(bufferId, QuasselType.BufferId),
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
+      qVariant(type, QtType.Int),
+      qVariant(flags, QtType.Int),
     )
   }
 
-  @Slot
-  fun requestBacklogAll(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1), limit: Int = -1,
-                        additional: Int = 0) {
-    REQUEST(
-      "requestBacklogAll", ARG(first, QType.MsgId), ARG(last, QType.MsgId),
-      ARG(limit, Type.Int), ARG(additional, Type.Int)
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestBacklogAll(
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0
+  ) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestBacklogAll",
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
     )
   }
 
-  @Slot
-  fun requestBacklogAllFiltered(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1),
-                                limit: Int = -1, additional: Int = 0, type: Int = -1,
-                                flags: Int = -1) {
-    REQUEST(
-      "requestBacklogAllFiltered", ARG(first, QType.MsgId), ARG(last, QType.MsgId),
-      ARG(limit, Type.Int), ARG(additional, Type.Int), ARG(type, Type.Int), ARG(flags, Type.Int)
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestBacklogAllFiltered(
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0,
+    type: Int = -1,
+    flags: Int = -1
+  ) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestBacklogAll",
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
+      qVariant(type, QtType.Int),
+      qVariant(flags, QtType.Int),
     )
   }
 
-  @Slot
-  fun receiveBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int, additional: Int,
-                     messages: QVariantList)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun receiveBacklog(
+    bufferId: BufferId,
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0,
+    messages: QVariantList
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "receiveBacklog",
+      qVariant(bufferId, QuasselType.BufferId),
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
+      qVariant(messages, QtType.QVariantList),
+    )
+  }
 
-  @Slot
-  fun receiveBacklogFiltered(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
-                             additional: Int, type: Int, flags: Int, messages: QVariantList)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun receiveBacklogFiltered(
+    bufferId: BufferId,
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0,
+    type: Int = -1,
+    flags: Int = -1,
+    messages: QVariantList
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "receiveBacklogFiltered",
+      qVariant(bufferId, QuasselType.BufferId),
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
+      qVariant(type, QtType.Int),
+      qVariant(flags, QtType.Int),
+      qVariant(messages, QtType.QVariantList),
+    )
+  }
 
-  @Slot
-  fun receiveBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int,
-                        messages: QVariantList)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun receiveBacklogAll(
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0,
+    messages: QVariantList
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "receiveBacklogAll",
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
+      qVariant(messages, QtType.QVariantList),
+    )
+  }
 
-  @Slot
-  fun receiveBacklogAllFiltered(first: MsgId, last: MsgId, limit: Int, additional: Int, type: Int,
-                                flags: Int, messages: QVariantList)
-
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun receiveBacklogAllFiltered(
+    first: MsgId = MsgId(-1),
+    last: MsgId = MsgId(-1),
+    limit: Int = -1,
+    additional: Int = 0,
+    type: Int = -1,
+    flags: Int = -1,
+    messages: QVariantList
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "receiveBacklogAllFiltered",
+      qVariant(first, QuasselType.MsgId),
+      qVariant(last, QuasselType.MsgId),
+      qVariant(limit, QtType.Int),
+      qVariant(additional, QtType.Int),
+      qVariant(type, QtType.Int),
+      qVariant(flags, QtType.Int),
+      qVariant(messages, QtType.QVariantList),
+    )
   }
 }

@@ -28,7 +28,7 @@
 -dontobfuscate
 
 # Keep our invokers
--keep class * implements de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invoker {
+-keep class * implements de.kuschku.libquassel.quassel.syncables.invoker.Invoker {
     static ** INSTANCE;
 }
 

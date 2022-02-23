@@ -20,6 +20,8 @@
 package de.kuschku.quasseldroid.service
 
 import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.session.HeartBeatRunner
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -28,7 +30,7 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 class AndroidHeartBeatRunner : HeartBeatRunner {
-  private val handler = Handler()
+  private val handler = Handler(Looper.getMainLooper())
   private var running = true
   private var lastHeartBeatReply: Instant = Instant.now()
   private var lastHeartBeatSend: Instant = Instant.now()

@@ -27,10 +27,10 @@ import java.nio.ByteBuffer
 
 object InitDataSerializer : SignalProxyMessageSerializer<SignalProxyMessage.InitData> {
   override fun serialize(data: SignalProxyMessage.InitData) = listOf(
-    QVariant.of<Any>(RequestType.InitData.value, Type.Int),
-    QVariant.of<Any>(data.className.serializeString(StringSerializer.UTF8), Type.QByteArray),
-    QVariant.of<Any>(data.objectName.serializeString(StringSerializer.UTF8), Type.QByteArray),
-    QVariant.of<Any>(data.initData, Type.QVariantMap)
+    QVariant.of<Any>(RequestType.InitData.value, QtType.Int),
+    QVariant.of<Any>(data.className.serializeString(StringSerializer.UTF8), QtType.QByteArray),
+    QVariant.of<Any>(data.objectName.serializeString(StringSerializer.UTF8), QtType.QByteArray),
+    QVariant.of<Any>(data.initData, QtType.QVariantMap)
   )
 
   override fun deserialize(data: QVariantList) = SignalProxyMessage.InitData(

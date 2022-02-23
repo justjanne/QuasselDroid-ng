@@ -20,7 +20,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
@@ -79,10 +79,10 @@ class BufferSyncer constructor(
   fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos.map { _bufferInfos.toMap() }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "Activities" to QVariant.of(initActivities(), Type.QVariantList),
-    "HighlightCounts" to QVariant.of(initHighlightCounts(), Type.QVariantList),
-    "LastSeenMsg" to QVariant.of(initLastSeenMsg(), Type.QVariantList),
-    "MarkerLines" to QVariant.of(initMarkerLines(), Type.QVariantList)
+    "Activities" to QVariant.of(initActivities(), QtType.QVariantList),
+    "HighlightCounts" to QVariant.of(initHighlightCounts(), QtType.QVariantList),
+    "LastSeenMsg" to QVariant.of(initLastSeenMsg(), QtType.QVariantList),
+    "MarkerLines" to QVariant.of(initMarkerLines(), QtType.QVariantList)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -107,8 +107,8 @@ class BufferSyncer constructor(
   override fun initActivities(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _bufferActivities) {
-      list.add(QVariant.of(key, QType.BufferId))
-      list.add(QVariant.of(value.toInt(), Type.Int))
+      list.add(QVariant.of(key, QuasselType.BufferId))
+      list.add(QVariant.of(value.toInt(), QtType.Int))
     }
     return list
   }
@@ -116,8 +116,8 @@ class BufferSyncer constructor(
   override fun initHighlightCounts(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _highlightCounts) {
-      list.add(QVariant.of(key, QType.BufferId))
-      list.add(QVariant.of(value, Type.Int))
+      list.add(QVariant.of(key, QuasselType.BufferId))
+      list.add(QVariant.of(value, QtType.Int))
     }
     return list
   }
@@ -125,8 +125,8 @@ class BufferSyncer constructor(
   override fun initLastSeenMsg(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _lastSeenMsg) {
-      list.add(QVariant.of(key, QType.BufferId))
-      list.add(QVariant.of(value, QType.MsgId))
+      list.add(QVariant.of(key, QuasselType.BufferId))
+      list.add(QVariant.of(value, QuasselType.MsgId))
     }
     return list
   }
@@ -134,8 +134,8 @@ class BufferSyncer constructor(
   override fun initMarkerLines(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _markerLines) {
-      list.add(QVariant.of(key, QType.BufferId))
-      list.add(QVariant.of(value, QType.MsgId))
+      list.add(QVariant.of(key, QuasselType.BufferId))
+      list.add(QVariant.of(value, QuasselType.MsgId))
     }
     return list
   }
@@ -230,7 +230,7 @@ class BufferSyncer constructor(
     notificationManager?.clear(buffer)
   }
 
-  override fun renameBuffer(buffer: BufferId, newName: String?) {
+  override fun renameBuffer(buffer: BufferId, newName: String) {
     val bufferInfo = _bufferInfos[buffer]
     if (bufferInfo != null) {
       _bufferInfos[buffer] = bufferInfo.copy(bufferName = newName)

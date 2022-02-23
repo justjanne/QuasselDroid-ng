@@ -20,10 +20,11 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.protocol.ARG
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.QVariant_
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.session.SignalProxy
 import io.reactivex.Observable
 
@@ -35,30 +36,37 @@ interface ISyncableObject {
   val proxy: SignalProxy
   val liveInitialized: Observable<Boolean>
 
-  fun requestUpdate(properties: QVariantMap = toVariantMap()) {
-    REQUEST("requestUpdate", ARG(properties, Type.QVariantMap))
+  fun sync(target: ProtocolSide, function: String, vararg arg: QVariant_) {
+    if (initialized && proxy.shouldSync(target)) {
+      proxy.callSync(className, objectName, function, arg.toList())
+    }
   }
 
+  fun rpc(target: ProtocolSide, function: String, vararg arg: QVariant_) {
+    if (initialized && proxy.shouldRpc(target)) {
+      proxy.callRpc(function, arg.toList())
+    }
+  }
   fun update(properties: QVariantMap) {
     fromVariantMap(properties)
-    SYNC("update", ARG(properties, Type.QVariantMap))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "update",
+      QVariant.of(properties, QtType.QVariantMap)
+    )
   }
 
-  fun deinit()
-  fun init() {}
+  fun requestUpdate(properties: QVariantMap = toVariantMap()) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestUpdate",
+      QVariant.of(properties, QtType.QVariantMap)
+    )
+  }
 
   fun fromVariantMap(properties: QVariantMap) = Unit
   fun toVariantMap(): QVariantMap = emptyMap()
-}
 
-inline fun ISyncableObject.SYNC(function: String, vararg arg: QVariant_) {
-  // Don’t transmit calls back that we just got from the network
-  if (initialized && proxy.shouldSync(className, objectName, function))
-    proxy.callSync(className, objectName, function, arg.toList())
-}
-
-inline fun ISyncableObject.REQUEST(function: String, vararg arg: QVariant_) {
-  // Don’t transmit calls back that we just got from the network
-  if (initialized && proxy.shouldSync(className, objectName, function))
-    proxy.callSync(className, objectName, function, arg.toList())
+  fun deinit()
+  fun init() {}
 }

@@ -34,6 +34,7 @@ import de.kuschku.quasseldroid.util.irc.format.spans.*
 import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
 import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
 
+@Suppress("MemberVisibilityCanBePrivate")
 class RichEditText : EditTextSelectionChange {
   val safeText: Editable
     get() = this.text ?: SpannableStringBuilder("").also {
@@ -67,15 +68,15 @@ class RichEditText : EditTextSelectionChange {
     R.color.mircColor92, R.color.mircColor93, R.color.mircColor94, R.color.mircColor95,
     R.color.mircColor96, R.color.mircColor97, R.color.mircColor98
   ).map(context::getColorCompat).toIntArray()
-  private val mircColorMap = mircColors.withIndex().map { (key, value) -> key to value }.toMap()
+  private val mircColorMap = mircColors.withIndex().associate { (key, value) -> key to value }
 
   private var formattingListener: ((Boolean, Boolean, Boolean, Boolean, Boolean, Int?, Int?) -> Unit)? = null
 
   private val doubleClickHelper = DoubleClickHelper(this)
 
-  constructor(context: Context?) : super(context)
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
+  constructor(context: Context) : super(context)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     super(context, attrs, defStyleAttr)
 
   init {

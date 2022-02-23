@@ -21,7 +21,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcChannel
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
@@ -32,6 +32,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.nio.charset.Charset
 
+@Suppress("MemberVisibilityCanBePrivate")
 class IrcChannel(
   name: String,
   network: Network,
@@ -45,8 +46,8 @@ class IrcChannel(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "ChanModes" to QVariant.of(initChanModes(), Type.QVariantMap),
-    "UserModes" to QVariant.of(initUserModes(), Type.QVariantMap)
+    "ChanModes" to QVariant.of(initChanModes(), QtType.QVariantMap),
+    "UserModes" to QVariant.of(initUserModes(), QtType.QVariantMap)
   ) + initProperties()
 
   private inline fun QVariant_?.indexed(index: Int?) = this?.let {
@@ -69,28 +70,28 @@ class IrcChannel(
 
   override fun initChanModes(): QVariantMap = mapOf(
     "A" to QVariant.of(_A_channelModes.map { (key, value) ->
-      key.toString() to QVariant.of(value.toList(), Type.QStringList)
-    }.toMap(), Type.QVariantMap),
+      key.toString() to QVariant.of(value.toList(), QtType.QStringList)
+    }.toMap(), QtType.QVariantMap),
     "B" to QVariant.of(_B_channelModes.map { (key, value) ->
-      key.toString() to QVariant.of(value, Type.QString)
-    }.toMap(), Type.QVariantMap),
+      key.toString() to QVariant.of(value, QtType.QString)
+    }.toMap(), QtType.QVariantMap),
     "C" to QVariant.of(_C_channelModes.map { (key, value) ->
-      key.toString() to QVariant.of(value, Type.QString)
-    }.toMap(), Type.QVariantMap),
-    "D" to QVariant.of(_D_channelModes.joinToString(), Type.QString)
+      key.toString() to QVariant.of(value, QtType.QString)
+    }.toMap(), QtType.QVariantMap),
+    "D" to QVariant.of(_D_channelModes.joinToString(), QtType.QString)
   )
 
   override fun initUserModes(): QVariantMap = synchronized(_userModes) {
-    _userModes.entries.map { (key, value) ->
-      key.nick() to QVariant.of(value, Type.QString)
-    }.toMap()
+    _userModes.entries.associate { (key, value) ->
+      key.nick() to QVariant.of(value, QtType.QString)
+    }
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "name" to QVariant.of(name(), Type.QString),
-    "topic" to QVariant.of(topic(), Type.QString),
-    "password" to QVariant.of(password(), Type.QString),
-    "encrypted" to QVariant.of(encrypted(), Type.Bool)
+    "name" to QVariant.of(name(), QtType.QString),
+    "topic" to QVariant.of(topic(), QtType.QString),
+    "password" to QVariant.of(password(), QtType.QString),
+    "encrypted" to QVariant.of(encrypted(), QtType.Bool)
   )
 
   override fun initSetChanModes(chanModes: QVariantMap) {
@@ -147,7 +148,7 @@ class IrcChannel(
     _userModes.getOr(ircUser, "")
   }
 
-  fun liveUserModes(ircUser: IrcUser) = live_userModes.map {
+  fun liveUserModes(ircUser: IrcUser): Observable<String> = live_userModes.map {
     synchronized(_userModes) {
       _userModes.getOr(ircUser, "")
     }
@@ -232,16 +233,16 @@ class IrcChannel(
     _codecForDecoding = codec
   }
 
-  override fun setTopic(topic: String?) {
-    if (_topic == topic ?: "")
+  override fun setTopic(topic: String) {
+    if (_topic == topic)
       return
-    _topic = topic ?: ""
+    _topic = topic
   }
 
-  override fun setPassword(password: String?) {
-    if (_password == password ?: "")
+  override fun setPassword(password: String) {
+    if (_password == password)
       return
-    _password = password ?: ""
+    _password = password
   }
 
   override fun setEncrypted(encrypted: Boolean) {
@@ -300,7 +301,7 @@ class IrcChannel(
     }
   }
 
-  override fun part(nick: String?) {
+  override fun part(nick: String) {
     part(network().ircUser(nick))
   }
 
@@ -313,7 +314,7 @@ class IrcChannel(
     }
   }
 
-  override fun setUserModes(nick: String?, modes: String?) {
+  override fun setUserModes(nick: String, modes: String?) {
     setUserModes(network().ircUser(nick), modes ?: "")
   }
 
@@ -333,7 +334,7 @@ class IrcChannel(
     }
   }
 
-  override fun addUserMode(nick: String?, mode: String?) {
+  override fun addUserMode(nick: String, mode: String?) {
     addUserMode(network().ircUser(nick), mode ?: "")
   }
 
@@ -350,7 +351,7 @@ class IrcChannel(
     }
   }
 
-  override fun removeUserMode(nick: String?, mode: String?) {
+  override fun removeUserMode(nick: String, mode: String?) {
     removeUserMode(network().ircUser(nick), mode ?: "")
   }
 
@@ -432,10 +433,10 @@ class IrcChannel(
   private var _codecForEncoding: Charset? = null
   private var _codecForDecoding: Charset? = null
 
-  var _A_channelModes: MutableMap<Char, MutableSet<String>> = mutableMapOf()
-  var _B_channelModes: MutableMap<Char, String> = mutableMapOf()
-  var _C_channelModes: MutableMap<Char, String> = mutableMapOf()
-  var _D_channelModes: MutableSet<Char> = mutableSetOf()
+  private var _A_channelModes: MutableMap<Char, MutableSet<String>> = mutableMapOf()
+  private var _B_channelModes: MutableMap<Char, String> = mutableMapOf()
+  private var _C_channelModes: MutableMap<Char, String> = mutableMapOf()
+  private var _D_channelModes: MutableSet<Char> = mutableSetOf()
 
   companion object {
     val NULL = IrcChannel("", Network.NULL, SignalProxy.NULL)

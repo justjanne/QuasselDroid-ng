@@ -181,7 +181,7 @@ class ToolbarFragment : ServiceBoundFragment() {
               openBuffer = true
             )
           }
-          else                                  -> null
+          else                                  -> Unit
         }
       }
     }

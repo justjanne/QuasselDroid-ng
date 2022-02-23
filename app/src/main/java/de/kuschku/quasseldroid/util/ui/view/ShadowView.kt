@@ -81,12 +81,10 @@ class ShadowView : View {
     // Get the attributes.
     val a = context.obtainStyledAttributes(attrs, R.styleable.ShadowView, defStyleAttr, defStyleRes)
     try {
-      if (a != null) {
-        gravity = a.getInt(R.styleable.ShadowView_android_gravity, gravity)
-      }
+      gravity = a.getInt(R.styleable.ShadowView_android_gravity, gravity)
 
     } finally {
-      a?.recycle()
+      a.recycle()
     }
 
     // Set the gradient as background.
@@ -164,7 +162,7 @@ class ShadowView : View {
   }
 
   private fun constrain(min: Float, max: Float, v: Float): Float {
-    return Math.max(min, Math.min(max, v))
+    return v.coerceIn(min, max)
   }
 
   class ShadowShaderFactory(

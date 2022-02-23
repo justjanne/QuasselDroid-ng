@@ -19,54 +19,75 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 
-@Syncable(name = "BufferViewManager")
+@SyncedObject(name = "BufferViewManager")
 interface IBufferViewManager : ISyncableObject {
   fun initBufferViewIds(): QVariantList
   fun initSetBufferViewIds(bufferViewIds: QVariantList)
 
   fun addBufferViewConfig(config: BufferViewConfig)
 
-  @Slot
-  fun addBufferViewConfig(bufferViewConfigId: Int)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addBufferViewConfig(bufferViewConfigId: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addBufferViewConfig",
+      qVariant(bufferViewConfigId, QtType.Int),
+    )
+  }
 
-  @Slot
-  fun deleteBufferViewConfig(bufferViewConfigId: Int)
-
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun newBufferViewConfig(bufferViewConfigId: Int) {
     addBufferViewConfig(bufferViewConfigId)
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestCreateBufferView(properties: QVariantMap) {
-    REQUEST("requestCreateBufferView", ARG(properties, Type.QVariantMap))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestCreateBufferView",
+      qVariant(properties, QtType.QVariantMap),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestCreateBufferViews(properties: QVariantList) {
-    REQUEST("requestCreateBufferViews", ARG(properties, Type.QVariantList))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestCreateBufferViews",
+      qVariant(properties, QtType.QVariantList),
+    )
   }
 
-  @Slot
-  fun requestDeleteBufferView(bufferViewId: Int) {
-    REQUEST("requestDeleteBufferView", ARG(bufferViewId, Type.Int))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun deleteBufferViewConfig(bufferViewConfigId: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "deleteBufferViewConfig",
+      qVariant(bufferViewConfigId, QtType.Int),
+    )
   }
 
-  @Slot
-  fun requestDeleteBufferViews(bufferViews: QVariantList) {
-    REQUEST("requestDeleteBufferViews", ARG(bufferViews, Type.QVariantList))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestDeleteBufferView(bufferViewConfigId: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestDeleteBufferView",
+      qVariant(bufferViewConfigId, QtType.Int),
+    )
   }
 
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
-  }
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

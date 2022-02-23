@@ -58,10 +58,6 @@ class AutoCompleteAdapter @Inject constructor(
       WidgetNickBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener
     )
-    VIEWTYPE_NICK_AWAY                       -> AutoCompleteViewHolder.NickAwayViewHolder(
-      WidgetNickAwayBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-      clickListener = clickListener
-    )
     VIEWTYPE_ALIAS                           -> AutoCompleteViewHolder.AliasViewHolder(
       WidgetAliasBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       clickListener = clickListener

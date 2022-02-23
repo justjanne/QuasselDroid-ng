@@ -17,12 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-plugins {
-  kotlin("jvm")
+plugins {id("justjanne.kotlin")
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.10"))
+  implementation(kotlin("stdlib", "1.6.10"))
 
   implementation("androidx.annotation", "annotation", "1.1.0")
 

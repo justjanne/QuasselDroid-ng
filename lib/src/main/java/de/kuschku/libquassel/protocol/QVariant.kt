@@ -21,8 +21,12 @@ package de.kuschku.libquassel.protocol
 
 import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
 
-sealed class QVariant<T> constructor(val data: T?, val type: Type, val serializer: Serializer<T>) {
-  class Typed<T> internal constructor(data: T?, type: Type, serializer: Serializer<T>) :
+sealed class QVariant<T> constructor(
+  val data: T?,
+  val type: QtType,
+  val serializer: Serializer<T>
+) {
+  class Typed<T> internal constructor(data: T?, type: QtType, serializer: Serializer<T>) :
     QVariant<T>(data, type, serializer) {
     override fun toString() = "QVariant.Typed(${type.serializableName}, $data)"
     override fun equals(other: Any?): Boolean {
@@ -42,7 +46,11 @@ sealed class QVariant<T> constructor(val data: T?, val type: Type, val serialize
     }
   }
 
-  class Custom<T> internal constructor(data: T?, val qtype: QType, serializer: Serializer<T>) :
+  class Custom<T> internal constructor(
+    data: T?,
+    val qtype: QuasselType,
+    serializer: Serializer<T>
+  ) :
     QVariant<T>(data, qtype.type, serializer) {
     override fun toString() = "QVariant.Custom($qtype, $data)"
     override fun equals(other: Any?): Boolean {
@@ -68,15 +76,18 @@ sealed class QVariant<T> constructor(val data: T?, val type: Type, val serialize
 
   companion object {
     @Suppress("UNCHECKED_CAST")
-    fun <T> of(data: T?, type: Type): QVariant<T> {
-      return QVariant.Typed(data, type, type.serializer as Serializer<T>)
-    }
+    fun <T> of(data: T?, type: QtType): QVariant<T> =
+      Typed(data, type, type.serializer as Serializer<T>)
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> of(data: T?, type: QType) =
-      QVariant.Custom(data, type, type.serializer as Serializer<T>)
+    fun <T> of(data: T?, type: QuasselType) =
+      Custom(data, type, type.serializer as Serializer<T>)
   }
 }
+
+inline fun <reified T> qVariant(data: T, type: QtType): QVariant<T> = QVariant.of(data, type)
+
+inline fun <reified T> qVariant(data: T, type: QuasselType): QVariant<T> = QVariant.of(data, type)
 
 inline fun <reified U> QVariant_?.value(): U? = this?.value<U?>(null)
 

@@ -38,6 +38,7 @@ import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.manager.ConnectionInfo
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.helper.clampOf
 import de.kuschku.libquassel.util.helper.value

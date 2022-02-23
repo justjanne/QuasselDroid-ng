@@ -21,7 +21,7 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
@@ -34,9 +34,9 @@ import java.util.*
 
 class AliasManager constructor(
   proxy: SignalProxy
-) : SyncableObject(proxy, "AliasManager"), IAliasManager, ISyncableObject {
+) : SyncableObject(proxy, "AliasManager"), IAliasManager {
   override fun toVariantMap(): QVariantMap = mapOf(
-    "Aliases" to QVariant.of(initAliases(), Type.QVariantMap)
+    "Aliases" to QVariant.of(initAliases(), QtType.QVariantMap)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -44,8 +44,8 @@ class AliasManager constructor(
   }
 
   override fun initAliases(): QVariantMap = mapOf(
-    "names" to QVariant.of(_aliases.map(Alias::name), Type.QStringList),
-    "expansions" to QVariant.of(_aliases.map(Alias::expansion), Type.QStringList)
+    "names" to QVariant.of(_aliases.map(Alias::name), QtType.QStringList),
+    "expansions" to QVariant.of(_aliases.map(Alias::expansion), QtType.QStringList)
   )
 
   override fun initSetAliases(aliases: QVariantMap) {
@@ -60,7 +60,7 @@ class AliasManager constructor(
     _aliases = names.zip(expansions, ::Alias).toList()
   }
 
-  override fun addAlias(name: String?, expansion: String?) {
+  override fun addAlias(name: String, expansion: String) {
     if (contains(name)) {
       return
     }
@@ -200,7 +200,7 @@ class AliasManager constructor(
     }
     while (!expandedCommands.isEmpty()) {
       val command: String
-      if (expandedCommands[0].trim().toLowerCase(Locale.US).startsWith("/wait ")) {
+      if (expandedCommands[0].trim().lowercase(Locale.ROOT).startsWith("/wait ")) {
         command = expandedCommands.joinToString("; ")
         expandedCommands.clear()
       } else {

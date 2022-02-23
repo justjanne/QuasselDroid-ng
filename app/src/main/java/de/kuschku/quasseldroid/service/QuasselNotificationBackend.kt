@@ -302,7 +302,7 @@ class QuasselNotificationBackend @Inject constructor(
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart(*IGNORED_CHARS)
                            .firstOrNull() ?: nickName.firstOrNull()
-        val initial = rawInitial?.toUpperCase().toString()
+        val initial = rawInitial?.uppercase().toString()
         val senderColor = when (messageSettings.colorizeNicknames) {
           MessageSettings.SenderColorMode.ALL          -> senderColors[senderColorIndex]
           MessageSettings.SenderColorMode.ALL_BUT_MINE ->

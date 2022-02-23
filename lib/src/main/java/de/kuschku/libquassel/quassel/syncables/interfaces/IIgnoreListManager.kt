@@ -19,50 +19,103 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "IgnoreListManager")
+@SyncedObject(name = "IgnoreListManager")
 interface IIgnoreListManager : ISyncableObject {
   fun initIgnoreList(): QVariantMap
   fun initSetIgnoreList(ignoreList: QVariantMap)
 
-  @Slot
-  fun addIgnoreListItem(type: Int, ignoreRule: String?, isRegEx: Boolean, strictness: Int,
-                        scope: Int, scopeRule: String?, isActive: Boolean)
-
-  @Slot
-  fun removeIgnoreListItem(ignoreRule: String?)
-
-  @Slot
-  fun requestAddIgnoreListItem(type: Int, ignoreRule: String?, isRegEx: Boolean, strictness: Int,
-                               scope: Int, scopeRule: String?, isActive: Boolean) {
-    REQUEST(
-      "requestAddIgnoreListItem", ARG(type, Type.Int), ARG(ignoreRule, Type.QString),
-      ARG(isRegEx, Type.Bool),
-      ARG(strictness, Type.Int), ARG(scope, Type.Int), ARG(scopeRule, Type.QString),
-      ARG(isActive, Type.Bool)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addIgnoreListItem(
+    type: Int,
+    ignoreRule: String?,
+    isRegEx: Boolean,
+    strictness: Int,
+    scope: Int,
+    scopeRule: String?,
+    isActive: Boolean
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addIgnoreListItem",
+      qVariant(type, QtType.Int),
+      qVariant(ignoreRule, QtType.QString),
+      qVariant(isRegEx, QtType.Bool),
+      qVariant(strictness, QtType.Int),
+      qVariant(scope, QtType.Int),
+      qVariant(scopeRule, QtType.QString),
+      qVariant(isActive, QtType.Bool),
     )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeIgnoreListItem(ignoreRule: String?) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeIgnoreListItem",
+      qVariant(ignoreRule, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestAddIgnoreListItem(
+    type: Int,
+    ignoreRule: String?,
+    isRegEx: Boolean,
+    strictness: Int,
+    scope: Int,
+    scopeRule: String?,
+    isActive: Boolean
+  ) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "requestAddIgnoreListItem",
+      qVariant(type, QtType.Int),
+      qVariant(ignoreRule, QtType.QString),
+      qVariant(isRegEx, QtType.Bool),
+      qVariant(strictness, QtType.Int),
+      qVariant(scope, QtType.Int),
+      qVariant(scopeRule, QtType.QString),
+      qVariant(isActive, QtType.Bool),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestRemoveIgnoreListItem(ignoreRule: String?) {
-    REQUEST("requestRemoveIgnoreListItem", ARG(ignoreRule, Type.QString))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestRemoveIgnoreListItem",
+      qVariant(ignoreRule, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestToggleIgnoreRule(ignoreRule: String?) {
-    REQUEST("requestToggleIgnoreRule", ARG(ignoreRule, Type.QString))
+    sync(
+      target = ProtocolSide.CORE,
+      "requestToggleIgnoreRule",
+      qVariant(ignoreRule, QtType.QString),
+    )
   }
 
-  @Slot
-  fun toggleIgnoreRule(ignoreRule: String?)
-
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun toggleIgnoreRule(ignoreRule: String?) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "requestToggleIgnoreRule",
+      qVariant(ignoreRule, QtType.QString),
+    )
   }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

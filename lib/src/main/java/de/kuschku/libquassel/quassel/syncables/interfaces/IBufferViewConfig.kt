@@ -19,12 +19,18 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "BufferViewConfig")
+@SyncedObject(name = "BufferViewConfig")
 interface IBufferViewConfig : ISyncableObject {
   fun initBufferList(): QVariantList
   fun initRemovedBuffers(): QVariantList
@@ -36,95 +42,184 @@ interface IBufferViewConfig : ISyncableObject {
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap)
 
-  @Slot
-  fun addBuffer(bufferId: BufferId, pos: Int)
-
-  @Slot
-  fun moveBuffer(bufferId: BufferId, pos: Int)
-
-  @Slot
-  fun removeBuffer(bufferId: BufferId)
-
-  @Slot
-  fun removeBufferPermanently(bufferId: BufferId)
-
-  @Slot
-  fun requestAddBuffer(bufferId: BufferId, pos: Int) {
-    REQUEST("requestAddBuffer", ARG(bufferId, QType.BufferId), ARG(pos, Type.Int))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addBuffer(buffer: BufferId, pos: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addBuffer",
+      qVariant(buffer, QuasselType.BufferId),
+      qVariant(pos, QtType.Int),
+    )
   }
 
-  @Slot
-  fun requestMoveBuffer(bufferId: BufferId, pos: Int) {
-    REQUEST("requestMoveBuffer", ARG(bufferId, QType.BufferId), ARG(pos, Type.Int))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestAddBuffer(buffer: BufferId, pos: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestAddBuffer",
+      qVariant(buffer, QuasselType.BufferId),
+      qVariant(pos, QtType.Int),
+    )
   }
 
-  @Slot
-  fun requestRemoveBuffer(bufferId: BufferId) {
-    REQUEST("requestRemoveBuffer", ARG(bufferId, QType.BufferId))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun moveBuffer(buffer: BufferId, pos: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "moveBuffer",
+      qVariant(buffer, QuasselType.BufferId),
+      qVariant(pos, QtType.Int),
+    )
   }
 
-  @Slot
-  fun requestRemoveBufferPermanently(bufferId: BufferId) {
-    REQUEST("requestRemoveBufferPermanently", ARG(bufferId, QType.BufferId))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestMoveBuffer(buffer: BufferId, pos: Int) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestMoveBuffer",
+      qVariant(buffer, QuasselType.BufferId),
+      qVariant(pos, QtType.Int),
+    )
   }
 
-  @Slot
-  fun requestSetBufferViewName(bufferViewName: String?) {
-    REQUEST("requestSetBufferViewName", ARG(bufferViewName, Type.QString))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeBuffer(buffer: BufferId) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeBuffer",
+      qVariant(buffer, QuasselType.BufferId),
+    )
   }
 
-  @Slot
-  fun setAddNewBuffersAutomatically(addNewBuffersAutomatically: Boolean) {
-    SYNC("setAddNewBuffersAutomatically", ARG(addNewBuffersAutomatically, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestRemoveBuffer(buffer: BufferId) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestRemoveBuffer",
+      qVariant(buffer, QuasselType.BufferId),
+    )
   }
 
-  @Slot
-  fun setAllowedBufferTypes(bufferTypes: Int) {
-    SYNC("setAllowedBufferTypes", ARG(bufferTypes, Type.Int))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeBufferPermanently(buffer: BufferId) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeBufferPermanently",
+      qVariant(buffer, QuasselType.BufferId),
+    )
   }
 
-  @Slot
-  fun setBufferViewName(bufferViewName: String?) {
-    SYNC("setBufferViewName", ARG(bufferViewName, Type.QString))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestRemoveBufferPermanently(buffer: BufferId) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestRemoveBufferPermanently",
+      qVariant(buffer, QuasselType.BufferId),
+    )
   }
 
-  @Slot
-  fun setDisableDecoration(disableDecoration: Boolean) {
-    SYNC("setDisableDecoration", ARG(disableDecoration, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setBufferViewName(value: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setBufferViewName",
+      qVariant(value, QtType.QString),
+    )
   }
 
-  @Slot
-  fun setHideInactiveBuffers(hideInactiveBuffers: Boolean) {
-    SYNC("setHideInactiveBuffers", ARG(hideInactiveBuffers, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CORE)
+  fun requestSetBufferViewName(value: String) {
+    sync(
+      target = ProtocolSide.CORE,
+      "requestSetBufferViewName",
+      qVariant(value, QtType.QString),
+    )
   }
 
-  @Slot
-  fun setHideInactiveNetworks(hideInactiveNetworks: Boolean) {
-    SYNC("setHideInactiveNetworks", ARG(hideInactiveNetworks, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAddNewBuffersAutomatically(value: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAddNewBuffersAutomatically",
+      qVariant(value, QtType.Bool),
+    )
   }
 
-  @Slot
-  fun setMinimumActivity(activity: Int) {
-    SYNC("setMinimumActivity", ARG(activity, Type.Int))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAllowedBufferTypes(value: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAllowedBufferTypes",
+      qVariant(value, QtType.Int),
+    )
   }
 
-  @Slot
-  fun setNetworkId(networkId: NetworkId) {
-    SYNC("setNetworkId", ARG(networkId, QType.NetworkId))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setDisableDecoration(value: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setDisableDecoration",
+      qVariant(value, QtType.Bool),
+    )
   }
 
-  @Slot
-  fun setShowSearch(showSearch: Boolean) {
-    SYNC("setShowSearch", ARG(showSearch, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setHideInactiveBuffers(value: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setHideInactiveBuffers",
+      qVariant(value, QtType.Bool),
+    )
   }
 
-  @Slot
-  fun setSortAlphabetically(sortAlphabetically: Boolean) {
-    SYNC("setSortAlphabetically", ARG(sortAlphabetically, Type.Bool))
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setHideInactiveNetworks(value: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setHideInactiveNetworks",
+      qVariant(value, QtType.Bool),
+    )
   }
 
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setMinimumActivity(value: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setMinimumActivity",
+      qVariant(value, QtType.Int),
+    )
   }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setNetworkId(value: NetworkId) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setNetworkId",
+      qVariant(value, QuasselType.NetworkId),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setShowSearch(value: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setShowSearch",
+      qVariant(value, QtType.Bool),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setSortAlphabetically(value: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setSortAlphabetically",
+      qVariant(value, QtType.Bool),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

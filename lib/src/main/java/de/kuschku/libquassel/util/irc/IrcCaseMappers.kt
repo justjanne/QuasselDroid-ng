@@ -48,25 +48,25 @@ object IrcCaseMappers {
     }
 
     override fun toLowerCase(value: String): String {
-      return value.toLowerCase(Locale.US)
+      return value.toLowerCase(Locale.ROOT)
     }
 
     override fun toUpperCase(value: String): String {
-      return value.toUpperCase(Locale.US)
+      return value.toUpperCase(Locale.ROOT)
     }
   }
 
   internal class ClassicalIrcCaseMapper :
     IrcCaseMapper {
     override fun toLowerCase(value: String): String {
-      return value.toLowerCase(Locale.US)
+      return value.toLowerCase(Locale.ROOT)
         .replace('[', '{')
         .replace(']', '}')
         .replace('^', '~')
     }
 
     override fun toUpperCase(value: String): String {
-      return value.toUpperCase(Locale.US)
+      return value.toUpperCase(Locale.ROOT)
         .replace('{', '[')
         .replace('}', ']')
         .replace('~', '^')

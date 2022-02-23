@@ -35,7 +35,7 @@ data class CoreSetupBackend(
         val result = mutableListOf<CoreSetupBackendConfigElement>()
         val setupDefaults = props["SetupDefaults"]?.value<QVariantMap>(emptyMap()).orEmpty()
         for (key in props["SetupKeys"]?.value<QStringList>(emptyList()).orEmpty()) {
-          val default = setupDefaults.getOr(key ?: "", QVariant_.of("", Type.QString))
+          val default = setupDefaults.getOr(key ?: "", QVariant_.of("", QtType.QString))
           result.add(CoreSetupBackendConfigElement(key ?: "", key ?: "", default))
         }
         result
@@ -45,7 +45,7 @@ data class CoreSetupBackend(
         }
       }
 
-      val fallback = QVariant_.of("", Type.QString)
+      val fallback = QVariant_.of("", QtType.QString)
 
       return CoreSetupBackend(
         displayName = props.getOr("DisplayName", fallback).value(""),

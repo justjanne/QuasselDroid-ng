@@ -29,7 +29,7 @@ import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.protocol.QVariant_
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupBackendConfigElement
 import de.kuschku.libquassel.protocol.value
 import de.kuschku.quasseldroid.R
@@ -64,7 +64,7 @@ class QuasselSetupEntry : FrameLayout {
 
       wrapper.hint = data.displayName
       when {
-        data.defaultValue.type == Type.QString &&
+        data.defaultValue.type == QtType.QString &&
         data.key.contains("password", ignoreCase = true) -> {
           wrapper.isPasswordVisibilityToggleEnabled = true
           field.inputType =
@@ -72,21 +72,21 @@ class QuasselSetupEntry : FrameLayout {
               InputType.TYPE_TEXT_VARIATION_PASSWORD
           field.setText(data.defaultValue.value(""))
         }
-        data.defaultValue.type == Type.QString &&
+        data.defaultValue.type == QtType.QString &&
         data.key.contains("hostname", ignoreCase = true) -> {
           field.inputType =
             InputType.TYPE_CLASS_TEXT or
               InputType.TYPE_TEXT_VARIATION_URI
           field.setText(data.defaultValue.value(""))
         }
-        data.defaultValue.type == Type.QString           -> {
+        data.defaultValue.type == QtType.QString           -> {
           field.inputType =
             InputType.TYPE_CLASS_TEXT or
               InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
               InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
           field.setText(data.defaultValue.value(""))
         }
-        data.defaultValue.type == Type.Int               -> {
+        data.defaultValue.type == QtType.Int               -> {
           field.inputType =
             InputType.TYPE_CLASS_NUMBER
           field.setText(data.defaultValue.value<Int>()?.toString())
@@ -102,14 +102,14 @@ class QuasselSetupEntry : FrameLayout {
     val data = this.data
 
     return when (data?.defaultValue?.type) {
-      Type.QString -> {
+      QtType.QString -> {
         QVariant_.of(rawValue, data.defaultValue.type)
       }
-      Type.Int     -> {
+      QtType.Int     -> {
         QVariant_.of(rawValue.toInt(), data.defaultValue.type)
       }
       else         -> {
-        QVariant_.of("", Type.QString)
+        QVariant_.of("", QtType.QString)
       }
     }
   }

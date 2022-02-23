@@ -21,7 +21,7 @@ package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.value
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
@@ -31,7 +31,7 @@ object HandshakeVariantMapSerializer : Serializer<QVariantMap> {
   override fun serialize(buffer: ChainedByteBuffer, data: QVariantMap, features: QuasselFeatures) {
     IntSerializer.serialize(buffer, data.size * 2, features)
     data.entries.forEach { (key, value) ->
-      VariantSerializer.serialize(buffer, QVariant.of(key, Type.QString), features)
+      VariantSerializer.serialize(buffer, QVariant.of(key, QtType.QString), features)
       VariantSerializer.serialize(buffer, value, features)
     }
   }

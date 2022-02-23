@@ -36,7 +36,7 @@ class IgnoreListManager constructor(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "IgnoreList" to QVariant.of(initIgnoreList(), Type.QVariantMap)
+    "IgnoreList" to QVariant.of(initIgnoreList(), QtType.QVariantMap)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -45,26 +45,26 @@ class IgnoreListManager constructor(
 
   override fun initIgnoreList() = mapOf(
     "ignoreType" to QVariant.of(_ignoreList.map {
-      QVariant.of(it.type.value, Type.Int)
-    }, Type.QVariantList),
+      QVariant.of(it.type.value, QtType.Int)
+    }, QtType.QVariantList),
     "ignoreRule" to QVariant.of(_ignoreList.map {
       it.ignoreRule
-    }, Type.QStringList),
+    }, QtType.QStringList),
     "isRegEx" to QVariant.of(_ignoreList.map {
-      QVariant.of(it.isRegEx, Type.Bool)
-    }, Type.QVariantList),
+      QVariant.of(it.isRegEx, QtType.Bool)
+    }, QtType.QVariantList),
     "strictness" to QVariant.of(_ignoreList.map {
-      QVariant.of(it.strictness.value, Type.Int)
-    }, Type.QVariantList),
+      QVariant.of(it.strictness.value, QtType.Int)
+    }, QtType.QVariantList),
     "scope" to QVariant.of(_ignoreList.map {
-      QVariant.of(it.scope.value, Type.Int)
-    }, Type.QVariantList),
+      QVariant.of(it.scope.value, QtType.Int)
+    }, QtType.QVariantList),
     "scopeRule" to QVariant.of(_ignoreList.map {
       it.scopeRule
-    }, Type.QStringList),
+    }, QtType.QStringList),
     "isActive" to QVariant.of(_ignoreList.map {
-      QVariant.of(it.isActive, Type.Bool)
-    }, Type.QVariantList)
+      QVariant.of(it.isActive, QtType.Bool)
+    }, QtType.QVariantList)
   )
 
   override fun initSetIgnoreList(ignoreList: QVariantMap) {

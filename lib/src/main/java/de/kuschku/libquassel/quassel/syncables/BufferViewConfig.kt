@@ -20,7 +20,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
@@ -38,9 +38,9 @@ class BufferViewConfig constructor(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "BufferList" to QVariant.of(initBufferList(), Type.QVariantList),
-    "RemovedBuffers" to QVariant.of(initRemovedBuffers(), Type.QVariantList),
-    "TemporarilyRemovedBuffers" to QVariant.of(initTemporarilyRemovedBuffers(), Type.QVariantList)
+    "BufferList" to QVariant.of(initBufferList(), QtType.QVariantList),
+    "RemovedBuffers" to QVariant.of(initRemovedBuffers(), QtType.QVariantList),
+    "TemporarilyRemovedBuffers" to QVariant.of(initTemporarilyRemovedBuffers(), QtType.QVariantList)
   ) + initProperties()
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -51,28 +51,28 @@ class BufferViewConfig constructor(
   }
 
   override fun initBufferList(): QVariantList = _buffers.map {
-    QVariant.of(it, QType.BufferId)
+    QVariant.of(it, QuasselType.BufferId)
   }
 
   override fun initRemovedBuffers(): QVariantList = _removedBuffers.map {
-    QVariant.of(it, QType.BufferId)
+    QVariant.of(it, QuasselType.BufferId)
   }
 
   override fun initTemporarilyRemovedBuffers(): QVariantList = _temporarilyRemovedBuffers.map {
-    QVariant.of(it, QType.BufferId)
+    QVariant.of(it, QuasselType.BufferId)
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "bufferViewName" to QVariant.of(bufferViewName(), Type.QString),
-    "networkId" to QVariant.of(networkId(), QType.NetworkId),
-    "addNewBuffersAutomatically" to QVariant.of(addNewBuffersAutomatically(), Type.Bool),
-    "sortAlphabetically" to QVariant.of(sortAlphabetically(), Type.Bool),
-    "hideInactiveBuffers" to QVariant.of(hideInactiveBuffers(), Type.Bool),
-    "hideInactiveNetworks" to QVariant.of(hideInactiveNetworks(), Type.Bool),
-    "disableDecoration" to QVariant.of(disableDecoration(), Type.Bool),
-    "allowedBufferTypes" to QVariant.of(allowedBufferTypes().toInt(), Type.Int),
-    "minimumActivity" to QVariant.of(minimumActivity().toInt(), Type.Int),
-    "showSearch" to QVariant.of(showSearch(), Type.Bool)
+    "bufferViewName" to QVariant.of(bufferViewName(), QtType.QString),
+    "networkId" to QVariant.of(networkId(), QuasselType.NetworkId),
+    "addNewBuffersAutomatically" to QVariant.of(addNewBuffersAutomatically(), QtType.Bool),
+    "sortAlphabetically" to QVariant.of(sortAlphabetically(), QtType.Bool),
+    "hideInactiveBuffers" to QVariant.of(hideInactiveBuffers(), QtType.Bool),
+    "hideInactiveNetworks" to QVariant.of(hideInactiveNetworks(), QtType.Bool),
+    "disableDecoration" to QVariant.of(disableDecoration(), QtType.Bool),
+    "allowedBufferTypes" to QVariant.of(allowedBufferTypes().toInt(), QtType.Int),
+    "minimumActivity" to QVariant.of(minimumActivity().toInt(), QtType.Int),
+    "showSearch" to QVariant.of(showSearch(), QtType.Bool)
   )
 
   override fun initSetBufferList(buffers: QVariantList) {
@@ -220,9 +220,9 @@ class BufferViewConfig constructor(
     super.setAllowedBufferTypes(bufferTypes)
   }
 
-  override fun setBufferViewName(bufferViewName: String?) {
-    _bufferViewName = bufferViewName ?: ""
-    super.setBufferViewName(bufferViewName)
+  override fun setBufferViewName(value: String) {
+    _bufferViewName = value
+    super.setBufferViewName(value)
   }
 
   override fun setDisableDecoration(disableDecoration: Boolean) {

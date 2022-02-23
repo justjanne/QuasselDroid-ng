@@ -18,30 +18,10 @@
  */
 
 plugins {
-  id("com.android.library")
-  kotlin("android")
-}
-
-android {
-  compileSdkVersion(30)
-
-  defaultConfig {
-    minSdkVersion(20)
-    targetSdkVersion(30)
-
-    consumerProguardFiles("proguard-rules.pro")
-
-    // Disable test runner analytics
-    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
-  }
-
-  lintOptions {
-    isWarningsAsErrors = true
-    lintConfig = file("../lint.xml")
-  }
+  id("justjanne.android.library")
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.10"))
+  implementation(kotlin("stdlib", "1.6.10"))
   implementation("androidx.appcompat", "appcompat", "1.1.0")
 }

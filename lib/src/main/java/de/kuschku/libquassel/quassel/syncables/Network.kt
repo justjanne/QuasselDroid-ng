@@ -20,13 +20,14 @@
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.*
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helper.getOr
 import de.kuschku.libquassel.util.helper.serializeString
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
@@ -34,6 +35,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.nio.ByteBuffer
 import java.util.*
 
+@Suppress("MemberVisibilityCanBePrivate")
 class Network constructor(
   networkId: NetworkId,
   proxy: SignalProxy
@@ -52,11 +54,11 @@ class Network constructor(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "Caps" to QVariant.of(initCaps(), Type.QVariantMap),
-    "CapsEnabled" to QVariant.of(initCapsEnabled(), Type.QVariantList),
-    "IrcUsersAndChannels" to QVariant.of(initIrcUsersAndChannels(), Type.QVariantMap),
-    "ServerList" to QVariant.of(initServerList(), Type.QVariantList),
-    "Supports" to QVariant.of(initSupports(), Type.QVariantMap)
+    "Caps" to QVariant.of(initCaps(), QtType.QVariantMap),
+    "CapsEnabled" to QVariant.of(initCapsEnabled(), QtType.QVariantList),
+    "IrcUsersAndChannels" to QVariant.of(initIrcUsersAndChannels(), QtType.QVariantMap),
+    "ServerList" to QVariant.of(initServerList(), QtType.QVariantList),
+    "Supports" to QVariant.of(initSupports(), QtType.QVariantMap)
   ) + initProperties()
 
   fun isMyNick(nick: String) = myNick().equals(nick, true)
@@ -136,9 +138,9 @@ class Network constructor(
   fun nicks() = _ircUsers.values.map(IrcUser::nick)
   fun channels(): Set<String> = _ircChannels.keys
   fun caps(): Set<String> = _caps.keys
-  fun liveCaps() = live_caps.map { caps() }
+  fun liveCaps(): Observable<Set<String>> = live_caps.map { caps() }
   fun capsEnabled(): Set<String> = _capsEnabled
-  fun livecapsEnabled() = live_capsEnabled.map { capsEnabled() }
+  fun livecapsEnabled(): Observable<Set<String>> = live_capsEnabled.map { capsEnabled() }
   fun serverList() = _serverList
   fun useRandomServer() = _useRandomServer
   fun perform() = _perform
@@ -184,11 +186,11 @@ class Network constructor(
     unlimitedMessageRate = unlimitedMessageRate()
   )
 
-  fun liveNetworkInfo() = live_networkInfo.map { networkInfo() }
+  fun liveNetworkInfo(): Observable<NetworkInfo> = live_networkInfo.map { networkInfo() }
 
   override fun setNetworkInfo(info: NetworkInfo) {
     // we don't set our ID!
-    if (!info.networkName.isEmpty() && info.networkName != networkName())
+    if (info.networkName.isNotEmpty() && info.networkName != networkName())
       setNetworkName(info.networkName)
     if (info.identity.isValidId() && info.identity != identity())
       setIdentity(info.identity)
@@ -200,7 +202,7 @@ class Network constructor(
       setCodecForDecoding(info.codecForDecoding)
     // FIXME compare components
     if (info.serverList.isNotEmpty())
-      setServerList(info.serverList.map { QVariant.of(it.toVariantMap(), QType.Network_Server) })
+      setServerList(info.serverList.map { QVariant.of(it.toVariantMap(), QuasselType.Network_Server) })
     if (info.useRandomServer != useRandomServer())
       setUseRandomServer(info.useRandomServer)
     if (info.perform != perform())
@@ -291,8 +293,8 @@ class Network constructor(
   fun channelModes(): Map<ChannelModeType, Set<Char>>? = _channelModes
 
   fun supports(): Map<String, String?> = _supports
-  fun liveSupports() = live_supports.map { supports() }
-  fun supports(param: String) = _supports.contains(param.toUpperCase(Locale.US))
+  fun liveSupports(): Observable<Map<String, String?>> = live_supports.map { supports() }
+  fun supports(param: String) = _supports.contains(param.uppercase(Locale.ROOT))
   fun support(param: String) = _supports.getOr(param, "")
   /**
    * Checks if a given capability is advertised by the server.
@@ -304,7 +306,7 @@ class Network constructor(
    * @param capability Name of capability
    * @return True if connected and advertised by the server, otherwise false
    */
-  fun capAvailable(capability: String) = _caps.contains(capability.toLowerCase(Locale.US))
+  fun capAvailable(capability: String) = _caps.contains(capability.lowercase(Locale.ROOT))
 
   /**
    * Checks if a given capability is acknowledged and active.
@@ -312,7 +314,7 @@ class Network constructor(
    * @param capability Name of capability
    * @return True if acknowledged (active), otherwise false
    */
-  fun capEnabled(capability: String) = _capsEnabled.contains(capability.toLowerCase(Locale.US))
+  fun capEnabled(capability: String) = _capsEnabled.contains(capability.lowercase(Locale.ROOT))
 
   /**
    * Gets the value of an available capability, e.g. for SASL, "EXTERNAL,PLAIN".
@@ -320,7 +322,7 @@ class Network constructor(
    * @param capability Name of capability
    * @return Value of capability if one was specified, otherwise isEmpty string
    */
-  fun capValue(capability: String) = _caps.getOr(capability.toLowerCase(Locale.US), "")
+  fun capValue(capability: String) = _caps.getOr(capability.lowercase(Locale.ROOT), "")
 
   /**
    * Check if the given authentication mechanism is likely to be supported.
@@ -371,17 +373,17 @@ class Network constructor(
   }
 
   fun ircUser(nickName: String?) = _ircUsers[caseMapper.toLowerCaseNullable(nickName)]
-  fun liveIrcUser(nickName: String?) = live_ircUsers.map {
+  fun liveIrcUser(nickName: String?): Observable<IrcUser> = live_ircUsers.map {
     ircUser(nickName) ?: IrcUser.NULL
   }.distinctUntilChanged()
 
   fun ircUsers() = _ircUsers.values.toList()
-  fun liveIrcUsers() = live_ircUsers.map {
+  fun liveIrcUsers(): Observable<List<IrcUser>> = live_ircUsers.map {
     ircUsers()
   }
 
   fun ircUserCount(): UInt = _ircUsers.size.toUInt()
-  fun liveIrcUserCount() = live_ircUsers.map {
+  fun liveIrcUserCount(): Observable<UInt> = live_ircUsers.map {
     ircUserCount()
   }
 
@@ -405,19 +407,19 @@ class Network constructor(
     }
 
   fun ircChannel(channelName: String?) = _ircChannels[channelName?.let(caseMapper::toLowerCase)]
-  fun liveIrcChannel(channelName: String?) = live_ircChannels.map {
+  fun liveIrcChannel(channelName: String?): Observable<IrcChannel> = live_ircChannels.map {
     ircChannel(
       channelName
     ) ?: IrcChannel.NULL
   }.distinctUntilChanged()
 
   fun ircChannels() = _ircChannels.values.toList()
-  fun liveIrcChannels() = live_ircChannels.map {
+  fun liveIrcChannels(): Observable<List<IrcChannel>> = live_ircChannels.map {
     ircChannels()
   }
 
   fun ircChannelCount(): UInt = _ircChannels.size.toUInt()
-  fun liveIrcChannelCount() = live_ircChannels.map {
+  fun liveIrcChannelCount(): Observable<UInt> = live_ircChannels.map {
     ircChannelCount()
   }
 
@@ -441,16 +443,16 @@ class Network constructor(
     _autoAwayActive = active
   }
 
-  override fun setNetworkName(networkName: String?) {
-    if (_networkName == networkName ?: "")
+  override fun setNetworkName(networkName: String) {
+    if (_networkName == networkName)
       return
-    _networkName = networkName ?: ""
+    _networkName = networkName
   }
 
-  override fun setCurrentServer(currentServer: String?) {
-    if (_currentServer == currentServer ?: "")
+  override fun setCurrentServer(currentServer: String) {
+    if (_currentServer == currentServer)
       return
-    _currentServer = currentServer ?: ""
+    _currentServer = currentServer
   }
 
   override fun setConnected(isConnected: Boolean) {
@@ -471,12 +473,12 @@ class Network constructor(
     live_connectionState.onNext(_connectionState)
   }
 
-  override fun setMyNick(mynick: String?) {
-    if (_myNick == mynick)
+  override fun setMyNick(myNick: String) {
+    if (_myNick == myNick)
       return
-    _myNick = mynick
-    if (_myNick != null && _myNick.isNullOrEmpty() && ircUser(myNick()) == null) {
-      newIrcUser(myNick() ?: "")
+    _myNick = myNick
+    if (_myNick.isEmpty() && ircUser(myNick()) == null) {
+      newIrcUser(myNick())
     }
   }
 
@@ -486,22 +488,22 @@ class Network constructor(
     _latency = latency
   }
 
-  override fun setIdentity(identity: IdentityId) {
-    if (_identity == identity)
+  override fun setIdentity(identityId: IdentityId) {
+    if (_identity == identityId)
       return
-    _identity = identity
+    _identity = identityId
   }
 
-  override fun setActualServerList(serverList: List<INetwork.Server>) {
+  override fun setActualServerList(serverList: List<Server>) {
     if (_serverList == serverList)
       return
     _serverList = serverList
   }
 
-  override fun setUseRandomServer(randomServer: Boolean) {
-    if (_useRandomServer == randomServer)
+  override fun setUseRandomServer(useRandomServer: Boolean) {
+    if (_useRandomServer == useRandomServer)
       return
-    _useRandomServer = randomServer
+    _useRandomServer = useRandomServer
   }
 
   override fun setPerform(perform: QStringList) {
@@ -511,64 +513,64 @@ class Network constructor(
     _perform = actualPerform
   }
 
-  override fun setUseAutoIdentify(autoIdentify: Boolean) {
-    if (_useAutoIdentify == autoIdentify)
+  override fun setUseAutoIdentify(useAutoIdentify: Boolean) {
+    if (_useAutoIdentify == useAutoIdentify)
       return
-    _useAutoIdentify = autoIdentify
+    _useAutoIdentify = useAutoIdentify
   }
 
-  override fun setAutoIdentifyService(service: String?) {
-    if (_autoIdentifyService == service ?: "")
+  override fun setAutoIdentifyService(autoIdentifyService: String) {
+    if (_autoIdentifyService == autoIdentifyService)
       return
-    _autoIdentifyService = service ?: ""
+    _autoIdentifyService = autoIdentifyService
   }
 
-  override fun setAutoIdentifyPassword(password: String?) {
-    if (_autoIdentifyPassword == password ?: "")
+  override fun setAutoIdentifyPassword(autoIdentifyPassword: String) {
+    if (_autoIdentifyPassword == autoIdentifyPassword)
       return
-    _autoIdentifyPassword = password ?: ""
+    _autoIdentifyPassword = autoIdentifyPassword
   }
 
-  override fun setUseSasl(sasl: Boolean) {
-    if (_useSasl == sasl)
+  override fun setUseSasl(useSasl: Boolean) {
+    if (_useSasl == useSasl)
       return
-    _useSasl = sasl
+    _useSasl = useSasl
   }
 
-  override fun setSaslAccount(account: String?) {
-    if (_saslAccount == account ?: "")
+  override fun setSaslAccount(saslAccount: String) {
+    if (_saslAccount == saslAccount)
       return
-    _saslAccount = account ?: ""
+    _saslAccount = saslAccount
   }
 
-  override fun setSaslPassword(password: String?) {
-    if (_saslPassword == password ?: "")
+  override fun setSaslPassword(saslPassword: String) {
+    if (_saslPassword == saslPassword)
       return
-    _saslPassword = password ?: ""
+    _saslPassword = saslPassword
   }
 
-  override fun setUseAutoReconnect(autoReconnect: Boolean) {
-    if (_useAutoReconnect == autoReconnect)
+  override fun setUseAutoReconnect(useAutoReconnect: Boolean) {
+    if (_useAutoReconnect == useAutoReconnect)
       return
-    _useAutoReconnect = autoReconnect
+    _useAutoReconnect = useAutoReconnect
   }
 
-  override fun setAutoReconnectInterval(interval: UInt) {
-    if (_autoReconnectInterval == interval)
+  override fun setAutoReconnectInterval(autoReconnectInterval: UInt) {
+    if (_autoReconnectInterval == autoReconnectInterval)
       return
-    _autoReconnectInterval = interval
+    _autoReconnectInterval = autoReconnectInterval
   }
 
-  override fun setAutoReconnectRetries(retries: UShort) {
-    if (_autoReconnectRetries == retries)
+  override fun setAutoReconnectRetries(autoReconnectRetries: UShort) {
+    if (_autoReconnectRetries == autoReconnectRetries)
       return
-    _autoReconnectRetries = retries
+    _autoReconnectRetries = autoReconnectRetries
   }
 
-  override fun setUnlimitedReconnectRetries(unlimitedRetries: Boolean) {
-    if (_unlimitedReconnectRetries == unlimitedRetries)
+  override fun setUnlimitedReconnectRetries(unlimitedReconnectRetries: Boolean) {
+    if (_unlimitedReconnectRetries == unlimitedReconnectRetries)
       return
-    _unlimitedReconnectRetries = unlimitedRetries
+    _unlimitedReconnectRetries = unlimitedReconnectRetries
   }
 
   override fun setRejoinChannels(rejoinChannels: Boolean) {
@@ -582,78 +584,75 @@ class Network constructor(
    *
    * Setting limits too low may value you disconnected from the server!
    *
-   * @param useCustomRate If true, use custom rate limits, otherwise use Quassel defaults.
+   * @param useCustomMessageRate If true, use custom rate limits, otherwise use Quassel defaults.
    */
-  override fun setUseCustomMessageRate(useCustomRate: Boolean) {
-    if (_useCustomMessageRate == useCustomRate)
+  override fun setUseCustomMessageRate(useCustomMessageRate: Boolean) {
+    if (_useCustomMessageRate == useCustomMessageRate)
       return
-    _useCustomMessageRate = useCustomRate
+    _useCustomMessageRate = useCustomMessageRate
   }
 
-  override fun setMessageRateBurstSize(burstSize: UInt) {
-    if (_messageRateBurstSize == burstSize)
+  override fun setMessageRateBurstSize(messageRateBurstSize: UInt) {
+    if (_messageRateBurstSize == messageRateBurstSize)
       return
-    if (burstSize == 0u)
-      throw IllegalArgumentException("Message Burst Size must be a positive number: $burstSize")
-    _messageRateBurstSize = burstSize
+    if (messageRateBurstSize == 0u)
+      throw IllegalArgumentException("Message Burst Size must be a positive number: $messageRateBurstSize")
+    _messageRateBurstSize = messageRateBurstSize
   }
 
-  override fun setMessageRateDelay(messageDelay: UInt) {
-    if (_messageRateDelay == messageDelay)
+  override fun setMessageRateDelay(messageRateDelay: UInt) {
+    if (_messageRateDelay == messageRateDelay)
       return
-    if (messageDelay == 0u)
-      throw IllegalArgumentException("Message Delay must be a positive number: $messageDelay")
-    _messageRateDelay = messageDelay
+    if (messageRateDelay == 0u)
+      throw IllegalArgumentException("Message Delay must be a positive number: $messageRateDelay")
+    _messageRateDelay = messageRateDelay
   }
 
-  override fun setUnlimitedMessageRate(unlimitedRate: Boolean) {
-    if (_unlimitedMessageRate == unlimitedRate)
+  override fun setUnlimitedMessageRate(unlimitedMessageRate: Boolean) {
+    if (_unlimitedMessageRate == unlimitedMessageRate)
       return
-    _unlimitedMessageRate = unlimitedRate
+    _unlimitedMessageRate = unlimitedMessageRate
   }
 
-  override fun setCodecForDecoding(codecName: ByteBuffer?) {
-    if (codecName != null)
-      setCodecForDecoding(Charsets.ISO_8859_1.decode(codecName).toString())
+  override fun setCodecForDecoding(codecForDecoding: ByteBuffer) {
+    setCodecForDecoding(Charsets.ISO_8859_1.decode(codecForDecoding).toString())
   }
 
-  override fun setCodecForEncoding(codecName: ByteBuffer?) {
-    if (codecName != null)
-      setCodecForEncoding(Charsets.ISO_8859_1.decode(codecName).toString())
+  override fun setCodecForEncoding(codecForEncoding: ByteBuffer) {
+    setCodecForEncoding(Charsets.ISO_8859_1.decode(codecForEncoding).toString())
   }
 
-  override fun setCodecForServer(codecName: ByteBuffer?) {
-    if (codecName != null)
-      setCodecForServer(Charsets.ISO_8859_1.decode(codecName).toString())
+  override fun setCodecForServer(codecForServer: ByteBuffer) {
+    setCodecForServer(Charsets.ISO_8859_1.decode(codecForServer).toString())
   }
 
-  override fun addSupport(param: String?, value: String?) {
-    _supports[param ?: ""] = value
+  override fun addSupport(param: String, value: String) {
+    _supports[param] = value
   }
 
-  override fun removeSupport(param: String?) {
-    if (!_supports.contains(param ?: ""))
+  override fun removeSupport(param: String) {
+    if (!_supports.contains(param))
       return
-    _supports.remove(param ?: "")
+    _supports.remove(param)
   }
 
-  override fun addCap(capability: String, value: String?) {
-    _caps[capability.toLowerCase(Locale.US)] = value
+  override fun addCap(capability: String, value: String) {
+    _caps[capability.lowercase(Locale.ROOT)] = value
   }
 
-  override fun acknowledgeCap(capability: String?) {
-    val lowerCase = capability?.toLowerCase(Locale.US)
-    if (!_capsEnabled.contains(lowerCase ?: ""))
+  override fun acknowledgeCap(capability: String) {
+    val lowerCase = capability.lowercase(Locale.ROOT)
+    if (!_capsEnabled.contains(lowerCase))
       return
-    _capsEnabled.add(lowerCase ?: "")
+    _capsEnabled.add(lowerCase)
   }
 
-  override fun removeCap(capability: String?) {
-    val lowerCase = capability?.toLowerCase(Locale.US)
-    if (!_caps.contains(lowerCase ?: ""))
+  override fun removeCap(capability: String) {
+    val lowerCase = capability.lowercase(Locale.ROOT)
+    if (!_caps.contains(lowerCase))
       return
-    _caps.remove(lowerCase ?: "")
-    _capsEnabled.remove(lowerCase ?: "")
+    _caps.remove(lowerCase)
+    _capsEnabled.remove(lowerCase)
   }
 
   override fun clearCaps() {
@@ -663,89 +662,89 @@ class Network constructor(
     _capsEnabled.clear()
   }
 
-  override fun addIrcUser(hostmask: String?) {
-    newIrcUser(hostmask ?: "")
+  override fun addIrcUser(hostmask: String) {
+    newIrcUser(hostmask)
   }
 
-  override fun addIrcChannel(channel: String?) {
-    newIrcChannel(channel ?: "")
+  override fun addIrcChannel(channel: String) {
+    newIrcChannel(channel)
   }
 
-  override fun initSupports(): QVariantMap = _supports.entries.map { (key, value) ->
-    key to QVariant.of(value, Type.QString)
-  }.toMap()
+  override fun initSupports(): QVariantMap = _supports.entries.associate { (key, value) ->
+    key to QVariant.of(value, QtType.QString)
+  }
 
-  override fun initCaps(): QVariantMap = _caps.entries.map { (key, value) ->
-    key to QVariant.of(value, Type.QString)
-  }.toMap()
+  override fun initCaps(): QVariantMap = _caps.entries.associate { (key, value) ->
+    key to QVariant.of(value, QtType.QString)
+  }
 
   override fun initCapsEnabled(): QVariantList = _capsEnabled.map {
-    QVariant.of(it, Type.QString)
+    QVariant.of(it, QtType.QString)
   }.toList()
 
   override fun initServerList(): QVariantList = _serverList.map {
-    QVariant.of(it.toVariantMap(), QType.Network_Server)
+    QVariant.of(it.toVariantMap(), QuasselType.Network_Server)
   }.toList()
 
   override fun initIrcUsersAndChannels(): QVariantMap {
     return mapOf(
       "Users" to QVariant.of(
         _ircUsers.values.map { it.toVariantMap() }.transpose().mapValues { (_, value) ->
-          QVariant.of(value, Type.QVariantList)
+          QVariant.of(value, QtType.QVariantList)
         },
-        Type.QVariantMap
+        QtType.QVariantMap
       ),
       "Channels" to QVariant.of(
         _ircChannels.values.map { it.toVariantMap() }.transpose().mapValues { (_, value) ->
-          QVariant.of(value, Type.QVariantList)
+          QVariant.of(value, QtType.QVariantList)
         },
-        Type.QVariantMap
+        QtType.QVariantMap
       )
     )
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "networkName" to QVariant.of(networkName(), Type.QString),
-    "currentServer" to QVariant.of(currentServer(), Type.QString),
-    "myNick" to QVariant.of(myNick(), Type.QString),
-    "latency" to QVariant.of(latency(), Type.Int),
+    "networkName" to QVariant.of(networkName(), QtType.QString),
+    "currentServer" to QVariant.of(currentServer(), QtType.QString),
+    "myNick" to QVariant.of(myNick(), QtType.QString),
+    "latency" to QVariant.of(latency(), QtType.Int),
     "codecForServer" to QVariant.of(
-      codecForServer().serializeString(StringSerializer.UTF8), Type.QByteArray
+      codecForServer().serializeString(StringSerializer.UTF8), QtType.QByteArray
     ),
     "codecForEncoding" to QVariant.of(
-      codecForEncoding().serializeString(StringSerializer.UTF8), Type.QByteArray
+      codecForEncoding().serializeString(StringSerializer.UTF8), QtType.QByteArray
     ),
     "codecForDecoding" to QVariant.of(
-      codecForDecoding().serializeString(StringSerializer.UTF8), Type.QByteArray
+      codecForDecoding().serializeString(StringSerializer.UTF8), QtType.QByteArray
     ),
-    "identityId" to QVariant.of(identity(), QType.IdentityId),
-    "isConnected" to QVariant.of(isConnected(), Type.Bool),
-    "connectionState" to QVariant.of(connectionState().value, Type.Int),
-    "useRandomServer" to QVariant.of(useRandomServer(), Type.Bool),
-    "perform" to QVariant.of(perform(), Type.QStringList),
-    "useAutoIdentify" to QVariant.of(useAutoIdentify(), Type.Bool),
-    "autoIdentifyService" to QVariant.of(autoIdentifyService(), Type.QString),
-    "autoIdentifyPassword" to QVariant.of(autoIdentifyPassword(), Type.QString),
-    "useSasl" to QVariant.of(useSasl(), Type.Bool),
-    "saslAccount" to QVariant.of(saslAccount(), Type.QString),
-    "saslPassword" to QVariant.of(saslPassword(), Type.QString),
-    "useAutoReconnect" to QVariant.of(useAutoReconnect(), Type.Bool),
-    "autoReconnectInterval" to QVariant.of(autoReconnectInterval(), Type.UInt),
-    "autoReconnectRetries" to QVariant.of(autoReconnectRetries(), Type.UShort),
-    "unlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries(), Type.Bool),
-    "rejoinChannels" to QVariant.of(rejoinChannels(), Type.Bool),
-    "useCustomMessageRate" to QVariant.of(useCustomMessageRate(), Type.Bool),
-    "msgRateBurstSize" to QVariant.of(messageRateBurstSize(), Type.UInt),
-    "msgRateMessageDelay" to QVariant.of(messageRateDelay(), Type.UInt),
-    "unlimitedMessageRate" to QVariant.of(unlimitedMessageRate(), Type.Bool)
+    "identityId" to QVariant.of(identity(), QuasselType.IdentityId),
+    "isConnected" to QVariant.of(isConnected(), QtType.Bool),
+    "connectionState" to QVariant.of(connectionState().value, QtType.Int),
+    "useRandomServer" to QVariant.of(useRandomServer(), QtType.Bool),
+    "perform" to QVariant.of(perform(), QtType.QStringList),
+    "useAutoIdentify" to QVariant.of(useAutoIdentify(), QtType.Bool),
+    "autoIdentifyService" to QVariant.of(autoIdentifyService(), QtType.QString),
+    "autoIdentifyPassword" to QVariant.of(autoIdentifyPassword(), QtType.QString),
+    "useSasl" to QVariant.of(useSasl(), QtType.Bool),
+    "saslAccount" to QVariant.of(saslAccount(), QtType.QString),
+    "saslPassword" to QVariant.of(saslPassword(), QtType.QString),
+    "useAutoReconnect" to QVariant.of(useAutoReconnect(), QtType.Bool),
+    "autoReconnectInterval" to QVariant.of(autoReconnectInterval(), QtType.UInt),
+    "autoReconnectRetries" to QVariant.of(autoReconnectRetries(), QtType.UShort),
+    "unlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries(), QtType.Bool),
+    "rejoinChannels" to QVariant.of(rejoinChannels(), QtType.Bool),
+    "useCustomMessageRate" to QVariant.of(useCustomMessageRate(), QtType.Bool),
+    "msgRateBurstSize" to QVariant.of(messageRateBurstSize(), QtType.UInt),
+    "msgRateMessageDelay" to QVariant.of(messageRateDelay(), QtType.UInt),
+    "unlimitedMessageRate" to QVariant.of(unlimitedMessageRate(), QtType.Bool)
   )
 
   override fun initSetSupports(supports: QVariantMap) {
-    supports.entries.map { (key, value) -> key to value.value("") }.toMap(_supports)
+    supports.mapValues { (_, value) -> value.value("") }.toMap(_supports)
   }
 
   override fun initSetCaps(caps: QVariantMap) {
-    caps.entries.map { (key, value) -> key to value.value("") }.toMap(_caps)
+    caps.mapValues { (_, value) -> value.value("") }.toMap(_caps)
   }
 
   override fun initSetCapsEnabled(capsEnabled: QVariantList) {
@@ -827,14 +826,11 @@ class Network constructor(
     }
   }
 
-  override fun ircUserNickChanged(old: String?, new: String?) {
-    val value = _ircUsers.remove(caseMapper.toLowerCase(old ?: ""))
+  override fun ircUserNickChanged(old: String, new: String) {
+    val value = _ircUsers.remove(caseMapper.toLowerCase(old))
     if (value != null) {
-      _ircUsers[caseMapper.toLowerCase(new ?: "")] = value
+      _ircUsers[caseMapper.toLowerCase(new)] = value
     }
-  }
-
-  override fun emitConnectionError(error: String?) {
   }
 
   fun removeChansAndUsers() {
@@ -870,7 +866,7 @@ class Network constructor(
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _myNick: String? = null
+  private var _myNick: String = ""
   private var _latency: Int = 0
     set(value) {
       field = value

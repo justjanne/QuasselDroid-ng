@@ -19,37 +19,55 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.protocol.Type
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
+import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.QStringList
+import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
+import de.kuschku.libquassel.protocol.qVariant
 
-@Syncable(name = "IrcListHelper")
+@SyncedObject("IrcListHelper")
 interface IIrcListHelper : ISyncableObject {
-  @Slot
+  @SyncedCall(target = ProtocolSide.CORE)
   fun requestChannelList(netId: NetworkId, channelFilters: QStringList): QVariantList {
-    REQUEST(
-      "requestChannelList", ARG(netId, QType.NetworkId),
-      ARG(channelFilters, Type.QStringList)
+    sync(
+      target = ProtocolSide.CORE,
+      "requestChannelList",
+      qVariant(netId, QuasselType.NetworkId),
+      qVariant(channelFilters, QtType.QStringList),
     )
     return emptyList()
   }
 
-  @Slot
-  fun receiveChannelList(netId: NetworkId, channelFilters: QStringList, channels: QVariantList)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun receiveChannelList(netId: NetworkId, channelFilters: QStringList, channels: QVariantList) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "receiveChannelList",
+      qVariant(netId, QuasselType.NetworkId),
+      qVariant(channelFilters, QtType.QStringList),
+      qVariant(channels, QtType.QVariantList),
+    )
+  }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun reportError(error: String?) {
-    SYNC("reportError", ARG(error, Type.QString))
+    sync(
+      target = ProtocolSide.CLIENT,
+      "reportError",
+      qVariant(error, QtType.QString),
+    )
   }
 
-  @Slot
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun reportFinishedList(netId: NetworkId) {
-    SYNC("reportFinishedList", ARG(netId, QType.NetworkId))
-  }
-
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+    sync(
+      target = ProtocolSide.CLIENT,
+      "reportFinishedList",
+      qVariant(netId, QuasselType.NetworkId),
+    )
   }
 }

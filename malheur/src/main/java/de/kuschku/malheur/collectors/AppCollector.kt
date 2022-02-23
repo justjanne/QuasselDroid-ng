@@ -45,6 +45,7 @@ class AppCollector(private val application: Application) : Collector<AppInfo, Ap
       )
     },
     installationSource = collectIf(config.installationSource) {
+      @Suppress("DEPRECATION")
       application.packageManager.getInstallerPackageName(application.packageName)
     }
   )

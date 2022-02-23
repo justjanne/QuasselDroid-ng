@@ -21,17 +21,17 @@ package de.kuschku.libquassel.protocol.message
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.protocol.value
 import de.kuschku.libquassel.util.flag.Flags
 
 object ClientInitSerializer : HandshakeMessageSerializer<HandshakeMessage.ClientInit> {
   override fun serialize(data: HandshakeMessage.ClientInit) = mapOf(
-    "MsgType" to QVariant.of("ClientInit", Type.QString),
-    "ClientVersion" to QVariant.of(data.clientVersion, Type.QString),
-    "ClientDate" to QVariant.of(data.buildDate, Type.QString),
-    "Features" to QVariant.of(data.clientFeatures?.toUInt(), Type.UInt),
-    "FeatureList" to QVariant.of(data.featureList, Type.QStringList)
+    "MsgType" to QVariant.of("ClientInit", QtType.QString),
+    "ClientVersion" to QVariant.of(data.clientVersion, QtType.QString),
+    "ClientDate" to QVariant.of(data.buildDate, QtType.QString),
+    "Features" to QVariant.of(data.clientFeatures?.toUInt(), QtType.UInt),
+    "FeatureList" to QVariant.of(data.featureList, QtType.QStringList)
   )
 
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientInit(

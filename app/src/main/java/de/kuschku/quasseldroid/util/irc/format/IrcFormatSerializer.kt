@@ -101,12 +101,12 @@ class IrcFormatSerializer @Inject constructor(context: Context) {
       out.append(CODE_COLOR)
       if (foreground == null && background != null) {
         out.append(
-          String.format(Locale.US, "%02d,%02d", this.colorForegroundMirc, background)
+          String.format(Locale.ROOT, "%02d,%02d", this.colorForegroundMirc, background)
         )
       } else if (background == null && foreground != null) {
-        out.append(String.format(Locale.US, "%02d", foreground))
+        out.append(String.format(Locale.ROOT, "%02d", foreground))
       } else if (background != null && foreground != null) {
-        out.append(String.format(Locale.US, "%02d,%02d", foreground, background))
+        out.append(String.format(Locale.ROOT, "%02d,%02d", foreground, background))
       }
     }
 
@@ -119,15 +119,15 @@ class IrcFormatSerializer @Inject constructor(context: Context) {
     fun writeHexColor(foreground: Int?, background: Int?) {
       out.append(CODE_HEXCOLOR)
       if (foreground != null) {
-        out.append(String.format(Locale.US, "%06x", foreground and 0x00FFFFFF))
+        out.append(String.format(Locale.ROOT, "%06x", foreground and 0x00FFFFFF))
         if (background != null) {
           out.append(',')
-          out.append(String.format(Locale.US, "%06x", background and 0x00FFFFFF))
+          out.append(String.format(Locale.ROOT, "%06x", background and 0x00FFFFFF))
         }
       } else if (background != null) {
-        out.append(String.format(Locale.US, "%06x", this.colorForegroundHex and 0x00FFFFFF))
+        out.append(String.format(Locale.ROOT, "%06x", this.colorForegroundHex and 0x00FFFFFF))
         out.append(',')
-        out.append(String.format(Locale.US, "%06x", background and 0x00FFFFFF))
+        out.append(String.format(Locale.ROOT, "%06x", background and 0x00FFFFFF))
       }
     }
 

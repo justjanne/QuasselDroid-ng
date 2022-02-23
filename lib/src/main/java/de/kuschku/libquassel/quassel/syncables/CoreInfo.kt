@@ -36,7 +36,7 @@ class CoreInfo constructor(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "coreData" to QVariant.of(coreData(), Type.QVariantMap)
+    "coreData" to QVariant.of(coreData(), QtType.QVariantMap)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

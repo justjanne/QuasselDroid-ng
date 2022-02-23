@@ -19,89 +19,233 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
-import de.kuschku.libquassel.annotations.Slot
-import de.kuschku.libquassel.annotations.Syncable
+import de.justjanne.libquassel.annotations.ProtocolSide
+import de.justjanne.libquassel.annotations.SyncedCall
+import de.justjanne.libquassel.annotations.SyncedObject
 import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.qVariant
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import org.threeten.bp.temporal.Temporal
 
-@Syncable(name = "IrcUser")
+@SyncedObject("IrcUser")
 interface IIrcUser : ISyncableObject {
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap, index: Int? = null)
-  @Slot
-  fun addUserModes(modes: String?)
 
   fun joinChannel(channel: IrcChannel, skip_channel_join: Boolean = false)
-  @Slot
-  fun joinChannel(channelname: String?)
-
   fun partChannel(channel: IrcChannel)
-  @Slot
-  fun partChannel(channelname: String?)
 
-  @Slot
-  fun quit()
 
-  @Slot
-  fun removeUserModes(modes: String?)
-
-  @Slot
-  fun setAccount(account: String?)
-
-  @Slot
-  fun setAway(away: Boolean)
-
-  @Slot
-  fun setAwayMessage(awayMessage: String?)
-
-  @Slot
-  fun setEncrypted(encrypted: Boolean)
-
-  @Slot
-  fun setHost(host: String?)
-
-  @Slot
-  fun setIdleTime(idleTime: Temporal)
-
-  @Slot
-  fun setIrcOperator(ircOperator: String?)
-
-  @Slot
-  fun setLastAwayMessage(lastAwayMessage: Int)
-
-  @Slot
-  fun setLastAwayMessageTime(lastAwayMessageTime: Temporal)
-
-  @Slot
-  fun setLoginTime(loginTime: Temporal)
-
-  @Slot
-  fun setNick(nick: String?)
-
-  @Slot
-  fun setRealName(realName: String?)
-
-  @Slot
-  fun setServer(server: String?)
-
-  @Slot
-  fun setSuserHost(suserHost: String?)
-
-  @Slot
-  fun setUser(user: String?)
-
-  @Slot
-  fun setUserModes(modes: String?)
-
-  @Slot
-  fun setWhoisServiceReply(whoisServiceReply: String?)
-
-  @Slot
-  fun updateHostmask(mask: String?)
-
-  @Slot
-  override fun update(properties: QVariantMap) {
-    super.update(properties)
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun addUserModes(modes: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "addUserModes",
+      qVariant(modes, QtType.QString),
+    )
   }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun joinChannel(channelname: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "joinChannel",
+      qVariant(channelname, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun partChannel(channelname: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "partChannel",
+      qVariant(channelname, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun quit() {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "quit",
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun removeUserModes(modes: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "removeUserModes",
+      qVariant(modes, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAccount(account: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAccount",
+      qVariant(account, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAway(away: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAway",
+      qVariant(away, QtType.Bool),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setAwayMessage(awayMessage: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setAwayMessage",
+      qVariant(awayMessage, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setEncrypted(encrypted: Boolean) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setEncrypted",
+      qVariant(encrypted, QtType.Bool),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setHost(host: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setHost",
+      qVariant(host, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setIdleTime(idleTime: Temporal) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setIdleTime",
+      qVariant(idleTime, QtType.QDateTime),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setIrcOperator(ircOperator: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setIrcOperator",
+      qVariant(ircOperator, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setLastAwayMessage(lastAwayMessage: Int) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setLastAwayMessage",
+      qVariant(lastAwayMessage, QtType.Int),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setLastAwayMessageTime(lastAwayMessageTime: Temporal) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setLastAwayMessageTime",
+      qVariant(lastAwayMessageTime, QtType.QDateTime),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setLoginTime(loginTime: Temporal) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setLoginTime",
+      qVariant(loginTime, QtType.QDateTime),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setNick(nick: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setNick",
+      qVariant(nick, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setRealName(realName: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setRealName",
+      qVariant(realName, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setServer(server: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setServer",
+      qVariant(server, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setSuserHost(suserHost: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setSuserHost",
+      qVariant(suserHost, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUser(user: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUser",
+      qVariant(user, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setUserModes(modes: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setUserModes",
+      qVariant(modes, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun setWhoisServiceReply(whoisServiceReply: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "setWhoisServiceReply",
+      qVariant(whoisServiceReply, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  fun updateHostmask(mask: String) {
+    sync(
+      target = ProtocolSide.CLIENT,
+      "updateHostmask",
+      qVariant(mask, QtType.QString),
+    )
+  }
+
+  @SyncedCall(target = ProtocolSide.CLIENT)
+  override fun update(properties: QVariantMap) = super.update(properties)
+
+  @SyncedCall(target = ProtocolSide.CORE)
+  override fun requestUpdate(properties: QVariantMap) = super.requestUpdate(properties)
 }

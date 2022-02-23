@@ -18,12 +18,11 @@
  */
 
 plugins {
-  kotlin("jvm")
-  kotlin("kapt")
+  id("justjanne.kotlin")
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.5.10"))
+  implementation(kotlin("stdlib", "1.6.10"))
 
   implementation("androidx.annotation", "annotation", "1.1.0")
 
@@ -31,7 +30,7 @@ dependencies {
   implementation("io.reactivex.rxjava2", "rxjava", "2.2.12")
 
   implementation(project(":invokerannotations"))
-  kapt(project(":invokergenerator"))
+  ksp(project(":invokergenerator"))
 
   testImplementation("junit", "junit", "4.12")
 }
