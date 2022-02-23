@@ -17,14 +17,24 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.buildFileName = 'build.gradle.kts'
+rootProject.buildFileName = "build.gradle.kts"
 
-include ':app',
-    ':invokerannotations',
-    ':invokergenerator',
-    ':lib',
-    ':lifecycle-ktx',
-    ':malheur',
-    ':persistence',
-    ':viewmodel',
-    ':ui_spinner'
+include(
+  ":app",
+  ":invokerannotations",
+  ":invokergenerator",
+  ":lib",
+  ":lifecycle-ktx",
+  ":malheur",
+  ":persistence",
+  ":viewmodel",
+  ":ui_spinner"
+)
+
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    google()
+    mavenCentral()
+  }
+}

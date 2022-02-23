@@ -19,24 +19,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 plugins {
-  java
-}
-
-buildscript {
-  repositories {
-    google()
-    jcenter()
-  }
-  dependencies {
-    classpath("com.android.tools.build:gradle:4.2.1")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
-  }
+  id("com.android.application") version "7.1.1" apply false
+  id("com.android.library") version "7.1.1" apply false
+  id("org.jetbrains.kotlin.android") version "1.6.10" apply false
 }
 
 allprojects {
   repositories {
     google()
-    jcenter()
+    mavenCentral()
     maven(url = "https://jitpack.io")
   }
 
