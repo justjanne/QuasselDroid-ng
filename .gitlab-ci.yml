@@ -13,22 +13,18 @@ before_script:
   - "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
 
 stages:
-  - "test"
+  - "build"
   - "deploy"
 
 test:
-  stage: "test"
+  stage: "build"
   script:
     - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
     - "cp app/build/outputs/apk/release/*.apk ."
-    - "export VERSION_NAME=$(git describe --abbrev=0 --tags HEAD)"
-    - "export VERSION_CODE=$(git rev-list --count $VERSION_NAME)"
-    - "echo \"{\\\"name\\\":\\\"$VERSION_NAME\\\",\\\"code\\\":$VERSION_CODE}\" > version.json"
     - "./gradlew check -x connectedCheck --stacktrace"
   artifacts:
     paths:
       - "*.apk"
-      - "version.json"
       - "*/build/test-results/**/TEST-*.xml"
       - "*/build/reports/*.xml"
     reports:
@@ -39,12 +35,26 @@ test:
     - if: "$CI_COMMIT_BRANCH == 'main'"
       when: on_success
 
+version:
+  stage: "build"
+  script:
+    - "export VERSION_NAME=$(git describe --abbrev=0 --tags HEAD)"
+    - "export VERSION_CODE=$(git rev-list --count $VERSION_NAME)"
+    - "echo \"{\\\"name\\\":\\\"$VERSION_NAME\\\",\\\"code\\\":$VERSION_CODE}\" > version.json"
+  artifacts:
+    paths:
+      - "version.json"
+  rules:
+    - if: "$CI_COMMIT_BRANCH == 'main'"
+      when: on_success
+
 deploy-local:
   stage: "deploy"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
   cache: { }
   dependencies:
     - "test"
+    - "version"
   script:
     - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
     - "export VERSION=$(ls *.apk)"
