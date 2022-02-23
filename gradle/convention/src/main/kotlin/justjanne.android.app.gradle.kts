@@ -13,7 +13,7 @@ android {
     minSdk = 21
     targetSdk = 31
 
-    applicationId = "${rootProject.group}.${rootProject.name/*.lowercase(Locale.ROOT)*/}"
+    applicationId = "${rootProject.group}.${rootProject.name.toLowerCase(Locale.ROOT)}"
     versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
     versionName = cmd("git", "describe", "--always", "--tags", "HEAD") ?: "1.0.0"
 
