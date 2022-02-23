@@ -23,7 +23,8 @@ import java.io.Serializable
 
 typealias AccountId_Type = Long
 
-inline class AccountId(val id: AccountId_Type) : Comparable<AccountId>, Serializable {
+@JvmInline
+value class AccountId(val id: AccountId_Type) : Comparable<AccountId>, Serializable {
   override fun compareTo(other: AccountId) = id.compareTo(other.id)
   inline fun isValidId() = id >= 0
 

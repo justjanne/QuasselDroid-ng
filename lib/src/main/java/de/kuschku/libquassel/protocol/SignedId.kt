@@ -27,7 +27,8 @@ typealias SignedId64 = Long
 
 typealias MsgId_Type = SignedId64
 
-inline class MsgId(val id: MsgId_Type) : Comparable<MsgId>, Serializable {
+@JvmInline
+value class MsgId(val id: MsgId_Type) : Comparable<MsgId>, Serializable {
   override fun compareTo(other: MsgId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 
@@ -43,7 +44,8 @@ inline class MsgId(val id: MsgId_Type) : Comparable<MsgId>, Serializable {
 
 typealias NetworkId_Type = SignedId
 
-inline class NetworkId(val id: NetworkId_Type) : Comparable<NetworkId>, Serializable {
+@JvmInline
+value class NetworkId(val id: NetworkId_Type) : Comparable<NetworkId>, Serializable {
   override fun compareTo(other: NetworkId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 
@@ -59,7 +61,8 @@ inline class NetworkId(val id: NetworkId_Type) : Comparable<NetworkId>, Serializ
 
 typealias BufferId_Type = SignedId
 
-inline class BufferId(val id: BufferId_Type) : Comparable<BufferId>, Serializable {
+@JvmInline
+value class BufferId(val id: BufferId_Type) : Comparable<BufferId>, Serializable {
   override fun compareTo(other: BufferId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 
@@ -75,7 +78,8 @@ inline class BufferId(val id: BufferId_Type) : Comparable<BufferId>, Serializabl
 
 typealias IdentityId_Type = SignedId
 
-inline class IdentityId(val id: IdentityId_Type) : Comparable<IdentityId>, Serializable {
+@JvmInline
+value class IdentityId(val id: IdentityId_Type) : Comparable<IdentityId>, Serializable {
   override fun compareTo(other: IdentityId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 

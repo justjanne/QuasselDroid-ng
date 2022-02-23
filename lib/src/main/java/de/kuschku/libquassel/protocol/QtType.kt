@@ -113,7 +113,7 @@ enum class QtType(val id: kotlin.Int, val serializer: Serializer<*>? = null) {
     get() = if (name.startsWith("Q")) {
       name
     } else {
-      name.toLowerCase(Locale.ENGLISH)
+      name.lowercase(Locale.ENGLISH)
     }
 
   companion object {
