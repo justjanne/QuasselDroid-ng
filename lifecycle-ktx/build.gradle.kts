@@ -21,9 +21,6 @@ plugins {id("justjanne.kotlin")
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.6.10"))
-
-  implementation("androidx.annotation", "annotation", "1.1.0")
-
-  implementation("androidx.lifecycle", "lifecycle-common", "2.1.0")
+  implementation(libs.androidx.annotation)
+  implementation(libs.androidx.lifecycle.common)
 }

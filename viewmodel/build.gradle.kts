@@ -22,21 +22,19 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.6.10"))
-
-  implementation("androidx.appcompat", "appcompat", "1.1.0")
-  withVersion("2.2.0") {
-    implementation("androidx.lifecycle", "lifecycle-extensions", version)
-    implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
-  }
+  implementation(libs.androidx.appcompat)
+  implementation(libs.androidx.lifecycle.extensions)
+  implementation(libs.androidx.lifecycle.reactivestreams)
 
   // Utility
-  implementation("io.reactivex.rxjava2", "rxandroid", "2.1.1")
-  implementation("io.reactivex.rxjava2", "rxjava", "2.2.12")
-  implementation("org.threeten", "threetenbp", "1.4.0", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "17.0.0")
+  implementation(libs.rxjava.android)
+  implementation(libs.rxjava.java)
+  implementation(libs.threetenbp) {
+    artifact { classifier = "no-tzdb" }
+  }
+  implementation(libs.annotations.jetbrains)
 
-  implementation("javax.inject", "javax.inject", "1")
+  implementation(libs.annotations.inject)
 
   // Quassel
   implementation(project(":persistence"))
@@ -44,13 +42,5 @@ dependencies {
     exclude(group = "org.threeten", module = "threetenbp")
   }
 
-  testImplementation("junit", "junit", "4.12")
-}
-
-data class VersionContext<T>(val version: T)
-
-inline fun <T> withVersion(version: T?, f: VersionContext<T>.() -> Unit) {
-  version?.let {
-    f.invoke(VersionContext(version))
-  }
+  testImplementation(libs.junit)
 }

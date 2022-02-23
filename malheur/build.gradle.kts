@@ -22,8 +22,6 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.6.10"))
-
-  implementation("com.google.code.gson", "gson", "2.8.5")
-  implementation("androidx.annotation", "annotation", "1.1.0")
+  implementation(libs.gson)
+  implementation(libs.androidx.annotation)
 }

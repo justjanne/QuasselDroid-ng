@@ -8,6 +8,10 @@ plugins {
   kotlin("kapt")
 }
 
+dependencies {
+  implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
+}
+
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     freeCompilerArgs = listOf(
