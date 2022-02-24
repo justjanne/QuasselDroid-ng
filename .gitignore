@@ -1,0 +1,11 @@
+*.iml
+.gradle
+/local.properties
+/signing.properties
+/.idea/*
+!/.idea/copyright/
+.DS_Store
+/captures
+build/
+/reports/
+/persistence/schemas/

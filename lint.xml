@@ -1,0 +1,53 @@
+<!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Mareike Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<lint>
+  <issue id="NewerVersionAvailable" severity="error" />
+
+  <!-- Because of course paging and room have incompatible versions -->
+  <issue id="GradleCompatible" severity="ignore" />
+
+  <!-- Because these are entirely broken -->
+  <issue id="ResourceType" severity="ignore" />
+  <issue id="UnusedResources" severity="ignore" />
+  <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+  <issue id="UnusedAttribute" severity="informational" />
+
+  <!-- Because this doesn’t work when using splash themes -->
+  <issue id="Overdraw" severity="ignore" />
+
+  <!-- Can’t request a translation without a release, can’t release without translation -->
+  <issue id="MissingTranslation" severity="informational" />
+  <!-- Because we don’t use app bundles and never will use them -->
+  <issue id="AppBundleLocaleChanges" severity="informational" />
+  <!-- Because this tries to apply english orthography to other locales -->
+  <issue id="Typos" severity="ignore" />
+
+  <!-- Because Autofill isn’t a priority at the moment -->
+  <issue id="Autofill" severity="informational" />
+
+  <!-- We’re not using AGP 5 yet, and once we are, we’ll use compose anyway -->
+  <issue id="NonConstantResourceId" severity="informational" />
+
+  <!-- It’s only used for testing -->
+  <issue id="TrustAllX509TrustManager" severity="informational" />
+
+  <!-- TODO for the future -->
+  <issue id="DataExtractionRules" severity="informational" />
+</lint>
