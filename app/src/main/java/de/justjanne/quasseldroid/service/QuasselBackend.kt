@@ -15,7 +15,7 @@ import de.justjanne.quasseldroid.util.lifecycle.LifecycleStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class QuasselBackend : DefaultContextualLifecycleObserver(), ServiceConnection,
-  StateHolder<ClientSession?> {
+  StateHolder<ClientSessionWrapper?> {
   private var connectionData: ConnectionData? = null
 
   override fun flow() = state.flatMap()

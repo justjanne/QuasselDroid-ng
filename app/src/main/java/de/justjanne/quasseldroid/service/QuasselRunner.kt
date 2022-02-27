@@ -8,6 +8,7 @@ import de.justjanne.libquassel.protocol.connection.ProtocolVersion
 import de.justjanne.libquassel.protocol.features.FeatureSet
 import de.justjanne.libquassel.protocol.io.CoroutineChannel
 import de.justjanne.libquassel.protocol.util.StateHolder
+import de.justjanne.quasseldroid.messages.MessageStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,16 +21,16 @@ import javax.net.ssl.SSLContext
 class QuasselRunner(
   private val address: InetSocketAddress,
   private val auth: Pair<String, String>
-) : Thread("Quassel Runner"), Closeable, StateHolder<ClientSession?> {
+) : Thread("Quassel Runner"), Closeable, StateHolder<ClientSessionWrapper?> {
   private val channel = CoroutineChannel()
 
-  override fun state(): ClientSession? = state.value
-  override fun flow(): StateFlow<ClientSession?> = state
+  override fun state(): ClientSessionWrapper? = state.value
+  override fun flow(): StateFlow<ClientSessionWrapper?> = state
 
-  private val state = MutableStateFlow<ClientSession?>(null)
+  private val state = MutableStateFlow<ClientSessionWrapper?>(null)
 
   init {
-      start()
+    start()
   }
 
   override fun run() {
@@ -49,7 +50,14 @@ class QuasselRunner(
           )
         ),
         SSLContext.getDefault()
-      ).also { state.value = it }
+      )
+      state.value = ClientSessionWrapper(
+        session,
+        messages = MessageStore(
+          session.rpcHandler.messages(),
+          session.backlogManager
+        )
+      )
       session.handshakeHandler.init(
         "Quasseltest v0.1",
         "2022-02-24",

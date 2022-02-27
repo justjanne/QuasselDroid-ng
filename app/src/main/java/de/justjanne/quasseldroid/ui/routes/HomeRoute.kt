@@ -1,4 +1,4 @@
-package de.justjanne.quasseldroid.ui
+package de.justjanne.quasseldroid.ui.routes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,11 +7,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import de.justjanne.libquassel.protocol.models.ids.BufferId
 import de.justjanne.libquassel.protocol.syncables.state.BufferViewConfigState
 import de.justjanne.libquassel.protocol.util.combineLatest
 import de.justjanne.libquassel.protocol.util.flatMap
@@ -20,11 +17,15 @@ import de.justjanne.quasseldroid.util.mapNullable
 import de.justjanne.quasseldroid.util.rememberFlow
 
 @Composable
-fun HomeView(backend: QuasselBackend, navController: NavController) {
-  val session = rememberFlow(null) { backend.flow() }
+fun HomeRoute(backend: QuasselBackend, navController: NavController) {
+  val session = rememberFlow(null) {
+    backend.flow()
+      .mapNullable { it.session }
+  }
 
   val bufferViewConfigs: List<BufferViewConfigState> = rememberFlow(emptyList()) {
     backend.flow()
+      .mapNullable { it.session }
       .flatMap()
       .mapNullable { it.bufferViewManager }
       .flatMap()
@@ -34,6 +35,7 @@ fun HomeView(backend: QuasselBackend, navController: NavController) {
 
   val initStatus = rememberFlow(null) {
     backend.flow()
+      .mapNullable { it.session }
       .mapNullable { it.baseInitHandler }
       .flatMap()
   }

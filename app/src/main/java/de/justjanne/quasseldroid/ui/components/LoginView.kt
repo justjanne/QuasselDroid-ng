@@ -1,4 +1,4 @@
-package de.justjanne.quasseldroid.ui
+package de.justjanne.quasseldroid.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,27 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import de.justjanne.quasseldroid.service.ConnectionData
-import de.justjanne.quasseldroid.service.QuasselBackend
 import de.justjanne.quasseldroid.util.TextFieldValueSaver
 import java.net.InetSocketAddress
-
-@Composable
-fun LoginRoute(backend: QuasselBackend, navController: NavController) {
-  val context = LocalContext.current
-  LoginView(onLogin = {
-    if (backend.login(context, it)) {
-      navController.navigate("home")
-    }
-  })
-}
 
 @Preview(name = "Login", showBackground = true)
 @Composable

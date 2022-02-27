@@ -6,8 +6,8 @@ import de.justjanne.libquassel.protocol.util.StateHolder
 import kotlinx.coroutines.flow.StateFlow
 
 class QuasselBinder(
-  private val state: StateFlow<ClientSession?>
-) : Binder(), StateHolder<ClientSession?> {
+  private val state: StateFlow<ClientSessionWrapper?>
+) : Binder(), StateHolder<ClientSessionWrapper?> {
   constructor(runner: QuasselRunner) : this(runner.flow())
 
   override fun flow() = state

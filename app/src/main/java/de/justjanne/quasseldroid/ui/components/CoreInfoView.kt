@@ -1,4 +1,4 @@
-package de.justjanne.quasseldroid.ui
+package de.justjanne.quasseldroid.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

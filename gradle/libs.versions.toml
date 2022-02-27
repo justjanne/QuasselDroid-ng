@@ -1,5 +1,5 @@
 [versions]
-libquassel = "0.8.1"
+libquassel = "0.9.0"
 androidx-activity = "1.4.0"
 androidx-appcompat = "1.4.1"
 androidx-compose = "1.1.1"
