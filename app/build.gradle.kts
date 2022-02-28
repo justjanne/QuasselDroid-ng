@@ -68,6 +68,7 @@ dependencies {
   implementation(libs.androidx.compose.compiler)
   implementation(libs.androidx.compose.foundation)
   implementation(libs.androidx.compose.material)
+  implementation(libs.androidx.compose.material.icons)
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
 

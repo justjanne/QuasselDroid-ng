@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import de.justjanne.quasseldroid.service.QuasselBackend
-import de.justjanne.quasseldroid.ui.theme.QuasseldroidTheme
+import de.justjanne.quasseldroid.ui.theme.QuasselTheme
 
 class MainActivity : ComponentActivity() {
   private val backend = QuasselBackend()
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     backend.onCreate(this)
     setContent {
-      QuasseldroidTheme {
+      QuasselTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           QuasseldroidRouter(backend = backend)
         }
