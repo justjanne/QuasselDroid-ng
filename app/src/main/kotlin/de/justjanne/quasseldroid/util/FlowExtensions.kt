@@ -5,6 +5,7 @@ import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.transform
 
@@ -22,4 +23,9 @@ inline fun <T, R> Flow<T?>.flatMapLatestNullable(crossinline transform: suspend 
 @Composable
 inline fun <T> rememberFlow(initial: T, calculation: @DisallowComposableCalls () -> Flow<T>): T {
   return remember(calculation).collectAsState(initial).value
+}
+
+@Composable
+inline fun <T> rememberFlow(calculation: @DisallowComposableCalls () -> StateFlow<T>): T {
+  return remember(calculation).collectAsState().value
 }

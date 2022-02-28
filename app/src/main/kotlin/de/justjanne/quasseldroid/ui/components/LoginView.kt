@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.justjanne.quasseldroid.service.ConnectionData
-import de.justjanne.quasseldroid.util.TextFieldValueSaver
+import de.justjanne.quasseldroid.util.saver.TextFieldValueSaver
 import java.net.InetSocketAddress
 
 @Preview(name = "Login", showBackground = true)

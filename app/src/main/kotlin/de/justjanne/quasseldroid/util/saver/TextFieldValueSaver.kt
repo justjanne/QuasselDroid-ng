@@ -1,4 +1,4 @@
-package de.justjanne.quasseldroid.util
+package de.justjanne.quasseldroid.util.saver
 
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
