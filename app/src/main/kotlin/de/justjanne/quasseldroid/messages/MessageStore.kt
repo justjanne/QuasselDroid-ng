@@ -1,7 +1,11 @@
 package de.justjanne.quasseldroid.messages
 
+import androidx.collection.LruCache
+import de.justjanne.bitflags.none
 import de.justjanne.libquassel.client.syncables.ClientBacklogManager
 import de.justjanne.libquassel.protocol.models.Message
+import de.justjanne.libquassel.protocol.models.flags.MessageFlag
+import de.justjanne.libquassel.protocol.models.flags.MessageType
 import de.justjanne.libquassel.protocol.models.ids.BufferId
 import de.justjanne.libquassel.protocol.models.ids.MsgId
 import de.justjanne.libquassel.protocol.util.StateHolder
@@ -41,51 +45,49 @@ class MessageStore(
     }
   }.launchIn(scope)
 
-  fun loadAround(bufferId: BufferId, messageId: MsgId) {
+  fun loadAround(bufferId: BufferId, messageId: MsgId, limit: Int) {
     scope.launch {
       state.update { messages ->
         val (before, after) = listOf(
-          async { backlogManager.backlog(bufferId, messageId) },
-          async { backlogManager.backlogForward(bufferId, messageId) },
-        ).awaitAll()
+          backlogManager.backlog(bufferId, last = messageId, limit = limit)
+            .mapNotNull { it.into<Message>() },
+          backlogManager.backlogForward(bufferId, first = messageId, limit = limit - 1)
+            .mapNotNull { it.into<Message>() },
+        )
 
         val updated = MessageBuffer(
           atEnd = false,
-          messages = (before + after)
-            .mapNotNull { it.into<Message>() }
-            .sortedBy { it.messageId }
+          messages = (before + after).distinct().sortedBy { it.messageId }
         )
         messages + Pair(bufferId, updated)
       }
     }
   }
 
-  fun loadBefore(bufferId: BufferId) {
+  fun loadBefore(bufferId: BufferId, limit: Int) {
     scope.launch {
       state.update { messages ->
         val buffer = messages[bufferId] ?: MessageBuffer(true, emptyList())
         val messageId = buffer.messages.firstOrNull()?.messageId ?: MsgId(-1)
-        val data = backlogManager.backlog(bufferId, messageId)
+        val data = backlogManager.backlog(bufferId, last = messageId, limit = limit)
           .mapNotNull { it.into<Message>() }
         val updated = buffer.copy(
-          messages = (buffer.messages + data)
-            .sortedBy { it.messageId }
+          messages = (buffer.messages + data).distinct().sortedBy { it.messageId }
         )
         messages + Pair(bufferId, updated)
       }
     }
   }
 
-  fun loadAfter(bufferId: BufferId) {
+  fun loadAfter(bufferId: BufferId, limit: Int) {
     scope.launch {
       state.update { messages ->
         val buffer = messages[bufferId] ?: MessageBuffer(true, emptyList())
         val messageId = buffer.messages.lastOrNull()?.messageId ?: MsgId(-1)
-        val data = backlogManager.backlogForward(bufferId, messageId)
+        val data = backlogManager.backlogForward(bufferId, first = messageId, limit = limit)
           .mapNotNull { it.into<Message>() }
         val updated = buffer.copy(
-          messages = (buffer.messages + data)
-            .sortedBy { it.messageId }
+          messages = (buffer.messages + data).distinct().sortedBy { it.messageId }
         )
         messages + Pair(bufferId, updated)
       }

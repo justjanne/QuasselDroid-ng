@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
-import de.justjanne.libquassel.client.session.ClientSession
 import de.justjanne.libquassel.protocol.util.StateHolder
 import de.justjanne.libquassel.protocol.util.flatMap
 import de.justjanne.quasseldroid.BuildConfig

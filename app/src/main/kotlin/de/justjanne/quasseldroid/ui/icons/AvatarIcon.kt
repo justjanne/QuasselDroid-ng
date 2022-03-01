@@ -35,7 +35,7 @@ fun AvatarIcon(
   size: Dp = 32.dp
 ) {
   val senderColor = QuasselTheme.sender.colors[SenderColorUtil.senderColor(nick)]
-  val initial = nick.asSequence().map { it.uppercase(Locale.ENGLISH) }.first()
+  val initial = nick.firstOrNull()?.uppercase(Locale.ENGLISH) ?: "?"
   val fontSize = with(LocalDensity.current) { (size.toPx() * 0.67f).toSp() }
 
   Surface(

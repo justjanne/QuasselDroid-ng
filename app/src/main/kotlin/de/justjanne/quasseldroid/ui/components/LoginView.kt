@@ -26,18 +26,21 @@ import java.net.InetSocketAddress
 
 @Preview(name = "Login", showBackground = true)
 @Composable
-fun LoginView(onLogin: (ConnectionData) -> Unit = {}) {
+fun LoginView(
+  default: ConnectionData? = null,
+  onLogin: (ConnectionData) -> Unit = {}
+) {
   val (host, setHost) = rememberSaveable(stateSaver = TextFieldValueSaver) {
-    mutableStateOf(TextFieldValue())
+    mutableStateOf(TextFieldValue(default?.address?.hostString ?: ""))
   }
   val (port, setPort) = rememberSaveable(stateSaver = TextFieldValueSaver) {
-    mutableStateOf(TextFieldValue("4242"))
+    mutableStateOf(TextFieldValue(default?.address?.port?.toString() ?: "4242"))
   }
   val (username, setUsername) = rememberSaveable(stateSaver = TextFieldValueSaver) {
-    mutableStateOf(TextFieldValue())
+    mutableStateOf(TextFieldValue(default?.username ?: ""))
   }
   val (password, setPassword) = rememberSaveable(stateSaver = TextFieldValueSaver) {
-    mutableStateOf(TextFieldValue())
+    mutableStateOf(TextFieldValue(default?.password ?: ""))
   }
 
   val focusManager = LocalFocusManager.current
