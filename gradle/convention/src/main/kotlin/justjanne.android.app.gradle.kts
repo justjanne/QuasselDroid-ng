@@ -6,6 +6,7 @@ plugins {
   id("justjanne.kotlin.android")
 }
 
+@Suppress("UnstableApiUsage")
 android {
   compileSdk = 31
 
