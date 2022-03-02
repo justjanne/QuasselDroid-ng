@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <string name="message_format_action">— %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s is now known as %3$s%4$s</string>
+  <string name="message_format_nick_self">You are now known as %1$s%2$s</string>
+  <string name="message_format_mode">Mode %1$s by %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s joined %3$s</string>
+  <string name="message_format_part_1">%1$s%2$s left</string>
+  <string name="message_format_part_2">%1$s%2$s left (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s quit</string>
+  <string name="message_format_quit_2">%1$s%2$s quit (%3$s)</string>
+  <string name="message_format_kick_1">%1$s was kicked by %2$s%3$s</string>
+  <string name="message_format_kick_2">%1$s was kicked by %2$s%3$s (%4$s)</string>
+  <string name="message_format_kill_1">%1$s was killed by %2$s%3$s</string>
+  <string name="message_format_kill_2">%1$s was killed by %2$s%3$s (%4$s)</string>
+</resources>
