@@ -21,6 +21,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.text.buildSpannedString
 import de.justjanne.quasseldroid.util.AnnotatedStringAppender
+import de.justjanne.quasseldroid.util.extensions.component6
+import de.justjanne.quasseldroid.util.extensions.component7
 import java.util.*
 import java.util.regex.Pattern
 
@@ -66,7 +68,7 @@ object TextFormatter {
         is FormatString.FixedValue -> target.append(block.content)
         is FormatString.FormatSpecifier -> {
           val arg = when {
-              block.index != null -> args[block.index - 1]
+              block.argumentIndex != null -> args[block.argumentIndex - 1]
               block.flags.orEmpty().contains(FLAG_REUSE_ARGUMENT) -> args[argIndex]
               else -> args[argIndex++]
           }
@@ -120,23 +122,23 @@ object TextFormatter {
       }
       index = match.range.last + 1
 
-      val conversionGroup = match.groups["conversion"]?.value
-      require(conversionGroup != null) {
-        "Invalid format string '$match', missing conversion"
+      val groupValues = match.groupValues
+      require(groupValues.size == 7) {
+        "Invalid match '$match', should return 6 groups, returned ${groupValues.size}"
       }
-      require(conversionGroup.length == 1) {
+      val (_, argumentIndex, flags, width, precision, time, conversion) = groupValues
+      require(conversion.length == 1) {
         "Invalid format string '$match', conversion too long"
       }
-      val conversion = conversionGroup.first()
 
       yield(
         FormatString.FormatSpecifier(
-          index = match.groups["index"]?.value?.toIntOrNull(),
-          flags = match.groups["flags"]?.value,
-          width = match.groups["width"]?.value?.toIntOrNull(),
-          precision = match.groups["precision"]?.value?.toIntOrNull(),
-          time = match.groups["time"] != null,
-          conversion = conversion
+          argumentIndex = argumentIndex.takeIf(String::isNotEmpty)?.toIntOrNull(),
+          flags = flags.takeIf(String::isNotEmpty),
+          width = width.takeIf(String::isNotEmpty)?.toIntOrNull(),
+          precision = precision.takeIf(String::isNotEmpty)?.toIntOrNull(),
+          time = time.takeIf(String::isNotEmpty) != null,
+          conversion = conversion.first()
         )
       )
     }
@@ -148,5 +150,5 @@ object TextFormatter {
   private const val FLAG_REUSE_ARGUMENT = '<'
 
   private val FORMAT_SEQUENCE =
-    Pattern.compile("%(?:(?<index>[0-9]+)\\$)?(?<flags>[,\\-(+# 0<]+)?(?<width>[0-9]+)?(?:\\.(?<precision>[0-9]+))?(?<time>[tT])?(?<conversion>[a-zA-Z])")
+    Pattern.compile("%(?:([0-9]+)\\\$)?([,\\-(+# 0<]*)([0-9]*)(?:\\.([0-9]*))?([tT]?)([a-zA-Z])")
 }
