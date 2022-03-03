@@ -1,10 +1,12 @@
 package de.justjanne.quasseldroid.ui.routes
 
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -14,60 +16,29 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.justjanne.libquassel.protocol.models.Message
-import de.justjanne.libquassel.protocol.models.ids.BufferId
-import de.justjanne.libquassel.protocol.models.ids.MsgId
+import de.justjanne.libquassel.protocol.models.BufferInfo
+import de.justjanne.libquassel.protocol.models.ids.NetworkId
+import de.justjanne.libquassel.protocol.models.network.NetworkInfo
+import de.justjanne.libquassel.protocol.syncables.common.Network
 import de.justjanne.libquassel.protocol.util.flatMap
-import de.justjanne.quasseldroid.messages.MessageStore
 import de.justjanne.quasseldroid.service.QuasselBackend
-import de.justjanne.quasseldroid.ui.components.MessageList
 import de.justjanne.quasseldroid.util.mapNullable
 import de.justjanne.quasseldroid.util.rememberFlow
 import de.justjanne.quasseldroid.util.saver.TextFieldValueSaver
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-
-private const val limit = 20
 
 @Composable
 fun HomeRoute(backend: QuasselBackend, navController: NavController) {
-  val session = rememberFlow(null) {
-    backend.flow()
-      .mapNullable { it.session }
+  val side = rememberFlow(null) {
+    backend.flow().mapNullable { it.session.side }
   }
 
   val (buffer, setBuffer) = rememberSaveable(stateSaver = TextFieldValueSaver) {
-    mutableStateOf(TextFieldValue("3747"))
-  }
-  val (position, setPosition) = rememberSaveable(stateSaver = TextFieldValueSaver) {
-    mutableStateOf(TextFieldValue("108113920"))
-  }
-
-  val bufferId = BufferId(buffer.text.toIntOrNull() ?: -1)
-  val positionId = MsgId(position.text.toLongOrNull() ?: -1L)
-
-  val listState = rememberLazyListState()
-
-  val messageStore: MessageStore? = rememberFlow(null) {
-    backend.flow()
-      .mapNullable { it.messages }
-  }
-
-  val messages: List<Message> = rememberFlow(emptyList()) {
-    backend.flow()
-      .mapNullable { it.messages }
-      .flatMap()
-      .mapNullable { it[bufferId] }
-      .map { it?.messages.orEmpty() }
-  }
-
-  val markerLine: MsgId? = rememberFlow(null) {
-    backend.flow()
-      .mapNullable { it.session }
-      .flatMap()
-      .mapNullable { it.bufferSyncer }
-      .flatMap()
-      .mapNullable { it.markerLines[bufferId] }
+    mutableStateOf(TextFieldValue(""))
   }
 
   val initStatus = rememberFlow(null) {
@@ -77,51 +48,74 @@ fun HomeRoute(backend: QuasselBackend, navController: NavController) {
       .flatMap()
   }
 
+  val buffers: List<Pair<NetworkInfo?, BufferInfo>> = rememberFlow(emptyList()) {
+    val sessions = backend.flow()
+      .mapNullable { it.session }
+      .flatMap()
+
+    val networks: Flow<Map<NetworkId, Network>> = sessions
+      .mapNullable { it.networks }
+      .map { it.orEmpty() }
+
+    val buffers: Flow<List<BufferInfo>> = sessions
+      .mapNullable { it.bufferSyncer }
+      .flatMap()
+      .mapNullable { it.bufferInfos.values.sortedBy(BufferInfo::bufferName) }
+      .map { it.orEmpty() }
+
+    combine(buffers, networks) { bufferList, networkMap ->
+      bufferList.map {
+        Pair(networkMap[it.networkId]?.networkInfo(), it)
+      }
+    }
+  }
+
+  val filteredBuffers = buffers.filter { (_, info) ->
+    info.bufferName?.contains(buffer.text) == true
+  }
+
   val context = LocalContext.current
-  val buttonScrollState = rememberScrollState()
+
+  val scrollState = rememberLazyListState()
 
   Column {
-    Text("Side: ${session?.side}")
+    Text("Side: $side")
     if (initStatus != null) {
       val done = initStatus.total - initStatus.waiting.size
       Text("Init: ${initStatus.started} $done/ ${initStatus.total}")
     }
-    Row(modifier = Modifier.horizontalScroll(buttonScrollState)) {
-      Button(onClick = { navController.navigate("coreInfo") }) {
-        Text("Core Info")
-      }
-      Button(onClick = {
-        backend.disconnect(context)
-        navController.navigate("login")
-      }) {
-        Text("Disconnect")
-      }
-      Button(onClick = {
-        messageStore?.loadBefore(bufferId, limit)
-      }) {
-        Text("↑")
-      }
-      Button(onClick = {
-        messageStore?.loadAfter(bufferId, limit)
-      }) {
-        Text("↓")
-      }
-      Button(onClick = {
-        messageStore?.loadAround(bufferId, positionId, limit)
-      }) {
-        Text("…")
-      }
+    Button(onClick = { navController.navigate("coreInfo") }) {
+      Text("Core Info")
+    }
+    Button(onClick = {
+      backend.disconnect(context)
+      navController.navigate("login")
+    }) {
+      Text("Disconnect")
     }
     TextField(value = buffer, onValueChange = setBuffer)
-    TextField(value = position, onValueChange = setPosition)
-    MessageList(
-      messages = messages,
-      listState = listState,
-      markerLine = markerLine ?: MsgId(-1),
-      buffer = 5,
-      onLoadAtStart = { messageStore?.loadBefore(bufferId, limit) },
-      onLoadAtEnd = { messageStore?.loadAfter(bufferId, limit) }
-    )
+    LazyColumn(state = scrollState) {
+      items(filteredBuffers, key = { (_, buffer) -> buffer.bufferId }) { (network, buffer) ->
+        Column(modifier = Modifier
+          .padding(4.dp)
+          .fillMaxWidth()
+          .clickable { navController.navigate("buffer/${buffer.bufferId.id}") }
+        ) {
+          Text(
+            network?.networkName ?: "Unknown network",
+            modifier = Modifier.fillMaxWidth()
+          )
+          Text(
+            buffer.type.joinToString(", "),
+            modifier = Modifier.fillMaxWidth()
+          )
+          Text(
+            buffer.bufferName ?: "Unknown buffer",
+            modifier = Modifier.fillMaxWidth()
+          )
+        }
+      }
+    }
   }
 }
 

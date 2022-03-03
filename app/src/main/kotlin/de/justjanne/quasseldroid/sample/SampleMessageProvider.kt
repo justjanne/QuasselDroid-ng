@@ -10,7 +10,12 @@ import de.justjanne.libquassel.protocol.models.flags.MessageType
 import de.justjanne.libquassel.protocol.models.ids.BufferId
 import de.justjanne.libquassel.protocol.models.ids.MsgId
 import de.justjanne.libquassel.protocol.models.ids.NetworkId
+import de.justjanne.libquassel.protocol.util.irc.HostmaskHelper
 import org.threeten.bp.Instant
+
+class SampleNickProvider : PreviewParameterProvider<String> {
+  override val values = SampleMessageProvider().values.map { HostmaskHelper.nick(it.sender) }
+}
 
 class SampleMessageProvider : PreviewParameterProvider<Message> {
   override val values = sequenceOf(

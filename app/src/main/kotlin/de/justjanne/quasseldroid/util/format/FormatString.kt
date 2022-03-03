@@ -1,5 +1,7 @@
 package de.justjanne.quasseldroid.util.format
 
+import de.justjanne.quasseldroid.util.extensions.joinString
+
 sealed class FormatString {
   data class FixedValue(
     val content: CharSequence
@@ -10,26 +12,34 @@ sealed class FormatString {
   }
 
   data class FormatSpecifier(
-    val index: Int?,
-    val flags: String?,
-    val width: Int?,
-    val precision: Int?,
-    val time: Boolean,
+    val argumentIndex: Int? = null,
+    val flags: String? = null,
+    val width: Int? = null,
+    val precision: Int? = null,
+    val time: Boolean = false,
     val conversion: Char
   ) : FormatString() {
-    override fun toString(): String = listOfNotNull(
-      index?.let { "index=$index" },
-      flags?.let { "flags='$flags'" },
-      width?.let { "width=$width" },
-      precision?.let { "precision=$precision" },
-      "time=$time",
-      "conversion='$conversion'"
-    ).joinToString(", ", prefix = "FormatSpecifier(", postfix = ")")
+    override fun toString(): String = joinString(", ", "FormatSpecifier(", ")") {
+      if (argumentIndex != null) {
+        append("argumentIndex=$argumentIndex")
+      }
+      if (flags != null) {
+        append("flags=$flags")
+      }
+      if (width != null) {
+        append("width=$width")
+      }
+      if (precision != null) {
+        append("precision=$precision")
+      }
+      append("time=$time")
+      append("conversion=$conversion")
+    }
 
     fun toFormatSpecifier(ignoreFlags: Set<Char> = emptySet()) = buildString {
       append("%")
-      if (index != null) {
-        append(index)
+      if (argumentIndex != null) {
+        append(argumentIndex)
         append("$")
       }
       if (flags != null) {

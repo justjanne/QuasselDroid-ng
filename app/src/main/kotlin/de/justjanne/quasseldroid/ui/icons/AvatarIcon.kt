@@ -2,6 +2,7 @@ package de.justjanne.quasseldroid.ui.icons
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
@@ -15,23 +16,21 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.justjanne.quasseldroid.sample.SampleNickProvider
 import de.justjanne.quasseldroid.ui.theme.QuasselTheme
 import irc.SenderColorUtil
 import java.util.*
 
 @Preview
 @Composable
-private fun AvatarIconPreview() {
-  AvatarIcon("justJanne", null)
-}
-
-@Composable
 fun AvatarIcon(
+  @PreviewParameter(SampleNickProvider::class)
   nick: String,
-  avatar: Bitmap?,
   modifier: Modifier = Modifier,
+  avatar: Bitmap? = null,
   size: Dp = 32.dp
 ) {
   val senderColor = QuasselTheme.sender.colors[SenderColorUtil.senderColor(nick)]

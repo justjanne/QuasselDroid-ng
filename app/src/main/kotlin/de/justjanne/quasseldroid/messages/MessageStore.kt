@@ -94,6 +94,14 @@ class MessageStore(
     }
   }
 
+  fun clear(bufferId: BufferId) {
+    scope.launch {
+      state.update { messages ->
+        messages - bufferId
+      }
+    }
+  }
+
   override fun close() {
     runBlocking {
       disposable.cancelAndJoin()
