@@ -2,7 +2,6 @@ package de.justjanne.quasseldroid.ui.icons
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
@@ -21,7 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.justjanne.quasseldroid.sample.SampleNickProvider
 import de.justjanne.quasseldroid.ui.theme.QuasselTheme
-import irc.SenderColorUtil
+import de.justjanne.quasseldroid.util.irc.SenderColorUtil
 import java.util.*
 
 @Preview

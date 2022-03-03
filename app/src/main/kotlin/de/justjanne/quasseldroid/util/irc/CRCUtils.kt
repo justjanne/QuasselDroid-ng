@@ -1,4 +1,4 @@
-package irc
+package de.justjanne.quasseldroid.util.irc
 
 object CRCUtils {
   fun qChecksum(data: ByteArray): Int {

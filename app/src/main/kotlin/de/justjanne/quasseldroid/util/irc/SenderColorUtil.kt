@@ -1,4 +1,4 @@
-package irc
+package de.justjanne.quasseldroid.util.irc
 
 import java.util.*
 

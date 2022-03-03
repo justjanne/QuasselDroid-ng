@@ -1,6 +1,6 @@
 package de.kuschku.justjanne.quasseldroid.util.irc
 
-import irc.SenderColorUtil
+import de.justjanne.quasseldroid.util.irc.SenderColorUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
