@@ -16,38 +16,12 @@
 
 package de.justjanne.quasseldroid.util.format
 
-import android.text.Spanned
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.core.text.buildSpannedString
-import de.justjanne.quasseldroid.util.AnnotatedStringAppender
 import de.justjanne.quasseldroid.util.extensions.component6
 import de.justjanne.quasseldroid.util.extensions.component7
 import java.util.*
 import java.util.regex.Pattern
 
-/**
- * Provides [String.format] style functions that work with [Spanned] strings and preserve formatting.
- *
- * @author George T. Steel
- */
 object TextFormatter {
-  fun format(
-    template: AnnotatedString,
-    vararg args: Any?,
-    locale: Locale = Locale.getDefault()
-  ): AnnotatedString = buildAnnotatedString {
-    formatBlocks(AnnotatedStringAppender(this), parseBlocks(template), args, locale)
-  }
-
-  fun format(
-    template: Spanned,
-    vararg args: Any?,
-    locale: Locale = Locale.getDefault()
-  ): Spanned = buildSpannedString {
-    formatBlocks(this, parseBlocks(template), args, locale)
-  }
-
   fun format(
     template: String,
     vararg args: Any?,
@@ -56,7 +30,7 @@ object TextFormatter {
     formatBlocks(this, parseBlocks(template), args, locale)
   }
 
-  internal fun formatBlocks(
+  fun formatBlocks(
     target: Appendable,
     blocks: Sequence<FormatString>,
     args: Array<out Any?>,
@@ -67,10 +41,14 @@ object TextFormatter {
       when (block) {
         is FormatString.FixedValue -> target.append(block.content)
         is FormatString.FormatSpecifier -> {
-          val arg = when {
-              block.argumentIndex != null -> args[block.argumentIndex - 1]
-              block.flags.orEmpty().contains(FLAG_REUSE_ARGUMENT) -> args[argIndex]
-              else -> args[argIndex++]
+          val index = when {
+            block.argumentIndex != null -> block.argumentIndex - 1
+            block.flags.orEmpty().contains(FLAG_REUSE_ARGUMENT) -> argIndex
+            else -> argIndex++
+          }
+          val arg = if (index in 0..args.size) args[index] else {
+            target.append(block.toFormatSpecifier())
+            continue
           }
 
           if (block.conversion.lowercaseChar() == TYPE_STRING) {
@@ -109,7 +87,7 @@ object TextFormatter {
     }
   }
 
-  internal fun parseBlocks(template: CharSequence) = sequence {
+  fun parseBlocks(template: CharSequence) = sequence {
     var index = 0
     while (index < template.length) {
       val match = FORMAT_SEQUENCE.toRegex().find(template, index)
