@@ -3,6 +3,7 @@ package de.kuschku.justjanne.quasseldroid.util.irc
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import de.justjanne.quasseldroid.util.extensions.format
 import de.justjanne.quasseldroid.util.format.FormatString
 import de.justjanne.quasseldroid.util.format.TextFormatter
 import org.junit.jupiter.api.Test

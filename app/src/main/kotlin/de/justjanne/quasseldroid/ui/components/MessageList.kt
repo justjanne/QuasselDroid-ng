@@ -21,6 +21,7 @@ import de.justjanne.quasseldroid.ui.theme.QuasselTheme
 import de.justjanne.quasseldroid.ui.theme.Typography
 import de.justjanne.quasseldroid.util.extensions.OnBottomReached
 import de.justjanne.quasseldroid.util.extensions.OnTopReached
+import de.justjanne.quasseldroid.util.extensions.format
 import de.justjanne.quasseldroid.util.extensions.getPrevious
 import de.justjanne.quasseldroid.util.format.IrcFormat
 import de.justjanne.quasseldroid.util.format.IrcFormatDeserializer
