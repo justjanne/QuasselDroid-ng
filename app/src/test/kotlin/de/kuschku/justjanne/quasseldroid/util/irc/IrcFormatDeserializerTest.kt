@@ -56,66 +56,94 @@ class IrcFormatDeserializerTest {
       listOf(
         IrcFormat.Span(
           "New Break set to: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(2))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2)
+          )
         ),
         IrcFormat.Span(
           "Target: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("388 "),
         IrcFormat.Span(
           "| ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(2))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2)
+          )
         ),
         IrcFormat.Span(
           "Type: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("GS | "),
         IrcFormat.Span(
           "Break: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("58,000 "),
         IrcFormat.Span(
           "| ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(2))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2)
+          )
         ),
         IrcFormat.Span(
           "120%: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("48,000 | "),
         IrcFormat.Span(
           "135%: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("43,000 "),
         IrcFormat.Span(
           "| ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(2))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2)
+          )
         ),
         IrcFormat.Span(
           "145%: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("40,000 "),
         IrcFormat.Span(
           "| ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(2))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2)
+          )
         ),
         IrcFormat.Span(
           "180%: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("32,000"),
         IrcFormat.Span(
           " | ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(2))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2)
+          )
         ),
         IrcFormat.Span(
           "Pop: ",
-          IrcFormat.Style(foreground = IrcFormat.Color.Mirc(3))
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
         ),
         IrcFormat.Span("73819"),
       ),
@@ -135,7 +163,9 @@ class IrcFormatDeserializerTest {
         IrcFormat.Span("Normal"),
         IrcFormat.Span(
           "Strikethrough",
-          IrcFormat.Style(flags = setOf(IrcFormat.Flag.STRIKETHROUGH))
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.STRIKETHROUGH)
+          )
         ),
         IrcFormat.Span("Normal")
       ),
@@ -152,7 +182,9 @@ class IrcFormatDeserializerTest {
         IrcFormat.Span("First"),
         IrcFormat.Span(
           "Second",
-          IrcFormat.Style(flags = setOf(IrcFormat.Flag.INVERSE))
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.INVERSE)
+          )
         ),
         IrcFormat.Span(
           "Red/Green",
@@ -385,7 +417,7 @@ class IrcFormatDeserializerTest {
         ),
       ),
       IrcFormatDeserializer.parse(
-        "Test 1: \u0002\u000312[\u00036\u00026,7,3,9,10,4,8,10,5\u0002\u000312]"+
+        "Test 1: \u0002\u000312[\u00036\u00026,7,3,9,10,4,8,10,5\u0002\u000312]" +
           "\u0003\u0002 \u000314Test2: \u0002 \u000312[\u0003\u00022,9\u0002\u000312]\u0003\u0002"
       ).toList()
     )
@@ -477,39 +509,968 @@ class IrcFormatDeserializerTest {
         "\u00030,1\u0002Sniper_ShooterCZ\u0002(1)\u000f:\u00032 kokote"
       ).toList()
     )
-  }
 
-  val futureTests = listOf(
-    // Colors
-    "\u000309uncurry\u000f \u000312Vect\u000f : \u000312(\u000f\u000312Nat\u000f\u000312,\u000f \u000312Type\u000f\u000312)\u000f -> \u000312Type\u000f",
-    "*** (\u0002ACTIVITIES\u000f): Mugging: \u000303,03|\u000303,03|\u000303,03|\u000303,03|\u000303,03|\u000303,03|\u000304,04|\u000304,04|\u000300,043\u000300,044\u000300,04%\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000300,04\u000f | [under dev] Piracy: \u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000300,040\u000300,04.\u000300,049\u000300,04%\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000300,04\u000f (exploring) | At this rate, you will get: Fined",
-    "\u000308\\u000308 \u000310\\u000310 \u0002\\u0002 \u000304\\u000304 \u0002\\u0002 \u000309\\u000309 \u0002\\u0002 \u0002\\u0002",
-    "\u000310teal\u0002boldteal\u000304boldred\u0002red",
-    "\u00033The channel for help with general IRC things such as \u0002\u000313clients\u0002\u00033, \u0002\u00037BNCs\u0002\u00033, \u0002\u00034bots\u0002\u00033, \u0002\u00036scripting\u0002 \u00033etc.",
-    "\u0002\u000310hi \u0002hola",
-    "\u000310\u0002hi \u0003hola",
-    "\u0002\u000310h\u00034i \u0002hola",
-    "\u00034,4__\u00033,0(\u00038,0✰\u00033,0)\u00032,2__\u00030,1 \u0002Ejercito Paraguayo\u0002 \u00034,4__\u00033,0(\u00038,0✰\u00033,0)\u00032,2__\u00031\u0003***** Lord Commander: mdmg - Sub-Comandantes: Sgto_Galleta ***** \u00030,4 Vencer o Morir!!!  Que alguien pase una nueva xd\u0003 http://i.imgur.com/bTWzTuA.jpg",
-    "\u00034\u000f",
-    "\u00034\u000fhello",
-    "\u00031",
-    "\u000304\u0002>bold\u0002\u0003test",
-    "\u00037P\u000flayers\u00037(\u0003141/12\u00037)\u000f \u000315Kenzi\u0003 \u00037C\u000furrent votewinner: none | ?? help for all the commands | www.no1gaming.eu | #no1",
-    "First \u00034Red \u00033Green\u0003\u0002 Bold\u0002\u000f",
-    "First \u00034Color\u0003\u0002 Bold\u0002 unnecessary:\u0003 \u00034Color\u0003\u0000 plain \u00034Color\u0003\u000f \u0002Bold\u000f \u00034No space color\u0003\u00034 New color\u000f",
-    "DALnet's recommended mIRC scripting & bot help channel. \u00034Visit us at \u001fwww.dalnethelpdesk.com\u000f for \u0003scripting info, forums, and searchable logs/stats \u000312Looking for a script/bot/addon?\u000f \u0002\u001fmircscripts.org\u000f \u00034or\u000f \u0002\u001fmirc.net\u000f \u000312 Writing your own?\u0003\u00034 Ask \u0002here.\u0002 \u000f - \u000312m\u00034IR\u00038Casdsaa\u0003asdasd\u000f v7.14 has been released",
-    "\u0002irccloud:\u0002 \u000307master\u0003 \u000303James Wheare\u0003 * \u000287ebfc3\u0002 (1 files in 1 dirs): hidden_host_set formatting - http://example.com/aaaa",
-    "\u001fStuff.Stuff.123.123.-WOOT\u001f",
-    "\u00039http://www.google.com/intl/en/about.html\u0003 asdsa http://www.google.com/intl/en/about.html asdasd",
-    "\u00039http://www.google.com/intl/en/about.html\u0003  asdsa  http://www.google.com/intl/en/about.html  asdasd",
-    "\u001fhttp://www.google.com/intl/en/about.html\u001f  asda  http://www.google.com/intl/en/about.html  asdasd",
-    "\u0002http://www.google.com/intl/en/about.html\u0002",
-    "\u00036Stuff.Stuff.123.123.Stuff.Stuff.12345.1234.Stuff-TEST\u0003",
-    " \u0002\u00034,1 [\u000307Test  Title\u00034]\u0003 \u0000blah.hah.hah.and.a.bottle.123.of.123456.0.RUM \u00034,1[\u000307hi/there\u00034]\u000f ",
-    "\u00034,1h\u000f\u00034,2#\u000f\u00034,3l\u000f\u00034,4l\u000f\u00034,5o\u000f",
-    "\u0002\u000312http://www.site.com/\u000f",
-    "i was last seen \\ \\\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00037test^\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00037._\u00031 \u00031 \u00031 \u000314 '--' \u000312'-.\\__/ \u000314_\u000312l\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00034\\\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00034\\\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u000313||\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00037/\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00034\u0002test\u0002\u00031 \u00031 \u00037^\u00031 \u00031 \u00031 \u00031 \u00039)\u000314\\\u000315((((\u00037\\\u00031 \u00031 \u00031 \u00037.\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00038 :;;,,\u00034'-._\u00031 \u00031 \u00034\\\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031",
-  )
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "uncurry",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(9)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "Vect",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(" : "),
+        IrcFormat.Span(
+          "(Nat,",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "Type)",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(" -> "),
+        IrcFormat.Span(
+          "Type",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "\u000309uncurry\u000f \u000312Vect\u000f : \u000312(\u000f\u000312Nat\u000f\u000312," +
+          "\u000f \u000312Type\u000f\u000312)\u000f -> \u000312Type\u000f"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span("*** ("),
+        IrcFormat.Span(
+          "ACTIVITIES",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD)
+          )
+        ),
+        IrcFormat.Span("): Mugging: "),
+        IrcFormat.Span(
+          "||||||",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3),
+            background = IrcFormat.Color.Mirc(3),
+          )
+        ),
+        IrcFormat.Span(
+          "||",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(
+          "34%",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(0),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(
+          "||||||||",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(" | [under dev] Piracy: "),
+        IrcFormat.Span(
+          "|||||||",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(
+          "0.9%",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(0),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(
+          "||||||||",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(" (exploring) | At this rate, you will get: Fined")
+      ),
+      IrcFormatDeserializer.parse(
+        "*** (\u0002ACTIVITIES\u000f): Mugging: \u000303,03|\u000303,03|\u000303,03|\u000303,03|" +
+          "\u000303,03|\u000303,03|\u000304,04|\u000304,04|\u000300,043\u000300,044\u000300,04%" +
+          "\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|" +
+          "\u000304,04|\u000300,04\u000f | [under dev] Piracy: \u000304,04|\u000304,04|" +
+          "\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000300,040\u000300,04." +
+          "\u000300,049\u000300,04%\u000304,04|\u000304,04|\u000304,04|\u000304,04|\u000304,04|" +
+          "\u000304,04|\u000304,04|\u000304,04|\u000300,04\u000f (exploring) | At this rate, you " +
+          "will get: Fined",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "\\u000308 ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(8)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u000310 ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u0002 ",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u000304 ",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u0002 ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u000309 ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(9)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u0002 ",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(9)
+          )
+        ),
+        IrcFormat.Span(
+          "\\u0002",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(9)
+          )
+        ),
+      ),
+      IrcFormatDeserializer.parse(
+        "\u000308\\u000308 \u000310\\u000310 \u0002\\u0002 \u000304\\u000304 \u0002\\u0002 " +
+          "\u000309\\u000309 \u0002\\u0002 \u0002\\u0002"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "teal",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "boldteal",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "boldred",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "red",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "\u000310teal\u0002boldteal\u000304boldred\u0002red",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "The channel for help with general IRC things such as ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
+        ),
+        IrcFormat.Span(
+          "clients",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(13)
+          )
+        ),
+        IrcFormat.Span(
+          ", ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
+        ),
+        IrcFormat.Span(
+          "BNCs",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          ", ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
+        ),
+        IrcFormat.Span(
+          "bots",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          ", ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
+        ),
+        IrcFormat.Span(
+          "scripting",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(6)
+          )
+        ),
+        IrcFormat.Span(
+          " ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(6)
+          )
+        ),
+        IrcFormat.Span(
+          "etc.",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "\u00033The channel for help with general IRC things such as \u0002\u000313clients" +
+          "\u0002\u00033, \u0002\u00037BNCs\u0002\u00033, \u0002\u00034bots\u0002\u00033, " +
+          "\u0002\u00036scripting\u0002 \u00033etc.",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "hi ",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "hola",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "\u0002\u000310hi \u0002hola"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "hi ",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "hola",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "\u000310\u0002hi \u0003hola"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "h",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(10)
+          )
+        ),
+        IrcFormat.Span(
+          "i ",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "hola",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "\u0002\u000310h\u00034i \u0002hola"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "__",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(
+          "(",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3),
+            background = IrcFormat.Color.Mirc(0),
+          )
+        ),
+        IrcFormat.Span(
+          "✰",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(8),
+            background = IrcFormat.Color.Mirc(0),
+          )
+        ),
+        IrcFormat.Span(
+          ")",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3),
+            background = IrcFormat.Color.Mirc(0),
+          )
+        ),
+        IrcFormat.Span(
+          "__",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2),
+            background = IrcFormat.Color.Mirc(2),
+          )
+        ),
+        IrcFormat.Span(
+          " ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(0),
+            background = IrcFormat.Color.Mirc(1),
+          )
+        ),
+        IrcFormat.Span(
+          "Ejercito Paraguayo",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(0),
+            background = IrcFormat.Color.Mirc(1),
+          )
+        ),
+        IrcFormat.Span(
+          " ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(0),
+            background = IrcFormat.Color.Mirc(1),
+          )
+        ),
+        IrcFormat.Span(
+          "__",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(
+          "(",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3),
+            background = IrcFormat.Color.Mirc(0),
+          )
+        ),
+        IrcFormat.Span(
+          "✰",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(8),
+            background = IrcFormat.Color.Mirc(0),
+          )
+        ),
+        IrcFormat.Span(
+          ")",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3),
+            background = IrcFormat.Color.Mirc(0),
+          )
+        ),
+        IrcFormat.Span(
+          "__",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(2),
+            background = IrcFormat.Color.Mirc(2),
+          )
+        ),
+        IrcFormat.Span("***** Lord Commander: mdmg - Sub-Comandantes: Sgto_Galleta ***** "),
+        IrcFormat.Span(
+          " Vencer o Morir!!!  Que alguien pase una nueva xd",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(0),
+            background = IrcFormat.Color.Mirc(4),
+          )
+        ),
+        IrcFormat.Span(" http://i.imgur.com/bTWzTuA.jpg"),
+      ),
+      IrcFormatDeserializer.parse(
+        "\u00034,4__\u00033,0(\u00038,0✰\u00033,0)\u00032,2__\u00030,1 \u0002Ejercito Paraguayo" +
+          "\u0002 \u00034,4__\u00033,0(\u00038,0✰\u00033,0)\u00032,2__" +
+          "\u00031\u0003***** Lord Commander: mdmg - Sub-Comandantes: Sgto_Galleta ***** " +
+          "\u00030,4 Vencer o Morir!!!  Que alguien pase una nueva xd" +
+          "\u0003 http://i.imgur.com/bTWzTuA.jpg"
+      ).toList()
+    )
+
+    assertEquals(
+      emptyList(),
+      IrcFormatDeserializer.parse(
+        "\u00034\u000f"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span("hello")
+      ),
+      IrcFormatDeserializer.parse(
+        "\u00034\u000fhello"
+      ).toList()
+    )
+
+    assertEquals(
+      emptyList(),
+      IrcFormatDeserializer.parse(
+        "\u00031"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          ">bold",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span("test")
+      ),
+      IrcFormatDeserializer.parse(
+        "\u000304\u0002>bold\u0002\u0003test"
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span(
+          "P",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span("layers"),
+        IrcFormat.Span(
+          "(",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "1/12",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(14)
+          )
+        ),
+        IrcFormat.Span(
+          ")",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "Kenzi",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(15)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "C",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span("urrent votewinner: none | ?? help for all the commands | www.no1gaming.eu | #no1"),
+      ),
+      IrcFormatDeserializer.parse(
+        "\u00037P\u000flayers\u00037(\u0003141/12\u00037)\u000f \u000315Kenzi\u0003 \u00037C" +
+          "\u000furrent votewinner: none | ?? help for all the commands | www.no1gaming.eu | #no1",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span("First "),
+        IrcFormat.Span(
+          "Red ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "Green",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(3)
+          )
+        ),
+        IrcFormat.Span(
+          " Bold",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD)
+          )
+        )
+      ),
+      IrcFormatDeserializer.parse(
+        "First \u00034Red \u00033Green\u0003\u0002 Bold\u0002\u000f",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span("First "),
+        IrcFormat.Span(
+          "Color",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          " Bold",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD)
+          )
+        ),
+        IrcFormat.Span(" unnecessary: "),
+        IrcFormat.Span(
+          "Color",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span("\u0000 plain "),
+        IrcFormat.Span(
+          "Color",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "Bold",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "No space color New color",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+      ),
+      IrcFormatDeserializer.parse(
+        "First \u00034Color\u0003\u0002 Bold\u0002 unnecessary:\u0003 \u00034Color" +
+          "\u0003\u0000 plain \u00034Color\u0003\u000f \u0002Bold\u000f \u00034No space color" +
+          "\u0003\u00034 New color\u000f",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span("DALnet's recommended mIRC scripting & bot help channel. "),
+        IrcFormat.Span(
+          "Visit us at ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "www.dalnethelpdesk.com",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.UNDERLINE),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(" for scripting info, forums, and searchable logs/stats "),
+        IrcFormat.Span(
+          "Looking for a script/bot/addon?",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "mircscripts.org",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD, IrcFormat.Flag.UNDERLINE)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "or",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          "mirc.net",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD, IrcFormat.Flag.UNDERLINE)
+          )
+        ),
+        IrcFormat.Span(" "),
+        IrcFormat.Span(
+          " Writing your own?",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(
+          " Ask ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "here.",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD),
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          " ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(" - "),
+        IrcFormat.Span(
+          "m",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(
+          "IR",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "Casdsaa",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(8)
+          )
+        ),
+        IrcFormat.Span("asdasd v7.14 has been released")
+      ),
+      IrcFormatDeserializer.parse(
+        "DALnet's recommended mIRC scripting & bot help channel. \u00034Visit us at " +
+          "\u001fwww.dalnethelpdesk.com\u000f for \u0003scripting info, forums, and searchable " +
+          "logs/stats \u000312Looking for a script/bot/addon?\u000f \u0002\u001fmircscripts.org" +
+          "\u000f \u00034or\u000f \u0002\u001fmirc.net\u000f \u000312 Writing your own?\u0003" +
+          "\u00034 Ask \u0002here.\u0002 \u000f - \u000312m\u00034IR\u00038Casdsaa\u0003asdasd" +
+          "\u000f v7.14 has been released",
+      ).toList()
+    )
+
+    assertEquals(
+      listOf(
+        IrcFormat.Span("i was last seen \\ \\"),
+        IrcFormat.Span(
+          "             ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "test^",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "      ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "._",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "   ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          " '--' ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(14)
+          )
+        ),
+        IrcFormat.Span(
+          "'-.\\__/ ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(
+          "_",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(14)
+          )
+        ),
+        IrcFormat.Span(
+          "l",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(12)
+          )
+        ),
+        IrcFormat.Span(
+          "       ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "\\",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "        ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "\\",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "      ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "||",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(13)
+          )
+        ),
+        IrcFormat.Span(
+          "       ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "/",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "       ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "test",
+          IrcFormat.Style(
+            flags = setOf(IrcFormat.Flag.BOLD), foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "  ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "^",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "    ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          ")",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(9)
+          )
+        ),
+        IrcFormat.Span(
+          "\\",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(14)
+          )
+        ),
+        IrcFormat.Span(
+          "((((",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(15)
+          )
+        ),
+        IrcFormat.Span(
+          "\\",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "   ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          ".",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(7)
+          )
+        ),
+        IrcFormat.Span(
+          "            ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          " :;;,,",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(8)
+          )
+        ),
+        IrcFormat.Span(
+          "'-._",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "  ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+        IrcFormat.Span(
+          "\\",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(4)
+          )
+        ),
+        IrcFormat.Span(
+          "                        ",
+          IrcFormat.Style(
+            foreground = IrcFormat.Color.Mirc(1)
+          )
+        ),
+      ),
+      IrcFormatDeserializer.parse(
+        "i was last seen \\ \\\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00031 \u00031 \u00031 \u00031 \u00037test^\u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00031 \u00037._\u00031 \u00031 \u00031 \u000314 '--' \u000312'-.\\__/ " +
+          "\u000314_\u000312l\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00034\\" +
+          "\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00034\\\u00031 " +
+          "\u00031 \u00031 \u00031 \u00031 \u00031 \u000313||\u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00031 \u00031 \u00037/\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00034\u0002test\u0002\u00031 \u00031 \u00037^\u00031 \u00031 \u00031 " +
+          "\u00031 \u00039)\u000314\\\u000315((((\u00037\\\u00031 \u00031 \u00031 \u00037." +
+          "\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00031 \u00038 :;;,,\u00034'-._\u00031 \u00031 \u00034\\\u00031 \u00031 " +
+          "\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 \u00031 " +
+          "\u00031 \u00031 \u00031"
+      ).toList()
+    )
+  }
 
   @Test
   fun testHexColors() {

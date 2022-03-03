@@ -20,6 +20,7 @@
 package de.justjanne.quasseldroid.util.format
 
 import androidx.compose.ui.graphics.Color
+import de.justjanne.quasseldroid.util.extensions.collapse
 import kotlin.math.min
 
 /**
@@ -67,8 +68,9 @@ object IrcFormatDeserializer {
       i += foregroundData.length
 
       val backgroundData =
-        if (content[i] == ',') content.substring(i + 1, min(i + length + 1, content.length))
-          .takeWhile(matcher)
+        if (i < content.length && content[i] == ',')
+          content.substring(i + 1, min(i + length + 1, content.length))
+            .takeWhile(matcher)
         else null
       val background = backgroundData
         ?.toIntOrNull(radix)
@@ -141,6 +143,9 @@ object IrcFormatDeserializer {
     if (lastProcessed != content.length) {
       yield(IrcFormat.Span(content.substring(lastProcessed), current))
     }
+  }.collapse { prev, current ->
+    if (prev.style == current.style) prev.copy(content = prev.content + current.content)
+    else null
   }
 
   private const val CODE_BOLD = 0x02.toChar()
