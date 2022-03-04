@@ -18,7 +18,6 @@ import de.justjanne.quasseldroid.util.rememberFlow
 fun CoreInfoRoute(backend: QuasselBackend, navController: NavController) {
   val coreInfo = rememberFlow(null) {
     backend.flow()
-      .mapNullable { it.session }
       .flatMap()
       .mapNullable { it.coreInfo }
       .flatMap()

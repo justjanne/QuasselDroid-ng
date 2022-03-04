@@ -1,6 +1,5 @@
 package de.justjanne.quasseldroid.ui.icons
 
-import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +28,7 @@ fun AvatarIcon(
   @PreviewParameter(SampleNickProvider::class)
   nick: String,
   modifier: Modifier = Modifier,
-  avatar: Bitmap? = null,
+  //avatar: Bitmap? = null,
   size: Dp = 32.dp
 ) {
   val senderColor = QuasselTheme.sender.colors[SenderColorUtil.senderColor(nick)]

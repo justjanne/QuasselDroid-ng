@@ -20,12 +20,9 @@ import de.charlex.compose.HtmlText
 import de.justjanne.libquassel.protocol.models.ConnectedClient
 import de.justjanne.quasseldroid.model.SecurityLevel
 import de.justjanne.quasseldroid.sample.SampleConnectedClientProvider
+import de.justjanne.quasseldroid.ui.Constants
 import de.justjanne.quasseldroid.ui.theme.Typography
 import org.threeten.bp.ZoneId
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
-
-private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
 @Preview(name = "Connected Client")
 @Composable
@@ -51,7 +48,7 @@ fun ConnectedClientCard(
           Text(
             client.connectedSince
               .atZone(ZoneId.systemDefault())
-              .format(formatter),
+              .format(Constants.dateTimeFormatter),
             style = Typography.body2
           )
         }

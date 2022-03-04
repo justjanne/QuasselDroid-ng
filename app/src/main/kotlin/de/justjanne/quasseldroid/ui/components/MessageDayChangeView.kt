@@ -17,13 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.justjanne.quasseldroid.ui.Constants
 import de.justjanne.quasseldroid.ui.theme.QuasselTheme
 import de.justjanne.quasseldroid.ui.theme.Typography
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
-
-private val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
 @Preview(name = "Day Change", showBackground = true)
 @Composable
@@ -54,7 +51,7 @@ fun MessageDayChangeView(
     )
     Spacer(Modifier.width(4.dp))
     Text(
-      date.format(formatter),
+      date.format(Constants.dateFormatter),
       modifier = Modifier
         .align(Alignment.CenterVertically),
       style = Typography.body2,

@@ -5,10 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import androidx.room.Room
+import de.justjanne.quasseldroid.persistence.AppDatabase
 import java.net.InetSocketAddress
 
 class QuasselService : Service() {
   private var runner: QuasselRunner? = null
+
+  private val database: AppDatabase by lazy {
+    Room.databaseBuilder(
+      this.applicationContext,
+      AppDatabase::class.java,
+      "app"
+    ).build()
+  }
 
   private fun newRunner(intent: Intent): QuasselRunner {
     Log.w("QuasselService", "Creating new quassel runner")
@@ -26,7 +36,7 @@ class QuasselService : Service() {
         "Required argument 'password' missing"
       },
     )
-    return QuasselRunner(address, auth)
+    return QuasselRunner(address, auth, database)
   }
 
   override fun onCreate() {

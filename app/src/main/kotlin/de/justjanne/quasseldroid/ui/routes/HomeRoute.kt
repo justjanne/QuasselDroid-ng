@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun HomeRoute(backend: QuasselBackend, navController: NavController) {
   val side = rememberFlow(null) {
-    backend.flow().mapNullable { it.session.side }
+    backend.flow().mapNullable { it.side }
   }
 
   val (buffer, setBuffer) = rememberSaveable(stateSaver = TextFieldValueSaver) {
@@ -43,14 +43,12 @@ fun HomeRoute(backend: QuasselBackend, navController: NavController) {
 
   val initStatus = rememberFlow(null) {
     backend.flow()
-      .mapNullable { it.session }
       .mapNullable { it.baseInitHandler }
       .flatMap()
   }
 
   val buffers: List<Pair<NetworkInfo?, BufferInfo>> = rememberFlow(emptyList()) {
     val sessions = backend.flow()
-      .mapNullable { it.session }
       .flatMap()
 
     val networks: Flow<Map<NetworkId, Network>> = sessions

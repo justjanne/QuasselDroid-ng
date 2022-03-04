@@ -25,7 +25,6 @@ plugins {
 android {
   defaultConfig {
     vectorDrawables.useSupportLibrary = true
-    testInstrumentationRunner = "de.justjanne.quasseldroid.util.TestRunner"
   }
 
   buildTypes {
@@ -72,7 +71,19 @@ dependencies {
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
 
+  implementation(libs.androidx.collection.ktx)
+  implementation(libs.androidx.core.ktx)
+
   implementation(libs.androidx.navigation.compose)
+
+  implementation(libs.androidx.paging.runtime)
+  testImplementation(libs.androidx.paging.test)
+  implementation(libs.androidx.paging.compose)
+
+  implementation(libs.androidx.room.runtime)
+  ksp(libs.androidx.room.compiler)
+  implementation(libs.androidx.room.ktx)
+  implementation(libs.androidx.room.paging)
 
   implementation(libs.libquassel.client)
   implementation(libs.libquassel.irc)

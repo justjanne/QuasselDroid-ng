@@ -22,6 +22,7 @@ tasks.withType<KotlinCompile> {
       "-opt-in=kotlin.ExperimentalUnsignedTypes",
       "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
       "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+      "-opt-in=androidx.paging.ExperimentalPagingApi",
     )
     jvmTarget = "1.8"
   }

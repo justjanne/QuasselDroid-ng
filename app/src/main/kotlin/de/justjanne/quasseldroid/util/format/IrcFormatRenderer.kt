@@ -43,8 +43,8 @@ object IrcFormatRenderer {
     textColor: Color,
     backgroundColor: Color
   ): SpanStyle {
-    val foreground = toColor(style.foreground)
-    val background = toColor(style.background)
+    val foreground = toColor(style.foreground) ?: textColor
+    val background = toColor(style.background) ?: backgroundColor
 
     return SpanStyle(
       fontWeight = if (style.flags.contains(IrcFormat.Flag.BOLD)) FontWeight.Bold else FontWeight.Normal,
@@ -56,10 +56,8 @@ object IrcFormatRenderer {
         )
       ),
       fontFamily = if (style.flags.contains(IrcFormat.Flag.MONOSPACE)) FontFamily.Monospace else null,
-      color = if (style.flags.contains(IrcFormat.Flag.INVERSE)) background ?: backgroundColor
-      else foreground ?: Color.Unspecified,
-      background = if (style.flags.contains(IrcFormat.Flag.INVERSE)) foreground ?: textColor
-      else background ?: Color.Unspecified,
+      color = if (style.flags.contains(IrcFormat.Flag.INVERSE)) background else foreground,
+      background = if (style.flags.contains(IrcFormat.Flag.INVERSE)) foreground else background,
     )
   }
 }

@@ -1,9 +1,14 @@
 [versions]
 libquassel = "0.10.1"
+androidx-collection = "1.2.0"
+androidx-core = "1.7.0"
 androidx-activity = "1.4.0"
 androidx-appcompat = "1.4.1"
 androidx-compose = "1.1.1"
+androidx-material3 = "1.0.0-alpha05"
 androidx-navigation = "2.4.1"
+androidx-paging = "3.1.0"
+androidx-room = "2.5.0-alpha01"
 
 [libraries]
 libquassel-protocol = { module = "de.justjanne.libquassel:libquassel-protocol", version.ref = "libquassel" }
@@ -19,7 +24,8 @@ androidx-appcompat-resources = { module = "androidx.appcompat:appcompat-resource
 androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "androidx-compose" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
-androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose" }
+#androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose" }
+androidx-compose-material = { module = "androidx.compose.material3:material3", version.ref = "androidx-material3" }
 androidx-compose-material-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidx-compose" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidx-compose" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
@@ -27,6 +33,18 @@ androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", versi
 androidx-compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
 androidx-compose-ui-test = { module = "androidx.compose.ui:ui-test", version.ref = "androidx-compose" }
 
+androidx-collection-ktx = { module = "androidx.collection:collection-ktx", version.ref = "androidx-collection" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "androidx-paging" }
+androidx-paging-test = { module = "androidx.paging:paging-common", version.ref = "androidx-paging" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version = "1.0.0-alpha14" }
+
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidx-room" }
 
 compose-htmltext = { module = "de.charlex.compose:html-text", version = "1.1.0" }

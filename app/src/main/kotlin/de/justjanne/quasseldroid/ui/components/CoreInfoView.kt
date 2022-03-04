@@ -14,12 +14,9 @@ import de.charlex.compose.HtmlText
 import de.justjanne.libquassel.protocol.models.ConnectedClient
 import de.justjanne.libquassel.protocol.syncables.state.CoreInfoState
 import de.justjanne.quasseldroid.sample.SampleCoreInfoProvider
+import de.justjanne.quasseldroid.ui.Constants
 import de.justjanne.quasseldroid.ui.theme.Typography
 import org.threeten.bp.ZoneId
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
-
-private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
 @Preview(name = "Core Info", showBackground = true)
 @Composable
@@ -36,14 +33,14 @@ fun CoreInfoView(
       Text(
         text = coreInfo.versionDate
           ?.atZone(ZoneId.systemDefault())
-          ?.format(formatter)
+          ?.format(Constants.dateTimeFormatter)
           ?: "Unknown",
         style = Typography.body2
       )
       Text(
         coreInfo.startTime
           .atZone(ZoneId.systemDefault())
-          .format(formatter),
+          .format(Constants.dateTimeFormatter),
         style = Typography.body2
       )
     }
