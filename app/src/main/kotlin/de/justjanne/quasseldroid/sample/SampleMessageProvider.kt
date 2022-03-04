@@ -10,7 +10,7 @@ import de.justjanne.libquassel.protocol.models.flags.MessageType
 import de.justjanne.libquassel.protocol.models.ids.BufferId
 import de.justjanne.libquassel.protocol.models.ids.MsgId
 import de.justjanne.libquassel.protocol.models.ids.NetworkId
-import de.justjanne.libquassel.protocol.util.irc.HostmaskHelper
+import de.justjanne.libquassel.irc.HostmaskHelper
 import org.threeten.bp.Instant
 
 class SampleNickProvider : PreviewParameterProvider<String> {

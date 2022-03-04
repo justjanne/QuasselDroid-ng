@@ -28,10 +28,10 @@
 -dontobfuscate
 
 # Keep our invokers
--keep class * implements de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invoker {
+-keep class * implements de.justjanne.libquassel.protocol.syncables.invoker.Invoker {
     static ** INSTANCE;
 }
--keep class * implements de.kuschku.libquassel.quassel.syncables.interfaces.invokers.InvokerRegistry {
+-keep class * implements de.justjanne.libquassel.protocol.syncables.invoker.InvokerRegistry {
     static ** INSTANCE;
 }
 

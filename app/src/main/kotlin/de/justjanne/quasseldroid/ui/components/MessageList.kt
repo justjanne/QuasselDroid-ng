@@ -11,10 +11,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import de.justjanne.bitflags.of
+import de.justjanne.libquassel.irc.HostmaskHelper
+import de.justjanne.libquassel.irc.IrcFormat
+import de.justjanne.libquassel.irc.IrcFormatDeserializer
 import de.justjanne.libquassel.protocol.models.Message
 import de.justjanne.libquassel.protocol.models.flags.MessageType
 import de.justjanne.libquassel.protocol.models.ids.MsgId
-import de.justjanne.libquassel.protocol.util.irc.HostmaskHelper
 import de.justjanne.quasseldroid.R
 import de.justjanne.quasseldroid.sample.SampleMessagesProvider
 import de.justjanne.quasseldroid.ui.theme.QuasselTheme
@@ -23,8 +25,6 @@ import de.justjanne.quasseldroid.util.extensions.OnBottomReached
 import de.justjanne.quasseldroid.util.extensions.OnTopReached
 import de.justjanne.quasseldroid.util.extensions.format
 import de.justjanne.quasseldroid.util.extensions.getPrevious
-import de.justjanne.quasseldroid.util.format.IrcFormat
-import de.justjanne.quasseldroid.util.format.IrcFormatDeserializer
 import de.justjanne.quasseldroid.util.format.IrcFormatRenderer
 import de.justjanne.quasseldroid.util.format.TextFormatter
 import org.threeten.bp.ZoneId
@@ -70,7 +70,7 @@ fun MessageList(
           }
         }
         MessageType.of(MessageType.Action) -> {
-          MessageBaseSmall(message) {
+          MessageBaseSmall(message, backgroundColor = QuasselTheme.chat.action) {
             val nick = HostmaskHelper.nick(message.sender)
 
             Text(
@@ -78,7 +78,9 @@ fun MessageList(
                 AnnotatedString(stringResource(R.string.message_format_action)),
                 buildNick(nick, message.senderPrefixes),
                 IrcFormatRenderer.render(
-                  data = parsed.map { it.copy(style = it.style.flipFlag(IrcFormat.Flag.ITALIC)) }
+                  data = parsed.map { it.copy(style = it.style.flipFlag(IrcFormat.Flag.ITALIC)) },
+                  textColor = QuasselTheme.chat.onAction,
+                  backgroundColor = QuasselTheme.chat.action
                 )
               ),
               style = Typography.body2,

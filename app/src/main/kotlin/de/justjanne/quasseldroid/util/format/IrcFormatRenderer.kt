@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import de.justjanne.libquassel.irc.IrcFormat
 import de.justjanne.quasseldroid.ui.theme.QuasselTheme
 
 object IrcFormatRenderer {
@@ -33,7 +34,7 @@ object IrcFormatRenderer {
   private fun toColor(color: IrcFormat.Color?): Color? = when (color) {
     null -> null
     is IrcFormat.Color.Mirc -> QuasselTheme.mirc.colors[color.index]
-    is IrcFormat.Color.Hex -> color.color
+    is IrcFormat.Color.Hex -> Color(color.color).copy(alpha = 1.0f)
   }
 
   @Composable
@@ -42,8 +43,8 @@ object IrcFormatRenderer {
     textColor: Color,
     backgroundColor: Color
   ): SpanStyle {
-    val foreground = toColor(style.foreground) ?: textColor
-    val background = toColor(style.background) ?: backgroundColor
+    val foreground = toColor(style.foreground)
+    val background = toColor(style.background)
 
     return SpanStyle(
       fontWeight = if (style.flags.contains(IrcFormat.Flag.BOLD)) FontWeight.Bold else FontWeight.Normal,
@@ -55,8 +56,10 @@ object IrcFormatRenderer {
         )
       ),
       fontFamily = if (style.flags.contains(IrcFormat.Flag.MONOSPACE)) FontFamily.Monospace else null,
-      color = if (style.flags.contains(IrcFormat.Flag.INVERSE)) background else foreground,
-      background = if (style.flags.contains(IrcFormat.Flag.INVERSE)) foreground else background,
+      color = if (style.flags.contains(IrcFormat.Flag.INVERSE)) background ?: backgroundColor
+      else foreground ?: Color.Unspecified,
+      background = if (style.flags.contains(IrcFormat.Flag.INVERSE)) foreground ?: textColor
+      else background ?: Color.Unspecified,
     )
   }
 }

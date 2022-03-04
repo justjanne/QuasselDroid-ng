@@ -1,4 +1,4 @@
-package de.kuschku.justjanne.quasseldroid.util.irc
+package de.justjanne.quasseldroid.util.irc
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle

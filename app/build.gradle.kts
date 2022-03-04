@@ -25,7 +25,7 @@ plugins {
 android {
   defaultConfig {
     vectorDrawables.useSupportLibrary = true
-    testInstrumentationRunner = "de.kuschku.quasseldroid.util.TestRunner"
+    testInstrumentationRunner = "de.justjanne.quasseldroid.util.TestRunner"
   }
 
   buildTypes {
@@ -75,6 +75,7 @@ dependencies {
   implementation(libs.androidx.navigation.compose)
 
   implementation(libs.libquassel.client)
+  implementation(libs.libquassel.irc)
 
   implementation(libs.compose.htmltext)
 

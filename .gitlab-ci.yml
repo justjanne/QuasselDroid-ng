@@ -14,7 +14,7 @@ before_script:
 
 stages:
   - "build"
-  - "deploy"
+#  - "deploy"
 
 test:
   stage: "build"
@@ -48,33 +48,34 @@ version:
     - if: "$CI_COMMIT_BRANCH == 'main'"
       when: on_success
 
-deploy-local:
-  stage: "deploy"
-  image: "k8r.eu/justjanne/docker-s3cmd:latest"
-  cache: { }
-  dependencies:
-    - "test"
-    - "version"
-  script:
-    - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
-    - "export VERSION=$(ls *.apk)"
-    - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
-    - "s3cmd put version.json s3://releases/quasseldroid-ng/version.json"
-    - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
-  rules:
-    - if: "$CI_COMMIT_BRANCH == 'main' && $S3_CONFIG != ''"
-      when: on_success
-
-deploy-beta:
-  stage: "deploy"
-  image: "k8r.eu/justjanne/docker-fastlane:latest"
-  cache: { }
-  dependencies:
-    - "test"
-  script:
-    - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
-    - "export VERSION=$(ls *.apk)"
-    - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
-  rules:
-    - if: "$CI_COMMIT_BRANCH == 'main' && $FASTLANE_CONFIG != ''"
-      when: on_success
+#deploy-local:
+#  stage: "deploy"
+#  image: "k8r.eu/justjanne/docker-s3cmd:latest"
+#  cache: { }
+#  dependencies:
+#    - "test"
+#    - "version"
+#  script:
+#    - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
+#    - "export VERSION=$(ls *.apk)"
+#    - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
+#    - "s3cmd put version.json s3://releases/quasseldroid-ng/version.json"
+#    - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
+#  rules:
+#    - if: "$CI_COMMIT_BRANCH == 'main' && $S3_CONFIG != ''"
+#      when: on_success
+#
+#deploy-beta:
+#  stage: "deploy"
+#  image: "k8r.eu/justjanne/docker-fastlane:latest"
+#  cache: { }
+#  dependencies:
+#    - "test"
+#  script:
+#    - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
+#    - "export VERSION=$(ls *.apk)"
+#    - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
+#  rules:
+#    - if: "$CI_COMMIT_BRANCH == 'main' && $FASTLANE_CONFIG != ''"
+#      when: on_success
+#

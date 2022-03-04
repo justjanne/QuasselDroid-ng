@@ -1,5 +1,5 @@
 [versions]
-libquassel = "0.9.2"
+libquassel = "0.10.1"
 androidx-activity = "1.4.0"
 androidx-appcompat = "1.4.1"
 androidx-compose = "1.1.1"
@@ -8,6 +8,7 @@ androidx-navigation = "2.4.1"
 [libraries]
 libquassel-protocol = { module = "de.justjanne.libquassel:libquassel-protocol", version.ref = "libquassel" }
 libquassel-client = { module = "de.justjanne.libquassel:libquassel-client", version.ref = "libquassel" }
+libquassel-irc = { module = "de.justjanne.libquassel:libquassel-irc", version.ref = "libquassel" }
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
