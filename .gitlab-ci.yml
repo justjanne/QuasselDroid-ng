@@ -6,18 +6,18 @@ cache:
     - ".gradle/caches"
 
 before_script:
+  - "mkdir -p $(pwd)/.gradle"
   - "export GRADLE_USER_HOME=$(pwd)/.gradle"
-  - "chmod +x ./gradlew"
-
   - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
   - "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
+  - "chmod +x ./gradlew"
 
 stages:
-  - "build"
-  - "deploy"
+  - "test"
+  - "release"
 
 test:
-  stage: "build"
+  stage: "test"
   script:
     - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
     - "cp app/build/outputs/apk/release/*.apk ."
@@ -31,12 +31,9 @@ test:
       junit:
         - "*/build/test-results/**/TEST-*.xml"
         - "*/build/reports/*.xml"
-  rules:
-    - if: "$CI_COMMIT_BRANCH == 'main'"
-      when: on_success
 
 version:
-  stage: "build"
+  stage: "test"
   script:
     - "export VERSION_NAME=$(git describe --abbrev=0 --tags HEAD)"
     - "export VERSION_CODE=$(git rev-list --count $VERSION_NAME)"
@@ -44,12 +41,9 @@ version:
   artifacts:
     paths:
       - "version.json"
-  rules:
-    - if: "$CI_COMMIT_BRANCH == 'main'"
-      when: on_success
 
 deploy-local:
-  stage: "deploy"
+  stage: "release"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
   cache: { }
   dependencies:
@@ -62,11 +56,11 @@ deploy-local:
     - "s3cmd put version.json s3://releases/quasseldroid-ng/version.json"
     - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
   rules:
-    - if: "$CI_COMMIT_BRANCH == 'main' && $S3_CONFIG != ''"
+    - if: "$CI_COMMIT_TAG && $S3_CONFIG != ''"
       when: on_success
 
 deploy-beta:
-  stage: "deploy"
+  stage: "release"
   image: "k8r.eu/justjanne/docker-fastlane:latest"
   cache: { }
   dependencies:
@@ -76,5 +70,5 @@ deploy-beta:
     - "export VERSION=$(ls *.apk)"
     - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
   rules:
-    - if: "$CI_COMMIT_BRANCH == 'main' && $FASTLANE_CONFIG != ''"
+    - if: "$CI_COMMIT_TAG && $FASTLANE_CONFIG != ''"
       when: on_success
