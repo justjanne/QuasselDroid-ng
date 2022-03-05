@@ -449,10 +449,10 @@ class Network constructor(
     _networkName = networkName
   }
 
-  override fun setCurrentServer(currentServer: String) {
+  override fun setCurrentServer(currentServer: String?) {
     if (_currentServer == currentServer)
       return
-    _currentServer = currentServer
+    _currentServer = currentServer ?: ""
   }
 
   override fun setConnected(isConnected: Boolean) {
@@ -461,7 +461,7 @@ class Network constructor(
     _connected = isConnected
     if (!isConnected) {
       setMyNick("")
-      setCurrentServer("")
+      setCurrentServer(null)
       removeChansAndUsers()
     }
   }
@@ -473,10 +473,10 @@ class Network constructor(
     live_connectionState.onNext(_connectionState)
   }
 
-  override fun setMyNick(myNick: String) {
-    if (_myNick == myNick)
+  override fun setMyNick(myNick: String?) {
+    if (_myNick == myNick ?: "")
       return
-    _myNick = myNick
+    _myNick = myNick ?: ""
     if (_myNick.isEmpty() && ircUser(myNick()) == null) {
       newIrcUser(myNick())
     }
@@ -614,19 +614,19 @@ class Network constructor(
     _unlimitedMessageRate = unlimitedMessageRate
   }
 
-  override fun setCodecForDecoding(codecForDecoding: ByteBuffer) {
-    setCodecForDecoding(Charsets.ISO_8859_1.decode(codecForDecoding).toString())
+  override fun setCodecForDecoding(codecForDecoding: ByteBuffer?) {
+    setCodecForDecoding(codecForDecoding?.let(Charsets.ISO_8859_1::decode)?.toString() ?: "")
   }
 
-  override fun setCodecForEncoding(codecForEncoding: ByteBuffer) {
-    setCodecForEncoding(Charsets.ISO_8859_1.decode(codecForEncoding).toString())
+  override fun setCodecForEncoding(codecForEncoding: ByteBuffer?) {
+    setCodecForEncoding(codecForEncoding?.let(Charsets.ISO_8859_1::decode)?.toString() ?: "")
   }
 
-  override fun setCodecForServer(codecForServer: ByteBuffer) {
-    setCodecForServer(Charsets.ISO_8859_1.decode(codecForServer).toString())
+  override fun setCodecForServer(codecForServer: ByteBuffer?) {
+    setCodecForServer(codecForServer?.let(Charsets.ISO_8859_1::decode)?.toString() ?: "")
   }
 
-  override fun addSupport(param: String, value: String) {
+  override fun addSupport(param: String, value: String?) {
     _supports[param] = value
   }
 
@@ -636,7 +636,7 @@ class Network constructor(
     _supports.remove(param)
   }
 
-  override fun addCap(capability: String, value: String) {
+  override fun addCap(capability: String, value: String?) {
     _caps[capability.lowercase(Locale.ROOT)] = value
   }
 

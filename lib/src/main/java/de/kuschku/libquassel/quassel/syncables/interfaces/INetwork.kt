@@ -67,7 +67,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun setCurrentServer(currentServer: String) {
+  fun setCurrentServer(currentServer: String?) {
     sync(
       target = ProtocolSide.CLIENT,
       "setCurrentServer",
@@ -76,7 +76,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun setMyNick(myNick: String) {
+  fun setMyNick(myNick: String?) {
     sync(
       target = ProtocolSide.CLIENT,
       "setMyNick",
@@ -94,7 +94,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun setCodecForServer(codecForServer: ByteBuffer) {
+  fun setCodecForServer(codecForServer: ByteBuffer?) {
     sync(
       target = ProtocolSide.CLIENT,
       "setCodecForServer",
@@ -103,7 +103,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun setCodecForEncoding(codecForEncoding: ByteBuffer) {
+  fun setCodecForEncoding(codecForEncoding: ByteBuffer?) {
     sync(
       target = ProtocolSide.CLIENT,
       "setCodecForEncoding",
@@ -112,7 +112,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun setCodecForDecoding(codecForDecoding: ByteBuffer) {
+  fun setCodecForDecoding(codecForDecoding: ByteBuffer?) {
     sync(
       target = ProtocolSide.CLIENT,
       "setCodecForDecoding",
@@ -323,7 +323,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun addSupport(param: String, value: String = "") {
+  fun addSupport(param: String, value: String? = null) {
     sync(
       target = ProtocolSide.CLIENT,
       "addSupport",
@@ -342,7 +342,7 @@ interface INetwork : ISyncableObject {
   }
 
   @SyncedCall(target = ProtocolSide.CLIENT)
-  fun addCap(capability: String, value: String = "") {
+  fun addCap(capability: String, value: String? = null) {
     sync(
       target = ProtocolSide.CLIENT,
       "addCap",
