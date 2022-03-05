@@ -27,11 +27,13 @@ fun KSTypeReference.asTypeName(): TypeName = resolve().asTypeName()
 fun KSType.asTypeName(): TypeName {
   when (val decl = declaration) {
     is KSTypeAlias -> return decl.type.resolve().asTypeName()
+      .copy(nullable = isMarkedNullable)
   }
 
   val baseType = asClassName()
   if (arguments.isEmpty()) {
     return baseType
+      .copy(nullable = isMarkedNullable)
   }
 
   val parameters = arguments.map {
@@ -53,4 +55,5 @@ fun KSType.asTypeName(): TypeName {
   }
 
   return baseType.parameterizedBy(parameters)
+    .copy(nullable = isMarkedNullable)
 }
