@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -46,7 +47,9 @@ fun PasswordTextField(
   trailingIcon: @Composable (() -> Unit)? = null,
   isError: Boolean = false,
   keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(
-    keyboardType = KeyboardType.Password
+    keyboardType = KeyboardType.Password,
+    autoCorrect = false,
+    capitalization = KeyboardCapitalization.None
   ),
   keyboardActions: KeyboardActions = KeyboardActions(),
   singleLine: Boolean = false,
