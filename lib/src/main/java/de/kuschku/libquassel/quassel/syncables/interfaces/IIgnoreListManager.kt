@@ -74,7 +74,7 @@ interface IIgnoreListManager : ISyncableObject {
     isActive: Boolean
   ) {
     sync(
-      target = ProtocolSide.CLIENT,
+      target = ProtocolSide.CORE,
       "requestAddIgnoreListItem",
       qVariant(type, QtType.Int),
       qVariant(ignoreRule, QtType.QString),
