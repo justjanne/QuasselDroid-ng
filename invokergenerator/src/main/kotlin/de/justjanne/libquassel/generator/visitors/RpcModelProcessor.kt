@@ -22,6 +22,7 @@ import de.justjanne.libquassel.annotations.ProtocolSide
 import de.justjanne.libquassel.generator.Constants.TYPENAME_GENERATED
 import de.justjanne.libquassel.generator.Constants.TYPENAME_INVOKER
 import de.justjanne.libquassel.generator.Constants.TYPENAME_QVARIANTLIST
+import de.justjanne.libquassel.generator.Constants.TYPENAME_QVARIANT_INTO
 import de.justjanne.libquassel.generator.Constants.TYPENAME_QVARIANT_INTOORTHROW
 import de.justjanne.libquassel.generator.Constants.TYPENAME_SYNCABLESTUB
 import de.justjanne.libquassel.generator.Constants.TYPENAME_UNKNOWN_METHOD_EXCEPTION
@@ -46,6 +47,10 @@ class RpcModelProcessor : RpcModelVisitor<ProtocolSide, KotlinModel?> {
         .addImport(
           TYPENAME_QVARIANT_INTOORTHROW.packageName,
           TYPENAME_QVARIANT_INTOORTHROW.simpleName
+        )
+        .addImport(
+          TYPENAME_QVARIANT_INTO.packageName,
+          TYPENAME_QVARIANT_INTO.simpleName
         )
         .addAnnotation(TYPENAME_GENERATED)
         .addType(
@@ -93,7 +98,10 @@ class RpcModelProcessor : RpcModelVisitor<ProtocolSide, KotlinModel?> {
                         addCase(ArgString("%S", method.rpcName ?: method.name), block.data)
                       }
                       buildElse {
-                        addStatement("throw %T(className, method)", TYPENAME_UNKNOWN_METHOD_EXCEPTION)
+                        addStatement(
+                          "throw %T(className, method)",
+                          TYPENAME_UNKNOWN_METHOD_EXCEPTION
+                        )
                       }
                     }
                     nextControlFlow("else")
@@ -122,7 +130,10 @@ class RpcModelProcessor : RpcModelVisitor<ProtocolSide, KotlinModel?> {
             for ((i, parameter) in model.parameters.withIndex()) {
               val suffix = if (i != lastIndex) "," else ""
               addStatement(
-                "${parameter.name} = params[$i].valueOrThrow<%T>()$suffix",
+                if (parameter.type.isNullable)
+                  "${parameter.name} = params[$i].value<%T>()$suffix"
+                else
+                  "${parameter.name} = params[$i].valueOrThrow<%T>()$suffix",
                 parameter.type
               )
             }
@@ -132,5 +143,8 @@ class RpcModelProcessor : RpcModelVisitor<ProtocolSide, KotlinModel?> {
       }
     )
 
-  override fun visitParameterModel(model: RpcModel.ParameterModel, data: ProtocolSide): KotlinModel? = null
+  override fun visitParameterModel(
+    model: RpcModel.ParameterModel,
+    data: ProtocolSide
+  ): KotlinModel? = null
 }

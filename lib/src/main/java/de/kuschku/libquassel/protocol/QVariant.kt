@@ -95,7 +95,7 @@ inline fun <reified U> QVariant_?.value(defValue: U): U = this?.data as? U ?: de
 
 inline fun <reified U> QVariant_?.valueOr(f: () -> U): U = this?.data as? U ?: f()
 
-inline fun <reified U> QVariant_?.valueOrThrow(e: Throwable = NullPointerException()): U =
+inline fun <reified U> QVariant_?.valueOrThrow(e: Throwable = ClassCastException("Could not obtain a ${U::class.java.canonicalName} from $this")): U =
   this?.data as? U ?: throw e
 
 inline fun <reified U> QVariant_?.valueOrThrow(e: () -> Throwable): U =

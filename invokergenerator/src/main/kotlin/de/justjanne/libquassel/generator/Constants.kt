@@ -54,6 +54,10 @@ object Constants {
     "de.kuschku.libquassel.protocol",
     "valueOrThrow"
   )
+  val TYPENAME_QVARIANT_INTO = ClassName(
+    "de.kuschku.libquassel.protocol",
+    "value"
+  )
   val TYPENAME_GENERATED = ClassName(
     "de.justjanne.libquassel.annotations",
     "Generated"

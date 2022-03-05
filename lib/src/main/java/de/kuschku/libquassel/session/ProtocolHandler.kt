@@ -63,6 +63,7 @@ abstract class ProtocolHandler(
     } catch (e: ObjectNotFoundException) {
       log(DEBUG, "ProtocolHandler", "An error has occured while processing $f", e)
     } catch (e: Throwable) {
+      log(DEBUG, "ProtocolHandler", "An error has occured while processing $f", e)
       exceptionHandler?.invoke(MessageHandlingException.SignalProxy(f, e))
     }
     return true
@@ -130,13 +131,16 @@ abstract class ProtocolHandler(
 
       val invoker = Invokers.get(ProtocolSide.CLIENT, f.className)
         ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
-      currentCallClass = f.className
-      currentCallInstance = f.objectName
-      currentCallSlot = f.slotName
-      invoker.invoke(it, f.slotName, f.params)
-      currentCallClass = ""
-      currentCallInstance = ""
-      currentCallSlot = ""
+      try {
+        currentCallClass = f.className
+        currentCallInstance = f.objectName
+        currentCallSlot = f.slotName
+        invoker.invoke(it, f.slotName, f.params)
+      } finally {
+        currentCallClass = ""
+        currentCallInstance = ""
+        currentCallSlot = ""
+      }
     }
     return true
   }
