@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.justjanne.quasseldroid.service.ConnectionData
+import de.justjanne.quasseldroid.util.extensions.handleTabFocus
 import de.justjanne.quasseldroid.util.saver.TextFieldValueSaver
 import java.net.InetSocketAddress
 
@@ -55,7 +56,8 @@ fun LoginView(
       singleLine = true,
       modifier = Modifier
         .padding(16.dp)
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .handleTabFocus(focusManager),
       label = { Text("Hostname") },
       keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
       keyboardActions = KeyboardActions(onNext = {
@@ -68,7 +70,8 @@ fun LoginView(
       singleLine = true,
       modifier = Modifier
         .padding(16.dp)
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .handleTabFocus(focusManager),
       label = { Text("Port") },
       keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
       keyboardActions = KeyboardActions(onNext = {
@@ -81,7 +84,8 @@ fun LoginView(
       singleLine = true,
       modifier = Modifier
         .padding(16.dp)
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .handleTabFocus(focusManager),
       label = { Text("Username") },
       keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
       keyboardActions = KeyboardActions(onNext = {
@@ -94,7 +98,8 @@ fun LoginView(
       singleLine = true,
       modifier = Modifier
         .padding(16.dp)
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .handleTabFocus(focusManager),
       label = { Text("Password") },
       keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
       keyboardActions = KeyboardActions(onNext = {
