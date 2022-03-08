@@ -56,7 +56,7 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
             setIdentityName(this@UserSetupActivity.getString(R.string.default_identity_identity_name))
             setNicks(listOf(data.getString("nick")))
             setRealName(data.getString("realname"))
-          }, emptyMap())
+          }.toVariantMap(), emptyMap())
 
           modelHelper.identities
             .map(Map<IdentityId, Identity>::values)
@@ -75,7 +75,7 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
                       useSsl = it.secure
                     )
                   }
-                ), data.getStringArray("channels")?.toList().orEmpty())
+                ).toVariantMap(), data.getStringArray("channels")?.toList().orEmpty())
 
                 backend.requestConnectNewNetwork()
               }

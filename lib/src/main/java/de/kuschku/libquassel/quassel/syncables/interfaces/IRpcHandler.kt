@@ -128,7 +128,7 @@ interface IRpcHandler : ISyncableObject {
   }
 
   @SyncedCall(name = "2createIdentity(Identity,QVariantMap)", target = ProtocolSide.CORE)
-  fun createIdentity(identity: IIdentity, additional: QVariantMap) {
+  fun createIdentity(identity: QVariantMap, additional: QVariantMap) {
     rpc(
       target = ProtocolSide.CORE,
       "2createIdentity(Identity,QVariantMap)",
@@ -147,7 +147,7 @@ interface IRpcHandler : ISyncableObject {
   }
 
   @SyncedCall(name = "2createNetwork(NetworkInfo,QStringList)", target = ProtocolSide.CORE)
-  fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) {
+  fun createNetwork(networkInfo: QVariantMap, channels: List<String>) {
     rpc(
       target = ProtocolSide.CORE,
       "2createNetwork(NetworkInfo,QStringList)",

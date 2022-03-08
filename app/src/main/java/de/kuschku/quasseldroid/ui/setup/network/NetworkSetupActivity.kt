@@ -74,7 +74,7 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
                     port = network.server.port,
                     useSsl = network.server.secure
                   ))
-                ), data.getStringArray("channels")?.toList().orEmpty())
+                ).toVariantMap(),data.getStringArray("channels")?.toList().orEmpty())
                 backend.requestConnectNewNetwork()
               }
             }

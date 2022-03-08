@@ -25,7 +25,7 @@ class IdentityCreateFragment : IdentityBaseFragment(true) {
   override fun onSave() = modelHelper.connectedSession.value?.orNull()?.let { session ->
     identity?.let { (_, data) ->
       applyChanges(data)
-      session.rpcHandler.createIdentity(data, mapOf())
+      session.rpcHandler.createIdentity(data.toVariantMap(), mapOf())
       true
     } ?: false
   } ?: false
