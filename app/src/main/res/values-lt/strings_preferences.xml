@@ -109,6 +109,9 @@
   <string name="preference_show_irccloud_avatars_title">Rodyti IRCCloud Avatarus</string>
   <string name="preference_show_irccloud_avatars_summary">Jei galima, vartotojams be Avataro rodys jų IRCCloud alternatyvą</string>
 
+  <string name="preference_show_libravatar_avatars_title">Rodyti Libravatar Avatarus</string>
+  <string name="preference_show_libravatar_avatars_summary">Jei galima, vartotojams be Avataro rodys jų Libravatar alternatyvą</string>
+
   <string name="preference_show_gravatar_avatars_title">Rodyti Gravatar Avatarus</string>
   <string name="preference_show_gravatar_avatars_summary">Jei galima, vartotojams be Avataro rodys jų Gravatar alternatyvą</string>
 

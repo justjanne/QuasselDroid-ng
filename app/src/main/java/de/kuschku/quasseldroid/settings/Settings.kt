@@ -138,6 +138,10 @@ object Settings {
         context.getString(R.string.preference_show_irccloud_avatars_key),
         MessageSettings.DEFAULT.showIRCCloudAvatars
       ),
+      showLibravatarAvatars = getBoolean(
+        context.getString(R.string.preference_show_libravatar_avatars_key),
+        MessageSettings.DEFAULT.showLibravatarAvatars
+      ),
       showGravatarAvatars = getBoolean(
         context.getString(R.string.preference_show_gravatar_avatars_key),
         MessageSettings.DEFAULT.showGravatarAvatars

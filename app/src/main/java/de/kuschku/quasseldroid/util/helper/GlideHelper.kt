@@ -36,10 +36,11 @@ import de.kuschku.quasseldroid.viewmodel.data.Avatar
 fun GlideRequests.loadWithFallbacks(urls: List<Avatar>): GlideRequest<Drawable>? {
   fun fold(url: Avatar, fallback: RequestBuilder<Drawable>?): GlideRequest<Drawable> {
     return when (url) {
-      is Avatar.NativeAvatar   -> load(url.url)
-      is Avatar.GravatarAvatar -> load(url.url)
-      is Avatar.IRCCloudAvatar -> load(url.url)
-      is Avatar.MatrixAvatar   -> load(url)
+      is Avatar.NativeAvatar     -> load(url.url)
+      is Avatar.LibravatarAvatar -> load(url.url)
+      is Avatar.GravatarAvatar   -> load(url.url)
+      is Avatar.IRCCloudAvatar   -> load(url.url)
+      is Avatar.MatrixAvatar     -> load(url)
     }.let {
       if (fallback != null) it.error(fallback) else it
     }

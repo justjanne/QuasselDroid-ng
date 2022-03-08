@@ -168,7 +168,7 @@
   <string name="label_feature_coresidehighlights">Reikalinga paryškinimams</string>
   <string name="label_feature_senderprefixes">Reikalinga norint matyti naudotoju priešdėlių rėžimus (+, @) žinutėse</string>
   <string name="label_feature_remotedisconnect">Reikalinga jūsų klientų nuotoliniam atsijungimui</string>
-  <string name="label_feature_richmessages">Reikalinga norint matyti tikruosius vardus ar IRCv3/Gravatar Avatarus žinutėse</string>
+  <string name="label_feature_richmessages">Reikalinga norint matyti tikruosius vardus ar IRCv3/Gravatar/Libravatar Avatarus žinutėse</string>
   <string name="label_feature_backlogfiltertype">Reikalinga norint gauti senus pranešimus po prisijungimo</string>
 
   <string name="label_feature_context_bufferactivitysync">Quasseldroid negali pažymėti neskaitytų pokalbių. Atnaujinkite branduolį į Quassel v0.13, jog tai ištaisytumėte.</string>

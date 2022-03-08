@@ -127,7 +127,7 @@
   <string name="label_feature_coresidehighlights">Potrebno za isticanje</string>
   <string name="label_feature_senderprefixes">Potrebno za vidljivost prefiksa modova (+, @) korisnika u porukama</string>
   <string name="label_feature_remotedisconnect">Potrebno za daljinsko prekidanje veze sopstvenih klijenata</string>
-  <string name="label_feature_richmessages">Potrebno za vidljivost pravih imena ili IRCv3 ili Gravatar avatara u porukama</string>
+  <string name="label_feature_richmessages">Potrebno za vidljivost pravih imena ili IRCv3 ili Gravatar ili Libravatar avatara u porukama</string>
   <string name="label_feature_backlogfiltertype">Potrebno za primanje prošlih obaveštenja posle povezivanja</string>
 
   <string name="label_feature_context_missing">Vašem jezgru nedostaju funkcije potrebne za pravilno funkcionisanje Quasseldroid-a.</string>

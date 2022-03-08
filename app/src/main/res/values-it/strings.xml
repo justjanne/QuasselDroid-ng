@@ -170,7 +170,7 @@
   <string name="label_feature_coresidehighlights">Necessario per le menzioni</string>
   <string name="label_feature_senderprefixes">Necessario per visualizzare i prefissi dei modi (+, @) degli utenti nei messaggi</string>
   <string name="label_feature_remotedisconnect">Necessario per la disconnessione da remoto dei tuoi client</string>
-  <string name="label_feature_richmessages">Necessario per visualizzare i nomi reali oppure gli avatar di IRCv3 o di Gravatar nei messaggi</string>
+  <string name="label_feature_richmessages">Necessario per visualizzare i nomi reali oppure gli avatar di IRCv3, di Libravatar, o di Gravatar nei messaggi</string>
   <string name="label_feature_backlogfiltertype">Necessario per ricevere le notifiche precedenti alla connessione</string>
 
   <string name="label_feature_context_bufferactivitysync">Quasseldroid non può evidenziare le chat non lette. Aggiorna il tuo core a Quassel v0.13 per risolvere.</string>

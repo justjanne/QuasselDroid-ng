@@ -120,6 +120,9 @@
   <string name="preference_show_irccloud_avatars_title">IRCCloud Avatare anzeigen</string>
   <string name="preference_show_irccloud_avatars_summary">Zeigt für Nutzer ohne Avatare den IRCCloud-Avatar an, falls verfügbar</string>
 
+  <string name="preference_show_libravatar_avatars_title">Libravatar Avatare anzeigen</string>
+  <string name="preference_show_libravatar_avatars_summary">Zeigt für Nutzer ohne Avatare den Libravatar-Avatar an, falls verfügbar</string>
+
   <string name="preference_show_gravatar_avatars_title">Gravatar Avatare anzeigen</string>
   <string name="preference_show_gravatar_avatars_summary">Zeigt für Nutzer ohne Avatare den Gravatar-Avatar an, falls verfügbar</string>
 

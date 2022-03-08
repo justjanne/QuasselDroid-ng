@@ -54,7 +54,7 @@
     },
     {
       "name": "RichMessages",
-      "description": "Required for seeing real names or IRCv3 or Gravatar avatars in messages"
+      "description": "Required for seeing real names or IRCv3, Gravatar, or Libravatar avatars in messages"
     },
     {
       "name": "BacklogFilterType",

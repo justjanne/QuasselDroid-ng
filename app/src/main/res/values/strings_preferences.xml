@@ -171,6 +171,10 @@
   <string name="preference_show_irccloud_avatars_title">Show IRCCloud Avatars</string>
   <string name="preference_show_irccloud_avatars_summary">Shows for users without avatar their IRCCloud fallback, if available</string>
 
+  <string name="preference_show_libravatar_avatars_key" translatable="false">show_libravatar_avatars</string>
+  <string name="preference_show_libravatar_avatars_title">Show Libravatar Avatars</string>
+  <string name="preference_show_libravatar_avatars_summary">Shows for users without avatar their Libravatar fallback, if available</string>
+  
   <string name="preference_show_gravatar_avatars_key" translatable="false">show_gravatar_avatars</string>
   <string name="preference_show_gravatar_avatars_title">Show Gravatar Avatars</string>
   <string name="preference_show_gravatar_avatars_summary">Shows for users without avatar their Gravatar fallback, if available</string>

@@ -120,7 +120,7 @@
   <string name="label_feature_coresidehighlights">Requis pour les highlights</string>
   <string name="label_feature_senderprefixes">Requis pour voir les préfixes de modes (+, @) des utilisateurs dans les messages</string>
   <string name="label_feature_remotedisconnect">Requis pour déconnecter vos propres clients à distance</string>
-  <string name="label_feature_richmessages">Requis pour voir les vrais noms ou les avatars IRCv3 ou Gravatar dans les messages</string>
+  <string name="label_feature_richmessages">Requis pour voir les vrais noms ou les avatars IRCv3, Gravatar, ou Libravatar dans les messages</string>
   <string name="label_feature_backlogfiltertype">Requis pour recevoir des notifications antérieures après la connection</string>
 
   <string name="notification_channel_connection_title">Connection</string>

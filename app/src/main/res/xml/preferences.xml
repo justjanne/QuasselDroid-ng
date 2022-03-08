@@ -215,6 +215,12 @@
     <SwitchPreference
       android:defaultValue="false"
       android:dependency="@string/preference_show_avatars_key"
+      android:key="@string/preference_show_libravatar_avatars_key"
+      android:title="@string/preference_show_libravatar_avatars_title" />
+
+    <SwitchPreference
+      android:defaultValue="false"
+      android:dependency="@string/preference_show_avatars_key"
       android:key="@string/preference_show_gravatar_avatars_key"
       android:title="@string/preference_show_gravatar_avatars_title" />
 

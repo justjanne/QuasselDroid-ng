@@ -118,6 +118,9 @@
   <string name="preference_show_irccloud_avatars_title">Mostra avatar di IRCCloud</string>
   <string name="preference_show_irccloud_avatars_summary">Per gli utenti privi di avatar mostra quello di IRCCloud, se disponibile</string>
 
+  <string name="preference_show_libravatar_avatars_title">Mostra avatar di Libravatar</string>
+  <string name="preference_show_libravatar_avatars_summary">Per gli utenti privi di avatar mostra quello di Libravatar, se disponibile</string>
+
   <string name="preference_show_gravatar_avatars_title">Mostra avatar di Gravatar</string>
   <string name="preference_show_gravatar_avatars_summary">Per gli utenti privi di avatar mostra quello di Gravatar, se disponibile</string>
 

@@ -43,6 +43,9 @@ object AvatarHelper {
       (settings.showAvatars && settings.showIRCCloudAvatars).letIf {
         ircCloudFallback(ident, size)
       },
+      (settings.showAvatars && settings.showLibravatarAvatars).letIf {
+        libravatarFallback(realName, size)
+      },
       (settings.showAvatars && settings.showGravatarAvatars).letIf {
         gravatarFallback(realName, size)
       },
@@ -87,6 +90,23 @@ object AvatarHelper {
         "https://static.irccloud-cdn.com/avatar-redirect/$userId"
       )
     )
+  }
+
+  private fun libravatarFallback(realname: String, size: Int?): List<Avatar> {
+    return Patterns.AUTOLINK_EMAIL_ADDRESS
+      .findAll(realname)
+      .mapNotNull {
+        it.groups[1]?.value
+      }.map { email ->
+        val hash = Hex.encodeHexString(DigestUtils.md5(IrcCaseMappers.unicode.toLowerCase(email)))
+        val domain = IrcCaseMappers.unicode.toLowerCase(email).split('@')[1]
+        val base = "https://seccdn.libravatar.org/avatar"
+        if (size == null) {
+          "$base/$hash?d=404"
+        } else {
+          "$base/$hash?d=404&s=${size}"
+        }
+      }.map { Avatar.LibravatarAvatar(it) }.toList()
   }
 
   private fun gravatarFallback(realname: String, size: Int?): List<Avatar> {
