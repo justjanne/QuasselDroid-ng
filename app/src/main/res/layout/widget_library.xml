@@ -46,15 +46,6 @@
       tools:text="@sample/libraries.json/data/name" />
 
     <TextView
-      android:id="@+id/version"
-      style="@style/Widget.RtlConformTextView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textAppearance="?android:attr/textAppearanceSmall"
-      android:textColor="?colorTextSecondary"
-      tools:text="@sample/libraries.json/data/version" />
-
-    <TextView
       android:id="@+id/license"
       style="@style/Widget.RtlConformTextView"
       android:layout_width="wrap_content"

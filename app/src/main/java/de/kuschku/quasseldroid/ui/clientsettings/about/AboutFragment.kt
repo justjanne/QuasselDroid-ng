@@ -122,31 +122,26 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Apache Commons Codec",
-        version = "1.13",
         license = apache2,
         url = "https://commons.apache.org/proper/commons-codec/"
       ),
       Library(
         name = "AutoService",
-        version = "1.0-rc6",
         license = apache2,
         url = "https://github.com/google/auto/tree/master/service"
       ),
       Library(
         name = "Better Link Movement Method",
-        version = "2.1.0",
         license = apache2,
         url = "https://github.com/Saketme/Better-Link-Movement-Method"
       ),
       Library(
         name = "Butter Knife",
-        version = "10.1.0",
         license = apache2,
         url = "http://jakewharton.github.io/butterknife/"
       ),
       Library(
         name = "Dagger 2",
-        version = "2.24",
         license = apache2,
         url = "https://google.github.io/dagger/"
       ),
@@ -161,19 +156,16 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "FloatingActionButtonSpeedDial",
-        version = "3.0.0",
         license = apache2,
         url = "https://github.com/leinardi/FloatingActionButtonSpeedDial"
       ),
       Library(
         name = "Glide",
-        version = "4.9.0",
         license = apache2,
         url = "https://bumptech.github.io/glide/"
       ),
       Library(
         name = "Gson",
-        version = "2.8.5",
         license = apache2,
         url = "https://github.com/google/gson"
       ),
@@ -188,31 +180,26 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "KotlinPoet",
-        version = "1.3.0",
         license = apache2,
         url = "https://github.com/square/kotlinpoet"
       ),
       Library(
         name = "JetBrains Java Annotations",
-        version = "17.0.0",
         license = apache2,
         url = "https://github.com/JetBrains/java-annotations"
       ),
       Library(
         name = "Kotlin Standard Library",
-        version = "1.6.10",
         license = apache2,
         url = "https://kotlinlang.org/"
       ),
       Library(
         name = "LeakCanary",
-        version = "1.6.3",
         license = apache2,
         url = "https://github.com/square/leakcanary"
       ),
       Library(
         name = "Material Components",
-        version = "1.1.0-alpha10",
         license = apache2,
         url = "https://github.com/material-components/material-components-android"
       ),
@@ -227,13 +214,11 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Material Design Icons: Google",
-        version = "3.0.1",
         license = apache2,
         url = "https://github.com/google/material-design-icons"
       ),
       Library(
         name = "Material Dialogs",
-        version = "0.9.6.0",
         license = License(
           shortName = "MIT",
           fullName = "The MIT License (MIT)",
@@ -243,13 +228,11 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "MaterialProgressBar",
-        version = "1.6.1",
         license = apache2,
         url = "https://github.com/DreaminginCodeZH/MaterialProgressBar"
       ),
       Library(
         name = "Quassel",
-        version = "0.13.1",
         license = License(
           shortName = "GPLv3",
           fullName = "GNU GENERAL PUBLIC LICENSE",
@@ -259,7 +242,6 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Reactive Streams",
-        version = "1.0.2",
         license = License(
           shortName = "CC0",
           fullName = "Creative Commons CC0 1.0 Universal",
@@ -269,25 +251,21 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "ReactiveNetwork",
-        version = "3.0.6",
         license = apache2,
         url = "https://github.com/pwittchen/ReactiveNetwork"
       ),
       Library(
         name = "RecyclerView-FastScroll",
-        version = "2.0.",
         license = apache2,
         url = "https://github.com/timusus/RecyclerView-FastScroll"
       ),
       Library(
         name = "Retrofit",
-        version = "2.6.1",
         license = apache2,
         url = "https://square.github.io/retrofit/"
       ),
       Library(
         name = "RxJava",
-        version = "2.2.12",
         license = apache2,
         url = "https://github.com/ReactiveX/RxJava"
       ),
@@ -302,7 +280,6 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "ThreeTen backport project",
-        version = "1.4.10",
         license = License(
           shortName = "BSD 3-clause",
           text = R.raw.license_threetenbp

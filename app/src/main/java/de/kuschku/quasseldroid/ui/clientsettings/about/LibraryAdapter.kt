@@ -56,8 +56,6 @@ class LibraryAdapter(private val libraries: List<Library>) :
     fun bind(item: Library) {
       this.item = item
       binding.name.text = item.name
-      binding.version.text = item.version
-      binding.version.visibleIf(!item.version.isNullOrBlank())
       binding.license.text = item.license.shortName
     }
   }
