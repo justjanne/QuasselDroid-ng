@@ -94,7 +94,7 @@ interface INetworkConfig : ISyncableObject {
     )
   }
 
-  @SyncedCall(target = ProtocolSide.CORE)
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setAutoWhoNickLimit(limit: Int) {
     sync(
       target = ProtocolSide.CORE,
@@ -112,7 +112,7 @@ interface INetworkConfig : ISyncableObject {
     )
   }
 
-  @SyncedCall(target = ProtocolSide.CORE)
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setMaxPingCount(count: Int) {
     sync(
       target = ProtocolSide.CORE,
@@ -130,7 +130,7 @@ interface INetworkConfig : ISyncableObject {
     )
   }
 
-  @SyncedCall(target = ProtocolSide.CORE)
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setPingInterval(interval: Int) {
     sync(
       target = ProtocolSide.CORE,
@@ -148,7 +148,7 @@ interface INetworkConfig : ISyncableObject {
     )
   }
 
-  @SyncedCall(target = ProtocolSide.CORE)
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setPingTimeoutEnabled(enabled: Boolean) {
     sync(
       target = ProtocolSide.CORE,
@@ -166,7 +166,7 @@ interface INetworkConfig : ISyncableObject {
     )
   }
 
-  @SyncedCall(target = ProtocolSide.CORE)
+  @SyncedCall(target = ProtocolSide.CLIENT)
   fun setStandardCtcp(enabled: Boolean) {
     sync(
       target = ProtocolSide.CORE,
