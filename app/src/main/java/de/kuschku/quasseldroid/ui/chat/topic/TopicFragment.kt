@@ -37,6 +37,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.input.*
+import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -80,6 +81,9 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
   @Inject
   lateinit var modelHelper: EditorViewModelHelper
 
+  @Inject
+  lateinit var emojiHandler: EmojiHandler
+
   private lateinit var editorHelper: EditorHelper
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -93,7 +97,8 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
       messageSettings,
       formatDeserializer,
       contentFormatter,
-      modelHelper
+      modelHelper,
+      emojiHandler
     )
 
     editorHelper = EditorHelper(

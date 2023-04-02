@@ -20,26 +20,67 @@
 package de.kuschku.quasseldroid.util.emoji
 
 import android.os.Build
+import android.text.Editable
 import android.text.SpannableStringBuilder
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import de.kuschku.quasseldroid.QuasseldroidTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.io.Reader
+
+inline fun <reified T> Gson.fromJson(reader: Reader): T =
+  if (T::class.java.typeParameters.isEmpty()) {
+    this.fromJson(reader, T::class.java)
+  } else {
+    val type = object : TypeToken<T>() {}.type
+    this.fromJson(reader, type)
+  }
+
+fun EmojiHandler.replaceShortcodes(source: String): String =
+  this.replaceShortcodes(SpannableStringBuilder(source)).toString()
 
 @Config(application = QuasseldroidTest::class, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class EmojiDataTest {
-  @Test
-  fun replaceShortCodes() {
-    assertEquals("\ud83d\udc4d", replaceShortCodes(":like:"))
-    assertEquals("this\ud83d\udc4disa\ud83d\udc1e\ud83d\udc4dtest",
-                 replaceShortCodes("this:like:isa:beetle::+1:test"))
+  object TestEmojiProvider : EmojiProvider {
+    private val gson: Gson = GsonBuilder().create()
+    override val emoji: List<EmojiHandler.Emoji> = gson.fromJson(
+      TestEmojiProvider::class.java.getResourceAsStream("/emoji.json")!!.reader(Charsets.UTF_8)
+    )
+    override val shortcodes: Map<String, EmojiHandler.Emoji> = emoji.flatMap { entry ->
+      entry.shortcodes.map { Pair(it, entry) }
+    }.toMap()
   }
 
-  companion object {
-    private fun replaceShortCodes(text: String): String =
-      EmojiData.replaceShortCodes(SpannableStringBuilder(text)).toString()
+  private val handler = EmojiHandler(TestEmojiProvider)
+
+  @Test
+  fun findShortCodes() {
+    assertTrue(EmojiHandler.shortcodeRegex.matches(":like:"))
+    assertTrue(EmojiHandler.shortcodeRegex.matches(":+1:"))
+    assertTrue(EmojiHandler.shortcodeRegex.matches(":beetle:"))
+  }
+
+  @Test
+  fun replaceShortCodes() {
+    assertEquals("\uD83D\uDC4D️",
+      handler.replaceShortcodes(":like:")
+    )
+    assertEquals("\uD83D\uDC4D️",
+      handler.replaceShortcodes(":+1:")
+    )
+    assertEquals("\uD83D\uDC1E\uD83D\uDC4D️",
+      handler.replaceShortcodes(":ladybug::+1:")
+    )
+    assertEquals(
+      "this\uD83D\uDC4D️isa\uD83D\uDC1E\uD83D\uDC4D️test",
+      handler.replaceShortcodes("this:like:isa:ladybug::+1:test")
+    )
   }
 }

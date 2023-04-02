@@ -38,7 +38,7 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
-import de.kuschku.quasseldroid.util.emoji.EmojiData
+import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
@@ -54,7 +54,8 @@ class AutoCompleteHelper(
   private val messageSettings: MessageSettings,
   private val ircFormatDeserializer: IrcFormatDeserializer,
   private val contentFormatter: ContentFormatter,
-  private val helper: EditorViewModelHelper
+  private val helper: EditorViewModelHelper,
+  private val emojiHandler: EmojiHandler,
 ) {
   private var autocompleteListener: ((AutoCompletionState) -> Unit)? = null
   private var dataListeners: List<((List<AutoCompleteItem>) -> Unit)> = emptyList()
@@ -246,11 +247,9 @@ class AutoCompleteHelper(
         )
       }
 
-      fun getEmojis() = EmojiData.processedEmojiMap.filter {
-        it.shortCodes.any {
-          it.contains(lastWord.first.trim(':'))
-        }
-      }
+      fun getEmojis() = emojiHandler.fuzzyLookup(
+        emojiHandler.normalizeShortcode(lastWord.first)
+      ).map { AutoCompleteItem.EmojiItem(it) }
 
       when (lastWord.first.firstOrNull()) {
         '/'  -> getAliases()

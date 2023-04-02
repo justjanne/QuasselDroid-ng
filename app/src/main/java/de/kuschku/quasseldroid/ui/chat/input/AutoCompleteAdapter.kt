@@ -217,8 +217,9 @@ class AutoCompleteAdapter @Inject constructor(
       fun bindImpl(data: AutoCompleteItem.EmojiItem, messageSettings: MessageSettings) {
         value = data
 
-        binding.emoji.text = data.replacement
-        binding.shortCode.text = data.shortCodes.joinToString(", ")
+        binding.emoji.text = data.emoji.replacement
+        binding.label.text = data.emoji.label
+        binding.tags.text = data.emoji.tags.joinToString(", ")
       }
     }
   }

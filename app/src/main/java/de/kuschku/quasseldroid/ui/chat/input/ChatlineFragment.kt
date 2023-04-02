@@ -40,7 +40,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.util.emoji.EmojiData
+import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -98,6 +98,9 @@ class ChatlineFragment : ServiceBoundFragment() {
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
+  @Inject
+  lateinit var emojiHandler: EmojiHandler
+
   lateinit var editorHelper: EditorHelper
 
   lateinit var autoCompleteHelper: AutoCompleteHelper
@@ -126,7 +129,8 @@ class ChatlineFragment : ServiceBoundFragment() {
       messageSettings,
       ircFormatDeserializer,
       contentFormatter,
-      modelHelper
+      modelHelper,
+      emojiHandler
     )
 
     editorHelper = EditorHelper(
@@ -176,7 +180,7 @@ class ChatlineFragment : ServiceBoundFragment() {
 
     fun send() {
       val safeText =
-        if (messageSettings.replaceEmoji) EmojiData.replaceShortCodes(chatline.safeText)
+        if (messageSettings.replaceEmoji) emojiHandler.replaceShortcodes(chatline.safeText)
         else chatline.safeText
 
       if (safeText.isNotEmpty()) {

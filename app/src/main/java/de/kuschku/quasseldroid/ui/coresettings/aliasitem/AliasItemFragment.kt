@@ -38,6 +38,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.input.*
+import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
@@ -84,6 +85,9 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   @Inject
   lateinit var modelHelper: EditorViewModelHelper
 
+  @Inject
+  lateinit var emojiHandler: EmojiHandler
+
   private lateinit var editorHelper: EditorHelper
 
   private var rule: IAliasManager.Alias? = null
@@ -104,7 +108,8 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
       messageSettings,
       formatDeserializer,
       contentFormatter,
-      modelHelper
+      modelHelper,
+      emojiHandler
     )
 
     editorHelper = EditorHelper(

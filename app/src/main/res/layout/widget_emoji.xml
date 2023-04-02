@@ -23,32 +23,51 @@
   android:layout_height="wrap_content"
   android:background="?attr/backgroundMenuItem"
   android:minHeight="48dp"
+  android:orientation="horizontal"
   android:paddingLeft="16dp"
-  android:paddingTop="8dp"
+  android:paddingTop="4dp"
   android:paddingRight="16dp"
-  android:paddingBottom="8dp">
+  android:paddingBottom="4dp"
+  android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
   <TextView
     android:id="@+id/emoji"
-    android:layout_width="32dp"
-    android:layout_height="32dp"
-    android:layout_gravity="center_vertical|start"
+    android:layout_width="@dimen/avatar_size"
+    android:layout_height="@dimen/avatar_size"
+    android:layout_gravity="center"
     android:layout_marginEnd="16dp"
-    android:fontFamily="sans-serif-medium"
-    android:gravity="center_vertical|start"
-    android:singleLine="true"
-    android:textColor="?attr/colorTextPrimary"
+    android:textAlignment="center"
     android:textSize="24dp"
     tools:ignore="SpUsage"
     tools:text="♥" />
 
-  <TextView
-    android:id="@+id/shortCode"
-    android:layout_width="wrap_content"
+  <LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|start"
-    android:singleLine="true"
-    android:textColor="?attr/colorTextSecondary"
-    android:textSize="12sp"
-    tools:text=":heart:" />
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/label"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:ellipsize="marquee"
+      android:singleLine="true"
+      android:textColor="?attr/colorTextPrimary"
+      android:textSize="13sp"
+      tools:text="smiling face with hearts" />
+
+    <TextView
+      android:id="@+id/tags"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:ellipsize="marquee"
+      android:singleLine="true"
+      android:textColor="?attr/colorTextSecondary"
+      android:textSize="12sp"
+      tools:text="adore, crush, hearts, in love"
+      tools:visibility="visible" />
+  </LinearLayout>
 </LinearLayout>

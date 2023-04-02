@@ -32,7 +32,7 @@ import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.mapNullable
 import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.libquassel.util.helper.safeSwitchMap
-import de.kuschku.quasseldroid.util.emoji.EmojiData
+import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.safety.DeceptiveNetworkManager
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
@@ -45,6 +45,7 @@ import javax.inject.Inject
 
 open class EditorViewModelHelper @Inject constructor(
   val editor: EditorViewModel,
+  emojiHandler: EmojiHandler,
   deceptiveNetworkManager: DeceptiveNetworkManager,
   chat: ChatViewModel,
   quassel: QuasselViewModel
@@ -166,21 +167,17 @@ open class EditorViewModelHelper @Inject constructor(
                   }
                 }
 
-                fun getEmojis() = EmojiData.processedEmojiMap.filter {
-                  it.shortCodes.any {
-                    it.contains(lastWord.first.trim(':'))
-                  }
-                }.map {
-                  Observable.just(it)
-                }
+                fun getEmoji() = emojiHandler.fuzzyLookup(
+                  emojiHandler.normalizeShortcode(lastWord.first)
+                ).map { Observable.just(AutoCompleteItem.EmojiItem(it)) }
 
                 processResults(
                   when (lastWord.first.firstOrNull()) {
                     '/'  -> getAliases()
                     '@'  -> getNicks()
                     '#'  -> getBuffers()
-                    ':'  -> getEmojis()
-                    else -> getAliases() + getNicks() + getBuffers() + getEmojis()
+                    ':'  -> getEmoji()
+                    else -> getAliases() + getNicks() + getBuffers() + getEmoji()
                   }
                 )
               }
