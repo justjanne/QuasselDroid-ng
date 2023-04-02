@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2020 Janne Mareike Koschinski
- * Copyright (c) 2020 The Quassel Project
+ * Copyright (c) 2023 Janne Mareike Koschinski
+ * Copyright (c) 2023 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.defaults
 
 import android.content.Context
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import de.kuschku.quasseldroid.util.helper.fromJson
 import java.io.IOException
 import javax.inject.Inject
 
@@ -29,10 +29,7 @@ class DefaultNetworks @Inject constructor(context: Context, gson: Gson) {
   val networks: List<DefaultNetwork> by lazy {
     try {
       context.assets.open("networks.json").use {
-        gson.fromJson<List<DefaultNetwork>>(
-          it.bufferedReader(Charsets.UTF_8),
-          object : TypeToken<List<DefaultNetwork>>() {}.type
-        )
+        gson.fromJson(it.bufferedReader(Charsets.UTF_8))
       }
     } catch (e: IOException) {
       throw IllegalStateException("networks.json missing from assets.", e)
