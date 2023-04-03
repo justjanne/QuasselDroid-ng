@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-  compileSdk = 31
+  compileSdk = 32
 
   defaultConfig {
     minSdk = 21
-    targetSdk = 31
+    targetSdk = 32
 
     applicationId = "${rootProject.group}.${rootProject.name.toLowerCase(Locale.ROOT)}"
     versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
