@@ -56,7 +56,7 @@ deploy-local:
     - "s3cmd put version.json s3://releases/quasseldroid-ng/version.json"
     - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
   rules:
-    - if: "$CI_COMMIT_TAG && $S3_CONFIG != ''"
+    - if: "$S3_CONFIG != ''"
       when: on_success
 
 deploy-beta:
@@ -70,5 +70,5 @@ deploy-beta:
     - "export VERSION=$(ls *.apk)"
     - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
   rules:
-    - if: "$CI_COMMIT_TAG && $FASTLANE_CONFIG != ''"
+    - if: "$FASTLANE_CONFIG != ''"
       when: on_success
