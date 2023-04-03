@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 /*
  * Quasseldroid - Quassel client for Android
  *
@@ -17,14 +19,26 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import util.buildConfigField
+import util.cmd
+
 plugins {
-  id("justjanne.android.signing")
   id("justjanne.android.app")
+}
+
+fun Project.fancyVersionName(): String? {
+  val name = cmd("git", "describe", "--always", "--tags", "HEAD") ?: return null
+  val commit = cmd("git", "rev-parse", "HEAD") ?: return name
+
+  return """<a href="https://git.kuschku.de/justJanne/QuasselDroid-ng/commit/$commit">$name</a>"""
 }
 
 android {
   defaultConfig {
+    buildConfigField("FANCY_VERSION_NAME", fancyVersionName())
+
     vectorDrawables.useSupportLibrary = true
+    testInstrumentationRunner = "de.justjanne.quasseldroid.util.TestRunner"
   }
 
   buildTypes {
@@ -52,11 +66,21 @@ android {
   }
 
   composeOptions {
-    kotlinCompilerExtensionVersion = libs.versions.androidx.compose.get()
+    kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
   }
 }
 
 dependencies {
+  implementation(libs.kotlin.stdlib)
+
+  implementation(libs.kotlinx.coroutines.android)
+  testImplementation(libs.kotlinx.coroutines.test)
+
+  testImplementation(libs.kotlin.test)
+  testImplementation(libs.junit.api)
+  testImplementation(libs.junit.params)
+  testRuntimeOnly(libs.junit.engine)
+
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.appcompat.resources)
 
@@ -69,7 +93,7 @@ dependencies {
   implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.material.icons)
   implementation(libs.androidx.compose.runtime)
-  implementation(libs.androidx.compose.ui)
+  implementation(libs.androidx.compose.ui.tooling)
 
   implementation(libs.androidx.collection.ktx)
   implementation(libs.androidx.core.ktx)
@@ -88,7 +112,7 @@ dependencies {
   implementation(libs.libquassel.client)
   implementation(libs.libquassel.irc)
 
-  implementation(libs.compose.htmltext)
+  //implementation(libs.compose.htmltext)
 
   debugImplementation(libs.androidx.compose.ui.tooling)
   implementation(libs.androidx.compose.ui.preview)

@@ -34,6 +34,11 @@ class MainActivity : ComponentActivity() {
     backend.onResume(this)
   }
 
+  override fun onPause() {
+    super.onPause()
+    backend.onPause(this)
+  }
+
   override fun onStop() {
     super.onStop()
     backend.onStop(this)

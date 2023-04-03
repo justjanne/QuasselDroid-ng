@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import de.charlex.compose.HtmlText
+//import de.charlex.compose.HtmlText
 import de.justjanne.libquassel.protocol.models.ConnectedClient
 import de.justjanne.libquassel.protocol.syncables.state.CoreInfoState
 import de.justjanne.quasseldroid.sample.SampleCoreInfoProvider
@@ -26,7 +26,7 @@ fun CoreInfoView(
 ) {
   Column(modifier = Modifier.padding(8.dp)) {
     Column(modifier = Modifier.padding(8.dp)) {
-      HtmlText(
+      Text(
         text = coreInfo.version,
         style = Typography.body1
       )

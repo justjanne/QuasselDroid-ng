@@ -21,11 +21,11 @@ inline fun <T, R> Flow<T?>.flatMapLatestNullable(crossinline transform: suspend 
   }
 
 @Composable
-inline fun <T> rememberFlow(initial: T, calculation: @DisallowComposableCalls () -> Flow<T>): T {
+inline fun <T> rememberFlow(initial: T, crossinline calculation: @DisallowComposableCalls () -> Flow<T>): T {
   return remember(calculation).collectAsState(initial).value
 }
 
 @Composable
-inline fun <T> rememberFlow(calculation: @DisallowComposableCalls () -> StateFlow<T>): T {
+inline fun <T> rememberFlow(crossinline calculation: @DisallowComposableCalls () -> StateFlow<T>): T {
   return remember(calculation).collectAsState().value
 }

@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import de.charlex.compose.HtmlText
+//import de.charlex.compose.HtmlText
 import de.justjanne.libquassel.protocol.models.ConnectedClient
 import de.justjanne.quasseldroid.model.SecurityLevel
 import de.justjanne.quasseldroid.sample.SampleConnectedClientProvider
@@ -34,7 +34,7 @@ fun ConnectedClientCard(
   Card(modifier = modifier) {
     Row(modifier = Modifier.padding(16.dp)) {
       Column(modifier = Modifier.weight(1.0f)) {
-        HtmlText(
+        Text(
           text = client.version,
           style = Typography.body1,
           overflow = TextOverflow.Ellipsis

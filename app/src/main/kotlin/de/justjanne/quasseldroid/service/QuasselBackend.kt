@@ -41,7 +41,9 @@ class QuasselBackend : DefaultContextualLifecycleObserver(), ServiceConnection,
   override fun onStop(owner: Context) {
     super.onStop(owner)
     Log.d("QuasselBackend", "Unbinding Quassel Service")
-    owner.unbindService(this)
+    if (state.value != null) {
+      owner.unbindService(this)
+    }
   }
 
   fun login(context: Context, connectionData: ConnectionData): Boolean {

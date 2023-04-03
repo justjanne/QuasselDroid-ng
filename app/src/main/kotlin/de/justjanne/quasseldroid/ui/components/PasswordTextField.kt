@@ -54,6 +54,7 @@ fun PasswordTextField(
   keyboardActions: KeyboardActions = KeyboardActions(),
   singleLine: Boolean = false,
   maxLines: Int = Int.MAX_VALUE,
+  minLines: Int = 1,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   shape: Shape = MaterialTheme.shapes.small,
   colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
@@ -86,6 +87,7 @@ fun PasswordTextField(
     keyboardActions,
     singleLine,
     maxLines,
+    minLines,
     interactionSource,
     shape,
     colors
@@ -111,6 +113,7 @@ fun PasswordTextField(
   keyboardActions: KeyboardActions = KeyboardActions(),
   singleLine: Boolean = false,
   maxLines: Int = Int.MAX_VALUE,
+  minLines: Int = 1,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   shape: Shape = MaterialTheme.shapes.small,
   colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
@@ -143,6 +146,7 @@ fun PasswordTextField(
     keyboardActions,
     singleLine,
     maxLines,
+    minLines,
     interactionSource,
     shape,
     colors
