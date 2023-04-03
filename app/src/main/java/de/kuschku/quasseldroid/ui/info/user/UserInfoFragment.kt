@@ -19,12 +19,14 @@
 
 package de.kuschku.quasseldroid.ui.info.user
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -42,10 +44,9 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.BufferSyncer
-import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helper.*
 import de.kuschku.libquassel.util.irc.HostmaskHelper
@@ -59,6 +60,7 @@ import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.avatars.MatrixApi
 import de.kuschku.quasseldroid.util.avatars.MatrixAvatarInfo
+import de.kuschku.quasseldroid.util.avatars.MatrixAvatarResponse
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -71,6 +73,7 @@ import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import io.reactivex.Observable
+import java.util.*
 import javax.inject.Inject
 
 class UserInfoFragment : ServiceBoundFragment() {
@@ -157,14 +160,11 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     val bufferId = BufferId(arguments?.getInt("bufferId") ?: -1)
     val networkId = NetworkId(arguments?.getInt("networkId") ?: -1)
-    val nickName = arguments?.getString("nick")
+    val hostMask = arguments?.getString("hostmask") ?: ""
+    val fallbackRealname = arguments?.getString("realname") ?: ""
 
     var currentBufferInfo: BufferInfo? = null
     var currentIrcUser: IrcUser?
-
-    fun updateShortcutVisibility() {
-      actionShortcut.visibleIf(currentBufferInfo != null)
-    }
 
     val commonChannelsAdapter = ChannelAdapter()
     commonChannels.layoutManager = LinearLayoutManager(context)
@@ -181,294 +181,278 @@ class UserInfoFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    combineLatest(modelHelper.connectedSession,
-                  modelHelper.networks).safeSwitchMap { (sessionOptional, networks) ->
-      fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null, info: BufferInfo? = null,
-                      ignoreItems: List<IgnoreListManager.IgnoreListItem>? = null): Observable<Optional<IrcUserInfo>> {
-        actionShortcut.post(::updateShortcutVisibility)
-        return when {
-          user == IrcUser.NULL && info != null -> Observable.just(Optional.of(IrcUserInfo(
-            networkId = info.networkId,
-            nick = info.bufferName ?: "",
+    combineLatest(modelHelper.connectedSession, modelHelper.networks).safeSwitchMap { (sessionOptional, networks) ->
+      val session = sessionOptional?.orNull()
+      val ignoreListManager = session?.ignoreListManager
+      val bufferSyncer = session?.bufferSyncer
+
+      val bufferInfo: Observable<Optional<BufferInfo>> = bufferSyncer?.liveBufferInfo(bufferId)
+        ?: Observable.just(Optional.empty())
+
+      val nick: Observable<String> = if (openBuffer == true) {
+        bufferInfo.map { (it.orNull()?.bufferName ?: "").ifEmpty { HostmaskHelper.nick(hostMask) } }
+      } else Observable.just(HostmaskHelper.nick(hostMask))
+
+      val user: Observable<IrcUser> = nick.safeSwitchMap {
+        networks[networkId]?.liveIrcUser(it)
+          ?.safeSwitchMap(IrcUser::updates)
+          ?: Observable.just(IrcUser.NULL)
+      }
+
+      val ignoreRules = user.safeSwitchMap {
+        ignoreListManager?.liveMatchingRules(it.hostMask().ifEmpty { hostMask })
+          ?: Observable.just(emptyList())
+      }
+
+      val userMeta = combineLatest(nick, user).map { (nick, user) ->
+        if (user == IrcUser.NULL) {
+          IrcUserMeta(
+            networkId = networkId,
+            nick = nick,
+            knownToCore = false,
+            user = HostmaskHelper.user(hostMask),
+            host = HostmaskHelper.host(hostMask),
+            realName = fallbackRealname,
+          )
+        } else {
+          IrcUserMeta(
+            networkId = user.network().networkId(),
+            nick = user.nick(),
             knownToCore = true,
-            info = info
-          )))
-          user == IrcUser.NULL                 -> Observable.just(Optional.empty())
-          else                                 -> {
-            fun buildUserInfo(channels: List<BufferProps>) = IrcUserInfo(
-              networkId = user.network().networkId(),
-              nick = user.nick(),
-              user = user.user(),
-              host = user.host(),
-              account = user.account(),
-              server = user.server(),
-              realName = user.realName(),
-              isAway = user.isAway(),
-              awayMessage = user.awayMessage(),
-              network = user.network(),
-              knownToCore = true,
-              info = info,
-              ircUser = user,
-              channels = channels.sortedBy {
-                IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName)
-              },
-              ignoreListItems = ignoreItems.orEmpty()
-            )
-
-            if (user.channels().isEmpty()) {
-              Observable.just(Optional.of(
-                buildUserInfo(emptyList())
-              ))
-            } else {
-              combineLatest(user.channels().map { channelName ->
-                user.network().liveIrcChannel(
-                  channelName
-                ).safeSwitchMap { channel ->
-                  channel.updates().map {
-                    Optional.ofNullable(
-                      bufferSyncer?.find(
-                        bufferName = channelName,
-                        networkId = user.network().networkId()
-                      )?.let { info ->
-                        val bufferStatus =
-                          if (it == IrcChannel.NULL) BufferStatus.OFFLINE
-                          else BufferStatus.ONLINE
-                        val color =
-                          if (bufferStatus == BufferStatus.ONLINE) colorAccent
-                          else colorAway
-                        val fallbackDrawable = colorContext.buildTextDrawable("#", color)
-
-                        BufferProps(
-                          info = info,
-                          network = user.network().networkInfo(),
-                          description = it.topic(),
-                          activity = Message_Type.of(),
-                          bufferStatus = bufferStatus,
-                          networkConnectionState = user.network().connectionState(),
-                          fallbackDrawable = fallbackDrawable
-                        )
-                      }
-                    )
-                  }
-                }
-              }).map {
-                it.mapNotNull(Optional<BufferProps>::orNull)
-              }.map {
-                Optional.of(buildUserInfo(it))
-              }
-            }
-          }
+            user = user.user(),
+            host = user.host(),
+            account = user.account(),
+            server = user.server(),
+            realName = user.realName(),
+            isAway = user.isAway(),
+            awayMessage = user.awayMessage(),
+            ircUser = user,
+          )
         }
       }
 
-      val session = sessionOptional?.orNull()
-      if (openBuffer == true) {
-        val bufferSyncer = session?.bufferSyncer
-        val bufferInfo = bufferSyncer?.bufferInfo(bufferId)
-        bufferInfo?.let {
-          networks[it.networkId]?.liveIrcUser(it.bufferName)?.safeSwitchMap(IrcUser::updates)?.safeSwitchMap {
-            processUser(it, bufferSyncer, bufferInfo)
-          }
-        }
-      } else {
-        val ignoreListManager = session?.ignoreListManager
+      combineLatest(bufferInfo, userMeta, ignoreRules).safeSwitchMap { (bufferInfo, meta, ignoreItems) ->
+        val channels = if (meta.ircUser == null) {
+          Observable.just(emptyList())
+        } else {
+          combineLatest(meta.ircUser.channels().map { channelName ->
+            meta.ircUser.network().liveIrcChannel(channelName).safeSwitchMap { channel ->
+              channel.updates().map {
+                Optional.ofNullable(
+                  bufferSyncer?.find(
+                    bufferName = channelName,
+                    networkId = meta.ircUser.network().networkId()
+                  )?.let { info ->
+                    val bufferStatus =
+                      if (it == IrcChannel.NULL) BufferStatus.OFFLINE
+                      else BufferStatus.ONLINE
+                    val color =
+                      if (bufferStatus == BufferStatus.ONLINE) colorAccent
+                      else colorAway
+                    val fallbackDrawable = colorContext.buildTextDrawable("#", color)
 
-        networks[networkId]
-          ?.liveIrcUser(nickName)
-          ?.safeSwitchMap(IrcUser::updates)
-          ?.safeSwitchMap { user ->
-            ignoreListManager?.liveMatchingRules(user.hostMask())?.map {
-              Pair(user, it)
-            } ?: Observable.just(Pair(user, emptyList()))
-          }?.safeSwitchMap { (user, ignoreItems) ->
-            processUser(user,
-                        sessionOptional?.orNull()?.bufferSyncer,
-                        ignoreItems = ignoreItems)
-          }
-      } ?: Observable.just(IrcUser.NULL).safeSwitchMap { user -> processUser(user, null, null) }
-    }.toLiveData().observe(viewLifecycleOwner, Observer {
-      val user = it.orNull()
-      if (user != null) {
-        currentBufferInfo = user.info
-        currentIrcUser = user.ircUser
-        actionShortcut.visibleIf(currentBufferInfo != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-
-        avatar.post {
-          avatar.visibility = View.GONE
-          actualUrl = null
-          avatar.loadAvatars(
-            AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
-            crop = false
-          ) { model ->
-            avatar.visibility = View.VISIBLE
-            when (model) {
-              is String              -> {
-                actualUrl = model
+                    BufferProps(
+                      info = info,
+                      network = meta.ircUser.network().networkInfo(),
+                      description = it.topic(),
+                      activity = Message_Type.of(),
+                      bufferStatus = bufferStatus,
+                      networkConnectionState = meta.ircUser.network().connectionState(),
+                      fallbackDrawable = fallbackDrawable
+                    )
+                  }
+                )
               }
-              is Avatar.MatrixAvatar -> {
-                runInBackground {
-                  matrixApi.avatarUrl(model.userId).execute().body()?.let {
+            }
+          }).map { it.mapNotNull(Optional<BufferProps>::orNull) }
+        }
+
+        channels.map {
+          IrcUserLiveMeta(
+            meta = meta,
+            network = meta.ircUser?.network(),
+            info = bufferInfo.orNull(),
+            channels = it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) },
+            ignoreListItems = ignoreItems.orEmpty()
+          )
+        }
+      }
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
+      val live = it
+      val user = it.meta
+
+      currentBufferInfo = live.info
+      currentIrcUser = user.ircUser
+      actionShortcut.visibleIf(currentBufferInfo != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+      avatar.post {
+        avatar.visibility = View.GONE
+        actualUrl = null
+        avatar.loadAvatars(
+          AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
+          crop = false
+        ) { model ->
+          avatar.visibility = View.VISIBLE
+          when (model) {
+            is String -> {
+              actualUrl = model
+            }
+            is Avatar.MatrixAvatar -> {
+              runInBackground {
+                matrixApi.avatarUrl(model.userId).execute().body()
+                  ?.let<MatrixAvatarResponse, Unit> {
                     it.avatarUrl?.let {
                       val avatarInfo = MatrixAvatarInfo(it, model.size)
                       val url = Uri.parse(avatarInfo.avatarUrl)
 
-                      val imageUrl = matrixApi.avatarImage(server = url.host ?: "",
-                                                           id = url.pathSegments.first()).request().url()
+                      val imageUrl = matrixApi.avatarImage(
+                        server = url.host ?: "",
+                        id = url.pathSegments.first()
+                      ).request().url()
                       actualUrl = imageUrl.toString()
                     }
                   }
-                }
               }
             }
           }
         }
-        nick.text = ircFormatDeserializer.formatString(user.nick, messageSettings.colorizeMirc)
-        val (content, _) = contentFormatter.formatContent(
-          user.realName ?: "",
-          networkId = user.networkId
-        )
-        realName.text = content
-        realName.visibleIf(!user.realName.isNullOrBlank() && user.realName != user.nick)
-
-        awayMessage.text = user.awayMessage.nullIf { it.isNullOrBlank() } ?: SpannableString(
-          getString(
-            R.string.label_no_away_message)).apply {
-          setSpan(IrcItalicSpan(), 0, length, 0)
-        }
-        awayContainer.visibleIf(user.isAway == true)
-
-        account.text = user.account
-        accountContainer.visibleIf(!user.account.isNullOrBlank())
-
-        val (userIdent, _) = contentFormatter.formatContent(
-          user.user ?: "",
-          networkId = user.networkId
-        )
-        ident.text = userIdent
-        identContainer.visibleIf(userIdent.isNotBlank())
-
-        val (userHost, _) = contentFormatter.formatContent(
-          user.host ?: "",
-          networkId = user.networkId
-        )
-        host.text = userHost
-        hostContainer.visibleIf(userHost.isNotBlank())
-
-        server.text = user.server
-        serverContainer.visibleIf(!user.server.isNullOrBlank())
-
-        actionWhois.visibleIf(user.knownToCore)
-
-        actionQuery.setOnClickListener { view ->
-          modelHelper.connectedSession.value?.orNull()?.let { session ->
-            val info = session.bufferSyncer.find(
-              bufferName = user.nick,
-              networkId = user.networkId,
-              type = Buffer_Type.of(Buffer_Type.QueryBuffer)
-            )
-
-            if (info != null) {
-              ChatActivity.launch(view.context, bufferId = info.bufferId)
-            } else {
-              modelHelper.allBuffers.map {
-                listOfNotNull(it.find {
-                  it.networkId == user.networkId && it.bufferName == user.nick
-                })
-              }.filter {
-                it.isNotEmpty()
-              }.firstElement().toLiveData().observe(viewLifecycleOwner, Observer {
-                it?.firstOrNull()?.let { info ->
-                  ChatActivity.launch(view.context, bufferId = info.bufferId)
-                }
-              })
-
-              session.bufferSyncer.find(
-                networkId = user.networkId,
-                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-              )?.let { statusInfo ->
-                session.rpcHandler.sendInput(statusInfo, "/query ${user.nick}")
-              }
-            }
-          }
-        }
-
-        var ignoreMenu: PopupMenu? = null
-        actionIgnore.setOnClickListener { view ->
-          PopupMenu(actionIgnore.context, actionIgnore).also { menu ->
-            ignoreMenu?.dismiss()
-            menu.menuInflater.inflate(R.menu.context_ignore, menu.menu)
-            for (ignoreItem in user.ignoreListItems) {
-              menu.menu.add(ignoreItem.ignoreRule).apply {
-                isCheckable = true
-                isChecked = ignoreItem.isActive
-              }
-            }
-            menu.setOnMenuItemClickListener {
-              when {
-                it.itemId == R.id.action_create -> {
-                  IgnoreListActivity.launch(
-                    view.context,
-                    addRule = HostmaskHelper.build(user.nick, user.user, user.host)
-                  )
-                  menu.dismiss()
-                  ignoreMenu = null
-                  true
-                }
-                it.itemId == R.id.action_show   -> {
-                  IgnoreListActivity.launch(
-                    view.context
-                  )
-                  menu.dismiss()
-                  ignoreMenu = null
-                  true
-                }
-                it.isCheckable                  -> {
-                  modelHelper.ignoreListManager.value?.orNull()?.requestToggleIgnoreRule(it.title.toString())
-                  true
-                }
-                else                            -> false
-              }
-            }
-            menu.setOnDismissListener {
-              ignoreMenu = null
-            }
-            menu.show()
-          }
-        }
-
-        actionMention.setOnClickListener { view ->
-          ChatActivity.launch(view.context, sharedText = "${user.nick}: ")
-        }
-
-        actionWhois.setOnClickListener { view ->
-          modelHelper.connectedSession {
-            it.orNull()?.let { session ->
-              session.bufferSyncer.find(
-                networkId = user.networkId,
-                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-              )?.let { statusInfo ->
-                session.rpcHandler.sendInput(statusInfo, "/whois ${user.nick} ${user.nick}")
-              }
-            }
-          }
-        }
-
-        actionShortcut.setOnClickListener {
-          this.context?.let { context ->
-            currentBufferInfo?.let { info ->
-              ShortcutCreationHelper.create(
-                context = context,
-                messageSettings = messageSettings,
-                accountId = accountId,
-                info = info,
-                ircUser = currentIrcUser
-              )
-            }
-          }
-        }
-
-        commonChannelsAdapter.submitList(user.channels)
       }
+      nick.text = ircFormatDeserializer.formatString(user.nick, messageSettings.colorizeMirc)
+      val (content, _) = contentFormatter.formatContent(
+        user.realName ?: "",
+        networkId = user.networkId
+      )
+      realName.text = content
+      realName.visibleIf(!user.realName.isNullOrBlank() && user.realName != user.nick)
+      awayMessage.text = user.awayMessage.nullIf<String?> { it.isNullOrBlank() } ?: SpannableString(
+        getString(
+          R.string.label_no_away_message
+        )
+      ).apply {
+        setSpan(IrcItalicSpan(), 0, length, 0)
+      }
+      awayContainer.visibleIf(user.isAway == true)
+      account.text = user.account
+      accountContainer.visibleIf(!user.account.isNullOrBlank())
+      val (userIdent, _) = contentFormatter.formatContent(
+        user.user ?: "",
+        networkId = user.networkId
+      )
+      ident.text = userIdent
+      identContainer.visibleIf(userIdent.isNotBlank())
+      val (userHost, _) = contentFormatter.formatContent(
+        user.host ?: "",
+        networkId = user.networkId
+      )
+      host.text = userHost
+      hostContainer.visibleIf(userHost.isNotBlank())
+      server.text = user.server
+      serverContainer.visibleIf(!user.server.isNullOrBlank())
+      actionWhois.visibleIf(user.knownToCore)
+      actionQuery.setOnClickListener { view ->
+        modelHelper.connectedSession.value?.orNull()?.let<ISession, Unit> { session ->
+          val info = session.bufferSyncer.find(
+            bufferName = user.nick,
+            networkId = user.networkId,
+            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+          )
+
+          if (info != null) {
+            ChatActivity.launch(view.context, bufferId = info.bufferId)
+          } else {
+            modelHelper.allBuffers.map {
+              listOfNotNull(it.find {
+                it.networkId == user.networkId && it.bufferName == user.nick
+              })
+            }.filter {
+              it.isNotEmpty()
+            }.firstElement().toLiveData().observe(viewLifecycleOwner, Observer {
+              it?.firstOrNull()?.let { info ->
+                ChatActivity.launch(view.context, bufferId = info.bufferId)
+              }
+            })
+
+            session.bufferSyncer.find(
+              networkId = user.networkId,
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )?.let { statusInfo ->
+              session.rpcHandler.sendInput(statusInfo, "/query ${user.nick}")
+            }
+          }
+        }
+      }
+      var ignoreMenu: PopupMenu? = null
+      actionIgnore.setOnClickListener { view ->
+        PopupMenu(actionIgnore.context, actionIgnore).also<PopupMenu> { menu ->
+          ignoreMenu?.dismiss()
+          menu.menuInflater.inflate(R.menu.context_ignore, menu.menu)
+          for (ignoreItem in live.ignoreListItems) {
+            menu.menu.add(ignoreItem.ignoreRule).apply<MenuItem> {
+              this.isCheckable = true
+              this.isChecked = ignoreItem.isActive
+            }
+          }
+          menu.setOnMenuItemClickListener {
+            when {
+              it.itemId == R.id.action_create -> {
+                IgnoreListActivity.launch(
+                  view.context,
+                  addRule = HostmaskHelper.build(user.nick, user.user, user.host)
+                )
+                menu.dismiss()
+                ignoreMenu = null
+                true
+              }
+              it.itemId == R.id.action_show -> {
+                IgnoreListActivity.launch(
+                  view.context
+                )
+                menu.dismiss()
+                ignoreMenu = null
+                true
+              }
+              it.isCheckable -> {
+                modelHelper.ignoreListManager.value?.orNull()
+                  ?.requestToggleIgnoreRule(it.title.toString())
+                true
+              }
+              else -> false
+            }
+          }
+          menu.setOnDismissListener {
+            ignoreMenu = null
+          }
+          menu.show()
+        }
+      }
+      actionMention.setOnClickListener { view ->
+        ChatActivity.launch(view.context, sharedText = "${user.nick}: ")
+      }
+      actionWhois.setOnClickListener { view ->
+        modelHelper.connectedSession {
+          it.orNull()?.let { session ->
+            session.bufferSyncer.find(
+              networkId = user.networkId,
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )?.let { statusInfo ->
+              session.rpcHandler.sendInput(statusInfo, "/whois ${user.nick} ${user.nick}")
+            }
+          }
+        }
+      }
+      actionShortcut.setOnClickListener {
+        context?.let<Context, Unit> { context ->
+          currentBufferInfo?.let { info ->
+            ShortcutCreationHelper.create(
+              context = context,
+              messageSettings = messageSettings,
+              accountId = accountId,
+              info = info,
+              ircUser = currentIrcUser
+            )
+          }
+        }
+      }
+      commonChannelsAdapter.submitList(live.channels)
     })
 
     avatar.setOnClickListener {

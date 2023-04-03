@@ -73,7 +73,7 @@ class BufferSyncer constructor(
 
   fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
   fun liveBufferInfo(bufferId: BufferId) =
-    live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
+    live_bufferInfos.map { Optional.ofNullable(bufferInfo(bufferId)) }.distinctUntilChanged()
 
   fun bufferInfos(): Collection<BufferInfo> = _bufferInfos.values.toList()
   fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos.map { _bufferInfos.toMap() }

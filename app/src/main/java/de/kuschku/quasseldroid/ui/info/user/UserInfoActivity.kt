@@ -31,26 +31,31 @@ class UserInfoActivity : ServiceBoundSettingsActivity(UserInfoFragment()) {
       context: Context,
       openBuffer: Boolean,
       bufferId: BufferId? = null,
-      nick: String? = null,
-      networkId: NetworkId? = null
-    ) = context.startActivity(intent(context, openBuffer, bufferId, nick, networkId))
+      networkId: NetworkId? = null,
+      hostmask: String? = null,
+      realname: String? = null
+    ) = context.startActivity(intent(context, openBuffer, bufferId, networkId, hostmask, realname))
 
     fun intent(
       context: Context,
       openBuffer: Boolean,
       bufferId: BufferId? = null,
-      nick: String? = null,
-      networkId: NetworkId? = null
+      networkId: NetworkId? = null,
+      hostmask: String? = null,
+      realname: String? = null
     ) = Intent(context, UserInfoActivity::class.java).apply {
       putExtra("openBuffer", openBuffer)
       if (bufferId != null) {
         putExtra("bufferId", bufferId.id)
       }
-      if (nick != null) {
-        putExtra("nick", nick)
-      }
       if (networkId != null) {
         putExtra("networkId", networkId.id)
+      }
+      if (hostmask != null) {
+        putExtra("hostmask", hostmask)
+      }
+      if (realname != null) {
+        putExtra("realname", realname)
       }
     }
   }

@@ -171,6 +171,7 @@ class ToolbarFragment : ServiceBoundFragment() {
             UserInfoActivity.launch(
               requireContext(),
               bufferId = info.bufferId,
+              networkId = info.networkId,
               openBuffer = true
             )
           }

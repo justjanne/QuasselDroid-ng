@@ -186,7 +186,7 @@ class NickListFragment : ServiceBoundFragment() {
           networkId = networkId,
           type = Buffer_Type.of(Buffer_Type.QueryBuffer)
         )?.let(BufferInfo::bufferId),
-        nick = nick,
+        hostmask = nick,
         networkId = networkId
       )
     }

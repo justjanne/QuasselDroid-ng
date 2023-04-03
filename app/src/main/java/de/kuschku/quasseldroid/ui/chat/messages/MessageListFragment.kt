@@ -132,13 +132,14 @@ class MessageListFragment : ServiceBoundFragment() {
               UserInfoActivity.launch(
                 requireContext(),
                 openBuffer = false,
+                networkId = networkId,
                 bufferId = bufferSyncer.find(
                   bufferName = HostmaskHelper.nick(msg.original.sender),
                   networkId = networkId,
                   type = Buffer_Type.of(Buffer_Type.QueryBuffer)
                 )?.let(BufferInfo::bufferId),
-                nick = HostmaskHelper.nick(msg.original.sender),
-                networkId = networkId
+                hostmask = msg.original.sender,
+                realname = msg.original.realName
               )
             }
           }
@@ -287,13 +288,14 @@ class MessageListFragment : ServiceBoundFragment() {
           UserInfoActivity.launch(
             requireContext(),
             openBuffer = false,
+            networkId = networkId,
             bufferId = bufferSyncer.find(
               bufferName = HostmaskHelper.nick(msg.sender),
               networkId = networkId,
               type = Buffer_Type.of(Buffer_Type.QueryBuffer)
             )?.let(BufferInfo::bufferId),
-            nick = HostmaskHelper.nick(msg.sender),
-            networkId = networkId
+            hostmask = msg.sender,
+            realname = msg.realName
           )
         }
       }

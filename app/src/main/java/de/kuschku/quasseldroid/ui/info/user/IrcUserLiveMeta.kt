@@ -26,20 +26,12 @@ import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 
-data class IrcUserInfo(
-  val networkId: NetworkId,
-  val nick: String,
-  val user: String? = null,
-  val host: String? = null,
-  val account: String? = null,
-  val server: String? = null,
-  val realName: String? = null,
-  val isAway: Boolean? = false,
-  val awayMessage: String? = null,
-  val network: Network? = null,
+data class IrcUserLiveMeta(
+  val meta: IrcUserMeta,
   val knownToCore: Boolean = false,
-  val info: BufferInfo? = null,
   val ircUser: IrcUser? = null,
+  val network: Network? = null,
+  val info: BufferInfo? = null,
   val channels: List<BufferProps> = emptyList(),
   val ignoreListItems: List<IgnoreListManager.IgnoreListItem> = emptyList()
 )

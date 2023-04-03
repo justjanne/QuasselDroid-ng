@@ -25,7 +25,7 @@ import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.persistence.models.NotificationData
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.info.user.IrcUserInfo
+import de.kuschku.quasseldroid.ui.info.user.IrcUserMeta
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.backport.codec.Hex
 import de.kuschku.quasseldroid.util.helper.letIf
@@ -61,7 +61,7 @@ object AvatarHelper {
   fun avatar(settings: MessageSettings, user: IrcUserItem, size: Int? = null) =
     avatar(settings, HostmaskHelper.user(user.hostmask), user.realname.toString(), null, size)
 
-  fun avatar(settings: MessageSettings, user: IrcUserInfo, size: Int? = null) =
+  fun avatar(settings: MessageSettings, user: IrcUserMeta, size: Int? = null) =
     avatar(settings, user.user ?: "", user.realName ?: "", null, size)
 
   fun avatar(settings: MessageSettings, user: IrcUser, size: Int? = null) =
