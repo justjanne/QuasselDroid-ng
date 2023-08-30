@@ -61,15 +61,6 @@
       "url": "https://bumptech.github.io/glide/"
     },
     {
-      "name": "Gson",
-      "version": "2.8.2",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://github.com/google/gson"
-    },
-    {
       "name": "Gruvbox",
       "license": {
         "short_name": "MIT",

@@ -37,9 +37,10 @@ dependencies {
   implementation(libs.threetenbp) {
     artifact { classifier = "no-tzdb" }
   }
-  implementation(libs.annotations.jetbrains)
 
+  implementation(libs.annotations.jetbrains)
   implementation(libs.annotations.inject)
+  implementation(libs.kotlinx.serialization.json)
 
   // Quassel
   implementation(project(":persistence"))

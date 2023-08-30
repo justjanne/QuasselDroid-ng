@@ -28,7 +28,7 @@ import java.io.InputStream
 class MatrixModelLoader(private val api: MatrixApi) :
   ModelLoader<Avatar.MatrixAvatar, InputStream> {
   override fun buildLoadData(model: Avatar.MatrixAvatar, width: Int, height: Int,
-                             options: Options): ModelLoader.LoadData<InputStream>? {
+                             options: Options): ModelLoader.LoadData<InputStream> {
     return ModelLoader.LoadData(ObjectKey(model), MatrixDataFetcher(model, api))
   }
 

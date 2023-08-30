@@ -20,18 +20,16 @@
 package de.kuschku.quasseldroid.dagger
 
 import android.app.Application
-import android.content.Context
-import androidx.fragment.app.FragmentActivity
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import de.kuschku.quasseldroid.Quasseldroid
 import de.kuschku.quasseldroid.util.AndroidEmojiProvider
 import de.kuschku.quasseldroid.util.avatars.MatrixApi
 import de.kuschku.quasseldroid.util.emoji.EmojiProvider
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 object AppModule {
@@ -39,16 +37,13 @@ object AppModule {
   fun bindApplication(app: Quasseldroid): Application = app
 
   @Provides
-  fun provideGson(): Gson = GsonBuilder().setPrettyPrinting().create()
-
-  @Provides
   fun provideMatrixApi(): MatrixApi = Retrofit.Builder()
     .baseUrl("https://matrix.org/")
-    .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+    .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
     .build()
     .create(MatrixApi::class.java)
 
   @Provides
-  fun provideEmojiProvider(context: Application, gson: Gson): EmojiProvider =
-    AndroidEmojiProvider(context.applicationContext, gson)
+  fun provideEmojiProvider(context: Application): EmojiProvider =
+    AndroidEmojiProvider(context.applicationContext)
 }

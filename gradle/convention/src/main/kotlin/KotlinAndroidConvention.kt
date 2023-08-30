@@ -19,6 +19,7 @@ class KotlinAndroidConvention : Plugin<Project> {
         apply("org.jetbrains.kotlin.android")
         apply("org.jetbrains.kotlin.kapt")
         apply("com.google.devtools.ksp")
+        apply("org.jetbrains.kotlin.plugin.serialization")
       }
 
       // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947

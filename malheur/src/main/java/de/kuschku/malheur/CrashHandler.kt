@@ -24,15 +24,14 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import android.widget.Toast
-import com.google.gson.GsonBuilder
 import de.kuschku.malheur.collectors.ReportCollector
 import de.kuschku.malheur.config.ReportConfig
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
-import java.util.*
+import java.util.Date
 
 object CrashHandler {
-  private val gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
-
   private val startTime = Date()
   private var originalHandler: Thread.UncaughtExceptionHandler? = null
   private var myHandler: ((Thread, Throwable) -> Unit)? = null
@@ -62,7 +61,7 @@ object CrashHandler {
         Toast.makeText(application, "Creating crash report", Toast.LENGTH_LONG).show()
       }
       try {
-        val json = gson.toJson(
+        val json = Json.encodeToString(
           reportCollector.collect(
             CrashContext(
               application = application,

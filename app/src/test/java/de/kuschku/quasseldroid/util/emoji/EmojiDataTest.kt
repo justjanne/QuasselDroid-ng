@@ -20,27 +20,18 @@
 package de.kuschku.quasseldroid.util.emoji
 
 import android.os.Build
-import android.text.Editable
 import android.text.SpannableStringBuilder
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import de.kuschku.quasseldroid.QuasseldroidTest
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.DecodeSequenceMode
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.io.Reader
-
-inline fun <reified T> Gson.fromJson(reader: Reader): T =
-  if (T::class.java.typeParameters.isEmpty()) {
-    this.fromJson(reader, T::class.java)
-  } else {
-    val type = object : TypeToken<T>() {}.type
-    this.fromJson(reader, type)
-  }
 
 fun EmojiHandler.replaceShortcodes(source: String): String =
   this.replaceShortcodes(SpannableStringBuilder(source)).toString()
@@ -48,11 +39,12 @@ fun EmojiHandler.replaceShortcodes(source: String): String =
 @Config(application = QuasseldroidTest::class, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class EmojiDataTest {
+  @OptIn(ExperimentalSerializationApi::class)
   object TestEmojiProvider : EmojiProvider {
-    private val gson: Gson = GsonBuilder().create()
-    override val emoji: List<EmojiHandler.Emoji> = gson.fromJson(
-      TestEmojiProvider::class.java.getResourceAsStream("/emoji.json")!!.reader(Charsets.UTF_8)
-    )
+    override val emoji: List<EmojiHandler.Emoji> = Json.decodeToSequence<EmojiHandler.Emoji>(
+      TestEmojiProvider::class.java.getResourceAsStream("/emoji.json"),
+      DecodeSequenceMode.ARRAY_WRAPPED
+    ).toList()
     override val shortcodes: Map<String, EmojiHandler.Emoji> = emoji.flatMap { entry ->
       entry.shortcodes.map { Pair(it, entry) }
     }.toMap()

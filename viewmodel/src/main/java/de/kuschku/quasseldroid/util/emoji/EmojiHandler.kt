@@ -20,10 +20,12 @@
 package de.kuschku.quasseldroid.util.emoji
 
 import android.text.Editable
+import kotlinx.serialization.Serializable
 import java.util.*
 import javax.inject.Inject
 
 class EmojiHandler @Inject constructor(private val emojiProvider: EmojiProvider) {
+  @Serializable
   data class Emoji(
     val label: String,
     val tags: List<String>,

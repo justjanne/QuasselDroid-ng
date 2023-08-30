@@ -89,11 +89,11 @@ dependencies {
     artifact { classifier = "no-tzdb" }
   }
   implementation(libs.annotations.jetbrains)
-  implementation(libs.gson)
   implementation(libs.commons.codec)
   implementation(libs.reactivenetwork)
   implementation(libs.retrofit.core)
-  implementation(libs.retrofit.converter.gson)
+  implementation(libs.retrofit.converter.kotlinx)
+  implementation(libs.kotlinx.serialization.json)
 
   // Quassel
   implementation(project(":viewmodel"))

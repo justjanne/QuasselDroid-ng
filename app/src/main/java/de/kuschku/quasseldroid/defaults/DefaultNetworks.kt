@@ -20,16 +20,19 @@
 package de.kuschku.quasseldroid.defaults
 
 import android.content.Context
-import com.google.gson.Gson
-import de.kuschku.quasseldroid.util.helper.fromJsonList
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.DecodeSequenceMode
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
 import java.io.IOException
 import javax.inject.Inject
 
-class DefaultNetworks @Inject constructor(context: Context, gson: Gson) {
+@OptIn(ExperimentalSerializationApi::class)
+class DefaultNetworks @Inject constructor(context: Context) {
   val networks: List<DefaultNetwork> by lazy {
     try {
       context.assets.open("networks.json").use {
-        gson.fromJsonList(it.bufferedReader(Charsets.UTF_8))
+        Json.decodeToSequence<DefaultNetwork>(it, DecodeSequenceMode.ARRAY_WRAPPED).toList()
       }
     } catch (e: IOException) {
       throw IllegalStateException("networks.json missing from assets.", e)

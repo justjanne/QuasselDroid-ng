@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.util.avatars
 
+
 data class MatrixAvatarInfo(
   val avatarUrl: String,
   val size: Int?

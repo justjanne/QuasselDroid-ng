@@ -20,16 +20,19 @@
 package de.kuschku.quasseldroid.util
 
 import android.content.Context
-import com.google.gson.Gson
 import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.emoji.EmojiProvider
-import de.kuschku.quasseldroid.util.helper.fromJsonList
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.DecodeSequenceMode
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
 import java.io.IOException
 
-class AndroidEmojiProvider(context: Context, gson: Gson) : EmojiProvider {
+@OptIn(ExperimentalSerializationApi::class)
+class AndroidEmojiProvider(context: Context) : EmojiProvider {
   override val emoji: List<EmojiHandler.Emoji> = try {
     context.assets.open("emoji.json").use {
-      gson.fromJsonList(it.bufferedReader(Charsets.UTF_8))
+      Json.decodeToSequence<EmojiHandler.Emoji>(it, DecodeSequenceMode.ARRAY_WRAPPED).toList()
     }
   } catch (e: IOException) {
     throw IllegalStateException("emoji.json missing from assets.", e)

@@ -26,6 +26,6 @@ android {
 }
 
 dependencies {
-  implementation(libs.gson)
   implementation(libs.androidx.annotation)
+  implementation(libs.kotlinx.serialization.json)
 }

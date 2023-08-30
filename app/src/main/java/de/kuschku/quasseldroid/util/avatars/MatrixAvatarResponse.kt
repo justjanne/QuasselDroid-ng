@@ -19,10 +19,12 @@
 
 package de.kuschku.quasseldroid.util.avatars
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MatrixAvatarResponse(
-  @SerializedName("avatar_url")
+  @SerialName("avatar_url")
   val avatarUrl: String?
 )
 

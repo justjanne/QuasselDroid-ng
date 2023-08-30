@@ -29,12 +29,13 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.module.AppGlideModule
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import de.kuschku.quasseldroid.util.avatars.MatrixApi
 import de.kuschku.quasseldroid.util.avatars.MatrixModelLoader
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.InputStream
 
 @GlideModule
@@ -43,22 +44,26 @@ class QuasseldroidGlideModule : AppGlideModule() {
     if (!BuildConfig.DEBUG) builder.setLogLevel(Log.ERROR)
   }
 
+  override fun isManifestParsingEnabled() = false
+
   override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
     val matrixApi = Retrofit.Builder()
       .baseUrl("https://matrix.org/")
-      .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+      .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
       .build()
       .create(MatrixApi::class.java)
 
-    registry.append(Avatar.MatrixAvatar::class.java,
-                    InputStream::class.java,
-                    object : ModelLoaderFactory<Avatar.MatrixAvatar, InputStream> {
-                      override fun build(
-                        multiFactory: MultiModelLoaderFactory): ModelLoader<Avatar.MatrixAvatar, InputStream> {
-                        return MatrixModelLoader(matrixApi)
-                      }
+    registry.append(
+      Avatar.MatrixAvatar::class.java,
+      InputStream::class.java,
+      object : ModelLoaderFactory<Avatar.MatrixAvatar, InputStream> {
+        override fun build(
+          multiFactory: MultiModelLoaderFactory
+        ): ModelLoader<Avatar.MatrixAvatar, InputStream> {
+          return MatrixModelLoader(matrixApi)
+        }
 
-                      override fun teardown() = Unit
-                    })
+        override fun teardown() = Unit
+      })
   }
 }

@@ -148,11 +148,6 @@ class AboutFragment : DaggerFragment() {
         url = "https://bumptech.github.io/glide/"
       ),
       Library(
-        name = "Gson",
-        license = apache2,
-        url = "https://github.com/google/gson"
-      ),
-      Library(
         name = "Gruvbox",
         license = License(
           shortName = "MIT",

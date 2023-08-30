@@ -19,10 +19,11 @@
 
 package de.kuschku.quasseldroid.defaults
 
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class DefaultNetworkServer(
   val host: String,
   val port: UInt,
   val secure: Boolean
-) : Serializable
+) : java.io.Serializable

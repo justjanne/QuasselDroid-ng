@@ -41,8 +41,6 @@
 -dontnote org.apache.http.**
 # Kotlin stuff
 -dontnote kotlin.**
-# Gson
--dontnote com.google.gson.**
 # Dagger
 -dontwarn com.google.errorprone.annotations.*
 # Retrofit

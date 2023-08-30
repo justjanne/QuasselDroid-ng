@@ -30,17 +30,14 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import dagger.android.support.DaggerFragment
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.malheur.data.Report
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.fromJson
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import kotlinx.serialization.json.Json
 import java.io.File
-import javax.inject.Inject
 
 class CrashFragment : DaggerFragment() {
   lateinit var list: RecyclerView
@@ -48,9 +45,6 @@ class CrashFragment : DaggerFragment() {
 
   private lateinit var handlerThread: HandlerThread
   private lateinit var handler: Handler
-
-  @Inject
-  lateinit var gson: Gson
 
   private var crashDir: File? = null
   private var adapter: CrashAdapter? = null
@@ -69,7 +63,6 @@ class CrashFragment : DaggerFragment() {
 
   private fun reload() {
     val crashDir = this.crashDir
-    val gson = this.gson
     val context = this.context
 
     if (crashDir != null && context != null) {
@@ -78,11 +71,7 @@ class CrashFragment : DaggerFragment() {
         .orEmpty()
         .map {
           Pair<Report?, Uri>(
-            try {
-              gson.fromJson<Report>(it.readText())
-            } catch (e: JsonSyntaxException) {
-              null
-            },
+            Json.decodeFromString<Report>(it.readText()),
             FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it)
           )
         }

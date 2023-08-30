@@ -69,8 +69,6 @@ Authors of legacy Quasseldroid:
   Apache-2.0
 * [**Glide**](https://bumptech.github.io/glide/)
   Apache-2.0
-* [**Gson**](https://github.com/google/gson)
-  Apache-2.0
 * [**JavaPoet**](https://github.com/square/javapoet)
   Apache-2.0
 * [**JetBrains Java Annotations**](https://github.com/JetBrains/java-annotations)

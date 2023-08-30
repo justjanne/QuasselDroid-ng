@@ -8,9 +8,10 @@ androidx-test = "1.5.2"
 dagger = "2.47"
 glide = "4.16.0"
 kotlin = "1.9.10"
+kotlinx-serialization = "1.6.0"
 ksp = "1.9.10-1.0.13"
 materialdialogs = "0.9.6.0"
-retrofit = "2.6.1"
+retrofit = "2.9.0"
 
 [libraries]
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.6.0" }
@@ -57,11 +58,10 @@ flexbox = { module = "com.google.android.flexbox:flexbox", version = "3.0.0" }
 
 google-material = { module = "com.google.android.material:material", version = "1.9.0" }
 
-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 glide-core = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-recyclerview = { module = "com.github.bumptech.glide:recyclerview-integration", version.ref = "glide" }
 
-gson = { module = "com.google.code.gson:gson", version = "2.9.0" }
 hamcrest = { module = "org.hamcrest:hamcrest", version = "2.2" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-engine", version = "5.10.0" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version = "5.10.0" }
@@ -75,8 +75,10 @@ materialdialogs-core = { module = "com.afollestad.material-dialogs:core", versio
 materialprogressbar = { module = "me.zhanghai.android.materialprogressbar:library", version = "1.6.1" }
 reactivenetwork = { module = "com.github.pwittchen:reactivenetwork-rx2", version = "3.0.8" }
 
-retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-converter-kotlinx = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
+
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 robolectric = { module = "org.robolectric:robolectric", version = "4.7.3" }
 
