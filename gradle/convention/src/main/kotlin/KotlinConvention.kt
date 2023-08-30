@@ -26,14 +26,6 @@ class KotlinConvention : Plugin<Project> {
         apply("com.google.devtools.ksp")
       }
 
-      val service = project.extensions.getByType<JavaToolchainService>()
-      val customLauncher = service.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(17))
-      }
-      tasks.withType<UsesKotlinJavaToolchain>().configureEach {
-        kotlinJavaToolchain.toolchain.use(customLauncher)
-      }
-
       // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
       tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
