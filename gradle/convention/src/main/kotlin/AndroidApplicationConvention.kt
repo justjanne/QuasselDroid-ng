@@ -24,13 +24,14 @@ class AndroidApplicationConvention : Plugin<Project> {
 
           applicationId = "${rootProject.group}.${rootProject.name.lowercase(Locale.ROOT)}"
 
-          val commit = git("rev-parse", "HEAD")!!
-          val name = git("describe", "--always", "--tags", "HEAD")!!
+          val commit = git("rev-parse", "HEAD")
+          val name = git("describe", "--always", "--tags", "HEAD")
 
-          versionCode = git("rev-list", "--count", "HEAD")!!.toInt()
-          versionName = git("describe", "--always", "--tags", "HEAD")!!
+          versionCode = git("rev-list", "--count", "HEAD")?.toIntOrNull()
+          versionName = git("describe", "--always", "--tags", "HEAD")
 
-          val fancyVersionName = "<a href=\\\"https://git.kuschku.de/justJanne/QuasselDroid-ng/commit/$commit\\\">$name</a>"
+          val fancyVersionName = if (commit == null || name == null) name
+          else "<a href=\\\"https://git.kuschku.de/justJanne/QuasselDroid-ng/commit/$commit\\\">$name</a>"
 
           buildConfigField("String", "GIT_HEAD", "\"${git("rev-parse", "HEAD") ?: ""}\"")
           buildConfigField("String", "FANCY_VERSION_NAME", "\"${fancyVersionName ?: ""}\"")
