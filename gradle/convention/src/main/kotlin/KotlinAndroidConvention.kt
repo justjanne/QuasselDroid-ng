@@ -44,7 +44,7 @@ class KotlinAndroidConvention : Plugin<Project> {
         targetCompatibility = JavaVersion.VERSION_11
 
         toolchain {
-          languageVersion.set(JavaLanguageVersion.of(11))
+          languageVersion.set(JavaLanguageVersion.of(17))
         }
       }
     }
