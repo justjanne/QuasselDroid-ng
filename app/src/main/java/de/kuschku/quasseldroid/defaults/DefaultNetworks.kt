@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.defaults
 
 import android.content.Context
 import com.google.gson.Gson
-import de.kuschku.quasseldroid.util.helper.fromJson
+import de.kuschku.quasseldroid.util.helper.fromJsonList
 import java.io.IOException
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class DefaultNetworks @Inject constructor(context: Context, gson: Gson) {
   val networks: List<DefaultNetwork> by lazy {
     try {
       context.assets.open("networks.json").use {
-        gson.fromJson(it.bufferedReader(Charsets.UTF_8))
+        gson.fromJsonList(it.bufferedReader(Charsets.UTF_8))
       }
     } catch (e: IOException) {
       throw IllegalStateException("networks.json missing from assets.", e)

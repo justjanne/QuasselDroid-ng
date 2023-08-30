@@ -23,13 +23,13 @@ import android.content.Context
 import com.google.gson.Gson
 import de.kuschku.quasseldroid.util.emoji.EmojiHandler
 import de.kuschku.quasseldroid.util.emoji.EmojiProvider
-import de.kuschku.quasseldroid.util.helper.fromJson
+import de.kuschku.quasseldroid.util.helper.fromJsonList
 import java.io.IOException
 
 class AndroidEmojiProvider(context: Context, gson: Gson) : EmojiProvider {
   override val emoji: List<EmojiHandler.Emoji> = try {
     context.assets.open("emoji.json").use {
-      gson.fromJson(it.bufferedReader(Charsets.UTF_8))
+      gson.fromJsonList(it.bufferedReader(Charsets.UTF_8))
     }
   } catch (e: IOException) {
     throw IllegalStateException("emoji.json missing from assets.", e)

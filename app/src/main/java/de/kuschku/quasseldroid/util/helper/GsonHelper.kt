@@ -24,26 +24,20 @@ import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import java.io.Reader
 
+inline fun <reified T> Gson.fromJsonList(jsonElement: JsonElement): T =
+  this.fromJson(jsonElement, object : TypeToken<T>() {}.type)
+
+inline fun <reified T> Gson.fromJsonList(reader: Reader): T =
+  this.fromJson(reader, object : TypeToken<T>() {}.type)
+
+inline fun <reified T> Gson.fromJsonList(text: String): T =
+  this.fromJson(text, object : TypeToken<T>() {}.type)
+
 inline fun <reified T> Gson.fromJson(jsonElement: JsonElement): T =
-  if (T::class.java.typeParameters.isEmpty()) {
-    this.fromJson(jsonElement, T::class.java)
-  } else {
-    val type = object : TypeToken<T>() {}.type
-    this.fromJson(jsonElement, type)
-  }
+  this.fromJson(jsonElement, T::class.java)
 
 inline fun <reified T> Gson.fromJson(reader: Reader): T =
-  if (T::class.java.typeParameters.isEmpty()) {
-    this.fromJson(reader, T::class.java)
-  } else {
-    val type = object : TypeToken<T>() {}.type
-    this.fromJson(reader, type)
-  }
+  this.fromJson(reader, T::class.java)
 
 inline fun <reified T> Gson.fromJson(text: String): T =
-  if (T::class.java.typeParameters.isEmpty()) {
-    this.fromJson(text, T::class.java)
-  } else {
-    val type = object : TypeToken<T>() {}.type
-    this.fromJson(text, type)
-  }
+  this.fromJson(text, T::class.java)
