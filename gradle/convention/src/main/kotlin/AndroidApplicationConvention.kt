@@ -24,18 +24,17 @@ class AndroidApplicationConvention : Plugin<Project> {
 
           applicationId = "${rootProject.group}.${rootProject.name.lowercase(Locale.ROOT)}"
 
-          val commit = rootProject.git("rev-parse", "HEAD")
-          val name = rootProject.git("describe", "--always", "--tags", "HEAD")
+          val commit = git("rev-parse", "HEAD")!!
+          val name = git("describe", "--always", "--tags", "HEAD")!!
 
-          versionCode = rootProject.git("rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
-          versionName = rootProject.git("describe", "--always", "--tags", "HEAD") ?: "1.0.0"
+          versionCode = git("rev-list", "--count", "HEAD")!!.toInt()
+          versionName = git("describe", "--always", "--tags", "HEAD")!!
 
-          val fancyVersionName = if (commit == null || name == null) name
-          else "<a href=\\\"https://git.kuschku.de/justJanne/QuasselDroid-ng/commit/$commit\\\">$name</a>"
+          val fancyVersionName = "<a href=\\\"https://git.kuschku.de/justJanne/QuasselDroid-ng/commit/$commit\\\">$name</a>"
 
-          buildConfigField("String", "GIT_HEAD", "\"${rootProject.git("rev-parse", "HEAD") ?: ""}\"")
+          buildConfigField("String", "GIT_HEAD", "\"${git("rev-parse", "HEAD") ?: ""}\"")
           buildConfigField("String", "FANCY_VERSION_NAME", "\"${fancyVersionName ?: ""}\"")
-          buildConfigField("long", "GIT_COMMIT_DATE", "${rootProject.git("show", "-s", "--format=%ct") ?: 0}L")
+          buildConfigField("long", "GIT_COMMIT_DATE", "${git("show", "-s", "--format=%ct") ?: 0}L")
 
           signingConfig = signingConfigs.findByName("default")
 

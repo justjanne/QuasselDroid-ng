@@ -1,14 +1,18 @@
 package util
 
 import org.gradle.api.Project
+import java.io.ByteArrayOutputStream
 import java.util.Properties
 
-@Suppress("UnstableApiUsage")
-fun Project.git(vararg command: String): String? = try {
-  providers.exec {
+fun Project.git(vararg command: String) = try {
+  val stdOut = ByteArrayOutputStream()
+  exec {
     commandLine("git", *command)
-  }.standardOutput.asText.get().trim()
-} catch (t: Throwable) {
+    standardOutput = stdOut
+  }
+  stdOut.toString(Charsets.UTF_8.name()).trim()
+} catch (e: Throwable) {
+  e.printStackTrace()
   null
 }
 
