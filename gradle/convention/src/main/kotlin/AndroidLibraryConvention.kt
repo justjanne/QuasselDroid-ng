@@ -1,3 +1,4 @@
+import org.gradle.api.JavaVersion
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -22,6 +23,11 @@ class AndroidLibraryConvention : Plugin<Project> {
 
           // Disable test runner analytics
           testInstrumentationRunnerArguments["disableAnalytics"] = "true"
+        }
+
+        compileOptions {
+          sourceCompatibility = JavaVersion.VERSION_11
+          targetCompatibility = JavaVersion.VERSION_11
         }
 
         lint {

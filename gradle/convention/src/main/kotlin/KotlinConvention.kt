@@ -4,13 +4,18 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
+import org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
 class KotlinConvention : Plugin<Project> {
   override fun apply(target: Project) {
@@ -19,6 +24,14 @@ class KotlinConvention : Plugin<Project> {
         apply("org.jetbrains.kotlin.jvm")
         apply("org.jetbrains.kotlin.kapt")
         apply("com.google.devtools.ksp")
+      }
+
+      val service = project.extensions.getByType<JavaToolchainService>()
+      val customLauncher = service.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(17))
+      }
+      tasks.withType<UsesKotlinJavaToolchain>().configureEach {
+        kotlinJavaToolchain.toolchain.use(customLauncher)
       }
 
       // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
