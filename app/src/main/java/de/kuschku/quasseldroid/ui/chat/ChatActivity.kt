@@ -19,11 +19,13 @@
 
 package de.kuschku.quasseldroid.ui.chat
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -35,7 +37,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -71,6 +75,7 @@ import de.kuschku.quasseldroid.persistence.models.Filtered
 import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
 import de.kuschku.quasseldroid.persistence.models.SslValidityWhitelistEntry
 import de.kuschku.quasseldroid.persistence.util.AccountId
+import de.kuschku.quasseldroid.service.QuasselNotificationBackend
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
@@ -142,6 +147,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
+  @Inject
+  lateinit var notificationBackend: QuasselNotificationBackend
+
   lateinit var editorBottomSheet: DragInterceptBottomSheetBehavior<View>
 
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
@@ -155,43 +163,47 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   private var restoredDrawerState = false
 
   fun processIntent(intent: Intent) {
-      when {
-        intent.type == "text/plain"    -> {
-          val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
-          if (text != null) {
-            chatlineFragment?.replaceText(text)
-            binding.drawerLayout.closeDrawers()
-          }
-        }
-        intent.hasExtra(KEY_BUFFER_ID) -> {
-          chatViewModel.bufferId.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
-          chatViewModel.bufferOpened.onNext(Unit)
-          if (intent.hasExtra(KEY_ACCOUNT_ID)) {
-            val accountId = AccountId(intent.getLongExtra(KEY_ACCOUNT_ID, -1L))
-            if (accountId != this.accountId) {
-              resetAccount()
-              connectToAccount(accountId)
-              startedSelection = false
-              connectedAccount = AccountId(-1L)
-              checkConnection()
-              recreate()
-            }
-          }
-        }
-        intent.hasExtra(KEY_AUTOCOMPLETE_TEXT)                            -> {
-          chatlineFragment?.editorHelper?.appendText(
-            intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT),
-            intent.getStringExtra(KEY_AUTOCOMPLETE_SUFFIX)
-          )
+    when {
+      intent.type == "text/plain" -> {
+        val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
+        if (text != null) {
+          chatlineFragment?.replaceText(text)
           binding.drawerLayout.closeDrawers()
         }
-        intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL)   -> {
-          val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
-          val channel = intent.getStringExtra(KEY_CHANNEL) ?: ""
+      }
 
-          val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
+      intent.hasExtra(KEY_BUFFER_ID) -> {
+        chatViewModel.bufferId.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
+        chatViewModel.bufferOpened.onNext(Unit)
+        if (intent.hasExtra(KEY_ACCOUNT_ID)) {
+          val accountId = AccountId(intent.getLongExtra(KEY_ACCOUNT_ID, -1L))
+          if (accountId != this.accountId) {
+            resetAccount()
+            connectToAccount(accountId)
+            startedSelection = false
+            connectedAccount = AccountId(-1L)
+            checkConnection()
+            recreate()
+          }
+        }
+      }
 
-          modelHelper.connectedSession.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+      intent.hasExtra(KEY_AUTOCOMPLETE_TEXT) -> {
+        chatlineFragment?.editorHelper?.appendText(
+          intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT),
+          intent.getStringExtra(KEY_AUTOCOMPLETE_SUFFIX)
+        )
+        binding.drawerLayout.closeDrawers()
+      }
+
+      intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL) -> {
+        val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
+        val channel = intent.getStringExtra(KEY_CHANNEL) ?: ""
+
+        val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
+
+        modelHelper.connectedSession.filter(Optional<ISession>::isPresent).firstElement()
+          .subscribe {
             it.orNull()?.also { session ->
               val info = session.bufferSyncer.find(
                 bufferName = channel,
@@ -202,9 +214,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               if (info != null && !forceJoin) {
                 ChatActivity.launch(this, bufferId = info.bufferId)
               } else {
-                modelHelper.chat.chatToJoin.onNext(Optional.of(
-                  Pair(networkId, channel)
-                ))
+                modelHelper.chat.chatToJoin.onNext(
+                  Optional.of(
+                    Pair(networkId, channel)
+                  )
+                )
 
                 session.bufferSyncer.find(
                   networkId = networkId,
@@ -217,14 +231,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               }
             }
           }
-        }
-        intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_NICK_NAME) -> {
-          val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
-          val channel = intent.getStringExtra(KEY_NICK_NAME)
+      }
 
-          val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
+      intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_NICK_NAME) -> {
+        val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
+        val channel = intent.getStringExtra(KEY_NICK_NAME)
 
-          modelHelper.connectedSession.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+        val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
+
+        modelHelper.connectedSession.filter(Optional<ISession>::isPresent).firstElement()
+          .subscribe {
             it.orNull()?.also { session ->
               val info = session.bufferSyncer.find(
                 bufferName = channel,
@@ -238,8 +254,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 modelHelper.allBuffers.map {
                   listOfNotNull(it.find {
                     it.networkId == networkId &&
-                    it.bufferName == channel &&
-                    it.type.hasFlag(Buffer_Type.QueryBuffer)
+                      it.bufferName == channel &&
+                      it.type.hasFlag(Buffer_Type.QueryBuffer)
                   })
                 }.filter {
                   it.isNotEmpty()
@@ -260,31 +276,32 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               }
             }
           }
-        }
-        intent.scheme == "irc" ||
-        intent.scheme == "ircs"                                           -> {
-          val uri = intent.data
-          if (uri != null) {
-            val channelString = (uri.path.let { it ?: "" }.trimStart('/')) +
-                                (uri.fragment?.let { "#$it" }.let { it ?: "" })
-            NetworkSetupActivity.launch(
-              this,
-              network = LinkNetwork(
-                name = "",
-                server = DefaultNetworkServer(
-                  host = uri.host ?: "",
-                  port = uri.port.nullIf { it < 0 }?.toUInt()
-                         ?: if (uri.scheme == "irc") PORT_PLAINTEXT.port
-                         else PORT_SSL.port,
-                  secure = uri.scheme == "ircs"
-                )
-              ),
-              channels = channelString.split(",").toTypedArray()
-            )
-          }
+      }
+
+      intent.scheme == "irc" ||
+        intent.scheme == "ircs" -> {
+        val uri = intent.data
+        if (uri != null) {
+          val channelString = (uri.path.let { it ?: "" }.trimStart('/')) +
+            (uri.fragment?.let { "#$it" }.let { it ?: "" })
+          NetworkSetupActivity.launch(
+            this,
+            network = LinkNetwork(
+              name = "",
+              server = DefaultNetworkServer(
+                host = uri.host ?: "",
+                port = uri.port.nullIf { it < 0 }?.toUInt()
+                  ?: if (uri.scheme == "irc") PORT_PLAINTEXT.port
+                  else PORT_SSL.port,
+                secure = uri.scheme == "ircs"
+              )
+            ),
+            channels = channelString.split(",").toTypedArray()
+          )
         }
       }
-      setIntent(null)
+    }
+    setIntent(null)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -292,7 +309,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    chatlineFragment = supportFragmentManager.findFragmentById(R.id.fragment_chatline) as? ChatlineFragment
+    chatlineFragment =
+      supportFragmentManager.findFragmentById(R.id.fragment_chatline) as? ChatlineFragment
 
     setSupportActionBar(binding.layoutMain.layoutToolbar.toolbar)
 
@@ -338,10 +356,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
     )
 
-    val maxBufferActivity = modelHelper.processBufferList(modelHelper.bufferViewConfig,
-                                                          filtered).map { (config, bufferList) ->
+    val maxBufferActivity = modelHelper.processBufferList(
+      modelHelper.bufferViewConfig,
+      filtered
+    ).map { (config, bufferList) ->
       val minimumActivity: Buffer_Activity = config?.minimumActivity()?.enabledValues()?.maxOrNull()
-                                             ?: Buffer_Activity.NoActivity
+        ?: Buffer_Activity.NoActivity
 
       val maxActivity: Buffer_Activity = bufferList.mapNotNull {
         it.bufferActivity.enabledValues().maxOrNull()
@@ -349,11 +369,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
       val hasNotifications = bufferList.any { props ->
         when {
-          props.info.type hasFlag Buffer_Type.QueryBuffer   ->
+          props.info.type hasFlag Buffer_Type.QueryBuffer ->
             props.bufferActivity hasFlag Buffer_Activity.NewMessage
+
           props.info.type hasFlag Buffer_Type.ChannelBuffer ->
             props.highlights > 0
-          else                                              -> false
+
+          else -> false
         }
       }
 
@@ -366,28 +388,36 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     supportActionBar?.apply {
       val toggleDefault = DrawerToggleActivityDrawable(themedContext, 0)
-      val toggleOtherActivity = DrawerToggleActivityDrawable(themedContext,
-                                                             R.attr.colorTintActivity)
+      val toggleOtherActivity = DrawerToggleActivityDrawable(
+        themedContext,
+        R.attr.colorTintActivity
+      )
       val toggleNewMessage = DrawerToggleActivityDrawable(themedContext, R.attr.colorTintMessage)
       val toggleHighlight = DrawerToggleActivityDrawable(themedContext, R.attr.colorTintHighlight)
-      val toggleNotification = DrawerToggleActivityDrawable(themedContext,
-                                                            R.attr.colorTintNotification)
+      val toggleNotification = DrawerToggleActivityDrawable(
+        themedContext,
+        R.attr.colorTintNotification
+      )
       maxBufferActivity.toLiveData()
         .observe(this@ChatActivity, Observer { (activity, hasNotifications) ->
           setHomeAsUpIndicator(
             when {
               notificationSettings.showAllActivitiesInToolbar &&
-              activity == Buffer_Activity.Highlight     ->
+                activity == Buffer_Activity.Highlight ->
                 toggleHighlight
+
               notificationSettings.showAllActivitiesInToolbar &&
-              activity == Buffer_Activity.NewMessage    ->
+                activity == Buffer_Activity.NewMessage ->
                 toggleNewMessage
+
               notificationSettings.showAllActivitiesInToolbar &&
-              activity == Buffer_Activity.OtherActivity ->
+                activity == Buffer_Activity.OtherActivity ->
                 toggleOtherActivity
-              hasNotifications                          ->
+
+              hasNotifications ->
                 toggleNotification
-              else                                      ->
+
+              else ->
                 toggleDefault
             }
           )
@@ -426,16 +456,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     modelHelper.errors.toLiveData(BackpressureStrategy.BUFFER).observe(this, Observer { error ->
       error?.let {
         when (it) {
-          is Error.HandshakeError  -> it.message.let {
+          is Error.HandshakeError -> it.message.let {
             when (it) {
-              is HandshakeMessage.ClientInitAck     ->
+              is HandshakeMessage.ClientInitAck ->
                 if (it.coreConfigured == false)
                   CoreSetupActivity.launch(
                     this,
                     accountDatabase.accounts().findById(accountId),
                     CoreSetupData.of(it)
                   )
-              is HandshakeMessage.ClientInitReject  ->
+
+              is HandshakeMessage.ClientInitReject ->
                 MaterialDialog.Builder(this)
                   .title(R.string.label_error_init)
                   .content(Html.fromHtml(it.errorString))
@@ -448,7 +479,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .contentColorAttr(R.attr.colorTextPrimary)
                   .build()
                   .show()
-              is HandshakeMessage.CoreSetupReject   ->
+
+              is HandshakeMessage.CoreSetupReject ->
                 MaterialDialog.Builder(this)
                   .title(R.string.label_error_setup)
                   .content(Html.fromHtml(it.errorString))
@@ -461,6 +493,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .contentColorAttr(R.attr.colorTextPrimary)
                   .build()
                   .show()
+
               is HandshakeMessage.ClientLoginReject ->
                 MaterialDialog.Builder(this)
                   .title(R.string.label_error_login)
@@ -514,10 +547,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .contentColorAttr(R.attr.colorTextPrimary)
                   .build()
                   .show()
+
               else -> Unit // Do Nothing
             }
           }
-          is Error.SslError        -> {
+
+          is Error.SslError -> {
             it.exception.let {
               if (it == QuasselSecurityException.NoSsl) {
                 // Ssl is required but not available
@@ -547,8 +582,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   when {
                     // Certificate has expired
                     it is QuasselSecurityException.Certificate &&
-                    (it.cause is CertificateNotYetValidException ||
-                     it.cause is CertificateExpiredException)  -> {
+                      (it.cause is CertificateNotYetValidException ||
+                        it.cause is CertificateExpiredException) -> {
                       MaterialDialog.Builder(this)
                         .title(R.string.label_error_certificate)
                         .content(
@@ -556,10 +591,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                             getString(
                               R.string.label_error_certificate_invalid,
                               leafCertificate.sha1Fingerprint,
-                              dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notBefore.time)
-                                                         .atZone(ZoneId.systemDefault())),
-                              dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notAfter.time)
-                                                         .atZone(ZoneId.systemDefault()))
+                              dateTimeFormatter.format(
+                                Instant.ofEpochMilli(leafCertificate.notBefore.time)
+                                  .atZone(ZoneId.systemDefault())
+                              ),
+                              dateTimeFormatter.format(
+                                Instant.ofEpochMilli(leafCertificate.notAfter.time)
+                                  .atZone(ZoneId.systemDefault())
+                              )
                             )
                           )
                         )
@@ -590,7 +629,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                         .show()
                     }
                     // Certificate is in any other way invalid
-                    it is QuasselSecurityException.Certificate   -> {
+                    it is QuasselSecurityException.Certificate -> {
                       MaterialDialog.Builder(this)
                         .title(R.string.label_error_certificate)
                         .content(
@@ -679,45 +718,62 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               }
             }
           }
+
           is Error.ConnectionError -> {
             it.throwable.let {
               val cause = it.cause
               when {
-                it is UnknownHostException         -> {
+                it is UnknownHostException -> {
                   val host = it.message?.replace("Host is unresolved: ", "")
 
-                  Toast.makeText(this,
-                                 getString(R.string.label_error_unknown_host, host),
-                                 Toast.LENGTH_LONG).show()
+                  Toast.makeText(
+                    this,
+                    getString(R.string.label_error_unknown_host, host),
+                    Toast.LENGTH_LONG
+                  ).show()
                 }
-                it is ProtocolVersionException     -> {
+
+                it is ProtocolVersionException -> {
                   val protocolVersion: Int = it.protocol.version.toInt()
-                  Toast.makeText(this,
-                                 getString(R.string.label_error_invalid_protocol_version,
-                                           protocolVersion),
-                                 Toast.LENGTH_LONG).show()
+                  Toast.makeText(
+                    this,
+                    getString(
+                      R.string.label_error_invalid_protocol_version,
+                      protocolVersion
+                    ),
+                    Toast.LENGTH_LONG
+                  ).show()
                 }
+
                 it is ConnectException &&
-                cause is libcore.io.ErrnoException -> {
+                  cause is libcore.io.ErrnoException -> {
                   val errorCode = OsConstants.errnoName(cause.errno)
                   val errorName = OsConstants.strerror(cause.errno)
 
-                  Toast.makeText(this,
-                                 getString(R.string.label_error_connection, errorName, errorCode),
-                                 Toast.LENGTH_LONG).show()
+                  Toast.makeText(
+                    this,
+                    getString(R.string.label_error_connection, errorName, errorCode),
+                    Toast.LENGTH_LONG
+                  ).show()
                 }
+
                 it is ConnectException && cause is ErrnoException -> {
                   val errorCode = OsConstants.errnoName(cause.errno)
                   val errorName = OsConstants.strerror(cause.errno)
 
-                  Toast.makeText(this,
-                                 getString(R.string.label_error_connection, errorName, errorCode),
-                                 Toast.LENGTH_LONG).show()
+                  Toast.makeText(
+                    this,
+                    getString(R.string.label_error_connection, errorName, errorCode),
+                    Toast.LENGTH_LONG
+                  ).show()
                 }
-                else                               -> {
-                  Toast.makeText(this,
-                                 getString(R.string.label_error_connection_closed),
-                                 Toast.LENGTH_LONG).show()
+
+                else -> {
+                  Toast.makeText(
+                    this,
+                    getString(R.string.label_error_connection_closed),
+                    Toast.LENGTH_LONG
+                  ).show()
                 }
               }
             }
@@ -734,8 +790,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .observe(this, Observer {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-              chatViewModel.bufferId.safeValue == BufferId.MAX_VALUE &&
-              !restoredDrawerState) {
+            chatViewModel.bufferId.safeValue == BufferId.MAX_VALUE &&
+            !restoredDrawerState
+          ) {
             binding.drawerLayout.openDrawer(GravityCompat.START)
           }
           connectedAccount = accountId
@@ -770,7 +827,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     binding.layoutMain.connectionStatus.setOnClickListener {
       if (modelHelper.connectionProgress.value?.first == ConnectionState.CONNECTED
-        && modelHelper.deceptiveNetwork.value == true) {
+        && modelHelper.deceptiveNetwork.value == true
+      ) {
         DeceptiveNetworkDialog.Builder(this)
           .message(R.string.deceptive_network_freenode)
           .show()
@@ -789,13 +847,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         val (state, progress, max) = connection
         when (state) {
           ConnectionState.DISCONNECTED,
-          ConnectionState.CLOSED     -> {
+          ConnectionState.CLOSED -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
 
             binding.layoutMain.connectionStatus.icon.setImageResource(R.drawable.ic_disconnected)
             binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
             binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_disconnected))
           }
+
           ConnectionState.CONNECTING -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
             binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
@@ -803,14 +862,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
             binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_connecting))
           }
-          ConnectionState.HANDSHAKE  -> {
+
+          ConnectionState.HANDSHAKE -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
             binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = true
 
             binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
             binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_handshake))
           }
-          ConnectionState.INIT       -> {
+
+          ConnectionState.INIT -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.VISIBLE
             // Show indeterminate when no progress has been made yet
             binding.layoutMain.layoutToolbar.progressBar.isIndeterminate = progress == 0 || max == 0
@@ -820,7 +881,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_PROGRESS)
             binding.layoutMain.connectionStatus.setText(getString(R.string.label_status_init))
           }
-          ConnectionState.CONNECTED  -> {
+
+          ConnectionState.CONNECTED -> {
             binding.layoutMain.layoutToolbar.progressBar.visibility = View.INVISIBLE
             if (deceptive && appearanceSettings.deceptiveNetworks) {
               binding.layoutMain.connectionStatus.setMode(WarningBarView.MODE_ICON)
@@ -839,13 +901,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
       } else {
-        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
+        binding.drawerLayout.setDrawerLockMode(
+          DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+          GravityCompat.END
+        )
       }
 
       invalidateOptionsMenu()
     })
 
-    editorBottomSheet = DragInterceptBottomSheetBehavior.from(binding.root.findViewById(R.id.fragment_chatline))
+    editorBottomSheet =
+      DragInterceptBottomSheetBehavior.from(binding.root.findViewById(R.id.fragment_chatline))
     editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
     chatlineFragment?.panelSlideListener?.let(editorBottomSheet::setBottomSheetCallback)
 
@@ -861,8 +927,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    combineLatest(modelHelper.allBuffers,
-                  modelHelper.chat.chatToJoin).map { (buffers, chatToJoinOptional) ->
+    combineLatest(
+      modelHelper.allBuffers,
+      modelHelper.chat.chatToJoin
+    ).map { (buffers, chatToJoinOptional) ->
       val chatToJoin = chatToJoinOptional.orNull()
       if (chatToJoin == null) {
         emptyList()
@@ -871,8 +939,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
         listOfNotNull(buffers.find {
           it.networkId == networkId &&
-          it.bufferName == channel &&
-          it.type.hasFlag(Buffer_Type.ChannelBuffer)
+            it.bufferName == channel &&
+            it.type.hasFlag(Buffer_Type.ChannelBuffer)
         })
       }
     }.filter {
@@ -880,6 +948,28 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }.firstElement().toLiveData().observeForever {
       it?.firstOrNull()?.let { info ->
         launch(this, bufferId = info.bufferId)
+      }
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+          if (modelHelper.connectionProgress.value?.first == ConnectionState.CONNECTED) {
+            notificationBackend.showConnectedNotifications()
+          }
+        }
+      }
+
+      if (ActivityCompat.checkSelfPermission(
+          applicationContext,
+          Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+      ) {
+        ActivityCompat.requestPermissions(
+          this,
+          arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+          1
+        )
       }
     }
   }
@@ -938,7 +1028,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     chatViewModel.onSaveInstanceState(outState)
 
     outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount.id)
-    outState.putBoolean(KEY_OPEN_DRAWER_START, binding.drawerLayout.isDrawerOpen(GravityCompat.START))
+    outState.putBoolean(
+      KEY_OPEN_DRAWER_START,
+      binding.drawerLayout.isDrawerOpen(GravityCompat.START)
+    )
     outState.putBoolean(KEY_OPEN_DRAWER_END, binding.drawerLayout.isDrawerOpen(GravityCompat.END))
   }
 
@@ -959,29 +1052,33 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     val nickCountDrawableSize = resources.getDimensionPixelSize(R.dimen.size_nick_count)
-    val nickCountDrawableColor = binding.layoutMain.layoutToolbar.toolbar.context.theme.styledAttributes(
-      androidx.appcompat.R.attr.colorControlNormal
-    ) { getColor(0, 0) }
+    val nickCountDrawableColor =
+      binding.layoutMain.layoutToolbar.toolbar.context.theme.styledAttributes(
+        androidx.appcompat.R.attr.colorControlNormal
+      ) { getColor(0, 0) }
 
     menuInflater.inflate(R.menu.activity_main, menu)
-    menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer)
-                                                      ?: false
+    menu?.findItem(R.id.action_nicklist)?.isVisible =
+      bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer)
+        ?: false
     menu?.findItem(R.id.action_filter_messages)?.isVisible =
       (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
-       bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false)
+        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false)
     menu?.retint(binding.layoutMain.layoutToolbar.toolbar.context)
     menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(
       bufferData?.userCount ?: 0,
       nickCountDrawableSize,
-      nickCountDrawableColor)
+      nickCountDrawableColor
+    )
     return super.onCreateOptionsMenu(menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-    android.R.id.home           -> {
+    android.R.id.home -> {
       drawerToggle.onOptionsItemSelected(item)
     }
-    R.id.action_nicklist        -> {
+
+    R.id.action_nicklist -> {
       if (binding.drawerLayout.isDrawerVisible(GravityCompat.END)) {
         binding.drawerLayout.closeDrawer(GravityCompat.END)
       } else {
@@ -989,6 +1086,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
+
     R.id.action_filter_messages -> {
       runInBackground {
         chatViewModel.bufferId { buffer ->
@@ -1060,23 +1158,28 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    R.id.action_core_settings   -> {
+
+    R.id.action_core_settings -> {
       CoreSettingsActivity.launch(this)
       true
     }
+
     R.id.action_client_settings -> {
       ClientSettingsActivity.launch(this)
       true
     }
-    R.id.action_about           -> {
+
+    R.id.action_about -> {
       AboutActivity.launch(this)
       true
     }
-    R.id.action_disconnect      -> {
+
+    R.id.action_disconnect -> {
       disconnect()
       true
     }
-    else                        -> super.onOptionsItemSelected(item)
+
+    else -> super.onOptionsItemSelected(item)
   }
 
   override fun onBackPressed() {
@@ -1159,16 +1262,18 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       accountId: Long? = null,
       forceJoin: Boolean? = null
     ) = context.startActivity(
-      intent(context,
-             sharedText,
-             autoCompleteText,
-             autoCompleteSuffix,
-             channel,
-             nickName,
-             networkId,
-             bufferId,
-             accountId,
-             forceJoin)
+      intent(
+        context,
+        sharedText,
+        autoCompleteText,
+        autoCompleteSuffix,
+        channel,
+        nickName,
+        networkId,
+        bufferId,
+        accountId,
+        forceJoin
+      )
     )
 
     fun intent(

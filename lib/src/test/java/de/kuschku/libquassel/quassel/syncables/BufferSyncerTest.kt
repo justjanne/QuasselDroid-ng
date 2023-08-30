@@ -25,7 +25,7 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class BufferSyncerTest {
   @Test

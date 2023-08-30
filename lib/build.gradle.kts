@@ -30,5 +30,7 @@ dependencies {
   implementation(project(":invokerannotations"))
   ksp(project(":invokergenerator"))
 
-  testImplementation(libs.junit)
+  testImplementation(libs.hamcrest)
+  testImplementation(libs.junit.api)
+  testRuntimeOnly(libs.junit.engine)
 }

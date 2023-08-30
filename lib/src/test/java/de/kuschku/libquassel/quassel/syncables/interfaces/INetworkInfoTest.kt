@@ -23,8 +23,8 @@ import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class INetworkInfoTest {
   @Test

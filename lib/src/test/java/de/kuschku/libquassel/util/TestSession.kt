@@ -56,7 +56,7 @@ import de.kuschku.libquassel.session.ProtocolHandler
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import org.junit.Assert.assertTrue
+import org.junit.jupiter.api.Assertions.assertTrue
 import javax.net.ssl.SSLSession
 
 class TestSession : ProtocolHandler({ throw it }), ISession {
@@ -79,35 +79,35 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
         it.className == target.className
       }
       assertTrue(
-        "SYNC No calls were made on objects of type ${target.className}",
-        matchingTargetTypes.isNotEmpty()
+        matchingTargetTypes.isNotEmpty(),
+        "SYNC No calls were made on objects of type ${target.className}"
       )
       val matchingTargets = matchingTargetTypes.filter {
         it.objectName == target.objectName
       }
       assertTrue(
+        matchingTargets.isNotEmpty(),
         if (matchingTargetTypes.isNotEmpty()) {
           "SYNC No calls were made on ${target.className}:${target.objectName}, instead only on:\n  ${matchingTargetTypes.map { "${it.className}:${it.objectName}" }.joinToString(
             "\n  ")}"
         } else {
           "SYNC No calls were made on ${target.className}:${target.objectName}"
-        },
-        matchingTargets.isNotEmpty()
+        }
       )
 
       val matchingNames = matchingTargets.filter {
         it.slotName == slotName
       }
       assertTrue(
-        "SYNC ${target.className}:${target.objectName}:$slotName() was never called",
-        matchingNames.isNotEmpty()
+        matchingNames.isNotEmpty(),
+        "SYNC ${target.className}:${target.objectName}:$slotName() was never called"
       )
       if (!params.isNullOrEmpty()) {
         val calledParams = matchingNames.map(SignalProxyMessage.SyncMessage::params)
         assertTrue(
+          calledParams.contains(params),
           "SYNC ${target.className}:${target.objectName}:$slotName was called with the wrong parameters:\nExpected:\n  $params\nActual:\n  ${calledParams.joinToString(
-            "\n  ")}",
-          calledParams.contains(params)
+            "\n  ")}"
         )
       }
     }
@@ -118,15 +118,15 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
         it.slotName == slotName
       }
       assertTrue(
-        "RPC $slotName() was not called",
-        matchingNames.isNotEmpty()
+        matchingNames.isNotEmpty(),
+        "RPC $slotName() was not called"
       )
       if (!params.isNullOrEmpty()) {
         val calledParams = matchingNames.map(SignalProxyMessage.RpcCall::params)
         assertTrue(
+          calledParams.contains(params),
           "RPC $slotName was called with the wrong parameters:\nExpected:\n  $params\nActual:\n  ${calledParams.joinToString(
-            "\n  ")}",
-          calledParams.contains(params)
+            "\n  ")}"
         )
       }
     }
@@ -136,16 +136,16 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
         it.className == className
       }
       assertTrue(
-        "InitRequest No data was requested for objects of type $className",
-        matchingType.isNotEmpty()
+        matchingType.isNotEmpty(),
+        "InitRequest No data was requested for objects of type $className"
       )
       val matchingCalls = matchingType.filter {
         it.objectName == objectName
       }
       assertTrue(
+        matchingCalls.isNotEmpty(),
         "InitRequest No data was requested for object $className:$objectName, instead only for:\n  ${matchingType.map { "${it.className}:${it.objectName}" }.joinToString(
-          "\n  ")}",
-        matchingCalls.isNotEmpty()
+          "\n  ")}"
       )
     }
   }

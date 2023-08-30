@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.service
 
+import android.Manifest
 import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
@@ -26,11 +27,13 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
@@ -63,7 +66,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
 
   @TargetApi(Build.VERSION_CODES.O)
   private fun prepareChannels() {
-    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val notificationManager =
+      context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.createNotificationChannels(
       listOf(
         NotificationChannel(
@@ -109,9 +113,11 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
     return bitmap
   }
 
-  fun notificationMessage(notificationSettings: NotificationSettings, buffer: NotificationBuffer,
-                          selfInfo: SelfInfo, notifications: List<NotificationMessage>,
-                          isLoud: Boolean, isConnected: Boolean): Handle {
+  fun notificationMessage(
+    notificationSettings: NotificationSettings, buffer: NotificationBuffer,
+    selfInfo: SelfInfo, notifications: List<NotificationMessage>,
+    isLoud: Boolean, isConnected: Boolean
+  ): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
@@ -279,7 +285,13 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
   }
 
   fun notify(handle: Handle) {
-    notificationManagerCompat.notify(handle.id, handle.builder.build())
+    if (ActivityCompat.checkSelfPermission(
+        context.applicationContext,
+        Manifest.permission.POST_NOTIFICATIONS
+      ) == PackageManager.PERMISSION_GRANTED
+    ) {
+      notificationManagerCompat.notify(handle.id, handle.builder.build())
+    }
   }
 
   fun remove(handle: Handle) {

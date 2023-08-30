@@ -33,7 +33,8 @@
   <issue id="Overdraw" severity="ignore" />
 
   <!-- Can’t request a translation without a release, can’t release without translation -->
-  <issue id="MissingTranslation" severity="informational" />
+  <issue id="MissingTranslation" severity="ignore" />
+  <issue id="MissingQuantity" severity="ignore" />
   <!-- Because we don’t use app bundles and never will use them -->
   <issue id="AppBundleLocaleChanges" severity="informational" />
   <!-- Because this tries to apply english orthography to other locales -->

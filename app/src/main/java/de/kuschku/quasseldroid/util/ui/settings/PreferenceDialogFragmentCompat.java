@@ -233,8 +233,7 @@ public abstract class PreferenceDialogFragmentCompat extends DialogFragment impl
       return null;
     }
 
-    LayoutInflater inflater = LayoutInflater.from(context);
-    return inflater.inflate(resId, null);
+    return getLayoutInflater().inflate(resId, null);
   }
 
   /**

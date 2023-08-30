@@ -53,7 +53,6 @@ class ShadowView : View {
     initialize(context, attrs, defStyleAttr, 0)
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) :
     super(context, attrs, defStyleAttr, defStyleRes) {
     initialize(context, attrs, defStyleAttr, defStyleRes)

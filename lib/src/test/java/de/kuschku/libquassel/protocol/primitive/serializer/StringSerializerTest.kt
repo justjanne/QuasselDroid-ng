@@ -23,9 +23,9 @@ import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
-import org.junit.Test
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class StringSerializerTest {
   @Test

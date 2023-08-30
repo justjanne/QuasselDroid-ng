@@ -22,7 +22,7 @@ package de.kuschku.libquassel.integration
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.util.withTestSession
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /*
  * When implementing SignedIds properly for the first time, we noticed that they were used in

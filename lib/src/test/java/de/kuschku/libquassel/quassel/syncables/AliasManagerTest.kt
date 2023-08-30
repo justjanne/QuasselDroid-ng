@@ -22,7 +22,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class AliasManagerTest {
   @Test

@@ -25,7 +25,7 @@ import de.kuschku.libquassel.util.randomBoolean
 import de.kuschku.libquassel.util.randomOf
 import de.kuschku.libquassel.util.randomString
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class IgnoreListManagerTest {
   @Test

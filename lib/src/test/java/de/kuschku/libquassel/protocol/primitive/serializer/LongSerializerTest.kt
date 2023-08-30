@@ -21,8 +21,8 @@ package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class LongSerializerTest {
   @Test

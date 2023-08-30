@@ -124,14 +124,16 @@ dependencies {
   implementation(libs.dagger.android.core)
   implementation(libs.dagger.android.support)
 
-  testImplementation(libs.junit)
+  testImplementation(libs.junit.api)
+  testRuntimeOnly(libs.junit.engine)
   testImplementation(libs.androidx.test.core)
   testImplementation(libs.robolectric) {
     exclude(group = "org.threeten", module = "threetenbp")
     exclude(group = "com.google.auto.service", module = "auto-service")
   }
 
-  androidTestImplementation(libs.junit)
+  androidTestImplementation(libs.junit.api)
+  androidTestRuntimeOnly(libs.junit.engine)
   androidTestImplementation(libs.androidx.test.espresso.core)
   androidTestImplementation(libs.androidx.test.espresso.contrib)
   androidTestImplementation(libs.androidx.test.junit)

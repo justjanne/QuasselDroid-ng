@@ -21,9 +21,13 @@ package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import org.threeten.bp.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Month
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZoneOffset
 
 class DateTimeSerializerTest {
   @Test

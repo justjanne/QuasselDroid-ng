@@ -19,6 +19,7 @@
 
 package de.kuschku.malheur.collectors
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.res.Configuration
 import android.util.SparseArray
@@ -86,6 +87,7 @@ class ConfigurationCollector(private val application: Application) :
     }
   }
 
+  @SuppressLint("PrivateApi")
   override fun collect(context: CrashContext,
                        config: Boolean) = configurationFields.mapNotNull { info ->
     val field: Field? = Configuration::class.java.getDeclaredField(info.fieldName)

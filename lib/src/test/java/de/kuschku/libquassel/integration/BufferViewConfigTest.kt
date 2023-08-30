@@ -26,13 +26,13 @@ import de.kuschku.libquassel.protocol.QtType
 import de.kuschku.libquassel.util.TestSession
 import de.kuschku.libquassel.util.setupTestSession
 import de.kuschku.libquassel.util.with
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class BufferViewConfigTest {
   lateinit var session: TestSession
 
-  @Before
+  @BeforeEach
   fun setUp() {
     session = setupTestSession()
   }

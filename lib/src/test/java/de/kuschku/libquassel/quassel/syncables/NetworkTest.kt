@@ -24,8 +24,16 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
-import de.kuschku.libquassel.util.*
-import org.junit.Test
+import de.kuschku.libquassel.util.randomBoolean
+import de.kuschku.libquassel.util.randomCharset
+import de.kuschku.libquassel.util.randomInstant
+import de.kuschku.libquassel.util.randomInt
+import de.kuschku.libquassel.util.randomOf
+import de.kuschku.libquassel.util.randomString
+import de.kuschku.libquassel.util.randomUInt
+import de.kuschku.libquassel.util.randomUShort
+import de.kuschku.libquassel.util.roundTrip
+import org.junit.jupiter.api.Test
 
 class NetworkTest {
   @Test

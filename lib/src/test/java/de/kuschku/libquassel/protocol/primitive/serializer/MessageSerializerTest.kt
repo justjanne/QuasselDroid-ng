@@ -19,13 +19,19 @@
 
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.Message
+import de.kuschku.libquassel.protocol.Message_Flag
+import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.threeten.bp.Instant
 
 class MessageSerializerTest {

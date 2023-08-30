@@ -25,8 +25,8 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class BufferInfoSerializerTest {
   @Test

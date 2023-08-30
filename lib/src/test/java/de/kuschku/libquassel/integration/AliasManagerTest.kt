@@ -26,16 +26,16 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.util.TestSession
 import de.kuschku.libquassel.util.setupTestSession
 import de.kuschku.libquassel.util.with
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class AliasManagerTest {
   lateinit var session: TestSession
   lateinit var channelBuffer: BufferInfo
   lateinit var queryBuffer: BufferInfo
 
-  @Before
+  @BeforeEach
   fun setUp() {
     session = setupTestSession()
     session.aliasManager.setAliasList(listOf(

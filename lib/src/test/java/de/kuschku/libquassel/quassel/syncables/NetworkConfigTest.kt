@@ -24,7 +24,7 @@ import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.randomBoolean
 import de.kuschku.libquassel.util.randomInt
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.math.abs
 
 class NetworkConfigTest {

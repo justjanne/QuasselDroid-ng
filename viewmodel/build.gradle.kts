@@ -47,5 +47,6 @@ dependencies {
     exclude(group = "org.threeten", module = "threetenbp")
   }
 
-  testImplementation(libs.junit)
+  testImplementation(libs.junit.api)
+  testRuntimeOnly(libs.junit.engine)
 }

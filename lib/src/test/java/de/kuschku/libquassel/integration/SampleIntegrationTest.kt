@@ -20,11 +20,11 @@
 package de.kuschku.libquassel.integration
 
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.protocol.QuasselType
 import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.QtType
+import de.kuschku.libquassel.protocol.QuasselType
 import de.kuschku.libquassel.util.withTestSession
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class SampleIntegrationTest {
   @Test

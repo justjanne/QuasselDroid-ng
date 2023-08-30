@@ -20,8 +20,8 @@
 package de.kuschku.quasseldroid.viewmodel
 
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel.Companion.recentMessagesChangeInternal
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class ChatViewModelTest {
   @Test

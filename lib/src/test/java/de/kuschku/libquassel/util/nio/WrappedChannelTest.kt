@@ -20,8 +20,8 @@
 package de.kuschku.libquassel.util.nio
 
 import de.kuschku.libquassel.util.nio.WrappedChannel.Companion.selectBestTlsVersion
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class WrappedChannelTest {
   @Test
