@@ -4,7 +4,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import util.git
-import util.properties
 import java.util.Locale
 
 class AndroidApplicationConvention : Plugin<Project> {
@@ -13,6 +12,7 @@ class AndroidApplicationConvention : Plugin<Project> {
       with(pluginManager) {
         apply("com.android.application")
         apply("justjanne.kotlin.android")
+        apply("justjanne.signing")
       }
 
       extensions.configure<ApplicationExtension> {
@@ -47,17 +47,6 @@ class AndroidApplicationConvention : Plugin<Project> {
 
         buildFeatures {
           buildConfig = true
-        }
-
-        signingConfigs {
-          SigningData.of(project.rootProject.properties("signing.properties"))?.let {
-            create("default") {
-              storeFile = file(it.storeFile)
-              storePassword = it.storePassword
-              keyAlias = it.keyAlias
-              keyPassword = it.keyPassword
-            }
-          }
         }
 
         compileOptions {

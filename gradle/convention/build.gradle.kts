@@ -32,6 +32,10 @@ gradlePlugin {
       id = "justjanne.kotlin"
       implementationClass = "KotlinConvention"
     }
+    register("signing") {
+      id = "justjanne.signing"
+      implementationClass = "SigningConvention"
+    }
   }
 }
 
