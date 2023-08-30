@@ -28,7 +28,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.system.ErrnoException
 import android.text.Html
 import android.view.ActionMode
@@ -42,6 +41,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -94,6 +94,7 @@ import de.kuschku.quasseldroid.util.backport.OsConstants
 import de.kuschku.quasseldroid.util.deceptive_networks.DeceptiveNetworkDialog
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
+import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
@@ -106,6 +107,9 @@ import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -161,6 +165,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   private var connectedAccount = AccountId(-1L)
 
   private var restoredDrawerState = false
+
+  private val permissionGranted = BehaviorSubject.createDefault(false)
 
   fun processIntent(intent: Intent) {
     when {
@@ -308,6 +314,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onCreate(savedInstanceState)
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      permissionGranted.onNext(
+        PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+          applicationContext,
+          Manifest.permission.POST_NOTIFICATIONS
+        )
+      )
+    } else {
+      permissionGranted.onNext(true)
+    }
+    registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+      permissionGranted.onNext(isGranted)
+    }
 
     chatlineFragment =
       supportFragmentManager.findFragmentById(R.id.fragment_chatline) as? ChatlineFragment
@@ -782,12 +802,71 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    // After initial connect, open the drawer
-    modelHelper.connectionProgress
-      .filter { (it, _, _) -> it == ConnectionState.CONNECTED }
-      .firstElement()
-      .toLiveData()
-      .observe(this, Observer {
+    val isConnected: Observable<Boolean> = modelHelper.connectionProgress.map { (state, _, _) ->
+      state == ConnectionState.CONNECTED
+    }.filter { it }
+
+    val missingIdentity: Observable<Boolean> = modelHelper.connectedSession.map { session ->
+      session.orNull()?.identities.isNullOrEmpty()
+    }
+
+    val missingFeatures: Observable<List<MissingFeature>> =
+      modelHelper.connectedSession.mapMap { session ->
+        RequiredFeatures.features.filter {
+          it.feature !in session.features.core.enabledFeatures
+        }
+      }.mapOrElse(emptyList())
+
+    val postConnectionState = combineLatest(
+      isConnected,
+      missingIdentity,
+      missingFeatures,
+      permissionGranted
+    ).map { (connected, missingIdentity, missingFeatures, permissionGranted) ->
+      when {
+        !connected -> PostConnectionState.Connecting
+        missingIdentity -> PostConnectionState.SetupIdentity
+        missingFeatures.isNotEmpty() -> PostConnectionState.MissingFeatures(missingFeatures)
+        !permissionGranted -> PostConnectionState.RequestingPermissions
+        else -> PostConnectionState.Done
+      }
+    }
+
+    postConnectionState.toLiveData().observe(this) { state ->
+      if (state == PostConnectionState.SetupIdentity) {
+        UserSetupActivity.launch(this)
+      } else if (state is PostConnectionState.MissingFeatures) {
+        runInBackground {
+          val accounts = accountDatabase.accounts()
+          val account = accounts.findById(accountId)
+          if (account?.acceptedMissingFeatures == false) {
+            val dialog = MissingFeaturesDialog.Builder(this)
+              .missingFeatures(state.features)
+              .positiveListener(MaterialDialog.SingleButtonCallback { _, _ ->
+                runInBackground {
+                  accounts.save(account.copy(acceptedMissingFeatures = true))
+                }
+              })
+            runOnUiThread {
+              dialog.show()
+            }
+          }
+        }
+      } else if (state == PostConnectionState.RequestingPermissions &&
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+      ) {
+        if (ActivityCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.POST_NOTIFICATIONS
+          ) != PackageManager.PERMISSION_GRANTED
+        ) {
+          ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+            1
+          )
+        }
+      } else {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
             chatViewModel.bufferId.safeValue == BufferId.MAX_VALUE &&
@@ -796,34 +875,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             binding.drawerLayout.openDrawer(GravityCompat.START)
           }
           connectedAccount = accountId
-          modelHelper.connectedSession.value?.orNull()?.let { session ->
-            if (session.identities.isEmpty()) {
-              UserSetupActivity.launch(this)
-            }
-            val missingFeatures = RequiredFeatures.features.filter {
-              it.feature !in session.features.core.enabledFeatures
-            }
-            if (missingFeatures.isNotEmpty()) {
-              runInBackground {
-                val accounts = accountDatabase.accounts()
-                val account = accounts.findById(accountId)
-                if (account?.acceptedMissingFeatures == false) {
-                  val dialog = MissingFeaturesDialog.Builder(this)
-                    .missingFeatures(missingFeatures)
-                    .positiveListener(MaterialDialog.SingleButtonCallback { _, _ ->
-                      runInBackground {
-                        accounts.save(account.copy(acceptedMissingFeatures = true))
-                      }
-                    })
-                  runOnUiThread {
-                    dialog.show()
-                  }
-                }
-              }
-            }
-          }
         }
-      })
+      }
+    }
 
     binding.layoutMain.connectionStatus.setOnClickListener {
       if (modelHelper.connectionProgress.value?.first == ConnectionState.CONNECTED
@@ -948,28 +1002,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }.firstElement().toLiveData().observeForever {
       it?.firstOrNull()?.let { info ->
         launch(this, bufferId = info.bufferId)
-      }
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-          if (modelHelper.connectionProgress.value?.first == ConnectionState.CONNECTED) {
-            notificationBackend.showConnectedNotifications()
-          }
-        }
-      }
-
-      if (ActivityCompat.checkSelfPermission(
-          applicationContext,
-          Manifest.permission.POST_NOTIFICATIONS
-        ) != PackageManager.PERMISSION_GRANTED
-      ) {
-        ActivityCompat.requestPermissions(
-          this,
-          arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-          1
-        )
       }
     }
   }
@@ -1315,5 +1347,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     }
+  }
+
+  sealed class PostConnectionState {
+    object Connecting : PostConnectionState()
+    object SetupIdentity : PostConnectionState()
+    data class MissingFeatures(val features: List<MissingFeature>) : PostConnectionState()
+    object RequestingPermissions : PostConnectionState()
+    object Done : PostConnectionState()
   }
 }
