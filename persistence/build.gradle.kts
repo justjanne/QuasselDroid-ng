@@ -21,6 +21,10 @@ plugins {
   id("justjanne.android.library")
 }
 
+android {
+  namespace = "de.kuschku.quasseldroid.persistence"
+}
+
 dependencies {
   implementation(libs.androidx.appcompat)
 

@@ -28,8 +28,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
@@ -41,40 +39,17 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFra
 
 class NetworkServerFragment : ServiceBoundSettingsFragment(), Savable,
                               Changeable {
-  @BindView(R.id.host)
   lateinit var host: EditText
-
-  @BindView(R.id.port)
   lateinit var port: EditText
-
-  @BindView(R.id.ssl_enabled)
   lateinit var sslEnabled: SwitchCompat
-
-  @BindView(R.id.ssl_verify)
   lateinit var sslVerify: SwitchCompat
-
-  @BindView(R.id.password)
   lateinit var password: EditText
-
-  @BindView(R.id.proxy_enabled)
   lateinit var proxyEnabled: SwitchCompat
-
-  @BindView(R.id.proxy_group)
   lateinit var proxyGroup: ViewGroup
-
-  @BindView(R.id.proxy_type)
   lateinit var proxyType: Spinner
-
-  @BindView(R.id.proxy_host)
   lateinit var proxyHost: EditText
-
-  @BindView(R.id.proxy_port)
   lateinit var proxyPort: EditText
-
-  @BindView(R.id.proxy_user)
   lateinit var proxyUser: EditText
-
-  @BindView(R.id.proxy_pass)
   lateinit var proxyPass: EditText
 
   private var item: INetwork.Server? = null
@@ -82,7 +57,18 @@ class NetworkServerFragment : ServiceBoundSettingsFragment(), Savable,
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_networkserver, container, false)
-    ButterKnife.bind(this, view)
+    this.host = view.findViewById(R.id.host)
+    this.port = view.findViewById(R.id.port)
+    this.sslEnabled = view.findViewById(R.id.ssl_enabled)
+    this.sslVerify = view.findViewById(R.id.ssl_verify)
+    this.password = view.findViewById(R.id.password)
+    this.proxyEnabled = view.findViewById(R.id.proxy_enabled)
+    this.proxyGroup = view.findViewById(R.id.proxy_group)
+    this.proxyType = view.findViewById(R.id.proxy_type)
+    this.proxyHost = view.findViewById(R.id.proxy_host)
+    this.proxyPort = view.findViewById(R.id.proxy_port)
+    this.proxyUser = view.findViewById(R.id.proxy_user)
+    this.proxyPass = view.findViewById(R.id.proxy_pass)
 
     (arguments?.getSerializable("server") as? INetwork.Server)?.let {
       item = it

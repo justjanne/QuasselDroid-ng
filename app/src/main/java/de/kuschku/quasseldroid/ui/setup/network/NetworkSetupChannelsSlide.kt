@@ -24,17 +24,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 
 class NetworkSetupChannelsSlide : SlideFragment() {
-  @BindView(R.id.channelsWrapper)
   lateinit var channelsWrapper: TextInputLayout
-
-  @BindView(R.id.channels)
   lateinit var channelsField: EditText
 
   override fun isValid() = true
@@ -61,7 +56,8 @@ class NetworkSetupChannelsSlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_user_channels, container, false)
-    ButterKnife.bind(this, view)
+    this.channelsWrapper = view.findViewById(R.id.channelsWrapper)
+    this.channelsField = view.findViewById(R.id.channels)
     return view
   }
 }

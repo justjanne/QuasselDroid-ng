@@ -281,7 +281,7 @@ public class MaterialShapeDrawable extends Drawable
   }
 
   @Override
-  protected void onBoundsChange(Rect bounds) {
+  protected void onBoundsChange(@NonNull Rect bounds) {
     pathDirty = true;
     super.onBoundsChange(bounds);
   }
@@ -441,7 +441,7 @@ public class MaterialShapeDrawable extends Drawable
   }
 
   @Override
-  protected boolean onStateChange(int[] state) {
+  protected boolean onStateChange(@NonNull int[] state) {
     boolean paintColorChanged = updateColorsForState(state);
     boolean tintFilterChanged = updateTintFilter();
     boolean invalidateSelf = paintColorChanged || tintFilterChanged;
@@ -539,6 +539,7 @@ public class MaterialShapeDrawable extends Drawable
       paintStyle = orig.paintStyle;
     }
 
+    @NonNull
     @Override
     public Drawable newDrawable() {
       return new MaterialShapeDrawable(this);

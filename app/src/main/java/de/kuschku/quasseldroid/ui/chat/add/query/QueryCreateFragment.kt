@@ -33,8 +33,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
@@ -49,7 +47,6 @@ import de.kuschku.libquassel.util.helper.mapSwitchMap
 import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.libquassel.util.irc.SenderColorUtil
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
@@ -74,16 +71,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class QueryCreateFragment : ServiceBoundFragment() {
-  @BindView(R.id.network)
   lateinit var network: AppCompatSpinner
-
-  @BindView(R.id.name)
   lateinit var name: EditText
-
-  @BindView(R.id.query)
   lateinit var query: Button
-
-  @BindView(R.id.list)
   lateinit var list: RecyclerView
 
   @Inject
@@ -104,7 +94,10 @@ class QueryCreateFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_query, container, false)
-    ButterKnife.bind(this, view)
+    this.network = view.findViewById(R.id.network)
+    this.name = view.findViewById(R.id.name)
+    this.query = view.findViewById(R.id.query)
+    this.list = view.findViewById(R.id.list)
 
     networkId = NetworkId(
       savedInstanceState?.getInt("network_id", 0)
@@ -195,7 +188,7 @@ class QueryCreateFragment : ServiceBoundFragment() {
       )
 
       override fun getPreloadRequestBuilder(item: List<Avatar>) =
-        GlideApp.with(this@QueryCreateFragment).loadWithFallbacks(item)?.override(avatarSize)
+        Glide.with(this@QueryCreateFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)

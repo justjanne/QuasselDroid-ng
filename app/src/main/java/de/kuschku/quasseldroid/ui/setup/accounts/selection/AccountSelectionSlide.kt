@@ -29,8 +29,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -49,7 +47,6 @@ import de.kuschku.quasseldroid.util.helper.zip
 import javax.inject.Inject
 
 class AccountSelectionSlide : SlideFragment() {
-  @BindView(R.id.account_list)
   lateinit var accountList: RecyclerView
 
   @Inject
@@ -76,7 +73,7 @@ class AccountSelectionSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     BufferId
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
-    ButterKnife.bind(this, view)
+    this.accountList = view.findViewById(R.id.account_list)
     val firstObserver = object : Observer<List<Account>?> {
       override fun onChanged(t: List<Account>?) {
         if (t?.isEmpty() != false)
@@ -101,15 +98,15 @@ class AccountSelectionSlide : SlideFragment() {
     adapter.addClickListener {
       accountViewModel.selectedItem.postValue(it)
     }
-    accountViewModel.selectedItem.observeSticky(viewLifecycleOwner, Observer {
+    accountViewModel.selectedItem.observeSticky(viewLifecycleOwner) {
       updateValidity()
-    })
+    }
 
     accountViewModel.accounts.zip(accountViewModel.selectedItem).map { (accounts, selected) ->
       accounts.map { Pair(it, it.id == selected) }
-    }.observe(viewLifecycleOwner, Observer {
+    }.observe(viewLifecycleOwner) {
       adapter.submitList((it ?: emptyList()) + Pair(null, false))
-    })
+    }
 
     return view
   }

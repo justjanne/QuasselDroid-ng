@@ -27,20 +27,13 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatImageView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.use
 
 class BannerView : FrameLayout {
-  @BindView(R.id.icon)
   lateinit var icon: AppCompatImageView
-
-  @BindView(R.id.text)
   lateinit var text: TextView
-
-  @BindView(R.id.button)
   lateinit var button: TextView
 
   constructor(context: Context) :
@@ -53,10 +46,12 @@ class BannerView : FrameLayout {
     super(context, attrs, defStyleAttr) {
 
     val content = LayoutInflater.from(context).inflate(R.layout.widget_banner, this, true)
-    ButterKnife.bind(this)
+    this.icon = this.findViewById(R.id.icon)
+    this.text = this.findViewById(R.id.text)
+    this.button = this.findViewById(R.id.button)
 
     context.theme.styledAttributes(R.attr.colorBackgroundSnackbar,
-                                   R.attr.selectableItemBackground) {
+                                   androidx.appcompat.R.attr.selectableItemBackground) {
       content.background = LayerDrawable(arrayOf(
         getDrawable(0),
         getDrawable(1)

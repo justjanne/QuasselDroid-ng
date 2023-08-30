@@ -35,45 +35,33 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import dagger.android.support.DaggerFragment
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 
 class AboutFragment : DaggerFragment() {
-
-  @BindView(R.id.version_container)
   lateinit var versionContainer: View
-
-  @BindView(R.id.version)
   lateinit var version: TextView
-
-  @BindView(R.id.action_website)
   lateinit var website: Button
-
-  @BindView(R.id.action_source)
   lateinit var source: Button
-
-  @BindView(R.id.action_privacy_policy)
   lateinit var privacyPolicy: Button
-
-  @BindView(R.id.authors)
   lateinit var authors: RecyclerView
-
-  @BindView(R.id.acknowledgements)
   lateinit var acknowledgements: RecyclerView
-
-  @BindView(R.id.translators)
   lateinit var translators: RecyclerView
-
-  @BindView(R.id.libraries)
   lateinit var libraries: RecyclerView
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.preferences_about, container, false)
-    ButterKnife.bind(this, view)
+    this.versionContainer = view.findViewById(R.id.version_container)
+    this.version = view.findViewById(R.id.version)
+    this.website = view.findViewById(R.id.action_website)
+    this.source = view.findViewById(R.id.action_source)
+    this.privacyPolicy = view.findViewById(R.id.action_privacy_policy)
+    this.authors = view.findViewById(R.id.authors)
+    this.acknowledgements = view.findViewById(R.id.acknowledgements)
+    this.translators = view.findViewById(R.id.translators)
+    this.libraries = view.findViewById(R.id.libraries)
 
     version.text = BuildConfig.VERSION_NAME
 
@@ -134,11 +122,6 @@ class AboutFragment : DaggerFragment() {
         name = "Better Link Movement Method",
         license = apache2,
         url = "https://github.com/Saketme/Better-Link-Movement-Method"
-      ),
-      Library(
-        name = "Butter Knife",
-        license = apache2,
-        url = "http://jakewharton.github.io/butterknife/"
       ),
       Library(
         name = "Dagger 2",

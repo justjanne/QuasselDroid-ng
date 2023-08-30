@@ -75,7 +75,7 @@ class AutoCompleteHelper(
     getColor(0, 0)
   }
 
-  private val colorAccent = activity.theme.styledAttributes(R.attr.colorAccent) {
+  private val colorAccent = activity.theme.styledAttributes(androidx.appcompat.R.attr.colorAccent) {
     getColor(0, 0)
   }
 

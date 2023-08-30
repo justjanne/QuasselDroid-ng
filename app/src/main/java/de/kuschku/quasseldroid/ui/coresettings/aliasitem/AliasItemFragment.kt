@@ -29,8 +29,6 @@ import android.widget.EditText
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.quasseldroid.R
@@ -49,16 +47,9 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
-  @BindView(R.id.name)
   lateinit var name: EditText
-
-  @BindView(R.id.expansion)
   lateinit var expansion: RichEditText
-
-  @BindView(R.id.formatting_toolbar)
   lateinit var toolbar: RichToolbar
-
-  @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
 
   @Inject
@@ -96,7 +87,10 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
                             savedInstanceState: Bundle?): View? {
 
     val view = inflater.inflate(R.layout.settings_aliasitem, container, false)
-    ButterKnife.bind(this, view)
+    this.name = view.findViewById(R.id.name)
+    this.expansion = view.findViewById(R.id.expansion)
+    this.toolbar = view.findViewById(R.id.formatting_toolbar)
+    this.autoCompleteList = view.findViewById(R.id.autocomplete_list)
 
     (arguments?.getSerializable("item") as? IAliasManager.Alias)?.let {
       rule = it

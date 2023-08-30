@@ -35,15 +35,6 @@
       "url": "https://github.com/Saketme/Better-Link-Movement-Method"
     },
     {
-      "name": "Butter Knife",
-      "version": "8.8.1",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "http://jakewharton.github.io/butterknife/"
-    },
-    {
       "name": "Dagger 2",
       "version": "2.15",
       "license": {

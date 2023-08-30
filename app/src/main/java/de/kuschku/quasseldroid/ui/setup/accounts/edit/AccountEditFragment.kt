@@ -30,8 +30,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SwitchCompat
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -49,32 +47,21 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.SettingsFragment
 import javax.inject.Inject
 
 class AccountEditFragment : SettingsFragment(), Changeable, Savable, Deletable {
-  @BindView(R.id.nameWrapper)
   lateinit var nameWrapper: TextInputLayout
-  @BindView(R.id.name)
   lateinit var name: EditText
 
-  @BindView(R.id.hostWrapper)
   lateinit var hostWrapper: TextInputLayout
-  @BindView(R.id.host)
   lateinit var host: EditText
 
-  @BindView(R.id.portWrapper)
   lateinit var portWrapper: TextInputLayout
-  @BindView(R.id.port)
   lateinit var port: EditText
 
-  @BindView(R.id.require_ssl)
   lateinit var requireSsl: SwitchCompat
 
-  @BindView(R.id.userWrapper)
   lateinit var userWrapper: TextInputLayout
-  @BindView(R.id.user)
   lateinit var user: EditText
 
-  @BindView(R.id.passWrapper)
   lateinit var passWrapper: TextInputLayout
-  @BindView(R.id.pass)
   lateinit var pass: EditText
 
   @Inject
@@ -101,7 +88,17 @@ class AccountEditFragment : SettingsFragment(), Changeable, Savable, Deletable {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.setup_account_edit, container, false)
-    ButterKnife.bind(this, view)
+    this.nameWrapper = view.findViewById(R.id.nameWrapper)
+    this.name = view.findViewById(R.id.name)
+    this.hostWrapper = view.findViewById(R.id.hostWrapper)
+    this.host = view.findViewById(R.id.host)
+    this.portWrapper = view.findViewById(R.id.portWrapper)
+    this.port = view.findViewById(R.id.port)
+    this.requireSsl = view.findViewById(R.id.require_ssl)
+    this.userWrapper = view.findViewById(R.id.userWrapper)
+    this.user = view.findViewById(R.id.user)
+    this.passWrapper = view.findViewById(R.id.passWrapper)
+    this.pass = view.findViewById(R.id.pass)
 
     setHasOptionsMenu(true)
 

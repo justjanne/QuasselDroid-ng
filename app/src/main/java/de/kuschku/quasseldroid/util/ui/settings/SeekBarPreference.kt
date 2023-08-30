@@ -24,8 +24,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 
 class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
@@ -37,19 +35,12 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
   private var unitsLeftText = ""
   private var unitsRightText = ""
 
-  @BindView(R.id.seekBarPrefSeekBar)
   @JvmField
   var seekBar: AppCompatSeekBar? = null
-
-  @BindView(R.id.seekBarPrefValue)
   @JvmField
   var statusText: TextView? = null
-
-  @BindView(R.id.seekBarPrefUnitsLeft)
   @JvmField
   var unitsLeft: TextView? = null
-
-  @BindView(R.id.seekBarPrefUnitsRight)
   @JvmField
   var unitsRight: TextView? = null
 
@@ -94,7 +85,10 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
   override fun onBindViewHolder(holder: PreferenceViewHolder) {
     super.onBindViewHolder(holder)
     holder.itemView.let { view ->
-      ButterKnife.bind(this, view)
+      this.seekBar = view.findViewById(R.id.seekBarPrefSeekBar)
+      this.statusText = view.findViewById(R.id.seekBarPrefValue)
+      this.unitsLeft = view.findViewById(R.id.seekBarPrefUnitsLeft)
+      this.unitsRight = view.findViewById(R.id.seekBarPrefUnitsRight)
       seekBar?.max = maxValue - minValue
       seekBar?.setOnSeekBarChangeListener(this)
       statusText?.text = currentValue.toString()

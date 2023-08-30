@@ -30,17 +30,17 @@ class DoubleClickHelper(view: View) : View.OnTouchListener {
   private val gestureDetector = GestureDetector(
     view.context,
     object : GestureDetector.SimpleOnGestureListener() {
-      override fun onDoubleTap(e: MotionEvent?): Boolean {
+      override fun onDoubleTap(e: MotionEvent): Boolean {
         doubleClickListener?.invoke()
         return true
       }
 
-      override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+      override fun onDoubleTapEvent(e: MotionEvent): Boolean {
         return true
       }
     }
   )
 
   @SuppressLint("ClickableViewAccessibility")
-  override fun onTouch(v: View?, event: MotionEvent?) = gestureDetector.onTouchEvent(event)
+  override fun onTouch(v: View?, event: MotionEvent) = gestureDetector.onTouchEvent(event)
 }

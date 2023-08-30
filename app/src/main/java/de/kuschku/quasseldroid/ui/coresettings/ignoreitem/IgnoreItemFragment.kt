@@ -29,8 +29,6 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
@@ -40,28 +38,13 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFra
 
 class IgnoreItemFragment : ServiceBoundSettingsFragment(), Savable,
                            Changeable {
-  @BindView(R.id.enabled)
   lateinit var enabled: SwitchCompat
-
-  @BindView(R.id.ignore_rule)
   lateinit var ignoreRule: EditText
-
-  @BindView(R.id.isregex)
   lateinit var isRegEx: SwitchCompat
-
-  @BindView(R.id.type)
   lateinit var type: Spinner
-
-  @BindView(R.id.strictness)
   lateinit var strictness: Spinner
-
-  @BindView(R.id.scope)
   lateinit var scope: Spinner
-
-  @BindView(R.id.scope_rule)
   lateinit var scopeRule: EditText
-
-  @BindView(R.id.scopegroup)
   lateinit var scopegroup: ViewGroup
 
   private var item: IgnoreListManager.IgnoreListItem? = null
@@ -69,7 +52,14 @@ class IgnoreItemFragment : ServiceBoundSettingsFragment(), Savable,
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_ignoreitem, container, false)
-    ButterKnife.bind(this, view)
+    this.enabled = view.findViewById(R.id.enabled)
+    this.ignoreRule = view.findViewById(R.id.ignore_rule)
+    this.isRegEx = view.findViewById(R.id.isregex)
+    this.type = view.findViewById(R.id.type)
+    this.strictness = view.findViewById(R.id.strictness)
+    this.scope = view.findViewById(R.id.scope)
+    this.scopeRule = view.findViewById(R.id.scope_rule)
+    this.scopegroup = view.findViewById(R.id.scopegroup)
 
     (arguments?.getSerializable("item") as? IgnoreListManager.IgnoreListItem)?.let {
       item = it

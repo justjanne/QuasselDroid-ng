@@ -27,8 +27,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
@@ -50,26 +48,12 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class ChannelInfoFragment : ServiceBoundFragment() {
-
-  @BindView(R.id.name)
   lateinit var name: TextView
-
-  @BindView(R.id.topic)
   lateinit var topic: TextView
-
-  @BindView(R.id.action_edit_topic)
   lateinit var actionEditTopic: Button
-
-  @BindView(R.id.action_who)
   lateinit var actionWho: Button
-
-  @BindView(R.id.action_part)
   lateinit var actionPart: Button
-
-  @BindView(R.id.action_join)
   lateinit var actionJoin: Button
-
-  @BindView(R.id.action_shortcut)
   lateinit var actionShortcut: Button
 
   @Inject
@@ -84,7 +68,13 @@ class ChannelInfoFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_channel, container, false)
-    ButterKnife.bind(this, view)
+    this.name = view.findViewById(R.id.name)
+    this.topic = view.findViewById(R.id.topic)
+    this.actionEditTopic = view.findViewById(R.id.action_edit_topic)
+    this.actionWho = view.findViewById(R.id.action_who)
+    this.actionPart = view.findViewById(R.id.action_part)
+    this.actionJoin = view.findViewById(R.id.action_join)
+    this.actionShortcut = view.findViewById(R.id.action_shortcut)
 
     val openBuffer = arguments?.getBoolean("openBuffer")
     val bufferId = BufferId(arguments?.getInt("bufferId") ?: -1)

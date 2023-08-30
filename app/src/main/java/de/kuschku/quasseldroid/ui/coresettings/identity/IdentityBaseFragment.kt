@@ -31,8 +31,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.quassel.syncables.Identity
@@ -50,41 +48,17 @@ import javax.inject.Inject
 
 abstract class IdentityBaseFragment(private val initDefault: Boolean) :
   ServiceBoundSettingsFragment(), Savable, Changeable {
-
-  @BindView(R.id.identity_name)
   lateinit var identityName: EditText
-
-  @BindView(R.id.real_name)
   lateinit var realName: EditText
-
-  @BindView(R.id.ident)
   lateinit var ident: EditText
-
-  @BindView(R.id.nicks)
   lateinit var nicks: RecyclerView
-
-  @BindView(R.id.new_nick)
   lateinit var newNick: Button
-
-  @BindView(R.id.kick_reason)
   lateinit var kickReason: EditText
-
-  @BindView(R.id.part_reason)
   lateinit var partReason: EditText
-
-  @BindView(R.id.quit_reason)
   lateinit var quitReason: EditText
-
-  @BindView(R.id.away_reason)
   lateinit var awayReason: EditText
-
-  @BindView(R.id.detach_away)
   lateinit var detachAway: SwitchCompat
-
-  @BindView(R.id.detach_away_group)
   lateinit var detachAwayGroup: ViewGroup
-
-  @BindView(R.id.detach_away_reason)
   lateinit var detachAwayReason: EditText
 
   @Inject
@@ -98,7 +72,18 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_identity, container, false)
-    ButterKnife.bind(this, view)
+    this.identityName = view.findViewById(R.id.identity_name)
+    this.realName = view.findViewById(R.id.real_name)
+    this.ident = view.findViewById(R.id.ident)
+    this.nicks = view.findViewById(R.id.nicks)
+    this.newNick = view.findViewById(R.id.new_nick)
+    this.kickReason = view.findViewById(R.id.kick_reason)
+    this.partReason = view.findViewById(R.id.part_reason)
+    this.quitReason = view.findViewById(R.id.quit_reason)
+    this.awayReason = view.findViewById(R.id.away_reason)
+    this.detachAway = view.findViewById(R.id.detach_away)
+    this.detachAwayGroup = view.findViewById(R.id.detach_away_group)
+    this.detachAwayReason = view.findViewById(R.id.detach_away_reason)
 
     val identityId = IdentityId(arguments?.getInt("identity", -1) ?: -1)
 

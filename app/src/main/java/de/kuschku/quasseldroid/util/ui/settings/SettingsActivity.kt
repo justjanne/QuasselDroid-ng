@@ -23,8 +23,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.ThemedActivity
@@ -36,14 +34,13 @@ abstract class SettingsActivity(protected val fragment: Fragment? = null) : Them
   private var changeable: Changeable? = null
   protected var actualFragment: Fragment? = null
 
-  @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
 
   override fun onCreate(savedInstanceState: Bundle?) {
     val arguments = intent.extras
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_settings)
-    ButterKnife.bind(this)
+    this.toolbar = this.findViewById(R.id.toolbar)
 
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)

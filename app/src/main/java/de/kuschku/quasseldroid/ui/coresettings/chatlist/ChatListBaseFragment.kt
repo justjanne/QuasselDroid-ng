@@ -28,8 +28,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
@@ -54,37 +52,16 @@ import javax.inject.Inject
 
 abstract class ChatListBaseFragment(private val initDefault: Boolean) :
   ServiceBoundSettingsFragment(), Savable, Changeable {
-  @BindView(R.id.buffer_view_name)
   lateinit var bufferViewName: EditText
-
-  @BindView(R.id.show_search)
   lateinit var showSearch: SwitchCompat
-
-  @BindView(R.id.sort_alphabetically)
   lateinit var sortAlphabetically: SwitchCompat
-
-  @BindView(R.id.add_new_buffers_automatically)
   lateinit var addNewBuffersAutomatically: SwitchCompat
-
-  @BindView(R.id.network_id)
   lateinit var networkId: Spinner
-
-  @BindView(R.id.show_status_buffer)
   lateinit var showStatusBuffer: SwitchCompat
-
-  @BindView(R.id.show_channels)
   lateinit var showChannels: SwitchCompat
-
-  @BindView(R.id.show_queries)
   lateinit var showQueries: SwitchCompat
-
-  @BindView(R.id.minimum_activity)
   lateinit var minimumActivity: Spinner
-
-  @BindView(R.id.hide_inactive_buffers)
   lateinit var hideInactiveBuffers: SwitchCompat
-
-  @BindView(R.id.hide_inactive_networks)
   lateinit var hideInactiveNetworks: SwitchCompat
 
   @Inject
@@ -95,7 +72,17 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_chatlist, container, false)
-    ButterKnife.bind(this, view)
+    this.bufferViewName = view.findViewById(R.id.buffer_view_name)
+    this.showSearch = view.findViewById(R.id.show_search)
+    this.sortAlphabetically = view.findViewById(R.id.sort_alphabetically)
+    this.addNewBuffersAutomatically = view.findViewById(R.id.add_new_buffers_automatically)
+    this.networkId = view.findViewById(R.id.network_id)
+    this.showStatusBuffer = view.findViewById(R.id.show_status_buffer)
+    this.showChannels = view.findViewById(R.id.show_channels)
+    this.showQueries = view.findViewById(R.id.show_queries)
+    this.minimumActivity = view.findViewById(R.id.minimum_activity)
+    this.hideInactiveBuffers = view.findViewById(R.id.hide_inactive_buffers)
+    this.hideInactiveNetworks = view.findViewById(R.id.hide_inactive_networks)
 
     val chatlistId = arguments?.getInt("chatlist", -1) ?: -1
 

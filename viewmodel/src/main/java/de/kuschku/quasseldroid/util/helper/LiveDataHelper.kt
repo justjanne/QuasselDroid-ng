@@ -62,7 +62,7 @@ inline fun <X, Y> LiveData<X>.switchMapNotNull(
     var mSource: LiveData<Y>? = null
 
     @SuppressLint("NullSafeMutableLiveData")
-    override fun onChanged(x: X?) {
+    override fun onChanged(x: X) {
       val newLiveData = if (x == null) null else func(x)
       if (mSource === newLiveData) {
         return
@@ -103,18 +103,18 @@ inline fun <X> LiveData<X?>.or(
   return result
 }
 
-inline fun <T> LiveData<T>.observeSticky(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+inline fun <T> LiveData<T>.observeSticky(lifecycleOwner: LifecycleOwner, observer: Observer<T?>) {
   observe(lifecycleOwner, observer)
   observer.onChanged(value)
 }
 
-inline fun <T> LiveData<T>.observeForeverSticky(observer: Observer<T>) {
+inline fun <T> LiveData<T>.observeForeverSticky(observer: Observer<T?>) {
   observeForever(observer)
   observer.onChanged(value)
 }
 
 inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner): Observable<T> =
-  Observable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycleOwner, this))
+  Observable.fromPublisher(toPublisher(lifecycleOwner))
 
 
 inline operator fun <T> LiveData<T>.invoke() = value

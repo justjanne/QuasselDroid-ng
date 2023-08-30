@@ -29,19 +29,12 @@ import android.widget.TextView
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatImageView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.use
 
 class WarningBarView : FrameLayout {
-  @BindView(R.id.icon)
   lateinit var icon: AppCompatImageView
-
-  @BindView(R.id.progress)
   lateinit var progress: View
-
-  @BindView(R.id.text)
   lateinit var text: TextView
 
   constructor(context: Context) :
@@ -54,7 +47,9 @@ class WarningBarView : FrameLayout {
     super(context, attrs, defStyleAttr) {
 
     LayoutInflater.from(context).inflate(R.layout.widget_warning_bar, this, true)
-    ButterKnife.bind(this)
+    this.icon = this.findViewById(R.id.icon)
+    this.progress = this.findViewById(R.id.progress)
+    this.text = this.findViewById(R.id.text)
 
     context.theme.obtainStyledAttributes(attrs, R.styleable.WarningBarView, 0, 0).use {
       if (it.hasValue(R.styleable.WarningBarView_icon))

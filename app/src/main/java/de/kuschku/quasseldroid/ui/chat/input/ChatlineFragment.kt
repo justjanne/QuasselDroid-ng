@@ -30,8 +30,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.util.Optional
@@ -50,31 +48,14 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class ChatlineFragment : ServiceBoundFragment() {
-  @BindView(R.id.chatline)
   lateinit var chatline: RichEditText
-
-  @BindView(R.id.formatting_toolbar)
   lateinit var toolbar: RichToolbar
-
-  @BindView(R.id.send)
   lateinit var send: AppCompatImageButton
-
-  @BindView(R.id.tab_complete)
   lateinit var tabComplete: AppCompatImageButton
-
-  @BindView(R.id.msg_history)
   lateinit var messageHistory: RecyclerView
-
-  @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
-
-  @BindView(R.id.close)
   lateinit var close: AppCompatImageButton
-
-  @BindView(R.id.card_panel)
   lateinit var cardPanel: View
-
-  @BindView(R.id.editor_container)
   lateinit var editorContainer: View
 
   @Inject
@@ -121,7 +102,15 @@ class ChatlineFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.chat_chatline, container, false)
-    ButterKnife.bind(this, view)
+    this.chatline = view.findViewById(R.id.chatline)
+    this.toolbar = view.findViewById(R.id.formatting_toolbar)
+    this.send = view.findViewById(R.id.send)
+    this.tabComplete = view.findViewById(R.id.tab_complete)
+    this.messageHistory = view.findViewById(R.id.msg_history)
+    this.autoCompleteList = view.findViewById(R.id.autocomplete_list)
+    this.close = view.findViewById(R.id.close)
+    this.cardPanel = view.findViewById(R.id.card_panel)
+    this.editorContainer = view.findViewById(R.id.editor_container)
 
     autoCompleteHelper = AutoCompleteHelper(
       requireActivity(),

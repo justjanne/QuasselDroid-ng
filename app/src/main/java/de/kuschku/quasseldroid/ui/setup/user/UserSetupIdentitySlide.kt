@@ -25,8 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
@@ -37,16 +35,9 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import javax.inject.Inject
 
 class UserSetupIdentitySlide : SlideFragment() {
-  @BindView(R.id.nickWrapper)
   lateinit var nickWrapper: TextInputLayout
-
-  @BindView(R.id.nick)
   lateinit var nickField: EditText
-
-  @BindView(R.id.realnameWrapper)
   lateinit var realnameWrapper: TextInputLayout
-
-  @BindView(R.id.realname)
   lateinit var realnameField: EditText
 
   @Inject
@@ -78,7 +69,10 @@ class UserSetupIdentitySlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_user_identity, container, false)
-    ButterKnife.bind(this, view)
+    this.nickWrapper = view.findViewById(R.id.nickWrapper)
+    this.nickField = view.findViewById(R.id.nick)
+    this.realnameWrapper = view.findViewById(R.id.realnameWrapper)
+    this.realnameField = view.findViewById(R.id.realname)
     nickValidator = object : TextValidator(
       requireActivity(), nickWrapper::setError, resources.getString(R.string.hint_invalid_nick)
     ) {

@@ -30,8 +30,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
@@ -39,10 +37,7 @@ import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 class MissingFeaturesDialog : DialogFragment() {
   private var builder: Builder? = null
 
-  @BindView(R.id.list)
   lateinit var list: RecyclerView
-
-  @BindView(R.id.message)
   lateinit var message: TextView
 
   @SuppressLint("StringFormatInvalid")
@@ -56,7 +51,8 @@ class MissingFeaturesDialog : DialogFragment() {
         builder?.positiveListener?.let(it::onPositive)
       }
       .build()
-    ButterKnife.bind(this, dialog.customView!!)
+    this.list = dialog.customView!!.findViewById(R.id.list)
+    this.message = dialog.customView!!.findViewById(R.id.message)
     val version = builder?.missingFeatures?.maxByOrNull(MissingFeature::minimumVersion)?.minimumVersion
                   ?: QuasselVersion.VERSION_0_13
     message.text = Html.fromHtml(getString(R.string.info_missing_features, version.humanName))

@@ -65,8 +65,6 @@ Authors of legacy Quasseldroid:
   Apache-2.0
 * [**Better Link Movement Method**](https://github.com/Saketme/Better-Link-Movement-Method)
   Apache-2.0
-* [**Butter Knife**](http://jakewharton.github.io/butterknife/)
-  Apache-2.0
 * [**Dagger 2**](https://google.github.io/dagger/)
   Apache-2.0
 * [**Glide**](https://bumptech.github.io/glide/)

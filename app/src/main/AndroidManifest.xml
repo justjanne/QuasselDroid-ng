@@ -17,8 +17,7 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="de.kuschku.quasseldroid">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
   <uses-feature
     android:name="android.hardware.type.pc"
@@ -33,7 +32,7 @@
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
   <application
-    android:name=".Quasseldroid"
+    android:name="de.kuschku.quasseldroid.Quasseldroid"
     android:allowBackup="true"
     android:description="@string/app_description"
     android:fullBackupContent="@xml/backup_content"
@@ -43,7 +42,7 @@
     android:theme="@style/Theme.SplashTheme">
 
     <activity
-      android:name=".ui.chat.ChatActivity"
+      android:name="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:exported="true"
       android:launchMode="singleTask"
       android:windowSoftInputMode="adjustResize">
@@ -72,7 +71,7 @@
       android:name="de.kuschku.quasseldroid.ui.info.user.UserInfoActivity"
       android:exported="false"
       android:label="@string/label_info_user"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Normal Chat -->
@@ -80,7 +79,7 @@
       android:name="de.kuschku.quasseldroid.ui.info.channel.ChannelInfoActivity"
       android:exported="false"
       android:label="@string/label_info_channel"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Info -->
@@ -88,7 +87,7 @@
       android:name="de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity"
       android:exported="false"
       android:label="@string/label_info_core"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name="de.kuschku.quasseldroid.ui.chat.topic.TopicActivity"
@@ -130,95 +129,95 @@
       android:label="@string/label_query_medium"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.CoreSettingsActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:exported="false"
       android:label="@string/label_settings_core"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.network.NetworkCreateActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.network.NetworkCreateActivity"
       android:exported="false"
       android:label="@string/settings_network_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Settings -->
     <activity
-      android:name=".ui.coresettings.network.NetworkEditActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity"
       android:exported="false"
       android:label="@string/settings_network_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.networkserver.NetworkServerActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity"
       android:exported="false"
       android:label="@string/settings_networkserver_title"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.identity.IdentityCreateActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity"
       android:exported="false"
       android:label="@string/settings_identity_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.identity.IdentityEditActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity"
       android:exported="false"
       android:label="@string/settings_identity_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.chatlist.ChatlistCreateActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity"
       android:exported="false"
       android:label="@string/settings_chatlist_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.chatlist.ChatlistEditActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity"
       android:exported="false"
       android:label="@string/settings_chatlist_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.ignorelist.IgnoreListActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity"
       android:exported="false"
       android:label="@string/settings_ignorelist_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.ignoreitem.IgnoreItemActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity"
       android:exported="false"
       android:label="@string/settings_ignoreitem_title"
-      android:parentActivityName=".ui.coresettings.ignorelist.IgnoreListActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.highlightlist.HighlightListActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListActivity"
       android:exported="false"
       android:label="@string/settings_highlightlist_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.highlightrule.HighlightRuleActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleActivity"
       android:exported="false"
       android:label="@string/settings_highlightrule_title"
-      android:parentActivityName=".ui.coresettings.highlightlist.HighlightListActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.aliaslist.AliasListActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity"
       android:exported="false"
       android:label="@string/settings_aliaslist_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.aliasitem.AliasItemActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.aliasitem.AliasItemActivity"
       android:exported="false"
       android:label="@string/settings_aliasitem_title"
-      android:parentActivityName=".ui.coresettings.aliaslist.AliasListActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
+      android:name="de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity"
       android:exported="false"
       android:label="@string/settings_networkconfig_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name="de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeActivity"
@@ -226,69 +225,69 @@
       android:label="@string/label_password_change"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.client.ClientSettingsActivity"
+      android:name="de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity"
       android:exported="false"
       android:label="@string/label_settings_client"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.crash.CrashActivity"
+      android:name="de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity"
       android:exported="false"
       android:label="@string/label_crashes"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Settings -->
     <activity
-      android:name=".ui.clientsettings.whitelist.WhitelistActivity"
+      android:name="de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity"
       android:exported="false"
       android:label="@string/label_certificates"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.about.AboutActivity"
+      android:name="de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity"
       android:exported="false"
       android:label="@string/label_about"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.license.LicenseActivity"
+      android:name="de.kuschku.quasseldroid.ui.clientsettings.license.LicenseActivity"
       android:exported="false"
       android:label="@string/label_license"
-      android:parentActivityName=".ui.clientsettings.about.AboutActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.setup.accounts.selection.AccountSelectionActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:exported="false"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.setup.accounts.setup.AccountSetupActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity"
       android:exported="false"
-      android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Setup Flow -->
     <activity
-      android:name=".ui.setup.accounts.edit.AccountEditActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity"
       android:exported="false"
-      android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.setup.core.CoreSetupActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.core.CoreSetupActivity"
       android:exported="false"
       android:label="@string/setup_core_title"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.setup.user.UserSetupActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity"
       android:exported="false"
       android:label="@string/setup_user_title"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Setup Flow -->
     <activity
-      android:name=".ui.setup.network.NetworkSetupActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.network.NetworkSetupActivity"
       android:exported="false"
       android:label="@string/setup_network_title"
-      android:parentActivityName=".ui.chat.ChatActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Core User Setup Flow -->
@@ -313,7 +312,7 @@
     </provider>
 
     <service
-      android:name=".service.QuasselService"
+      android:name="de.kuschku.quasseldroid.service.QuasselService"
       android:description="@string/connection_service_description"
       android:exported="false"
       android:label="@string/connection_service_title" />

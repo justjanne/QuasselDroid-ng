@@ -48,6 +48,7 @@
   <string name="label_close">Close</string>
   <string name="label_colors_custom">Custom</string>
   <string name="label_colors_mirc">mIRC</string>
+  <string name="label_colors_presets">Presets</string>
   <string name="label_configure">Configure</string>
   <string name="label_connect">Connect</string>
   <string name="label_copy">Copy</string>
@@ -58,6 +59,7 @@
   <string name="label_delete_all">Delete All</string>
   <string name="label_descending">Descending</string>
   <string name="label_disconnect">Disconnect</string>
+  <string name="label_done">Done</string>
   <string name="label_edit_core">Edit Account</string>
   <string name="label_edit_nick">Edit Nickname</string>
   <string name="label_edit_topic">Edit Topic</string>

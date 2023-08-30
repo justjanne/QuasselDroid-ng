@@ -27,8 +27,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.util.helper.invoke
@@ -48,13 +46,8 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class TopicFragment : ServiceBoundSettingsFragment(), Savable {
-  @BindView(R.id.chatline)
   lateinit var chatline: RichEditText
-
-  @BindView(R.id.formatting_toolbar)
   lateinit var toolbar: RichToolbar
-
-  @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
 
   @Inject
@@ -89,7 +82,9 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_topic, container, false)
-    ButterKnife.bind(this, view)
+    this.chatline = view.findViewById(R.id.chatline)
+    this.toolbar = view.findViewById(R.id.formatting_toolbar)
+    this.autoCompleteList = view.findViewById(R.id.autocomplete_list)
 
     val autoCompleteHelper = AutoCompleteHelper(
       requireActivity(),

@@ -332,7 +332,7 @@ class ArchiveListAdapter(
           offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_offline)?.mutate()
 
           itemView.context.theme.styledAttributes(
-            R.attr.colorAccent, R.attr.colorAway,
+            androidx.appcompat.R.attr.colorAccent, R.attr.colorAway,
             R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
             R.attr.colorTintHighlight
           ) {

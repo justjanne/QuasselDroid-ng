@@ -24,6 +24,8 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import androidx.annotation.ColorInt
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.ExtendedFeature
@@ -35,8 +37,6 @@ import de.kuschku.libquassel.util.helper.clampOf
 import de.kuschku.libquassel.util.helper.or
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.SenderColorUtil
-import de.kuschku.quasseldroid.GlideApp
-import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.dao.all
 import de.kuschku.quasseldroid.persistence.dao.buffers
@@ -313,8 +313,8 @@ class QuasselNotificationBackend @Inject constructor(
 
         val avatarList = AvatarHelper.avatar(messageSettings, ident, realName, avatarUrl, size)
         val avatarResult = try {
-          GlideApp.with(context).loadWithFallbacks(avatarList)
-            ?.letIf(!messageSettings.squareAvatars, GlideRequest<Drawable>::optionalCircleCrop)
+          Glide.with(context).loadWithFallbacks(avatarList)
+            ?.letIf(!messageSettings.squareAvatars, RequestBuilder<Drawable>::optionalCircleCrop)
             ?.placeholder(TextDrawable.builder().beginConfig()
                             .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(
                 Typeface.DEFAULT_BOLD).endConfig().let {

@@ -18,11 +18,11 @@
  */
 
 plugins {
-  id("justjanne.android.signing")
   id("justjanne.android.app")
 }
 
 android {
+  namespace = "de.kuschku.quasseldroid"
 
   defaultConfig {
     resourceConfigurations += setOf(
@@ -94,8 +94,6 @@ dependencies {
   implementation(libs.reactivenetwork)
   implementation(libs.retrofit.core)
   implementation(libs.retrofit.converter.gson)
-  implementation(libs.butterknife.core)
-  kapt(libs.butterknife.compiler)
 
   // Quassel
   implementation(project(":viewmodel"))
@@ -113,7 +111,7 @@ dependencies {
   implementation(libs.materialdialogs.commons)
   implementation(libs.glide.core)
   implementation(libs.glide.recyclerview)
-  kapt(libs.glide.compiler)
+  ksp(libs.glide.compiler)
 
   // Quality Assurance
   implementation(project(":malheur"))
@@ -138,5 +136,4 @@ dependencies {
   androidTestImplementation(libs.androidx.test.espresso.contrib)
   androidTestImplementation(libs.androidx.test.junit)
   androidTestImplementation(libs.androidx.test.runner)
-  androidTestImplementation(libs.androidx.test.rules)
 }

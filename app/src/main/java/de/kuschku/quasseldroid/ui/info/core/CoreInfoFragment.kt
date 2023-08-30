@@ -30,8 +30,6 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.ssl.commonName
@@ -56,41 +54,17 @@ import javax.inject.Inject
 import javax.net.ssl.SSLPeerUnverifiedException
 
 class CoreInfoFragment : ServiceBoundFragment() {
-
-  @BindView(R.id.version)
   lateinit var version: TextView
-
-  @BindView(R.id.version_date)
   lateinit var versionDate: TextView
-
-  @BindView(R.id.missing_features)
   lateinit var missingFeatures: Button
-
-  @BindView(R.id.uptime_container)
   lateinit var uptimeContainer: View
-
-  @BindView(R.id.uptime)
   lateinit var uptime: TextView
-
-  @BindView(R.id.secure_certificate)
   lateinit var secureCertificate: TextView
-
-  @BindView(R.id.secure_certificate_icon)
   lateinit var secureCertificateIcon: ImageView
-
-  @BindView(R.id.secure_connection_protocol)
   lateinit var secureConnectionProtocol: TextView
-
-  @BindView(R.id.secure_connection_ciphersuite)
   lateinit var secureConnectionCiphersuite: TextView
-
-  @BindView(R.id.secure_details)
   lateinit var secureDetails: Button
-
-  @BindView(R.id.clients_title)
   lateinit var clientsTitle: View
-
-  @BindView(R.id.clients)
   lateinit var clients: RecyclerView
 
   @Inject
@@ -111,7 +85,18 @@ class CoreInfoFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_core, container, false)
-    ButterKnife.bind(this, view)
+    this.version = view.findViewById(R.id.version)
+    this.versionDate = view.findViewById(R.id.version_date)
+    this.missingFeatures = view.findViewById(R.id.missing_features)
+    this.uptimeContainer = view.findViewById(R.id.uptime_container)
+    this.uptime = view.findViewById(R.id.uptime)
+    this.secureCertificate = view.findViewById(R.id.secure_certificate)
+    this.secureCertificateIcon = view.findViewById(R.id.secure_certificate_icon)
+    this.secureConnectionProtocol = view.findViewById(R.id.secure_connection_protocol)
+    this.secureConnectionCiphersuite = view.findViewById(R.id.secure_connection_ciphersuite)
+    this.secureDetails = view.findViewById(R.id.secure_details)
+    this.clientsTitle = view.findViewById(R.id.clients_title)
+    this.clients = view.findViewById(R.id.clients)
 
     var missingFeatureList: List<MissingFeature> = emptyList()
     combineLatest(modelHelper.coreInfo, modelHelper.coreFeatures).toLiveData()

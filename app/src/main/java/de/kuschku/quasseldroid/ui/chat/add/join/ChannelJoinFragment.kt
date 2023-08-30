@@ -28,8 +28,6 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.util.helper.combineLatest
@@ -44,13 +42,8 @@ import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import javax.inject.Inject
 
 class ChannelJoinFragment : ServiceBoundFragment() {
-  @BindView(R.id.network)
   lateinit var network: AppCompatSpinner
-
-  @BindView(R.id.name)
   lateinit var name: EditText
-
-  @BindView(R.id.join)
   lateinit var join: Button
 
   @Inject
@@ -62,7 +55,9 @@ class ChannelJoinFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_join, container, false)
-    ButterKnife.bind(this, view)
+    this.network = view.findViewById(R.id.network)
+    this.name = view.findViewById(R.id.name)
+    this.join = view.findViewById(R.id.join)
 
     networkId = NetworkId(
       savedInstanceState?.getInt("network_id", 0)

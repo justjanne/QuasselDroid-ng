@@ -26,8 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SwitchCompat
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
@@ -35,19 +33,10 @@ import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
 
 class AccountSetupConnectionSlide : SlideFragment() {
-  @BindView(R.id.hostWrapper)
   lateinit var hostWrapper: TextInputLayout
-
-  @BindView(R.id.host)
   lateinit var hostField: EditText
-
-  @BindView(R.id.portWrapper)
   lateinit var portWrapper: TextInputLayout
-
-  @BindView(R.id.port)
   lateinit var portField: EditText
-
-  @BindView(R.id.require_ssl)
   lateinit var requireSsl: SwitchCompat
 
   override fun isValid(): Boolean {
@@ -76,7 +65,11 @@ class AccountSetupConnectionSlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_account_connection, container, false)
-    ButterKnife.bind(this, view)
+    this.hostWrapper = view.findViewById(R.id.hostWrapper)
+    this.hostField = view.findViewById(R.id.host)
+    this.portWrapper = view.findViewById(R.id.portWrapper)
+    this.portField = view.findViewById(R.id.port)
+    this.requireSsl = view.findViewById(R.id.require_ssl)
     hostValidator = object : TextValidator(
       requireActivity(), hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {

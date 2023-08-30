@@ -1013,7 +1013,7 @@ public class MaterialSpinnerLayout extends LinearLayout {
     if (useDefaultColor) {
       // Probably caused by our theme not extending from Theme.Design*. Instead
       // we manually set something appropriate
-      TextViewCompat.setTextAppearance(textView, R.style.TextAppearance_AppCompat_Caption);
+      TextViewCompat.setTextAppearance(textView, androidx.appcompat.R.style.TextAppearance_AppCompat_Caption);
       textView.setTextColor(ContextCompat.getColor(getContext(), R.color.md_design_error));
     }
   }

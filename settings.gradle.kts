@@ -16,10 +16,27 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "Quasseldroid"
 rootProject.buildFileName = "build.gradle.kts"
 
-includeBuild("gradle/convention")
+pluginManagement {
+  includeBuild("gradle/convention")
+  repositories {
+    google()
+    mavenCentral()
+    gradlePluginPortal()
+  }
+}
+
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    google()
+    mavenCentral()
+  }
+}
 
 include(
   ":app",
@@ -31,11 +48,3 @@ include(
   ":viewmodel",
   ":ui_spinner"
 )
-
-pluginManagement {
-  repositories {
-    gradlePluginPortal()
-    google()
-    mavenCentral()
-  }
-}

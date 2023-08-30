@@ -51,7 +51,7 @@ class ChannelListAdapter @Inject constructor(
         oldItem == newItem
     }
   ) {
-  val colorAccent = context.theme.styledAttributes(R.attr.colorAccent) {
+  val colorAccent = context.theme.styledAttributes(androidx.appcompat.R.attr.colorAccent) {
     getColor(0, 0)
   }
 

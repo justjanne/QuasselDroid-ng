@@ -21,6 +21,10 @@ plugins {
   id("justjanne.android.library")
 }
 
+android {
+  namespace = "de.kuschku.ui.spinner"
+}
+
 dependencies {
   implementation(libs.androidx.appcompat)
 }

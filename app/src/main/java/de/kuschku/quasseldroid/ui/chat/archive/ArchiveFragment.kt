@@ -26,8 +26,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.safeValue
@@ -49,7 +47,6 @@ import de.kuschku.quasseldroid.viewmodel.helper.ArchiveViewModelHelper
 import javax.inject.Inject
 
 class ArchiveFragment : ServiceBoundFragment() {
-  @BindView(R.id.list)
   lateinit var list: RecyclerView
 
   @Inject
@@ -116,7 +113,7 @@ class ArchiveFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.chat_archive, container, false)
-    ButterKnife.bind(this, view)
+    this.list = view.findViewById(R.id.list)
 
     val chatlistId = arguments?.getInt("chatlist_id", -1) ?: -1
     modelHelper.archive.bufferViewConfigId.onNext(chatlistId)

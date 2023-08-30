@@ -33,8 +33,6 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
@@ -48,7 +46,6 @@ import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.*
 import de.kuschku.libquassel.util.irc.HostmaskHelper
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.dao.*
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
@@ -74,13 +71,8 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class MessageListFragment : ServiceBoundFragment() {
-  @BindView(R.id.messages)
   lateinit var messageList: RecyclerView
-
-  @BindView(R.id.scrollDown)
   lateinit var scrollDown: FloatingActionButton
-
-  @BindView(R.id.swipeRefreshLayout)
   lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
   @Inject
@@ -242,7 +234,9 @@ class MessageListFragment : ServiceBoundFragment() {
     savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.chat_messages, container, false)
-    ButterKnife.bind(this, view)
+    this.messageList = view.findViewById(R.id.messages)
+    this.scrollDown = view.findViewById(R.id.scrollDown)
+    this.swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
 
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
@@ -501,7 +495,7 @@ class MessageListFragment : ServiceBoundFragment() {
       )
 
       override fun getPreloadRequestBuilder(item: List<Avatar>) =
-        GlideApp.with(this@MessageListFragment).loadWithFallbacks(item)?.override(avatarSize)
+        Glide.with(this@MessageListFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)

@@ -33,8 +33,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.IHighlightRuleManager
@@ -50,25 +48,12 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
-  @BindView(R.id.feature_context_coresidehighlights)
   lateinit var featureContextCoreSideHighlights: WarningBarView
-
-  @BindView(R.id.highlight_nick_type)
   lateinit var highlightNickType: Spinner
-
-  @BindView(R.id.is_case_sensitive)
   lateinit var isCaseSensitive: SwitchCompat
-
-  @BindView(R.id.highlight_rules)
   lateinit var rules: RecyclerView
-
-  @BindView(R.id.new_highlight_rule)
   lateinit var newHighlightRule: Button
-
-  @BindView(R.id.highlight_ignore_rules)
   lateinit var ignoreRules: RecyclerView
-
-  @BindView(R.id.new_highlight_ignore_rule)
   lateinit var newHighlightIgnoreRule: Button
 
   @Inject
@@ -87,7 +72,13 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_highlightlist, container, false)
-    ButterKnife.bind(this, view)
+    this.featureContextCoreSideHighlights = view.findViewById(R.id.feature_context_coresidehighlights)
+    this.highlightNickType = view.findViewById(R.id.highlight_nick_type)
+    this.isCaseSensitive = view.findViewById(R.id.is_case_sensitive)
+    this.rules = view.findViewById(R.id.highlight_rules)
+    this.newHighlightRule = view.findViewById(R.id.new_highlight_rule)
+    this.ignoreRules = view.findViewById(R.id.highlight_ignore_rules)
+    this.newHighlightIgnoreRule = view.findViewById(R.id.new_highlight_ignore_rule)
 
     rules.adapter = rulesAdapter
     rules.layoutManager = LinearLayoutManager(requireContext())

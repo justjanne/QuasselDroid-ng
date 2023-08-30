@@ -34,8 +34,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Identity
@@ -63,79 +61,30 @@ import kotlin.math.roundToInt
 
 abstract class NetworkBaseFragment(private val initDefault: Boolean) :
   ServiceBoundSettingsFragment(), Savable, Changeable {
-  @BindView(R.id.network_name)
   lateinit var networkName: EditText
-
-  @BindView(R.id.identity)
   lateinit var identity: Spinner
-
-  @BindView(R.id.servers)
   lateinit var servers: RecyclerView
-
-  @BindView(R.id.new_server)
   lateinit var newServer: Button
-
-  @BindView(R.id.sasl_enabled)
   lateinit var saslEnabled: SwitchCompat
-
-  @BindView(R.id.sasl_group)
   lateinit var saslGroup: ViewGroup
-
-  @BindView(R.id.sasl_account)
   lateinit var saslAccount: EditText
-
-  @BindView(R.id.sasl_password)
   lateinit var saslPassword: EditText
-
-  @BindView(R.id.autoidentify_enabled)
   lateinit var autoidentifyEnabled: SwitchCompat
-
-  @BindView(R.id.autoidentify_group)
   lateinit var autoidentifyGroup: ViewGroup
-
-  @BindView(R.id.autoidentify_warning)
   lateinit var autoidentifyWarning: InlineSnackBar
-
-  @BindView(R.id.autoidentify_service)
   lateinit var autoidentifyService: EditText
-
-  @BindView(R.id.autoidentify_password)
   lateinit var autoidentifyPassword: EditText
-
-  @BindView(R.id.autoreconnect_enabled)
   lateinit var autoreconnectEnabled: SwitchCompat
-
-  @BindView(R.id.autoreconnect_group)
   lateinit var autoreconnectGroup: ViewGroup
-
-  @BindView(R.id.autoreconnect_interval)
   lateinit var autoreconnectInterval: EditText
-
-  @BindView(R.id.autoreconnect_attempts)
   lateinit var autoreconnectRetries: EditText
-
-  @BindView(R.id.autoreconnect_unlimited)
   lateinit var autoreconnectUnlimited: SwitchCompat
-
-  @BindView(R.id.perform)
   lateinit var perform: EditText
-
-  @BindView(R.id.rejoin_channels)
   lateinit var rejoinChannels: SwitchCompat
-
-  @BindView(R.id.customratelimits_enabled)
   lateinit var customratelimitsEnabled: SwitchCompat
-
-  @BindView(R.id.customratelimits_group)
   lateinit var customratelimitsGroup: ViewGroup
-
-  @BindView(R.id.customratelimits_burstsize)
   lateinit var customratelimitsBurstSize: EditText
-
-  @BindView(R.id.customratelimits_unlimited)
   lateinit var customratelimitsUnlimited: SwitchCompat
-
-  @BindView(R.id.customratelimits_delay)
   lateinit var customratelimitsDelay: EditText
 
   @Inject
@@ -149,7 +98,31 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_network, container, false)
-    ButterKnife.bind(this, view)
+    this.networkName = view.findViewById(R.id.network_name)
+    this.identity = view.findViewById(R.id.identity)
+    this.servers = view.findViewById(R.id.servers)
+    this.newServer = view.findViewById(R.id.new_server)
+    this.saslEnabled = view.findViewById(R.id.sasl_enabled)
+    this.saslGroup = view.findViewById(R.id.sasl_group)
+    this.saslAccount = view.findViewById(R.id.sasl_account)
+    this.saslPassword = view.findViewById(R.id.sasl_password)
+    this.autoidentifyEnabled = view.findViewById(R.id.autoidentify_enabled)
+    this.autoidentifyGroup = view.findViewById(R.id.autoidentify_group)
+    this.autoidentifyWarning = view.findViewById(R.id.autoidentify_warning)
+    this.autoidentifyService = view.findViewById(R.id.autoidentify_service)
+    this.autoidentifyPassword = view.findViewById(R.id.autoidentify_password)
+    this.autoreconnectEnabled = view.findViewById(R.id.autoreconnect_enabled)
+    this.autoreconnectGroup = view.findViewById(R.id.autoreconnect_group)
+    this.autoreconnectInterval = view.findViewById(R.id.autoreconnect_interval)
+    this.autoreconnectRetries = view.findViewById(R.id.autoreconnect_attempts)
+    this.autoreconnectUnlimited = view.findViewById(R.id.autoreconnect_unlimited)
+    this.perform = view.findViewById(R.id.perform)
+    this.rejoinChannels = view.findViewById(R.id.rejoin_channels)
+    this.customratelimitsEnabled = view.findViewById(R.id.customratelimits_enabled)
+    this.customratelimitsGroup = view.findViewById(R.id.customratelimits_group)
+    this.customratelimitsBurstSize = view.findViewById(R.id.customratelimits_burstsize)
+    this.customratelimitsUnlimited = view.findViewById(R.id.customratelimits_unlimited)
+    this.customratelimitsDelay = view.findViewById(R.id.customratelimits_delay)
 
     val networkId = NetworkId(arguments?.getInt("network", -1) ?: -1)
 

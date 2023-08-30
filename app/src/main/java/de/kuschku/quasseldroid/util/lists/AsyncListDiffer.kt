@@ -113,7 +113,7 @@ import java.util.*
  *
  * @see AdapterListUpdateCallback
 </T> */
-class AsyncListDiffer<T> {
+class AsyncListDiffer<T : Any> {
   private val mUpdateCallback: ListUpdateCallback
   private val mUpdateFinishedCallback: ((List<T>) -> Unit)?
   private val mConfig: AsyncDifferConfig<T>

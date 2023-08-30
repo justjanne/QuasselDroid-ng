@@ -29,8 +29,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
@@ -54,34 +52,15 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
-  @BindView(R.id.identity)
   lateinit var identity: Spinner
-
-  @BindView(R.id.network)
   lateinit var network: Spinner
-
-  @BindView(R.id.network_group)
   lateinit var networkGroup: ViewGroup
-
-  @BindView(R.id.nameWrapper)
   lateinit var nameWrapper: TextInputLayout
-
-  @BindView(R.id.name)
   lateinit var nameField: EditText
-
-  @BindView(R.id.hostWrapper)
   lateinit var hostWrapper: TextInputLayout
-
-  @BindView(R.id.host)
   lateinit var hostField: EditText
-
-  @BindView(R.id.portWrapper)
   lateinit var portWrapper: TextInputLayout
-
-  @BindView(R.id.port)
   lateinit var portField: EditText
-
-  @BindView(R.id.ssl_enabled)
   lateinit var sslEnabled: SwitchCompat
 
   @Inject
@@ -138,7 +117,16 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_network_network, container, false)
-    ButterKnife.bind(this, view)
+    this.identity = view.findViewById(R.id.identity)
+    this.network = view.findViewById(R.id.network)
+    this.networkGroup = view.findViewById(R.id.network_group)
+    this.nameWrapper = view.findViewById(R.id.nameWrapper)
+    this.nameField = view.findViewById(R.id.name)
+    this.hostWrapper = view.findViewById(R.id.hostWrapper)
+    this.hostField = view.findViewById(R.id.host)
+    this.portWrapper = view.findViewById(R.id.portWrapper)
+    this.portField = view.findViewById(R.id.port)
+    this.sslEnabled = view.findViewById(R.id.ssl_enabled)
     nameValidator = object : TextValidator(
       requireActivity(), nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {

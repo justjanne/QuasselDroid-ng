@@ -42,13 +42,13 @@ abstract class SlideFragment : DaggerFragment() {
 
   private var initialized = false
 
-  val valid = object : MutableLiveData<Boolean>() {
-    override fun observe(owner: LifecycleOwner, observer: Observer<in Boolean>) {
+  val valid = object : MutableLiveData<Boolean?>() {
+    override fun observe(owner: LifecycleOwner, observer: Observer<in Boolean?>) {
       super.observe(owner, observer)
       observer.onChanged(value)
     }
 
-    override fun observeForever(observer: Observer<in Boolean>) {
+    override fun observeForever(observer: Observer<in Boolean?>) {
       super.observeForever(observer)
       observer.onChanged(value)
     }

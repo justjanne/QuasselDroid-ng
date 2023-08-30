@@ -21,6 +21,10 @@ plugins {
   id("justjanne.android.library")
 }
 
+android {
+  namespace = "de.kuschku.malheur"
+}
+
 dependencies {
   implementation(libs.gson)
   implementation(libs.androidx.annotation)

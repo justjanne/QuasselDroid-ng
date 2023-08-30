@@ -34,7 +34,7 @@ class FixedNestingScrollView : NestedScrollView {
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     super(context, attrs, defStyleAttr)
 
-  override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+  override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
     if (!canScrollVertically(-1))
       return false
     return super.onInterceptTouchEvent(ev)

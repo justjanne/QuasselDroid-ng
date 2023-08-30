@@ -29,8 +29,6 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
@@ -38,7 +36,6 @@ import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 class DeceptiveNetworkDialog : DialogFragment() {
   private var builder: Builder? = null
 
-  @BindView(R.id.message)
   lateinit var message: TextView
 
   @SuppressLint("StringFormatInvalid")
@@ -48,7 +45,7 @@ class DeceptiveNetworkDialog : DialogFragment() {
       .title(R.string.deceptive_network)
       .negativeText(R.string.label_close)
       .build()
-    ButterKnife.bind(this, dialog.customView!!)
+    this.message = dialog.customView!!.findViewById(R.id.message)
     builder?.message?.let {
       message.text = Html.fromHtml(getString(it))
       message.movementMethod = BetterLinkMovementMethod.newInstance()

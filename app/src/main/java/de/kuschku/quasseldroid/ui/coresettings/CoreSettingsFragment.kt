@@ -29,8 +29,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
@@ -63,43 +61,18 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class CoreSettingsFragment : ServiceBoundFragment() {
-  @BindView(R.id.feature_context_missing)
   lateinit var featureContextMissing: BannerView
-
-  @BindView(R.id.coreinfo)
   lateinit var coreinfo: View
-
-  @BindView(R.id.passwordchange)
   lateinit var passwordchange: View
-
-  @BindView(R.id.networks)
   lateinit var networks: RecyclerView
-
-  @BindView(R.id.new_network)
   lateinit var newNetwork: Button
-
-  @BindView(R.id.identities)
   lateinit var identities: RecyclerView
-
-  @BindView(R.id.new_identity)
   lateinit var newIdentity: Button
-
-  @BindView(R.id.chatlists)
   lateinit var chatlists: RecyclerView
-
-  @BindView(R.id.new_chatlist)
   lateinit var newChatlist: Button
-
-  @BindView(R.id.ignorelist)
   lateinit var ignorelist: View
-
-  @BindView(R.id.highlightlist)
   lateinit var highlightlist: View
-
-  @BindView(R.id.aliaslist)
   lateinit var aliaslist: View
-
-  @BindView(R.id.networkconfig)
   lateinit var networkconfig: View
 
   @Inject
@@ -108,7 +81,19 @@ class CoreSettingsFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_list, container, false)
-    ButterKnife.bind(this, view)
+    this.featureContextMissing = view.findViewById(R.id.feature_context_missing)
+    this.coreinfo = view.findViewById(R.id.coreinfo)
+    this.passwordchange = view.findViewById(R.id.passwordchange)
+    this.networks = view.findViewById(R.id.networks)
+    this.newNetwork = view.findViewById(R.id.new_network)
+    this.identities = view.findViewById(R.id.identities)
+    this.newIdentity = view.findViewById(R.id.new_identity)
+    this.chatlists = view.findViewById(R.id.chatlists)
+    this.newChatlist = view.findViewById(R.id.new_chatlist)
+    this.ignorelist = view.findViewById(R.id.ignorelist)
+    this.highlightlist = view.findViewById(R.id.highlightlist)
+    this.aliaslist = view.findViewById(R.id.aliaslist)
+    this.networkconfig = view.findViewById(R.id.networkconfig)
 
     val networkAdapter = SettingsItemAdapter<NetworkId> {
       NetworkEditActivity.launch(requireContext(), network = it)

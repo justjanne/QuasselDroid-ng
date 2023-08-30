@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2020 Janne Mareike Koschinski
- * Copyright (c) 2020 The Quassel Project
+ * Copyright (c) 2023 Janne Mareike Koschinski
+ * Copyright (c) 2023 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,7 +21,7 @@
 package de.kuschku.quasseldroid.util.helper
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.toLiveData
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
@@ -31,15 +31,15 @@ inline fun <T> Observable<T>.toLiveData(
   handlerService: HandlerService? = null,
   scheduler: Scheduler = handlerService?.scheduler ?: Schedulers.computation()
 ): LiveData<T> =
-  LiveDataReactiveStreams.fromPublisher(subscribeOn(scheduler).toFlowable(strategy))
+  subscribeOn(scheduler).toFlowable(strategy).toLiveData()
 
 inline fun <T> Maybe<T>.toLiveData(
   handlerService: HandlerService? = null,
   scheduler: Scheduler = handlerService?.scheduler ?: Schedulers.computation()
 ): LiveData<T> =
-  LiveDataReactiveStreams.fromPublisher(subscribeOn(scheduler).toFlowable())
+  subscribeOn(scheduler).toFlowable().toLiveData()
 
 inline fun <T> Flowable<T>.toLiveData(
   handlerService: HandlerService? = null,
   scheduler: Scheduler = handlerService?.scheduler ?: Schedulers.computation()
-): LiveData<T> = LiveDataReactiveStreams.fromPublisher(subscribeOn(scheduler))
+): LiveData<T> = subscribeOn(scheduler).toLiveData()

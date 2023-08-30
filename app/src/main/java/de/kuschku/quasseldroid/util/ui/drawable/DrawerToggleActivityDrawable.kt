@@ -39,7 +39,7 @@ class DrawerToggleActivityDrawable(context: Context, @ColorRes colorAttribute: I
   }
 
   private val togglePaint = Paint().apply {
-    color = context.theme.styledAttributes(R.attr.colorControlNormal) {
+    color = context.theme.styledAttributes(androidx.appcompat.R.attr.colorControlNormal) {
       getColor(0, 0)
     }
     style = Paint.Style.STROKE
@@ -100,7 +100,7 @@ class DrawerToggleActivityDrawable(context: Context, @ColorRes colorAttribute: I
     transformedTogglePath.transform(transformationMatrix)
   }
 
-  override fun onBoundsChange(bounds: Rect?) {
+  override fun onBoundsChange(bounds: Rect) {
     transformPaths()
   }
 

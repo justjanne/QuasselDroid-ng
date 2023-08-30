@@ -27,8 +27,6 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.ActionMenuView
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.libquassel.util.helper.nullIf
@@ -45,13 +43,8 @@ import de.kuschku.quasseldroid.util.helper.updateRecentsHeader
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 
 abstract class SetupActivity : DaggerAppCompatActivity() {
-  @BindView(R.id.menu_view)
   lateinit var menuView: ActionMenuView
-
-  @BindView(R.id.view_pager)
   lateinit var viewPager: ViewPager
-
-  @BindView(R.id.next_button)
   lateinit var button: FloatingActionButton
 
   private lateinit var adapter: SlidePagerAdapter
@@ -118,7 +111,9 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA).labelRes
       .nullIf { it == 0 }?.let(this::setTitle)
     setContentView(R.layout.activity_setup)
-    ButterKnife.bind(this)
+    this.menuView = this.findViewById(R.id.menu_view)
+    this.viewPager = this.findViewById(R.id.view_pager)
+    this.button = this.findViewById(R.id.next_button)
 
     descriptionFinish = getString(R.string.label_finish)
     descriptionNext = getString(R.string.label_next)

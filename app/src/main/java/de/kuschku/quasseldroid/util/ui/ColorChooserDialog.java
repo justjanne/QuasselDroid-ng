@@ -604,15 +604,15 @@ public class ColorChooserDialog extends DialogFragment
     @ColorInt
     int preselectColor;
     @StringRes
-    int doneBtn = R.string.md_done_label;
+    int doneBtn = R.string.label_done;
     @StringRes
-    int backBtn = R.string.md_back_label;
+    int backBtn = R.string.label_back;
     @StringRes
-    int cancelBtn = R.string.md_cancel_label;
+    int cancelBtn = R.string.label_cancel;
     @StringRes
-    int customBtn = R.string.md_custom_label;
+    int customBtn = R.string.label_colors_custom;
     @StringRes
-    int presetsBtn = R.string.md_presets_label;
+    int presetsBtn = R.string.label_colors_presets;
     @Nullable
     int[] colorsTop;
     @Nullable

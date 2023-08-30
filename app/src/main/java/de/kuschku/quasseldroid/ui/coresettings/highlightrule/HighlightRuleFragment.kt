@@ -27,8 +27,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SwitchCompat
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
@@ -37,22 +35,11 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFra
 
 class HighlightRuleFragment : ServiceBoundSettingsFragment(), Savable,
                               Changeable {
-  @BindView(R.id.enabled)
   lateinit var enabled: SwitchCompat
-
-  @BindView(R.id.name)
   lateinit var name: EditText
-
-  @BindView(R.id.is_regex)
   lateinit var isRegex: SwitchCompat
-
-  @BindView(R.id.is_case_sensitive)
   lateinit var isCaseSensitive: SwitchCompat
-
-  @BindView(R.id.sender)
   lateinit var sender: EditText
-
-  @BindView(R.id.channel)
   lateinit var channel: EditText
 
   private var rule: HighlightRuleManager.HighlightRule? = null
@@ -63,7 +50,12 @@ class HighlightRuleFragment : ServiceBoundSettingsFragment(), Savable,
                             savedInstanceState: Bundle?): View? {
 
     val view = inflater.inflate(R.layout.settings_highlightrule, container, false)
-    ButterKnife.bind(this, view)
+    this.enabled = view.findViewById(R.id.enabled)
+    this.name = view.findViewById(R.id.name)
+    this.isRegex = view.findViewById(R.id.is_regex)
+    this.isCaseSensitive = view.findViewById(R.id.is_case_sensitive)
+    this.sender = view.findViewById(R.id.sender)
+    this.channel = view.findViewById(R.id.channel)
 
     isInverse = arguments?.getBoolean("inverse")
     (arguments?.getSerializable("item") as? HighlightRuleManager.HighlightRule)?.let {

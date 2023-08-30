@@ -34,8 +34,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import de.kuschku.libquassel.protocol.BufferId
@@ -71,28 +69,13 @@ import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
 import javax.inject.Inject
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
-  @BindView(R.id.chatListToolbar)
   lateinit var chatListToolbar: Toolbar
-
-  @BindView(R.id.chatListSpinner)
   lateinit var chatListSpinner: AppCompatSpinner
-
-  @BindView(R.id.chatList)
   lateinit var chatList: RecyclerView
-
-  @BindView(R.id.feature_context_bufferactivitysync)
   lateinit var featureContextBufferActivitySync: WarningBarView
-
-  @BindView(R.id.buffer_search)
   lateinit var bufferSearch: EditText
-
-  @BindView(R.id.buffer_search_clear)
   lateinit var bufferSearchClear: AppCompatImageButton
-
-  @BindView(R.id.buffer_search_container)
   lateinit var bufferSearchContainer: ViewGroup
-
-  @BindView(R.id.fab_chatlist)
   lateinit var fab: SpeedDialView
 
   @Inject
@@ -169,7 +152,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.chat_chatlist, container, false)
-    ButterKnife.bind(this, view)
+    this.chatListToolbar = view.findViewById(R.id.chatListToolbar)
+    this.chatListSpinner = view.findViewById(R.id.chatListSpinner)
+    this.chatList = view.findViewById(R.id.chatList)
+    this.featureContextBufferActivitySync = view.findViewById(R.id.feature_context_bufferactivitysync)
+    this.bufferSearch = view.findViewById(R.id.buffer_search)
+    this.bufferSearchClear = view.findViewById(R.id.buffer_search_clear)
+    this.bufferSearchContainer = view.findViewById(R.id.buffer_search_container)
+    this.fab = view.findViewById(R.id.fab_chatlist)
 
     val adapter = BufferViewConfigAdapter()
     modelHelper.bufferViewConfigs.safeSwitchMap {

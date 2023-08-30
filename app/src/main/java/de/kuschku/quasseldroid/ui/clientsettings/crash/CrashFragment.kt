@@ -30,8 +30,6 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import dagger.android.support.DaggerFragment
@@ -45,10 +43,7 @@ import java.io.File
 import javax.inject.Inject
 
 class CrashFragment : DaggerFragment() {
-  @BindView(R.id.list)
   lateinit var list: RecyclerView
-
-  @BindView(R.id.crashes_empty)
   lateinit var crashesEmpty: TextView
 
   private lateinit var handlerThread: HandlerThread
@@ -102,7 +97,8 @@ class CrashFragment : DaggerFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.preferences_crash, container, false)
-    ButterKnife.bind(this, view)
+    this.list = view.findViewById(R.id.list)
+    this.crashesEmpty = view.findViewById(R.id.crashes_empty)
 
     setHasOptionsMenu(true)
 

@@ -27,8 +27,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kuschku.libquassel.quassel.syncables.AliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
@@ -43,10 +41,7 @@ import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import javax.inject.Inject
 
 class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
-  @BindView(R.id.list)
   lateinit var list: RecyclerView
-
-  @BindView(R.id.add)
   lateinit var add: FloatingActionButton
 
   @Inject
@@ -62,7 +57,8 @@ class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_ignorelist, container, false)
-    ButterKnife.bind(this, view)
+    this.list = view.findViewById(R.id.list)
+    this.add = view.findViewById(R.id.add)
 
     adapter.setOnClickListener(::itemClick)
     adapter.setOnDragListener(::startDrag)

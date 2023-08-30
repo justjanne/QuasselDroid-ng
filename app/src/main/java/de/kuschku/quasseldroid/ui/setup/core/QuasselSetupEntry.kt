@@ -24,8 +24,6 @@ import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.protocol.QVariant_
@@ -35,10 +33,7 @@ import de.kuschku.libquassel.protocol.value
 import de.kuschku.quasseldroid.R
 
 class QuasselSetupEntry : FrameLayout {
-  @BindView(R.id.wrapper)
   lateinit var wrapper: TextInputLayout
-
-  @BindView(R.id.field)
   lateinit var field: TextInputEditText
 
   private var data: CoreSetupBackendConfigElement? = null
@@ -57,7 +52,8 @@ class QuasselSetupEntry : FrameLayout {
   ) : super(context, attrs, defStyleAttr) {
 
     LayoutInflater.from(context).inflate(R.layout.widget_quassel_setup_entry, this, true)
-    ButterKnife.bind(this)
+    this.wrapper = this.findViewById(R.id.wrapper)
+    this.field = this.findViewById(R.id.field)
 
     if (data != null) {
       this.data = data

@@ -27,16 +27,11 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.use
 
 class InlineSnackBar : FrameLayout {
-  @BindView(R.id.text)
   lateinit var text: TextView
-
-  @BindView(R.id.button)
   lateinit var button: Button
 
   constructor(context: Context) :
@@ -49,7 +44,8 @@ class InlineSnackBar : FrameLayout {
     super(context, attrs, defStyleAttr) {
 
     LayoutInflater.from(context).inflate(R.layout.widget_inline_snackbar, this, true)
-    ButterKnife.bind(this)
+    this.text = this.findViewById(R.id.text)
+    this.button = this.findViewById(R.id.button)
 
     context.theme.obtainStyledAttributes(attrs, R.styleable.InlineSnackBar, 0, 0).use {
       if (it.hasValue(R.styleable.InlineSnackBar_text))

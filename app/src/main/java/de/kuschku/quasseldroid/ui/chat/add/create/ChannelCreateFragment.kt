@@ -29,8 +29,6 @@ import android.widget.EditText
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
@@ -52,28 +50,13 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ChannelCreateFragment : ServiceBoundSettingsFragment() {
-  @BindView(R.id.network)
   lateinit var network: AppCompatSpinner
-
-  @BindView(R.id.name)
   lateinit var name: EditText
-
-  @BindView(R.id.hidden)
   lateinit var hidden: SwitchCompat
-
-  @BindView(R.id.invite_only)
   lateinit var inviteOnly: SwitchCompat
-
-  @BindView(R.id.password_protected)
   lateinit var passwordProtected: SwitchCompat
-
-  @BindView(R.id.password_group)
   lateinit var passwordGroup: ViewGroup
-
-  @BindView(R.id.password)
   lateinit var password: EditText
-
-  @BindView(R.id.save)
   lateinit var save: Button
 
   @Inject
@@ -85,7 +68,14 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_create, container, false)
-    ButterKnife.bind(this, view)
+    this.network = view.findViewById(R.id.network)
+    this.name = view.findViewById(R.id.name)
+    this.hidden = view.findViewById(R.id.hidden)
+    this.inviteOnly = view.findViewById(R.id.invite_only)
+    this.passwordProtected = view.findViewById(R.id.password_protected)
+    this.passwordGroup = view.findViewById(R.id.password_group)
+    this.password = view.findViewById(R.id.password)
+    this.save = view.findViewById(R.id.save)
 
     networkId = NetworkId(
       savedInstanceState?.getInt("network_id", 0)

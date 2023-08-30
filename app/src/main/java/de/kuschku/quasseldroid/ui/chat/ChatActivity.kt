@@ -900,7 +900,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
     actionMode = mode
     statusBarColor = window.statusBarColor
-    window.statusBarColor = theme.styledAttributes(R.attr.colorPrimaryDark) {
+    window.statusBarColor = theme.styledAttributes(androidx.appcompat.R.attr.colorPrimaryDark) {
       getColor(0, 0)
     }
     super.onActionModeStarted(mode)
@@ -959,9 +959,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     val nickCountDrawableSize = resources.getDimensionPixelSize(R.dimen.size_nick_count)
-    val nickCountDrawableColor = binding.layoutMain.layoutToolbar.toolbar.context.theme.styledAttributes(R.attr.colorControlNormal) {
-      getColor(0, 0)
-    }
+    val nickCountDrawableColor = binding.layoutMain.layoutToolbar.toolbar.context.theme.styledAttributes(
+      androidx.appcompat.R.attr.colorControlNormal
+    ) { getColor(0, 0) }
 
     menuInflater.inflate(R.menu.activity_main, menu)
     menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer)

@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import de.kuschku.libquassel.protocol.Buffer_Type
@@ -34,7 +35,6 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.SenderColorUtil
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -112,7 +112,7 @@ object ShortcutCreationHelper {
       if (urls == null || urls.isEmpty()) {
         resultAvailable(fallback)
       } else {
-        GlideApp.with(context)
+        Glide.with(context)
           .loadWithFallbacks(urls)
           ?.placeholder(fallback)
           ?.into(object : CustomTarget<Drawable>(bitmapSize, bitmapSize) {

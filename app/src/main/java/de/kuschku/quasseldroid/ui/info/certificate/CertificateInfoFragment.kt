@@ -25,8 +25,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.ssl.commonName
 import de.kuschku.libquassel.ssl.organization
@@ -45,56 +43,25 @@ import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
 
 class CertificateInfoFragment : ServiceBoundSettingsFragment() {
-
-  @BindView(R.id.content)
   lateinit var content: View
-  @BindView(R.id.error)
   lateinit var error: View
-
-  @BindView(R.id.subject_common_name_wrapper)
   lateinit var subjectCommonNameWrapper: View
-  @BindView(R.id.subject_common_name)
   lateinit var subjectCommonName: TextView
-
-  @BindView(R.id.subject_hostnames_wrapper)
   lateinit var subjectHostnamesWrapper: View
-  @BindView(R.id.subject_hostnames)
   lateinit var subjectHostnames: TextView
-
-  @BindView(R.id.subject_organization_wrapper)
   lateinit var subjectOrganizationWrapper: View
-  @BindView(R.id.subject_organization)
   lateinit var subjectOrganization: TextView
-
-  @BindView(R.id.subject_organizational_unit_wrapper)
   lateinit var subjectOrganizationalUnitWrapper: View
-  @BindView(R.id.subject_organizational_unit)
   lateinit var subjectOrganizationalUnit: TextView
-
-  @BindView(R.id.issuer_common_name_wrapper)
   lateinit var issuerCommonNameWrapper: View
-  @BindView(R.id.issuer_common_name)
   lateinit var issuerCommonName: TextView
-
-  @BindView(R.id.issuer_organization_wrapper)
   lateinit var issuerOrganizationWrapper: View
-  @BindView(R.id.issuer_organization)
   lateinit var issuerOrganization: TextView
-
-  @BindView(R.id.issuer_organizational_unit_wrapper)
   lateinit var issuerOrganizationalUnitWrapper: View
-  @BindView(R.id.issuer_organizational_unit)
   lateinit var issuerOrganizationalUnit: TextView
-
-  @BindView(R.id.not_before)
   lateinit var notBefore: TextView
-  @BindView(R.id.not_after)
   lateinit var notAfter: TextView
-
-  @BindView(R.id.fingerprint_sha256)
   lateinit var fingerprintSha256: TextView
-
-  @BindView(R.id.fingerprint_sha1)
   lateinit var fingerprintSha1: TextView
 
   @Inject
@@ -103,7 +70,26 @@ class CertificateInfoFragment : ServiceBoundSettingsFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_certificate, container, false)
-    ButterKnife.bind(this, view)
+    this.content = view.findViewById(R.id.content)
+    this.error = view.findViewById(R.id.error)
+    this.subjectCommonNameWrapper = view.findViewById(R.id.subject_common_name_wrapper)
+    this.subjectCommonName = view.findViewById(R.id.subject_common_name)
+    this.subjectHostnamesWrapper = view.findViewById(R.id.subject_hostnames_wrapper)
+    this.subjectHostnames = view.findViewById(R.id.subject_hostnames)
+    this.subjectOrganizationWrapper = view.findViewById(R.id.subject_organization_wrapper)
+    this.subjectOrganization = view.findViewById(R.id.subject_organization)
+    this.subjectOrganizationalUnitWrapper = view.findViewById(R.id.subject_organizational_unit_wrapper)
+    this.subjectOrganizationalUnit = view.findViewById(R.id.subject_organizational_unit)
+    this.issuerCommonNameWrapper = view.findViewById(R.id.issuer_common_name_wrapper)
+    this.issuerCommonName = view.findViewById(R.id.issuer_common_name)
+    this.issuerOrganizationWrapper = view.findViewById(R.id.issuer_organization_wrapper)
+    this.issuerOrganization = view.findViewById(R.id.issuer_organization)
+    this.issuerOrganizationalUnitWrapper = view.findViewById(R.id.issuer_organizational_unit_wrapper)
+    this.issuerOrganizationalUnit = view.findViewById(R.id.issuer_organizational_unit)
+    this.notBefore = view.findViewById(R.id.not_before)
+    this.notAfter = view.findViewById(R.id.not_after)
+    this.fingerprintSha256 = view.findViewById(R.id.fingerprint_sha256)
+    this.fingerprintSha1 = view.findViewById(R.id.fingerprint_sha1)
 
     val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 

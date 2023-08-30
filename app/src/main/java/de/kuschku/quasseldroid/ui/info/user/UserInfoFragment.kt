@@ -37,8 +37,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
@@ -77,61 +75,24 @@ import java.util.*
 import javax.inject.Inject
 
 class UserInfoFragment : ServiceBoundFragment() {
-  @BindView(R.id.avatar)
   lateinit var avatar: ImageView
-
-  @BindView(R.id.nick)
   lateinit var nick: TextView
-
-  @BindView(R.id.real_name)
   lateinit var realName: TextView
-
-  @BindView(R.id.action_query)
   lateinit var actionQuery: Button
-
-  @BindView(R.id.action_ignore)
   lateinit var actionIgnore: Button
-
-  @BindView(R.id.action_whois)
   lateinit var actionWhois: Button
-
-  @BindView(R.id.action_mention)
   lateinit var actionMention: Button
-
-  @BindView(R.id.action_shortcut)
   lateinit var actionShortcut: Button
-
-  @BindView(R.id.away_container)
   lateinit var awayContainer: ViewGroup
-
-  @BindView(R.id.away_message)
   lateinit var awayMessage: TextView
-
-  @BindView(R.id.account_container)
   lateinit var accountContainer: ViewGroup
-
-  @BindView(R.id.account)
   lateinit var account: TextView
-
-  @BindView(R.id.ident_container)
   lateinit var identContainer: ViewGroup
-
-  @BindView(R.id.ident)
   lateinit var ident: TextView
-
-  @BindView(R.id.host_container)
   lateinit var hostContainer: ViewGroup
-
-  @BindView(R.id.host)
   lateinit var host: TextView
-
-  @BindView(R.id.server_container)
   lateinit var serverContainer: ViewGroup
-
-  @BindView(R.id.server)
   lateinit var server: TextView
-
-  @BindView(R.id.common_channels)
   lateinit var commonChannels: RecyclerView
 
   @Inject
@@ -154,7 +115,25 @@ class UserInfoFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_user, container, false)
-    ButterKnife.bind(this, view)
+    this.avatar = view.findViewById(R.id.avatar)
+    this.nick = view.findViewById(R.id.nick)
+    this.realName = view.findViewById(R.id.real_name)
+    this.actionQuery = view.findViewById(R.id.action_query)
+    this.actionIgnore = view.findViewById(R.id.action_ignore)
+    this.actionWhois = view.findViewById(R.id.action_whois)
+    this.actionMention = view.findViewById(R.id.action_mention)
+    this.actionShortcut = view.findViewById(R.id.action_shortcut)
+    this.awayContainer = view.findViewById(R.id.away_container)
+    this.awayMessage = view.findViewById(R.id.away_message)
+    this.accountContainer = view.findViewById(R.id.account_container)
+    this.account = view.findViewById(R.id.account)
+    this.identContainer = view.findViewById(R.id.ident_container)
+    this.ident = view.findViewById(R.id.ident)
+    this.hostContainer = view.findViewById(R.id.host_container)
+    this.host = view.findViewById(R.id.host)
+    this.serverContainer = view.findViewById(R.id.server_container)
+    this.server = view.findViewById(R.id.server)
+    this.commonChannels = view.findViewById(R.id.common_channels)
 
     val openBuffer = arguments?.getBoolean("openBuffer")
 
@@ -173,7 +152,7 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     val colorContext = ColorContext(requireContext(), messageSettings)
 
-    val colorAccent = requireContext().theme.styledAttributes(R.attr.colorAccent) {
+    val colorAccent = requireContext().theme.styledAttributes(androidx.appcompat.R.attr.colorAccent) {
       getColor(0, 0)
     }
 

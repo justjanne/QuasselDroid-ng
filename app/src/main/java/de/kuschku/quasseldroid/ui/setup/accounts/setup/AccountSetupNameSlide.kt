@@ -25,17 +25,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.util.TextValidator
 
 class AccountSetupNameSlide : SlideFragment() {
-  @BindView(R.id.nameWrapper)
   lateinit var nameWrapper: TextInputLayout
-  @BindView(R.id.name)
   lateinit var nameField: EditText
 
   override fun isValid(): Boolean {
@@ -58,7 +54,8 @@ class AccountSetupNameSlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_account_name, container, false)
-    ButterKnife.bind(this, view)
+    this.nameWrapper = view.findViewById(R.id.nameWrapper)
+    this.nameField = view.findViewById(R.id.name)
     nameValidator = object : TextValidator(
       requireActivity(), nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {

@@ -26,14 +26,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
+import com.bumptech.glide.Glide
+
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.value
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -52,16 +51,12 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class ToolbarFragment : ServiceBoundFragment() {
-  @BindView(R.id.toolbar_title)
   lateinit var toolbarTitle: TextView
 
-  @BindView(R.id.toolbar_subtitle)
   lateinit var toolbarSubtitle: TextView
 
-  @BindView(R.id.toolbar_icon)
   lateinit var icon: AppCompatImageView
 
-  @BindView(R.id.toolbar_action_area)
   lateinit var actionArea: View
 
   @Inject
@@ -98,7 +93,10 @@ class ToolbarFragment : ServiceBoundFragment() {
     savedInstanceState: Bundle?
   ): View? {
     val view = inflater.inflate(R.layout.chat_toolbar, container, false)
-    ButterKnife.bind(this, view)
+    this.toolbarTitle = view.findViewById(R.id.toolbar_title)
+    this.toolbarSubtitle = view.findViewById(R.id.toolbar_subtitle)
+    this.icon = view.findViewById(R.id.toolbar_icon)
+    this.actionArea = view.findViewById(R.id.toolbar_action_area)
 
     fun colorizeDescription(description: String?) = ircFormatDeserializer.formatString(
       description, messageSettings.colorizeMirc
@@ -136,7 +134,7 @@ class ToolbarFragment : ServiceBoundFragment() {
             icon.loadAvatars(avatarUrls, fallbackDrawable, crop = !messageSettings.squareAvatars)
             icon.visibility = View.VISIBLE
           } else {
-            GlideApp.with(icon).clear(icon)
+            Glide.with(icon).clear(icon)
             icon.visibility = View.GONE
           }
 

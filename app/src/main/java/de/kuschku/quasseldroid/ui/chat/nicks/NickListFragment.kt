@@ -27,8 +27,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
@@ -39,7 +37,6 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.libquassel.util.irc.SenderColorUtil
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -58,7 +55,6 @@ import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.
 import javax.inject.Inject
 
 class NickListFragment : ServiceBoundFragment() {
-  @BindView(R.id.nickList)
   lateinit var nickList: RecyclerView
 
   @Inject
@@ -79,7 +75,7 @@ class NickListFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.chat_nicklist, container, false)
-    ButterKnife.bind(this, view)
+    this.nickList = view.findViewById(R.id.nickList)
 
     val nickListAdapter = NickListAdapter(messageSettings, clickListener)
     nickList.adapter = nickListAdapter
@@ -161,7 +157,7 @@ class NickListFragment : ServiceBoundFragment() {
       )
 
       override fun getPreloadRequestBuilder(item: List<Avatar>) =
-        GlideApp.with(this@NickListFragment).loadWithFallbacks(item)?.override(avatarSize)
+        Glide.with(this@NickListFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)

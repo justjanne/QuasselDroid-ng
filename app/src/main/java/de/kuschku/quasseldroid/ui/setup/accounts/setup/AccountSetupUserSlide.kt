@@ -25,24 +25,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.util.TextValidator
 
 class AccountSetupUserSlide : SlideFragment() {
-  @BindView(R.id.userWrapper)
   lateinit var userWrapper: TextInputLayout
-
-  @BindView(R.id.user)
   lateinit var userField: EditText
-
-  @BindView(R.id.passWrapper)
   lateinit var passWrapper: TextInputLayout
-
-  @BindView(R.id.pass)
   lateinit var passField: EditText
 
   override fun isValid(): Boolean {
@@ -67,7 +58,10 @@ class AccountSetupUserSlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_account_user, container, false)
-    ButterKnife.bind(this, view)
+    this.userWrapper = view.findViewById(R.id.userWrapper)
+    this.userField = view.findViewById(R.id.user)
+    this.passWrapper = view.findViewById(R.id.passWrapper)
+    this.passField = view.findViewById(R.id.pass)
     userValidator = object : TextValidator(
       requireActivity(), userWrapper::setError, resources.getString(R.string.hint_invalid_user)
     ) {

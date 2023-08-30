@@ -1,51 +1,49 @@
 [versions]
-androidx-appcompat = "1.4.1"
-androidx-espresso = "3.4.0"
-androidx-lifecycle = "2.4.1"
-androidx-room = "2.4.2"
-androidx-test = "1.4.0"
-butterknife = "10.2.3"
-dagger = "2.40.5"
-glide = "4.13.0"
-kotlin = "1.6.10"
+android-gradle-plugin = "8.1.1"
+androidx-appcompat = "1.6.1"
+androidx-espresso = "3.5.1"
+androidx-lifecycle = "2.6.1"
+androidx-room = "2.5.2"
+androidx-test = "1.5.2"
+dagger = "2.47"
+glide = "4.16.0"
+kotlin = "1.9.10"
+ksp = "1.9.10-1.0.13"
 materialdialogs = "0.9.6.0"
 retrofit = "2.6.1"
 
 [libraries]
-androidx-annotation = { module = "androidx.annotation:annotation", version = "1.3.0" }
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.6.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-appcompat-resorces = { module = "androidx.appcompat:appcompat-resources", version = "androidx-appcompat" }
-androidx-browser = { module = "androidx.browser:browser", version = "1.4.0" }
+androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
 androidx-cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.3" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
 androidx-legacy = { module = "androidx.legacy:legacy-preference-v14", version = "1.0.0" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-reactivestreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "androidx-lifecycle" }
 androidx-multidex = { module = "androidx.multidex:multidex", version = "2.0.1" }
-androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version = "3.1.0" }
-androidx-preference = { module = "androidx.preference:preference", version = "1.2.0" }
-androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.2.1" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version = "3.2.0" }
+androidx-preference = { module = "androidx.preference:preference", version = "1.2.1" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.3.1" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 androidx-room-rxjava = { module = "androidx.room:room-rxjava2", version.ref = "androidx-room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
-androidx-room-paging = { module = "androidx.room:room-paging", version = "2.5.0-alpha01" }
+androidx-room-paging = { module = "androidx.room:room-paging", version = "2.5.2" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version = "1.1.0" }
-androidx-test-core = { module = "androidx.arch.core:core-testing", version = "2.1.0" }
+androidx-test-core = { module = "androidx.arch.core:core-testing", version = "2.2.0" }
 androidx-test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx-espresso" }
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
-androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.1.3" }
+androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.1.5" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 
 annotations-inject = { module = "javax.inject:javax.inject", version = "1" }
 annotations-jetbrains = { module = "org.jetbrains:annotations", version = "23.0.0" }
-
-butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
-butterknife-core = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
 
 commons-codec = { module = "commons-codec:commons-codec", version = "1.15" }
 
@@ -57,7 +55,7 @@ dagger-processor = { module = "com.google.dagger:dagger-android-processor", vers
 
 flexbox = { module = "com.google.android.flexbox:flexbox", version = "3.0.0" }
 
-google-material = { module = "com.google.android.material:material", version = "1.5.0" }
+google-material = { module = "com.google.android.material:material", version = "1.9.0" }
 
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 glide-core = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -65,8 +63,8 @@ glide-recyclerview = { module = "com.github.bumptech.glide:recyclerview-integrat
 
 gson = { module = "com.google.code.gson:gson", version = "2.9.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
-kotlinpoet = { module = "com.squareup:kotlinpoet", version = "1.10.2" }
-ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version = "1.6.10-1.0.4" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version = "1.11.0" }
+ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.8.1" }
 
 materialdialogs-commons = { module = "com.afollestad.material-dialogs:commons", version.ref = "materialdialogs" }
@@ -85,3 +83,17 @@ rxjava-java = { module = "io.reactivex.rxjava2:rxjava", version = "2.2.21" }
 
 speeddial = { module = "com.leinardi.android:speed-dial", version = "3.2.0" }
 threetenbp = { module = "org.threeten:threetenbp", version = "1.5.2" }
+
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

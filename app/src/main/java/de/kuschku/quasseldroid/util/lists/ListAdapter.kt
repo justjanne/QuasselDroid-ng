@@ -93,7 +93,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @param <T> Type of the Lists this Adapter will receive.
  * @param <VH> A class that extends ViewHolder that will be used by the adapter.
 </VH></T> */
-abstract class ListAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH> {
+abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH> {
   private val mHelper: AsyncListDiffer<T>
 
   protected constructor(diffCallback: DiffUtil.ItemCallback<T>) {

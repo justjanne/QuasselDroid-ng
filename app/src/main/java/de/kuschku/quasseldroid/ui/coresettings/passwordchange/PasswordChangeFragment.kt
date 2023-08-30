@@ -28,8 +28,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.session.ISession
@@ -49,31 +47,14 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import javax.inject.Inject
 
 class PasswordChangeFragment : ServiceBoundFragment() {
-  @BindView(R.id.user)
   lateinit var user: EditText
-
-  @BindView(R.id.password_old_wrapper)
   lateinit var oldPasswordWrapper: TextInputLayout
-
-  @BindView(R.id.password_old)
   lateinit var oldPassword: EditText
-
-  @BindView(R.id.password_new)
   lateinit var newPassword: EditText
-
-  @BindView(R.id.password_repeat_wrapper)
   lateinit var repeatPasswordWrapper: TextInputLayout
-
-  @BindView(R.id.password_repeat)
   lateinit var repeatPassword: EditText
-
-  @BindView(R.id.error)
   lateinit var error: TextView
-
-  @BindView(R.id.save)
   lateinit var save: Button
-
-  @BindView(R.id.progress)
   lateinit var progress: MaterialProgressBar
 
   @Inject
@@ -87,7 +68,15 @@ class PasswordChangeFragment : ServiceBoundFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_passwordchange, container, false)
-    ButterKnife.bind(this, view)
+    this.user = view.findViewById(R.id.user)
+    this.oldPasswordWrapper = view.findViewById(R.id.password_old_wrapper)
+    this.oldPassword = view.findViewById(R.id.password_old)
+    this.newPassword = view.findViewById(R.id.password_new)
+    this.repeatPasswordWrapper = view.findViewById(R.id.password_repeat_wrapper)
+    this.repeatPassword = view.findViewById(R.id.password_repeat)
+    this.error = view.findViewById(R.id.error)
+    this.save = view.findViewById(R.id.save)
+    this.progress = view.findViewById(R.id.progress)
 
     val account = accountDatabase.accounts().findById(accountId)
 

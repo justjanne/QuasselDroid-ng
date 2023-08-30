@@ -25,7 +25,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import de.kuschku.quasseldroid.R
 
 fun Menu.retint(context: Context) {
-  context.theme.styledAttributes(R.attr.colorControlNormal) {
+  context.theme.styledAttributes(androidx.appcompat.R.attr.colorControlNormal) {
     val color = getColor(0, 0)
 
     for (item in (0 until size()).map { getItem(it) }) {

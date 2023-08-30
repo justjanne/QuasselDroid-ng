@@ -24,18 +24,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupBackend
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 
 abstract class CoreBackendSetupSlide : SlideFragment() {
-  @BindView(R.id.frame)
   lateinit var frame: LinearLayout
-
-  @BindView(R.id.no_options_info)
   lateinit var noOptionsInfo: View
 
   override fun isValid() = true
@@ -73,7 +68,8 @@ abstract class CoreBackendSetupSlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_core_backend_configure, container, false)
-    ButterKnife.bind(this, view)
+    this.frame = view.findViewById(R.id.frame)
+    this.noOptionsInfo = view.findViewById(R.id.no_options_info)
 
     return view
   }

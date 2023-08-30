@@ -30,8 +30,6 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.util.helper.visibleIf
@@ -42,16 +40,9 @@ import javax.inject.Inject
 
 class WhitelistFragment : SettingsFragment(), Changeable,
                           Savable {
-  @BindView(R.id.certificate_whitelist)
   lateinit var certificateList: RecyclerView
-
-  @BindView(R.id.certificate_whitelist_empty)
   lateinit var certificateListEmpty: TextView
-
-  @BindView(R.id.hostname_whitelist)
   lateinit var hostnameList: RecyclerView
-
-  @BindView(R.id.hostname_whitelist_empty)
   lateinit var hostnameListEmpty: TextView
 
   @Inject
@@ -80,7 +71,10 @@ class WhitelistFragment : SettingsFragment(), Changeable,
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.preferences_whitelist, container, false)
-    ButterKnife.bind(this, view)
+    this.certificateList = view.findViewById(R.id.certificate_whitelist)
+    this.certificateListEmpty = view.findViewById(R.id.certificate_whitelist_empty)
+    this.hostnameList = view.findViewById(R.id.hostname_whitelist)
+    this.hostnameListEmpty = view.findViewById(R.id.hostname_whitelist_empty)
 
     setHasOptionsMenu(true)
 

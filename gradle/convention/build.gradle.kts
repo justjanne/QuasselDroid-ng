@@ -9,13 +9,34 @@ repositories {
 }
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
-  implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.6.10-1.0.4")
-  implementation("com.android.tools.build:gradle:7.1.1")
+  compileOnly(libs.android.gradlePlugin)
+  compileOnly(libs.kotlin.gradlePlugin)
+  compileOnly(libs.ksp.gradlePlugin)
+}
+
+gradlePlugin {
+  plugins {
+    register("androidApplication") {
+      id = "justjanne.android.app"
+      implementationClass = "AndroidApplicationConvention"
+    }
+    register("androidLibrary") {
+      id = "justjanne.android.library"
+      implementationClass = "AndroidLibraryConvention"
+    }
+    register("kotlinAndroid") {
+      id = "justjanne.kotlin.android"
+      implementationClass = "KotlinAndroidConvention"
+    }
+    register("kotlin") {
+      id = "justjanne.kotlin"
+      implementationClass = "KotlinConvention"
+    }
+  }
 }
 
 configure<JavaPluginExtension> {
   toolchain {
-    languageVersion.set(JavaLanguageVersion.of(8))
+    languageVersion.set(JavaLanguageVersion.of(11))
   }
 }

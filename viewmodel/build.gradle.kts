@@ -21,6 +21,10 @@ plugins {
   id("justjanne.android.library")
 }
 
+android {
+  namespace = "de.kuschku.quasseldroid.viewmodel"
+}
+
 dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.lifecycle.viewmodel)

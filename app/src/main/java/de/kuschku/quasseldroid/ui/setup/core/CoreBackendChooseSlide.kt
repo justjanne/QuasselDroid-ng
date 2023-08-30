@@ -26,15 +26,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupBackend
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 
 abstract class CoreBackendChooseSlide : SlideFragment() {
-  @BindView(R.id.account_list)
   lateinit var backendList: RecyclerView
 
   override fun isValid() = adapter.selection() != null
@@ -60,7 +57,7 @@ abstract class CoreBackendChooseSlide : SlideFragment() {
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
-    ButterKnife.bind(this, view)
+    this.backendList = view.findViewById(R.id.account_list)
 
     backendList.layoutManager = LinearLayoutManager(context)
     backendList.itemAnimator = DefaultItemAnimator()

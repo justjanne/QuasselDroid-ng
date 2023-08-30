@@ -25,40 +25,19 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.setTooltip
 
 class RichToolbar : Toolbar {
-  @BindView(R.id.action_format_bold)
   lateinit var boldButton: View
-
-  @BindView(R.id.action_format_italic)
   lateinit var italicButton: View
-
-  @BindView(R.id.action_format_underline)
   lateinit var underlineButton: View
-
-  @BindView(R.id.action_format_strikethrough)
   lateinit var strikethroughButton: View
-
-  @BindView(R.id.action_format_monospace)
   lateinit var monospaceButton: View
-
-  @BindView(R.id.action_format_foreground)
   lateinit var foregroundButton: View
-
-  @BindView(R.id.action_format_foreground_preview)
   lateinit var foregroundButtonPreview: View
-
-  @BindView(R.id.action_format_background)
   lateinit var backgroundButton: View
-
-  @BindView(R.id.action_format_background_preview)
   lateinit var backgroundButtonPreview: View
-
-  @BindView(R.id.action_format_clear)
   lateinit var clearButton: View
 
   private var listener: FormattingListener? = null
@@ -70,7 +49,16 @@ class RichToolbar : Toolbar {
 
   init {
     LayoutInflater.from(context).inflate(R.layout.widget_formatting, this, true)
-    ButterKnife.bind(this)
+    this.boldButton = this.findViewById(R.id.action_format_bold)
+    this.italicButton = this.findViewById(R.id.action_format_italic)
+    this.underlineButton = this.findViewById(R.id.action_format_underline)
+    this.strikethroughButton = this.findViewById(R.id.action_format_strikethrough)
+    this.monospaceButton = this.findViewById(R.id.action_format_monospace)
+    this.foregroundButton = this.findViewById(R.id.action_format_foreground)
+    this.foregroundButtonPreview = this.findViewById(R.id.action_format_foreground_preview)
+    this.backgroundButton = this.findViewById(R.id.action_format_background)
+    this.backgroundButtonPreview = this.findViewById(R.id.action_format_background_preview)
+    this.clearButton = this.findViewById(R.id.action_format_clear)
 
     boldButton.setTooltip()
     italicButton.setTooltip()

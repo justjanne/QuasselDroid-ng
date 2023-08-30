@@ -26,8 +26,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.NetworkConfig
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
@@ -41,34 +39,15 @@ import javax.inject.Inject
 
 class NetworkConfigFragment : ServiceBoundSettingsFragment(), Savable,
                               Changeable {
-  @BindView(R.id.ping_timeout_enabled)
   lateinit var pingTimeoutEnabled: SwitchCompat
-
-  @BindView(R.id.ping_timeout_group)
   lateinit var pingTimeoutGroup: ViewGroup
-
-  @BindView(R.id.ping_interval)
   lateinit var pingInterval: EditText
-
-  @BindView(R.id.max_ping_count)
   lateinit var maxPingCount: EditText
-
-  @BindView(R.id.auto_who_enabled)
   lateinit var autoWhoEnabled: SwitchCompat
-
-  @BindView(R.id.auto_who_group)
   lateinit var autoWhoGroup: ViewGroup
-
-  @BindView(R.id.auto_who_interval)
   lateinit var autoWhoInterval: EditText
-
-  @BindView(R.id.auto_who_nick_limit)
   lateinit var autoWhoNickLimit: EditText
-
-  @BindView(R.id.auto_who_delay)
   lateinit var autoWhoDelay: EditText
-
-  @BindView(R.id.standard_ctcp)
   lateinit var standardCtcp: SwitchCompat
 
   @Inject
@@ -79,7 +58,16 @@ class NetworkConfigFragment : ServiceBoundSettingsFragment(), Savable,
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_networkconfig, container, false)
-    ButterKnife.bind(this, view)
+    this.pingTimeoutEnabled = view.findViewById(R.id.ping_timeout_enabled)
+    this.pingTimeoutGroup = view.findViewById(R.id.ping_timeout_group)
+    this.pingInterval = view.findViewById(R.id.ping_interval)
+    this.maxPingCount = view.findViewById(R.id.max_ping_count)
+    this.autoWhoEnabled = view.findViewById(R.id.auto_who_enabled)
+    this.autoWhoGroup = view.findViewById(R.id.auto_who_group)
+    this.autoWhoInterval = view.findViewById(R.id.auto_who_interval)
+    this.autoWhoNickLimit = view.findViewById(R.id.auto_who_nick_limit)
+    this.autoWhoDelay = view.findViewById(R.id.auto_who_delay)
+    this.standardCtcp = view.findViewById(R.id.standard_ctcp)
 
     modelHelper.networkConfig
       .filter(Optional<NetworkConfig>::isPresent)

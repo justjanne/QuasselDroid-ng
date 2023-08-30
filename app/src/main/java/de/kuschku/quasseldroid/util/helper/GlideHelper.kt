@@ -21,20 +21,19 @@ package de.kuschku.quasseldroid.util.helper
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import de.kuschku.quasseldroid.GlideApp
-import de.kuschku.quasseldroid.GlideRequest
-import de.kuschku.quasseldroid.GlideRequests
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
 
-fun GlideRequests.loadWithFallbacks(urls: List<Avatar>): GlideRequest<Drawable>? {
-  fun fold(url: Avatar, fallback: RequestBuilder<Drawable>?): GlideRequest<Drawable> {
+fun RequestManager.loadWithFallbacks(urls: List<Avatar>): RequestBuilder<Drawable>? {
+  fun fold(url: Avatar, fallback: RequestBuilder<Drawable>?): RequestBuilder<Drawable> {
     return when (url) {
       is Avatar.NativeAvatar   -> load(url.url)
       is Avatar.GravatarAvatar -> load(url.url)
@@ -51,7 +50,7 @@ fun GlideRequests.loadWithFallbacks(urls: List<Avatar>): GlideRequest<Drawable>?
 fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: Boolean = true,
                           listener: ((Any?) -> Unit)? = null) {
   if (urls.isNotEmpty()) {
-    GlideApp.with(this)
+    Glide.with(this)
       .loadWithFallbacks(urls)
       ?.let {
         if (crop) {
@@ -63,20 +62,28 @@ fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: 
       ?.placeholder(fallback)
       ?.letIf(listener != null) {
         it.addListener(object : RequestListener<Drawable> {
-          override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?,
-                                    isFirstResource: Boolean) = false
+          override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<Drawable>,
+            isFirstResource: Boolean
+          ): Boolean = false
 
-          override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
-                                       dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+          override fun onResourceReady(
+            resource: Drawable,
+            model: Any,
+            target: Target<Drawable>?,
+            dataSource: DataSource,
+            isFirstResource: Boolean
+          ): Boolean {
             listener?.invoke(model)
-
             return false
           }
         })
       }
       ?.into(this)
   } else {
-    GlideApp.with(this).clear(this)
+    Glide.with(this).clear(this)
     setImageDrawable(fallback)
   }
 }

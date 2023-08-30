@@ -138,7 +138,7 @@ open class ContextThemeWrapper : ContextWrapper {
     }
 
     if (themeResId == 0) {
-      themeResId = R.style.Theme_AppCompat_Light
+      themeResId = androidx.appcompat.R.style.Theme_AppCompat_Light
     }
     initializeTheme()
 

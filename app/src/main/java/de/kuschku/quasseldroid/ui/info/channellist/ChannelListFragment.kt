@@ -28,8 +28,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QStringList
 import de.kuschku.libquassel.quassel.syncables.IrcListHelper
@@ -49,19 +47,10 @@ import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class ChannelListFragment : ServiceBoundSettingsFragment() {
-  @BindView(R.id.search_input)
   lateinit var searchInput: EditText
-
-  @BindView(R.id.search_button)
   lateinit var searchButton: AppCompatImageButton
-
-  @BindView(R.id.progress)
   lateinit var progress: MaterialContentLoadingProgressBar
-
-  @BindView(R.id.search_results)
   lateinit var searchResults: RecyclerView
-
-  @BindView(R.id.error)
   lateinit var errorDisplay: WarningBarView
 
   @Inject
@@ -112,7 +101,11 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_channellist, container, false)
-    ButterKnife.bind(this, view)
+    this.searchInput = view.findViewById(R.id.search_input)
+    this.searchButton = view.findViewById(R.id.search_button)
+    this.progress = view.findViewById(R.id.progress)
+    this.searchResults = view.findViewById(R.id.search_results)
+    this.errorDisplay = view.findViewById(R.id.error)
 
     val networkId = NetworkId(arguments?.getInt("network_id", -1) ?: -1)
 
