@@ -27,7 +27,7 @@ class AndroidApplicationConvention : Plugin<Project> {
           val commit = git("rev-parse", "HEAD")
           val name = git("describe", "--always", "--tags", "HEAD")
 
-          versionCode = git("rev-list", "--count", "HEAD")?.toIntOrNull()
+          versionCode = git("rev-list", "--count", "HEAD", "--tags")?.toIntOrNull()
           versionName = git("describe", "--always", "--tags", "HEAD")
 
           val fancyVersionName = if (commit == null || name == null) name

@@ -36,7 +36,7 @@ version:
   stage: "test"
   script:
     - "export VERSION_NAME=$(git describe --abbrev=0 --tags HEAD)"
-    - "export VERSION_CODE=$(git rev-list --count $VERSION_NAME)"
+    - "export VERSION_CODE=$(git rev-list --count $VERSION_NAME --tags)"
     - "echo \"{\\\"name\\\":\\\"$VERSION_NAME\\\",\\\"code\\\":$VERSION_CODE}\" > version.json"
   artifacts:
     paths:
