@@ -24,7 +24,6 @@ import android.os.Build
 import de.kuschku.malheur.CrashContext
 import de.kuschku.malheur.config.AppConfig
 import de.kuschku.malheur.data.AppInfo
-import de.kuschku.malheur.util.reflectionCollectConstants
 
 class AppCollector(private val application: Application) : Collector<AppInfo, AppConfig> {
   override fun collect(context: CrashContext, config: AppConfig) = AppInfo(
@@ -39,20 +38,13 @@ class AppCollector(private val application: Application) : Collector<AppInfo, Ap
         application.packageManager.getPackageInfo(application.packageName, 0).versionCode.toLong()
       }
     },
-    buildConfig = collectIf(config.buildConfig) {
-      reflectionCollectConstants(
-        context.buildConfig ?: getBuildConfigClass(application.packageName)
-      )
-    },
     installationSource = collectIf(config.installationSource) {
-      @Suppress("DEPRECATION")
-      application.packageManager.getInstallerPackageName(application.packageName)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        application.packageManager.getInstallSourceInfo(application.packageName).originatingPackageName
+      } else {
+        @Suppress("DEPRECATION")
+        application.packageManager.getInstallerPackageName(application.packageName)
+      }
     }
   )
-
-  private fun getBuildConfigClass(packageName: String) = try {
-    Class.forName("$packageName.BuildConfig")
-  } catch (e: ClassNotFoundException) {
-    null
-  }
 }

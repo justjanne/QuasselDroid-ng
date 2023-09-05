@@ -20,7 +20,9 @@
 package de.kuschku.malheur.data
 
 import android.util.DisplayMetrics
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MetricsInfo(
   val density: Float,
   val scaledDensity: Float,

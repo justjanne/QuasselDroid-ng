@@ -19,6 +19,9 @@
 
 package de.kuschku.malheur.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ThreadInfo(
   val id: Long?,
   val name: String?,

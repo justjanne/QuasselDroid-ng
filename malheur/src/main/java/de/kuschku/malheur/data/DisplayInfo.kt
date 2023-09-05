@@ -19,11 +19,11 @@
 
 package de.kuschku.malheur.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class DisplayInfo(
   val width: Int,
   val height: Int,
-  val refreshRate: Float,
-  val hdr: List<String>?,
-  val isWideGamut: Boolean?,
   val metrics: MetricsInfo
 )

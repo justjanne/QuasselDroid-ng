@@ -19,6 +19,9 @@
 
 package de.kuschku.malheur.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class CrashInfo(
   val cause: ExceptionInfo?,
   val exception: String?

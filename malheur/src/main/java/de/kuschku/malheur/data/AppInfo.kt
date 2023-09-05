@@ -19,9 +19,11 @@
 
 package de.kuschku.malheur.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class AppInfo(
   val versionName: String?,
   val versionCode: Long?,
-  val buildConfig: Map<String, Any?>?,
   val installationSource: String?
 )

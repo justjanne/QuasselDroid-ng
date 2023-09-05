@@ -19,6 +19,9 @@
 
 package de.kuschku.malheur.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class TraceElement(
   val className: String?,
   val methodName: String?,

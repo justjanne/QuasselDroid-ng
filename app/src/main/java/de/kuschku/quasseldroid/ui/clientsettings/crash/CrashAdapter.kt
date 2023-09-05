@@ -90,7 +90,7 @@ class CrashAdapter : ListAdapter<Pair<Report?, Uri>, CrashAdapter.CrashViewHolde
       this.item = item
       this.uri = uri
 
-      binding.crashTime.text = item?.environment?.crashTime?.let {
+      binding.crashTime.text = item?.timestamp?.let {
         dateTimeFormatter.format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()))
       } ?: "null"
       binding.versionName.text = item?.application?.versionName ?: "null"

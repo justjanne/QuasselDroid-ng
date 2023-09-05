@@ -75,7 +75,7 @@ class CrashFragment : DaggerFragment() {
             FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it)
           )
         }
-        .sortedByDescending { it.first?.environment?.crashTime }
+        .sortedByDescending { it.first?.timestamp }
 
       activity?.runOnUiThread {
         this.adapter?.submitList(list)
