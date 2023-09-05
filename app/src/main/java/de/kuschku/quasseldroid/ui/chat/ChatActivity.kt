@@ -53,6 +53,7 @@ import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
+import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
 import de.kuschku.libquassel.session.Error
@@ -806,9 +807,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       state == ConnectionState.CONNECTED
     }.filter { it }
 
-    val missingIdentity: Observable<Boolean> = modelHelper.connectedSession.map { session ->
-      session.orNull()?.identities.isNullOrEmpty()
-    }
+    val missingIdentity: Observable<Boolean> = modelHelper.connectedSession
+      .mapSwitchMap(ISession::liveIdentities)
+      .mapMap(Map<IdentityId, Identity>::isEmpty)
+      .mapOrElse(false)
 
     val missingFeatures: Observable<List<MissingFeature>> =
       modelHelper.connectedSession.mapMap { session ->
