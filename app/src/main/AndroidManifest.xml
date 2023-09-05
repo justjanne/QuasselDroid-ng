@@ -317,7 +317,8 @@
       android:name="de.kuschku.quasseldroid.service.QuasselService"
       android:description="@string/connection_service_description"
       android:exported="false"
-      android:label="@string/connection_service_title" />
+      android:label="@string/connection_service_title"
+      android:foregroundServiceType="remoteMessaging" />
   </application>
 
 </manifest>
