@@ -23,13 +23,19 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.text.SpannableString
 import androidx.core.app.RemoteInput
-import androidx.lifecycle.Observer
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.ClientData
+import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.protocol.Protocol
+import de.kuschku.libquassel.protocol.Protocol_Feature
+import de.kuschku.libquassel.protocol.Protocol_Features
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
@@ -38,7 +44,6 @@ import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.manager.ConnectionInfo
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.helper.clampOf
 import de.kuschku.libquassel.util.helper.value
@@ -48,7 +53,11 @@ import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.persistence.dao.*
+import de.kuschku.quasseldroid.persistence.dao.buffers
+import de.kuschku.quasseldroid.persistence.dao.clear
+import de.kuschku.quasseldroid.persistence.dao.findById
+import de.kuschku.quasseldroid.persistence.dao.markHidden
+import de.kuschku.quasseldroid.persistence.dao.markReadNormal
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.util.AccountId
@@ -62,7 +71,11 @@ import de.kuschku.quasseldroid.ssl.custom.QuasselCertificateManager
 import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
 import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
-import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.helper.editApply
+import de.kuschku.quasseldroid.util.helper.editCommit
+import de.kuschku.quasseldroid.util.helper.lineSequence
+import de.kuschku.quasseldroid.util.helper.sharedPreferences
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 import io.reactivex.subjects.BehaviorSubject
@@ -161,10 +174,26 @@ class QuasselService : DaggerLifecycleService(),
       val notificationHandle = notificationManager.notificationBackground()
       this.notificationHandle = notificationHandle
       updateNotification(notificationHandle, rawProgress)
-      startForeground(notificationHandle.id, notificationHandle.builder.build())
+      if (Build.VERSION.SDK_INT >= 34) {
+        startForeground(
+          notificationHandle.id,
+          notificationHandle.builder.build(),
+          ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
+        )
+      } else {
+        startForeground(
+          notificationHandle.id,
+          notificationHandle.builder.build()
+        )
+      }
     } else {
       this.notificationHandle = null
-      stopForeground(true)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        stopForeground(STOP_FOREGROUND_REMOVE)
+      } else {
+        @Suppress("DEPRECATION")
+        stopForeground(true)
+      }
     }
   }
 
@@ -333,9 +362,9 @@ class QuasselService : DaggerLifecycleService(),
                 .filter { it }
                 .map { network }
             }.firstElement()
-        }.toLiveData().observe(this, Observer {
+        }.toLiveData().observe(this) {
           it?.requestConnect()
-        })
+        }
       }
     }
 
@@ -401,7 +430,7 @@ class QuasselService : DaggerLifecycleService(),
       supportedProtocols = listOf(Protocol.Datastream)
     )
 
-    sessionManager.connectionProgress.toLiveData().observe(this, Observer {
+    sessionManager.connectionProgress.toLiveData().observe(this) {
       if (this.progress.first != it?.first && it?.first == ConnectionState.CONNECTED) {
         handlerService.backend {
           database.message().clearMessages()
@@ -414,12 +443,12 @@ class QuasselService : DaggerLifecycleService(),
         updateNotification(handle, rawProgress)
         notificationManager.notify(handle)
       }
-    })
+    }
 
     ReactiveNetwork
       .observeNetworkConnectivity(applicationContext)
       .toLiveData()
-      .observe(this, Observer { connectivity ->
+      .observe(this) { connectivity ->
         if (!connectionSettings.ignoreNetworkChanges) {
           log(INFO, "QuasselService", "Connectivity changed: $connectivity")
           handlerService.backend {
@@ -430,13 +459,12 @@ class QuasselService : DaggerLifecycleService(),
             )
           }
         }
-      })
+      }
 
     sessionManager.state
       .distinctUntilChanged()
       .toLiveData()
-      .observe(
-        this, Observer {
+      .observe(this) {
         handlerService.backend {
           if (it == ConnectionState.HANDSHAKE) {
             backoff = BACKOFF_MIN
@@ -447,7 +475,7 @@ class QuasselService : DaggerLifecycleService(),
             notificationBackend.showDisconnectedNotifications()
           }
         }
-      })
+      }
 
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       registerOnSharedPreferenceChangeListener(this@QuasselService)
@@ -512,7 +540,7 @@ class QuasselService : DaggerLifecycleService(),
 
     // Cleanup deleted buffers from cache
 
-    val buffers = session.bufferSyncer.bufferInfos().map(BufferInfo::bufferId)
+    val buffers = session.bufferSyncer.bufferInfos().map(BufferInfo::bufferId).toSet()
 
     val deletedBuffersMessage = database.message().buffers().toSet() - buffers
     log(INFO, "QuasselService", "Buffers deleted from message storage: $deletedBuffersMessage")
